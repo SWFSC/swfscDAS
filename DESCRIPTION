@@ -1,0 +1,15 @@
+Package: swfscDAS
+Title: DAS Processing Functions for the Southwest Fisheries Science Center
+Version: 0.0.0.9000
+Authors@R: 
+    person("Sam", "Woodman", email = "sam.woodman@noaa.gov", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6071-8186"))
+Description: What the package does (one paragraph).
+URL: https://github.com/smwoodman/swfscDAS
+BugReports: https://github.com/smwoodman/swfscDAS/issues
+Depends: R (>= 3.5.0)
+Imports:
+    dplyr, 
+    lubridate
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
