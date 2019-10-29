@@ -11,24 +11,18 @@
 #' @importFrom lubridate minute
 #'
 #' @details Read...
-#'   Based on das_read() from CruzPlot 'Package' branch for reading DAS data;
-#'     adapted for this work. Originally based on swfscMisc::das.read()
-#'   CruzPlot::das_read() was split into das_read() and das_process():
-#'     das_read() simply reads and parses DAS data into data frame
-#'     das_process() is an S3 that either calls das_read() on a
-#'     character vector, or das_read() data frame as input and
-#'     outputs a data frame with additional columns, e.g. for Mode or Bft
+#'   Adapted from \code{\link[swfscMisc]{das.read}}
 #'  TODO: describe columns created?
-#'  TODO: check for events..?
+#'  TODO: any error checking?
 #'
 #' @return Data frame with columns for each DAS item...; idx_line only column added
 #'   Processing done: create DateTime column and convert lat/lon to decimal;
 #'   all else simply reading data from columns
-#'   TODO: make return object of class das_read.?
+#'   TODO: make return object of class das_read?
 #'
 #' @examples
 #' # TODO
-#' # x <- das_read("Data/1986-2006ETP.das")
+#' # x <- das_read("../das/Data/RV-Data/1986/MOPS0989.das")
 #'
 #' @export
 das_read <- function(file) {
@@ -92,7 +86,7 @@ das_read <- function(file) {
 
 
   #----------------------------------------------------------------------------
-  # Return data frame; as.numeric() for consistency with Abund9
+  # Return data frame
   data.frame(
     Event, OnEffort, DateTime,
     Yr = as.numeric(year(DateTime)), Mo = as.numeric(month(DateTime)),
@@ -104,6 +98,3 @@ das_read <- function(file) {
     stringsAsFactors = FALSE
   )
 }
-
-###############################################################################
-
