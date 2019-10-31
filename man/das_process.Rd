@@ -53,8 +53,7 @@ data frame with 'carry-over info' columns added (e.g., Mode and Bft)
 Process output of \link{das_read}
 }
 \details{
-For more details about WinCruz, see \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
-  das_process() is an S3 that either calls das_read() on a
+das_process() is an S3 that either calls das_read() on a
     character vector, or das_read() data frame as input and
     outputs a data frame with additional columns, e.g. for Mode or Bft
   TODO: describe columns created?
@@ -84,4 +83,8 @@ For more details about WinCruz, see \url{https://swfsc.noaa.gov/uploadedFiles/Di
 # TODO
 # x <- das_read("Data/1986-2006ETP.das")
 # y <- das_process(x, reset.day = TRUE, days.gap = 50)
+}
+\seealso{
+For more details about WinCruz and expected DAS data format, see
+  \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
 }
