@@ -4,97 +4,129 @@
 #'
 #' @param file filename of a DAS file
 #'
-#' @importFrom lubridate year
-#' @importFrom lubridate month
-#' @importFrom lubridate day
-#' @importFrom lubridate hour
-#' @importFrom lubridate minute
+#' @importFrom dplyr %>%
+#' @importFrom readr read_fwf
+#' @importFrom purrr set_names
+#' @importFrom readr cols
+#' @importFrom readr col_character
+#' @importFrom readr read_fwf
+#' @importFrom readr fwf_positions
+#' @importFrom utils tail
 #'
-#' @details Read...
-#'   Adapted from \code{\link[swfscMisc]{das.read}}
-#'  TODO: describe columns created?
-#'  TODO: any error checking?
+#' @details Parses DAS data into columns; adapted
+#'   from \code{\link[swfscMisc]{das.read}}.
+#'   The provided file must follow the following column number and format
+#'   specifications (note that 'Data#' columns may be referred to as
+#'   'Field#' columns in other documentation):
+#'   \tabular{lrr}{
+#'     \emph{Item} \tab \emph{Columns} \tab \emph{Format}\cr
+#'     Sequence (event number) \tab 1-3\cr
+#'     Event \tab 4\cr
+#'     Effort dot \tab 5\cr
+#'     Time \tab 6-11 \tab HHMMSS or HHMM\cr
+#'     Date \tab 13-18 \tab MMDDYY\cr
+#'     Latitude \tab 20-28 \tab NDD:MM.MM\cr
+#'     Longitude \tab 30-39 \tab WDDD:MM.MM\cr
+#'     Data1 \tab 40-44 \cr
+#'     Data2 \tab 45-49 \cr
+#'     Data3 \tab 50-54\cr
+#'     Data4 \tab 55-59\cr
+#'     Data5 \tab 60-64\cr
+#'     Data6 \tab 65-69\cr
+#'     Data7 \tab 70-74\cr
+#'     Data8 \tab 75+\cr
+#'   }
 #'
-#' @return Data frame with columns for each DAS item...; idx_line only column added
-#'   Processing done: create DateTime column and convert lat/lon to decimal;
-#'   all else simply reading data from columns
-#'   TODO: make return object of class das_read?
+#'   TODO: handle non-UTF-8 symbols in comments.
+#'
+#' @return Data frame with aerial DAS data parsed into columns.
+#'   The following columns were processed or added:
+#'   \itemize{
+#'     \item \code{EffortDot}: logical; \code{TRUE} if "." present, \code{FALSE otherwise}
+#'     \item \code{DateTime}: \code{POSIXct}; combination of \code{Date} and \code{Time} columns
+#'     \item \code{Lat}: \code{numeric}; decimal degrees in range [-90, 90]
+#'     \item \code{Lon}: \code{numeric}; decimal degrees in range [-180, 180]
+#'     \item \code{Data#}: leading/trailing whitespace trimmed for non-comment events (rows where \code{Event} is not "C" or "c")
+#'     \item \code{file_das}: character; filename (note not full filepath)
+#'     \item \code{line_num}: integer; line number of each data row
+#'   }
 #'
 #' @examples
 #' # TODO
 #' # x <- das_read("../das/Data/RV-Data/1986/MOPS0989.das")
+#' # x <- das_read("../das/Data/1986-2006ETP.das")
 #'
 #' @export
 das_read <- function(file) {
-  #----------------------------------------------------------------------------
-  # Parse and format DAS file
+  stopifnot(inherits(file, "character"))
 
-  ### Read file and get initial details
-  DAS <- readLines(file)
-  Event <- substr(DAS, 4, 4)
-  nDAS <- length(DAS)
-  OnEffort <- (substr(DAS, 5, 5) == ".")
+  fwf.start <- c(1,4,5, 06,13, 20,21,24, 30,31,35, 40,45,50,55,60,65,70,75)
+  fwf.end   <- c(3,4,5, 11,18, 20,22,28, 30,33,39, 44,49,54,59,64,69,74,NA)
 
-  ### Format times and dates
-  time.txt <- substr(DAS, 6, 11)
-  time.txt <- gsub(" ", "", time.txt)
-  date.txt <- substr(DAS, 13, 18)
-  date.txt <- gsub(" ", "", date.txt)
+  # suppressWarnings() is for lines that do not have data in all columns
+  x <- suppressWarnings(read_fwf(
+    file, col_positions = fwf_positions(start = fwf.start, end = fwf.end),
+    skip_empty_rows = FALSE,
+    na = c("", " ", "  ", "   ", "    ", "     ", "      "),
+    col_types = cols(.default = col_character()),
+    trim_ws = FALSE
+  )) %>%
+    set_names(c("event_num", "Event", "EffortDot", "Time", "Date",
+                "Lat1", "Lat2", "Lat3", "Lon1", "Lon2", "Lon3",
+                "Data1", "Data2", "Data3", "Data4", "Data5", "Data6",
+                "Data7", "Data8"))
+  browser()
 
-  DateTime <- strptime(paste(date.txt, time.txt), "%m%d%y %H%M%S")
+  # Process data, and add file and line number columns
+  x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
+  Lat <- ifelse(x$Lat1 == "N", 1, -1) * (as.numeric(x$Lat2) + as.numeric(x$Lat3)/60)
+  Lon <- ifelse(x$Lon1 == "E", 1, -1) * (as.numeric(x$Lon2) + as.numeric(x$Lon3)/60)
+  file_das  <- tail(strsplit(file, "/")[[1]], 1)
+  event_num <- suppressWarnings(as.numeric(x$event_num)) #blank for # events
+  line_num  <- seq_along(x$Event)
+
+  DateTime <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M%S")
   dt.na <- is.na(DateTime)
-  DateTime[dt.na] <- strptime(paste(date.txt, time.txt), "%m%d%y %H%M")[dt.na]
-
+  DateTime[dt.na] <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M")[dt.na]
   dt.na <- is.na(DateTime)
-  if (!all(names(table(Event[dt.na])) %in% c("*", "#", "?", "C", 1:8))) {
-    warning("There are DateTime NAs for unexpected events, meaning for ",
-            "events that are not one of: ", c("*", "#", "?", "C", 1:8))
+  dt.na.event <- c("*", "#", "?", "C", 1:8)
+  if (!all(names(table(x$Event[dt.na])) %in% dt.na.event)) {
+    warning("There are unexpected DateTime NAs, meaning for ",
+            "events that are not one of: ", dt.na.event)
   }
 
-  ### Get lat/long info
-  LatD <- as.numeric(substr(DAS, 21, 22))
-  LatM <- as.numeric(substr(DAS, 24, 28))
-  LonD <- as.numeric(substr(DAS, 31, 33))
-  LonM <- as.numeric(substr(DAS, 35, 39))
-  Lat <- (LatD + LatM/60) * ifelse(substr(DAS, 20, 20) == "S", -1, 1)
-  Lon <- (LonD + LonM/60) * ifelse(substr(DAS, 30, 30) == "W", -1, 1)
-  rm(LatD, LatM, LonD, LonM)
-
-  lat.na <- which(is.na(Lat))
-  lon.na <- which(is.na(Lon))
-  if (!(all.equal(lon.na, lat.na) == TRUE)) {
-    warning("The Lon and Lat columns have NA values for different rows")
-  }
-
-  ### Get data (i.e. field) info
-  Data1 <- gsub(" ", "", substr(DAS, 40, 44))
-  Data1[Data1 == ""] <- NA
-  Data2 <- gsub(" ", "", substr(DAS, 45, 49))
-  Data2[Data2 == ""] <- NA
-  Data3 <- gsub(" ", "", substr(DAS, 50, 54))
-  Data3[Data3 == ""] <- NA
-  Data4 <- gsub(" ", "", substr(DAS, 55, 59))
-  Data4[Data4 == ""] <- NA
-  Data5 <- gsub(" ", "", substr(DAS, 60, 64))
-  Data5[Data5 == ""] <- NA
-  Data6 <- gsub(" ", "", substr(DAS, 65, 69))
-  Data6[Data6 == ""] <- NA
-  Data7 <- gsub(" ", "", substr(DAS, 70, 74))
-  Data7[Data7 == ""] <- NA
-  Data8 <- gsub(" ", "", substr(DAS, 75, 79))
-  Data8[Data8 == ""] <- NA
-
-
-  #----------------------------------------------------------------------------
-  # Return data frame
-  data.frame(
-    Event, OnEffort, DateTime,
-    Yr = as.numeric(year(DateTime)), Mo = as.numeric(month(DateTime)),
-    Da = as.numeric(day(DateTime)),
-    Hr = as.numeric(hour(DateTime)), Min = as.numeric(minute(DateTime)),
-    Lat, Lon,
-    Data1, Data2, Data3, Data4, Data5, Data6, Data7, Data8,
-    idx_line = 1:nDAS,
+  y <- data.frame(
+    Data1 = ifelse(x$Event == "C", x$Data1, trimws(x$Data1)),
+    Data2 = ifelse(x$Event == "C", x$Data2, trimws(x$Data2)),
+    Data3 = ifelse(x$Event == "C", x$Data3, trimws(x$Data3)),
+    Data4 = ifelse(x$Event == "C", x$Data4, trimws(x$Data4)),
+    Data5 = ifelse(x$Event == "C", x$Data5, trimws(x$Data5)),
+    Data6 = ifelse(x$Event == "C", x$Data6, trimws(x$Data6)),
+    Data7 = ifelse(x$Event == "C", x$Data7, trimws(x$Data7)),
+    Data8 = ifelse(x$Event == "C",
+                   ifelse(trimws(x$Data8) == "", NA, x$Data8),
+                   trimws(x$Data8)),
     stringsAsFactors = FALSE
   )
+  # Data8 extra ^ is for entries with >6 spaces (eg "       ")
+  y[y == ""] <- NA
+
+  # Data frame to return
+  data.frame(
+    Event = x$Event, EffortDot = x$EffortDot, DateTime, Lat, Lon, y,
+    file_das, event_num, line_num,
+    stringsAsFactors = FALSE
+  )
+
+  # # Return data frame
+  # data.frame(
+  #   Event, OnEffort, DateTime,
+  #   Yr = as.numeric(year(DateTime)), Mo = as.numeric(month(DateTime)),
+  #   Da = as.numeric(day(DateTime)),
+  #   Hr = as.numeric(hour(DateTime)), Min = as.numeric(minute(DateTime)),
+  #   Lat, Lon,
+  #   Data1, Data2, Data3, Data4, Data5, Data6, Data7, Data8,
+  #   idx_line = 1:nDAS,
+  #   stringsAsFactors = FALSE
+  # )
 }
