@@ -19,16 +19,16 @@ das_process.character <- function(das.df, ...) {
 #' @name das_process
 #'
 #' @param days.gap numeric of length 1; time gap (in days) used to identify
-#'   a new cruise in concatenated DAS files. For instance, if days.gap = 50,
-#'   rows of das.df will be considered a new cruise if consecutive records are
-#'   more than 50 days apart.
+#'   a new cruise in concatenated DAS files, and thus also when propogated
+#'   info (weather/env, observers, etc) is reset.
+#'   The default is 10 days
 #' @param reset.event logical; indicates if condition/effort info
-#'   (e.g. Bft, Mode, etc) should be reset to NA if there is an
+#'   (Bft, Mode, etc) should be reset to NA if there is an
 #'   applicable event with an NA for that value
 #' @param reset.day logical; indicates if condition/effort info
 #'   (e.g. Bft, Mode, etc) should be reset to NA at the beginning of each day.
 #'   This argument should only be used (i.e. be \code{FALSE}
-#'   for comparison with older methods (e.g. Report)
+#'   for comparison with older methods, such as Report
 #' @param cruise.name character of length 1; name of cruise, e.g. 'MOPS'
 #' @param cruise.num character or numeric of length 1; cruise number, e.g. 989
 #' @param ship.name character of length 1; abbr name of ship, e.g. 'DSJ'
@@ -76,10 +76,11 @@ das_process.character <- function(das.df, ...) {
 #' @examples
 #' # TODO
 #' # x <- das_read("Data/1986-2006ETP.das")
-#' # y <- das_process(x, reset.day = TRUE, days.gap = 50)
+#' # y <- das_process(x, reset.day = TRUE, days.gap = 10)
+#' # y <- das_process("../das/Data/RV-Data/1986/MOPS0989.das")
 #' @export
 das_process.data.frame <- function(
-  das.df, days.gap = 50, reset.event = TRUE, reset.day = TRUE,
+  das.df, days.gap = 10, reset.event = TRUE, reset.day = TRUE,
   cruise.name = NA, cruise.num = NA, ship.name = NA, ...)
 {
   #----------------------------------------------------------------------------
@@ -105,9 +106,9 @@ das_process.data.frame <- function(
 
   # das.df has expected columns
   das.df.names <- c(
-    'Event', 'OnEffort', 'DateTime', 'Yr', 'Mo', 'Da', 'Hr', 'Min',
+    'Event', 'EffortDot', 'DateTime', #'Yr', 'Mo', 'Da', 'Hr', 'Min',
     'Lat', 'Lon', 'Data1', 'Data2', 'Data3', 'Data4', 'Data5', 'Data6',
-    'Data7', 'Data8', 'idx_line'
+    'Data7', 'Data8', "file_das", "event_num", 'line_num'
   )
   if (!identical(names(das.df), das.df.names)) {
     warning("das.df is expected to have the following column names:\n",
@@ -187,17 +188,6 @@ das_process.data.frame <- function(
   #   such as Beaufort but not sigting cue
 
   #--------------------------------------------------------
-  ### 'Initialize' appropriate objects as NA; will be updated in for loop
-  init.val <- as.numeric(rep(NA, nDAS))
-
-  Bft <- Cruise <- Course <- Mode <- EffType <-
-    Glare <- HorizSun <- VertSun <-
-    ObsPos <- RainFog <- SwellHght <- Vis <- init.val
-
-  LastBft <- LastCourse <- LastCruise <- LastEMode <- LastEType <-
-    LastGl <- LastHS <- LastVS <-
-    LastOP <- LastRF <- LastSwH <- LastVis <- NA
-
   ### Indices of specific events
   event.B <- das.df$Event == "B"
   event.N <- das.df$Event == "N"
@@ -206,73 +196,39 @@ das_process.data.frame <- function(
   event.W <- das.df$Event == "W"
 
   #--------------------------------------------------------
-  ### Get/set data where values change
+  ### Create vectors with data where values change/are reset
+  init.val <- as.numeric(rep(NA, nDAS))
   event.na <- ifelse(reset.event, -9999, NA)
-  # Bft
-  Bft[event.V] <- ifelse(
-    is.na(as.numeric(das.df$Data1[event.V])),
-    event.na, as.numeric(das.df$Data1[event.V])
-  )
-  # Course
-  Course[event.N] <- ifelse(
-    is.na(as.numeric(das.df$Data1[event.N])),
-    event.na, as.numeric(das.df$Data1[event.N])
-  )
-  # Cruise number
-  Cruise[event.B] <- ifelse(
-    is.na(as.numeric(das.df$Data1[event.B])),
-    event.na, as.numeric(das.df$Data1[event.B])
-  )
-  # Mode (closing/passing)
-  Mode[event.B] <- ifelse(
-    is.na(das.df$Data2[event.B]),
-    event.na, toupper(das.df$Data2[event.B])
-  )
-  # Effort type (S/N/F)
-  EffType[event.R] <- ifelse(
-    is.na(das.df$Data1[event.R]),
-    event.na, as.character(das.df$Data1[event.R])
-  )
-  # Horizontal sun
-  HorizSun[event.W] <- ifelse(
-    is.na(as.numeric(das.df$Data2[event.W])),
-    event.na, as.numeric(das.df$Data2[event.W])
-  )
-  # Vertical sun
-  VertSun[event.W] <- ifelse(
-    is.na(as.numeric(das.df$Data3[event.W])),
-    event.na, as.numeric(das.df$Data3[event.W])
-  )
-  # Glare; '==' results in NAs, while '%in%' results in FALSEs
+
+  Bft       <- das_process_help_num(init.val, das.df, "Data1", event.V, event.na)
+  Course    <- das_process_help_num(init.val, das.df, "Data1", event.N, event.na)
+  Cruise    <- das_process_help_num(init.val, das.df, "Data1", event.B, event.na)
+  EffType   <- das_process_help_chr(init.val, das.df, "Data1", event.R, event.na)
+  HorizSun  <- das_process_help_num(init.val, das.df, "Data2", event.W, event.na)
+  Mode      <- toupper(das_process_help_chr(init.val, das.df, "Data2", event.B, event.na))
+  SwellHght <- das_process_help_num(init.val, das.df, "Data2", event.V, event.na)
+  VertSun   <- das_process_help_num(init.val, das.df, "Data3", event.W, event.na)
+  Vis       <- das_process_help_num(init.val, das.df, "Data5", event.W, event.na)
+
   tmp1 <- as.numeric(das.df$Data2[event.W])
   tmp2 <- as.numeric(das.df$Data3[event.W])
+  Glare <- init.val
   Glare[event.W] <- ifelse(
     is.na(tmp1) | is.na(tmp2),
     event.na, ifelse(
       (tmp1 %in% c(11, 12, 1) & tmp2 %in% c(2, 3)) | (tmp1 %in% 12 & tmp2 %in% 1),
       TRUE, FALSE)
   )
-  # Rain or fog
-  RainFog[event.W] <- ifelse(
-    is.na(das.df$Data1[event.W]),
-    event.na, ifelse(das.df$Data1[event.W] %in% c(2:4), TRUE, FALSE)
-  )
-  # Swell height
-  SwellHght[event.V] <- ifelse(
-    is.na(as.numeric(das.df$Data2[event.V])),
-    event.na, as.numeric(das.df$Data2[event.V])
-  )
-  # Visibility
-  Vis[event.W] <- ifelse(
-    is.na(as.numeric(das.df$Data5[event.W])),
-    event.na, as.numeric(das.df$Data5[event.W])
-  )
-
   rm(tmp1, tmp2)
 
+  RainFog <- das_process_help_num(init.val, das.df, "Data1", event.W, event.na)
+  RainFog <- ifelse(is.na(RainFog), RainFog, ifelse(RainFog %in% c(2:4), TRUE, FALSE))
+
+
   #--------------------------------------------------------
-  ### Loop through all DAS lines for 'carry-over info' that
-  ###   applies to subsequent events
+  # Loop through all DAS lines for 'carry-over info' that
+  #   applies to subsequent events
+  # idx.new.cruise always includes 1, so don't need to pre-set Last.. objects
   for (i in 1:nDAS) {
     # Reset cruise info when starting data for a new cruise
     if (i %in% idx.new.cruise) {
@@ -289,17 +245,17 @@ das_process.data.frame <- function(
     }
 
     # Set/pass along 'carry-over info'
-    if (is.na(Bft[i])) Bft[i] <- LastBft else LastBft <- Bft[i]                   #Beaufort
-    if (is.na(Course[i])) Course[i] <- LastCourse else LastCourse <- Course[i]    #Course
-    if (is.na(Cruise[i])) Cruise[i] <- LastCruise else LastCruise <- Cruise[i]    #Cruise
-    if (is.na(Mode[i])) Mode[i] <- LastEMode else LastEMode <- Mode[i]            #Mode
-    if (is.na(EffType[i])) EffType[i] <- LastEType else LastEType <- EffType[i]   #Effort type
-    if (is.na(HorizSun[i])) HorizSun[i] <- LastHS else LastHS <- HorizSun[i]      #Horizontal sun
-    if (is.na(VertSun[i])) VertSun[i] <- LastVS else LastVS <- VertSun[i]         #Vertical sun
-    if (is.na(Glare[i])) Glare[i] <- LastGl else LastGl <- Glare[i]               #Glare
-    if (is.na(RainFog[i])) RainFog[i] <- LastRF else LastRF <- RainFog[i]         #Rain or fog
+    if (is.na(Bft[i]))       Bft[i] <- LastBft       else LastBft <- Bft[i]       #Beaufort
+    if (is.na(Course[i]))    Course[i] <- LastCourse else LastCourse <- Course[i] #Course
+    if (is.na(Cruise[i]))    Cruise[i] <- LastCruise else LastCruise <- Cruise[i] #Cruise
+    if (is.na(Mode[i]))      Mode[i] <- LastEMode    else LastEMode <- Mode[i]    #Mode
+    if (is.na(EffType[i]))   EffType[i] <- LastEType else LastEType <- EffType[i] #Effort type
+    if (is.na(HorizSun[i]))  HorizSun[i] <- LastHS   else LastHS <- HorizSun[i]   #Horizontal sun
+    if (is.na(VertSun[i]))   VertSun[i] <- LastVS    else LastVS <- VertSun[i]    #Vertical sun
+    if (is.na(Glare[i]))     Glare[i] <- LastGl      else LastGl <- Glare[i]      #Glare
+    if (is.na(RainFog[i]))   RainFog[i] <- LastRF    else LastRF <- RainFog[i]    #Rain or fog
     if (is.na(SwellHght[i])) SwellHght[i] <- LastSwH else LastSwH <- SwellHght[i] #Swell height
-    if (is.na(Vis[i])) Vis[i] <- LastVis else LastVis <- Vis[i]                   #Visibility
+    if (is.na(Vis[i]))       Vis[i] <- LastVis       else LastVis <- Vis[i]       #Visibility
   }
 
 

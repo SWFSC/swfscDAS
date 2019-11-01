@@ -10,7 +10,7 @@ das_process(das.df, ...)
 
 \method{das_process}{character}(das.df, ...)
 
-\method{das_process}{data.frame}(das.df, days.gap = 50,
+\method{das_process}{data.frame}(das.df, days.gap = 10,
   reset.event = TRUE, reset.day = TRUE, cruise.name = NA,
   cruise.num = NA, ship.name = NA, ...)
 }
@@ -21,18 +21,18 @@ a character which is then passed to \link{das_read}}
 \item{...}{Ignore}
 
 \item{days.gap}{numeric of length 1; time gap (in days) used to identify
-a new cruise in concatenated DAS files. For instance, if days.gap = 50,
-rows of das.df will be considered a new cruise if consecutive records are
-more than 50 days apart.}
+a new cruise in concatenated DAS files, and thus also when propogated
+info (weather/env, observers, etc) is reset.
+The default is 10 days}
 
 \item{reset.event}{logical; indicates if condition/effort info
-(e.g. Bft, Mode, etc) should be reset to NA if there is an
+(Bft, Mode, etc) should be reset to NA if there is an
 applicable event with an NA for that value}
 
 \item{reset.day}{logical; indicates if condition/effort info
 (e.g. Bft, Mode, etc) should be reset to NA at the beginning of each day.
 This argument should only be used (i.e. be \code{FALSE}
-for comparison with older methods (e.g. Report)}
+for comparison with older methods, such as Report}
 
 \item{cruise.name}{character of length 1; name of cruise, e.g. 'MOPS'}
 
@@ -82,7 +82,8 @@ das_process() is an S3 that either calls das_read() on a
 \examples{
 # TODO
 # x <- das_read("Data/1986-2006ETP.das")
-# y <- das_process(x, reset.day = TRUE, days.gap = 50)
+# y <- das_process(x, reset.day = TRUE, days.gap = 10)
+# y <- das_process("../das/Data/RV-Data/1986/MOPS0989.das")
 }
 \seealso{
 For more details about WinCruz and expected DAS data format, see

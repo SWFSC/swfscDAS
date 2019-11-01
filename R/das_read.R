@@ -75,7 +75,6 @@ das_read <- function(file) {
                 "Lat1", "Lat2", "Lat3", "Lon1", "Lon2", "Lon3",
                 "Data1", "Data2", "Data3", "Data4", "Data5", "Data6",
                 "Data7", "Data8"))
-  browser()
 
   # Process data, and add file and line number columns
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
