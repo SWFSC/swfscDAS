@@ -5,6 +5,10 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/smwoodman/swfscDAS.svg?branch=master)](https://travis-ci.org/smwoodman/swfscDAS)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/smwoodman/swfscDAS?branch=master&svg=true)](https://ci.appveyor.com/project/smwoodman/swfscDAS)
 <!-- badges: end -->
 
 This package contains functions for processing and analyzing DAS data
