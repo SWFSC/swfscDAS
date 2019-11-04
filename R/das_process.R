@@ -198,16 +198,16 @@ das_process.data.frame <- function(
   init.val <- as.numeric(rep(NA, nDAS))
   event.na <- ifelse(reset.event, -9999, NA)
 
-  Cruise    <- das_process_help_num(init.val, das.df, "Data1", event.B, event.na)
-  Mode      <- das_process_help_chr(init.val, das.df, "Data2", event.B, event.na)
-  Course    <- das_process_help_num(init.val, das.df, "Data1", event.N, event.na)
-  EffType   <- das_process_help_chr(init.val, das.df, "Data1", event.R, event.na)
-  Bft       <- das_process_help_num(init.val, das.df, "Data1", event.V, event.na)
-  SwellHght <- das_process_help_num(init.val, das.df, "Data2", event.V, event.na)
-  RainFog   <- das_process_help_num(init.val, das.df, "Data1", event.W, event.na)
-  HorizSun  <- das_process_help_num(init.val, das.df, "Data2", event.W, event.na)
-  VertSun   <- das_process_help_num(init.val, das.df, "Data3", event.W, event.na)
-  Vis       <- das_process_help_num(init.val, das.df, "Data5", event.W, event.na)
+  Cruise    <- .das_process_num(init.val, das.df, "Data1", event.B, event.na)
+  Mode      <- .das_process_chr(init.val, das.df, "Data2", event.B, event.na)
+  Course    <- .das_process_num(init.val, das.df, "Data1", event.N, event.na)
+  EffType   <- .das_process_chr(init.val, das.df, "Data1", event.R, event.na)
+  Bft       <- .das_process_num(init.val, das.df, "Data1", event.V, event.na)
+  SwellHght <- .das_process_num(init.val, das.df, "Data2", event.V, event.na)
+  RainFog   <- .das_process_num(init.val, das.df, "Data1", event.W, event.na)
+  HorizSun  <- .das_process_num(init.val, das.df, "Data2", event.W, event.na)
+  VertSun   <- .das_process_num(init.val, das.df, "Data3", event.W, event.na)
+  Vis       <- .das_process_num(init.val, das.df, "Data5", event.W, event.na)
 
   # Additional processing done after for loop
 
