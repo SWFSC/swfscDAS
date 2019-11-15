@@ -6,16 +6,23 @@
 \alias{das_process.data.frame}
 \title{Process DAS data}
 \usage{
-das_process(das.df, ...)
+das_process(x, ...)
 
-\method{das_process}{character}(das.df, ...)
+\method{das_process}{character}(x, ...)
 
-\method{das_process}{data.frame}(das.df, days.gap = 10,
-  reset.event = TRUE, reset.day = TRUE, cruise.name = NA,
-  cruise.num = NA, ship.name = NA, ...)
+\method{das_process}{data.frame}(
+  x,
+  days.gap = 10,
+  reset.event = TRUE,
+  reset.day = TRUE,
+  cruise.name = NA,
+  cruise.num = NA,
+  ship.name = NA,
+  ...
+)
 }
 \arguments{
-\item{das.df}{Either a data frame (the output of \link{das_read}) or
+\item{x}{Either a data frame (the output of \link{das_read}) or
 a character which is then passed to \link{das_read}}
 
 \item{...}{Ignore}
@@ -36,10 +43,11 @@ for comparison with older methods, such as Report}
 
 \item{cruise.name}{character of length 1; name of cruise, e.g. 'MOPS'}
 
-\item{cruise.num}{character or numeric of length 1; cruise number, e.g. 989}
+\item{cruise.num}{character or numeric of length 1; cruise number, e.g. 989.
+If \code{NA}, the cruise number will be determined using the data for
+as many rows as possible}
 
-\item{ship.name}{character of length 1; abbr name of ship, e.g. 'DSJ'
-TODO: should this be constrained, e.g. must be one of: "DSJ", "END", "MAC", "MACII"?}
+\item{ship.name}{character of length 1; abbr name of ship, e.g. 'DSJ'}
 }
 \value{
 data frame with 'carry-over info' columns added (e.g., Mode and Bft)
@@ -53,9 +61,8 @@ data frame with 'carry-over info' columns added (e.g., Mode and Bft)
 Process output of \link{das_read}
 }
 \details{
-das_process() is an S3 that either calls das_read() on a
-    character vector, or das_read() data frame as input and
-    outputs a data frame with additional columns, e.g. for Mode or Bft
+das_process() is an S3 that either calls das_read() on a character vector,
+  or das_read() data frame as input and outputs a data frame with additional columns, e.g. for Mode or Bft
   TODO: describe columns created?
   TODO: check for events..?
   # TODO 1? If/how to incorporate these assumptions
@@ -69,9 +76,8 @@ das_process() is an S3 that either calls das_read() on a
 
   Assumptions made during processing
   \itemize{
-    \item Specific to ETP cruises at the moment, e.g. cruise.num.exp
     \item Determines effort using both '.' (OnEffort) and R and E events (OnEffort_RE)
-    \item Resets all data at the beginning of each cruise (ID'd using days.gap)
+    \item Resets all data at the beginning of each cruise; a new cruise is identifed using \code{days.gap}
     \item Mode letter is capitalized
     \item Glare: TRUE if HzSun = 11, 12 or 1 and VtSun = 2 or 3, or if HzSun = 12 and VtSun = 1; otherwise FALSE.
     \item If Glare is NA, i.e. if HorizSun or VertSun is NA, then Glare is FALSE
@@ -83,7 +89,8 @@ das_process() is an S3 that either calls das_read() on a
 # TODO
 # x <- das_read("Data/1986-2006ETP.das")
 # y <- das_process(x, reset.day = TRUE, days.gap = 10)
-# y <- das_process("../das/Data/RV-Data/1986/MOPS0989.das")
+# y <- das_process("../DAS_files/RV-Data/1986/MOPS0989.das")
+
 }
 \seealso{
 For more details about WinCruz and expected DAS data format, see
