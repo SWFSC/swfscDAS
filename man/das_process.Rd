@@ -10,16 +10,7 @@ das_process(x, ...)
 
 \method{das_process}{character}(x, ...)
 
-\method{das_process}{data.frame}(
-  x,
-  days.gap = 10,
-  reset.event = TRUE,
-  reset.day = TRUE,
-  cruise.name = NA,
-  cruise.num = NA,
-  ship.name = NA,
-  ...
-)
+\method{das_process}{data.frame}(x, days.gap = 10, reset.event = TRUE, reset.day = TRUE, ...)
 }
 \arguments{
 \item{x}{Either a data frame (the output of \link{das_read}) or
@@ -37,24 +28,17 @@ The default is 10 days}
 applicable event with an NA for that value}
 
 \item{reset.day}{logical; indicates if condition/effort info
-(e.g. Bft, Mode, etc) should be reset to NA at the beginning of each day.
-This argument should only be used (i.e. be \code{FALSE}
+(Bft, Mode, etc) should be reset to NA at the beginning of each day.
+This argument should only be set to \code{FALSE}
 for comparison with older methods, such as Report}
-
-\item{cruise.name}{character of length 1; name of cruise, e.g. 'MOPS'}
-
-\item{cruise.num}{character or numeric of length 1; cruise number, e.g. 989.
-If \code{NA}, the cruise number will be determined using the data for
-as many rows as possible}
-
-\item{ship.name}{character of length 1; abbr name of ship, e.g. 'DSJ'}
 }
 \value{
 data frame with 'carry-over info' columns added (e.g., Mode and Bft)
-  OnEffort_RE is On/Off effort as determiend by R and E events: from R event
-    to the event before the next E event are considered on effort
-  Columns added to data frame:
-    CruiseName, Cruise (cruise #), Shipname, OnEffort_RE, Mode, EffType,
+  OnEffort is On/Off effort as determiend by R and E events: from R event
+    to the event before the next E event are considered on effort.
+    The effort dot is not used to determine effort.
+  Columns added to data frame (not in order):
+    OnEffort, Cruise (cruise #), Mode, EffType,
     Bft, SwellHght, RainFog, HorizSun, VertSun, Glare, Vis, Course
 }
 \description{
@@ -64,30 +48,29 @@ Process output of \link{das_read}
 das_process() is an S3 that either calls das_read() on a character vector,
   or das_read() data frame as input and outputs a data frame with additional columns, e.g. for Mode or Bft
   TODO: describe columns created?
-  TODO: check for events..?
   # TODO 1? If/how to incorporate these assumptions
   Effort assumptions; Specified by Jeff Moore June 2018 for CruzPlot for sake of early cruises
     \code{Mode[is.na(Mode)] <- "C"}
     \code{EffType[is.na(EffType)] <- "S"}
 
- TODO 2? Add warning() checks for unexpected values, e.g. for EffType?
+ TODO 2? Add warning() checks for unexpected values, e.g. for EffType or Event?
    any(!(EffType %in% c("S", "N", "F", NA)))
    Ties into broader question of how much data checking should this do?
 
   Assumptions made during processing
   \itemize{
-    \item Determines effort using both '.' (OnEffort) and R and E events (OnEffort_RE)
+    \item The effort dot (column 5) is ignored; effort (column \code{OnEffort}is determined using R and E events (TODO: use B events?)
     \item Resets all data at the beginning of each cruise; a new cruise is identifed using \code{days.gap}
     \item Mode letter is capitalized
-    \item Glare: TRUE if HzSun = 11, 12 or 1 and VtSun = 2 or 3, or if HzSun = 12 and VtSun = 1; otherwise FALSE.
-    \item If Glare is NA, i.e. if HorizSun or VertSun is NA, then Glare is FALSE
-    \item RainFog is TRUE if 2, 3, or 4; otherwise FALSE
+    \item Glare: TRUE if HzSun = 11, 12 or 1 and VtSun = 2 or 3, or if HzSun = 12 and VtSun = 1;
+      NA if HzSun or VtSun is NA; otherwise FALSE
+    \item RainFog is TRUE if 2, 3, or 4; otherwise FALSE (or NA)
   }
-  Note that das_process returns missing values as \code{NA} rather than \code{-1}
+  Note that missing values are \code{NA} rather than \code{-1}
 }
 \examples{
 # TODO
-# x <- das_read("Data/1986-2006ETP.das")
+# x <- das_read("../DAS_files/1986-2007ETP.das")
 # y <- das_process(x, reset.day = TRUE, days.gap = 10)
 # y <- das_process("../DAS_files/RV-Data/1986/MOPS0989.das")
 

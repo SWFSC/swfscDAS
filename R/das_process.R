@@ -26,14 +26,17 @@ das_process.character <- function(x, ...) {
 #'   (Bft, Mode, etc) should be reset to NA if there is an
 #'   applicable event with an NA for that value
 #' @param reset.day logical; indicates if condition/effort info
-#'   (e.g. Bft, Mode, etc) should be reset to NA at the beginning of each day.
-#'   This argument should only be used (i.e. be \code{FALSE}
+#'   (Bft, Mode, etc) should be reset to NA at the beginning of each day.
+#'   This argument should only be set to \code{FALSE}
 #'   for comparison with older methods, such as Report
-#' @param cruise.name character of length 1; name of cruise, e.g. 'MOPS'
-#' @param cruise.num character or numeric of length 1; cruise number, e.g. 989.
-#'   If \code{NA}, the cruise number will be determined using the data for
-#'   as many rows as possible
-#' @param ship.name character of length 1; abbr name of ship, e.g. 'DSJ'
+#'
+
+# @param cruise.name character of length 1; name of cruise, e.g. 'MOPS'
+# @param cruise.num character or numeric of length 1; cruise number, e.g. 989.
+#   If \code{NA}, the cruise number will be determined using the data for
+#   as many rows as possible
+# @param ship.name character of length 1; abbr name of ship, e.g. 'DSJ'
+
 #'
 #' @importFrom dplyr select
 #' @importFrom rlang !!
@@ -43,32 +46,32 @@ das_process.character <- function(x, ...) {
 #'   das_process() is an S3 that either calls das_read() on a character vector,
 #'   or das_read() data frame as input and outputs a data frame with additional columns, e.g. for Mode or Bft
 #'   TODO: describe columns created?
-#'   TODO: check for events..?
 #'   # TODO 1? If/how to incorporate these assumptions
 #'   Effort assumptions; Specified by Jeff Moore June 2018 for CruzPlot for sake of early cruises
 #'     \code{Mode[is.na(Mode)] <- "C"}
 #'     \code{EffType[is.na(EffType)] <- "S"}
 #'
-#'  TODO 2? Add warning() checks for unexpected values, e.g. for EffType?
+#'  TODO 2? Add warning() checks for unexpected values, e.g. for EffType or Event?
 #'    any(!(EffType %in% c("S", "N", "F", NA)))
 #'    Ties into broader question of how much data checking should this do?
 #'
 #'   Assumptions made during processing
 #'   \itemize{
-#'     \item Determines effort using both '.' (OnEffort) and R and E events (OnEffort_RE)
+#'     \item The effort dot (column 5) is ignored; effort (column \code{OnEffort}is determined using R and E events (TODO: use B events?)
 #'     \item Resets all data at the beginning of each cruise; a new cruise is identifed using \code{days.gap}
 #'     \item Mode letter is capitalized
-#'     \item Glare: TRUE if HzSun = 11, 12 or 1 and VtSun = 2 or 3, or if HzSun = 12 and VtSun = 1; otherwise FALSE.
-#'     \item If Glare is NA, i.e. if HorizSun or VertSun is NA, then Glare is FALSE
-#'     \item RainFog is TRUE if 2, 3, or 4; otherwise FALSE
+#'     \item Glare: TRUE if HzSun = 11, 12 or 1 and VtSun = 2 or 3, or if HzSun = 12 and VtSun = 1;
+#'       NA if HzSun or VtSun is NA; otherwise FALSE
+#'     \item RainFog is TRUE if 2, 3, or 4; otherwise FALSE (or NA)
 #'   }
-#'   Note that das_process returns missing values as \code{NA} rather than \code{-1}
+#'   Note that missing values are \code{NA} rather than \code{-1}
 #'
 #' @return data frame with 'carry-over info' columns added (e.g., Mode and Bft)
-#'   OnEffort_RE is On/Off effort as determiend by R and E events: from R event
-#'     to the event before the next E event are considered on effort
-#'   Columns added to data frame:
-#'     CruiseName, Cruise (cruise #), Shipname, OnEffort_RE, Mode, EffType,
+#'   OnEffort is On/Off effort as determiend by R and E events: from R event
+#'     to the event before the next E event are considered on effort.
+#'     The effort dot is not used to determine effort.
+#'   Columns added to data frame (not in order):
+#'     OnEffort, Cruise (cruise #), Mode, EffType,
 #'     Bft, SwellHght, RainFog, HorizSun, VertSun, Glare, Vis, Course
 #'
 #' @seealso For more details about WinCruz and expected DAS data format, see
@@ -76,14 +79,14 @@ das_process.character <- function(x, ...) {
 #'
 #' @examples
 #' # TODO
-#' # x <- das_read("Data/1986-2006ETP.das")
+#' # x <- das_read("../DAS_files/1986-2007ETP.das")
 #' # y <- das_process(x, reset.day = TRUE, days.gap = 10)
 #' # y <- das_process("../DAS_files/RV-Data/1986/MOPS0989.das")
 #'
 #' @export
 das_process.data.frame <- function(
-  x, days.gap = 10, reset.event = TRUE, reset.day = TRUE,
-  cruise.name = NA, cruise.num = NA, ship.name = NA, ...)
+  x, days.gap = 10, reset.event = TRUE, reset.day = TRUE, ...)
+  # cruise.name = NA, cruise.num = NA, ship.name = NA, ...)
 {
   #----------------------------------------------------------------------------
   ### Input checks
@@ -91,25 +94,26 @@ das_process.data.frame <- function(
 
   # TODO: verbosely ignore arguments passed via ... ?
 
-  # Argument length
-  if (!all(sapply(list(cruise.name, cruise.num, ship.name, days.gap), length) == 1)) {
-    stop("All arguments (except for x) must be of length 1")
-  }
+  # # Argument length
+  # if (!all(sapply(list(cruise.name, cruise.num, ship.name, days.gap), length) == 1)) {
+  #   stop("All arguments (except for x) must be of length 1")
+  # }
 
   # Input classes
   stopifnot(
     inherits(x, "data.frame"),
     inherits(days.gap, c("integer", "numeric")),
+    length(days.gap) == 1,
     days.gap > 0,
-    inherits(reset.day, "logical"),
-    is.na(cruise.name) | inherits(cruise.name, "character"),
-    is.na(cruise.num) | inherits(cruise.num, c("integer", "numeric")),
-    is.na(ship.name) | inherits(ship.name, "character")
+    inherits(reset.day, "logical")
+    # is.na(cruise.name) | inherits(cruise.name, "character"),
+    # is.na(cruise.num) | inherits(cruise.num, c("integer", "numeric")),
+    # is.na(ship.name) | inherits(ship.name, "character")
   )
 
   # das.df has expected columns
   das.df.names <- c(
-    'Event', 'EffortDot', 'DateTime', #'Yr', 'Mo', 'Da', 'Hr', 'Min',
+    'Event', 'EffortDot', 'DateTime',
     'Lat', 'Lon', 'Data1', 'Data2', 'Data3', 'Data4', 'Data5', 'Data6',
     'Data7', 'Data8', "file_das", "event_num", 'line_num'
   )
@@ -141,6 +145,7 @@ das_process.data.frame <- function(
 
   #----------------------------------------------------------------------------
   # Prep; determine R to E effort
+  # TODO: B events should be on effort as well??
   nDAS <- nrow(das.df)
 
   ndx.R <- which(das.df$Event == "R")
@@ -164,6 +169,7 @@ das_process.data.frame <- function(
   #----------------------------------------------------------------------------
   # Determine 'reset' rows, i.e. rows that mark a new cruise in concatenated
   #   DAS file or a new day for conditions
+  browser()
   dt.na <- is.na(das.df$DateTime)
 
   ### Determine indices where time-date change is by more than 'day.gap' days
@@ -216,7 +222,7 @@ das_process.data.frame <- function(
 
 
   #--------------------------------------------------------
-  # Loop through data for 'carry-over info' that applies to subsequent events
+  ### Loop through data for 'carry-over info' that applies to subsequent events
   # idx.new.cruise always includes 1, so don't need to pre-set Last.. objects
   for (i in 1:nDAS) {
     # Reset cruise info when starting data for a new cruise
@@ -247,51 +253,7 @@ das_process.data.frame <- function(
 
 
   #--------------------------------------------------------
-  # Post-processing
-
-  # ### Set all -9999 values as NA
-  # if (reset.event) {
-  #   Bft[Bft == -9999] <- NA             #Beaufort
-  #   Course[Course == -9999] <- NA       #Course
-  #   Cruise[Cruise == -9999] <- NA       #Cruise number
-  #   Mode[Mode == -9999] <- NA           #Mode
-  #   EffType[EffType == -9999] <- NA     #Effort type
-  #   HorizSun[HorizSun == -9999] <- NA   #Horizontal sun
-  #   VertSun[VertSun == -9999] <- NA     #Vertical sun
-  #   RainFog[RainFog == -9999] <- NA     #RainFog
-  #   SwellHght[SwellHght == -9999] <- NA #Swell height
-  #   Vis[Vis == -9999] <- NA             #Visibility
-  # }
-  #
-  # ### Post-for loop variable processing
-  # Glare <- ifelse(
-  #   is.na(HorizSun) | is.na(VertSun), FALSE, #FALSE rather than NA per JVR notes
-  #   (HorizSun %in% c(11, 12, 1) & VertSun %in% c(2, 3)) | (HorizSun %in% 12 & VertSun %in% 1)
-  # )
-  # EffType <- as.character(EffType)
-  # Mode <- as.character(toupper(Mode))
-  # RainFog <- as.logical(ifelse(is.na(RainFog), NA, RainFog %in% c(2:4)))
-  #
-  # ### Check that cruise num from data matches supplied cruise num (if appl)
-  # if (!is.na(cruise.num)) {
-  #   c.nona <- sort(unique(Cruise[!is.na(Cruise)]))
-  #   if (!all(c.nona %in% cruise.num)) {
-  #     warning("Warning: Cruise number(s) extracted from DAS data ",
-  #             "(printed below) do not match cruise number provided ",
-  #             "via the cruise.num argument.\n",
-  #             "Extracted cruise number(s): ", paste(c.nona, collapse = ", "))
-  #   }
-  #   Cruise <- cruise.num
-  # }
-  #
-  # data.frame(
-  #   das.df, CruiseName = as.character(cruise.name), as.numeric(Cruise),
-  #   Shipname = as.character(ship.name), OnEffort_RE,
-  #   Mode, EffType, Bft, SwellHght,
-  #   RainFog, HorizSun, VertSun, Glare, Vis, Course,
-  #   stringsAsFactors = FALSE
-  # )
-
+  ### Post-processing
   tmp <- list(
     Cruise = Cruise, Mode = Mode, Course = Course, EffType = EffType,
     Bft = Bft, SwellHght = SwellHght, RainFog = RainFog,
@@ -306,45 +268,41 @@ das_process.data.frame <- function(
     })
   }
 
-  ### Post-for loop variable processing
+  # Post-for loop variable processing
   tmp$Glare <- ifelse(
-    is.na(tmp$HorizSun) | is.na(tmp$VertSun), FALSE, #FALSE rather than NA per JVR notes
+    is.na(tmp$HorizSun) | is.na(tmp$VertSun), NA, #Per JVR notes, should be FALSE to match Abund
     (tmp$HorizSun %in% c(11, 12, 1) & tmp$VertSun %in% c(2, 3)) | (tmp$HorizSun %in% 12 & tmp$VertSun %in% 1)
   )
   tmp$EffType <- as.character(tmp$EffType)
   tmp$Mode <- as.character(toupper(tmp$Mode))
   tmp$RainFog <- as.logical(ifelse(is.na(tmp$RainFog), NA, tmp$RainFog %in% c(2:4)))
 
-  ### Check that cruise num from data matches supplied cruise num (if appl)
-  if (!is.na(cruise.num)) {
-    c.nona <- sort(unique(tmp$Cruise[!is.na(Cruise)]))
-    if (!all(c.nona %in% cruise.num)) {
-      warning("Warning: Cruise number(s) extracted from DAS data ",
-              "(printed below) do not match cruise number provided ",
-              "via the cruise.num argument.\n",
-              "Extracted cruise number(s): ", paste(c.nona, collapse = ", "))
-    }
-    tmp$Cruise <- cruise.num
-  }
-  tmp$Cruise <- as.numeric(tmp$Cruise)
-
-  browser()
+  # # Check that cruise num from data matches supplied cruise num (if appl)
+  # if (!is.na(cruise.num)) {
+  #   c.nona <- sort(unique(tmp$Cruise[!is.na(Cruise)]))
+  #   if (!all(c.nona %in% cruise.num)) {
+  #     warning("Warning: Cruise number(s) extracted from DAS data ",
+  #             "(printed below) do not match cruise number provided ",
+  #             "via the cruise.num argument.\n",
+  #             "Extracted cruise number(s): ", paste(c.nona, collapse = ", "))
+  #   }
+  #   tmp$Cruise <- cruise.num
+  # }
+  # tmp$Cruise <- as.numeric(tmp$Cruise)
 
 
   #----------------------------------------------------------------------------
-  # Create and order data frame to return
+  ### Create and order data frame to be return
   cols.tokeep <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
-    "CruiseName", "Shipname",
+    # "CruiseName", "ShipName",
     paste0("Data", 1:8), "file_das", "event_num", "line_num"
   )
 
-  data.frame(
-    das.df, tmp, CruiseName = as.character(cruise.name),
-    Shipname = as.character(ship.name), OnEffort,
-    stringsAsFactors = FALSE
-  ) %>%
+  # CruiseName = as.character(cruise.name), ShipName = as.character(ship.name),
+
+  data.frame(das.df, tmp, OnEffort, stringsAsFactors = FALSE) %>%
     select(!!cols.tokeep)
 }
