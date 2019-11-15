@@ -4,10 +4,12 @@
 \alias{das_read}
 \title{Read DAS file}
 \usage{
-das_read(file)
+das_read(file, tz = "UTC")
 }
 \arguments{
 \item{file}{filename of a DAS file}
+
+\item{tz}{character; see \link[base]{strptime}. Default is UTC}
 }
 \value{
 Data frame with aerial DAS data parsed into columns.
@@ -54,7 +56,7 @@ Parses DAS data into columns; adapted
 }
 \examples{
 # TODO
-# x <- das_read("../das/Data/RV-Data/1986/MOPS0989.das")
-# x <- das_read("../das/Data/1986-2006ETP.das")
+# x <- das_read("../DAS_files/RV-Data/1986/MOPS0989.das")
+# x <- das_read("../DAS_files/1986-2007ETP.das")
 
 }
