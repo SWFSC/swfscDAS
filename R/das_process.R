@@ -30,13 +30,6 @@ das_process.character <- function(x, ...) {
 #'   This argument should only be set to \code{FALSE}
 #'   for comparison with older methods, such as Report
 #'
-
-# @param cruise.name character of length 1; name of cruise, e.g. 'MOPS'
-# @param cruise.num character or numeric of length 1; cruise number, e.g. 989.
-#   If \code{NA}, the cruise number will be determined using the data for
-#   as many rows as possible
-# @param ship.name character of length 1; abbr name of ship, e.g. 'DSJ'
-
 #'
 #' @importFrom dplyr select
 #' @importFrom rlang !!
@@ -84,9 +77,8 @@ das_process.character <- function(x, ...) {
 #' # y <- das_process("../DAS_files/RV-Data/1986/MOPS0989.das")
 #'
 #' @export
-das_process.data.frame <- function(
-  x, days.gap = 10, reset.event = TRUE, reset.day = TRUE, ...)
-  # cruise.name = NA, cruise.num = NA, ship.name = NA, ...)
+das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
+                                   reset.day = TRUE, ...)
 {
   #----------------------------------------------------------------------------
   ### Input checks
@@ -306,3 +298,14 @@ das_process.data.frame <- function(
   data.frame(das.df, tmp, OnEffort, stringsAsFactors = FALSE) %>%
     select(!!cols.tokeep)
 }
+
+
+
+# @param cruise.name character of length 1; name of cruise, e.g. 'MOPS'
+# @param cruise.num character or numeric of length 1; cruise number, e.g. 989.
+#   If \code{NA}, the cruise number will be determined using the data for
+#   as many rows as possible
+# @param ship.name character of length 1; abbr name of ship, e.g. 'DSJ'
+
+# cruise.name = NA, cruise.num = NA, ship.name = NA, ...)
+

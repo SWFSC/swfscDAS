@@ -7,7 +7,6 @@
 #'
 #' @importFrom dplyr %>%
 #' @importFrom readr read_fwf
-#' @importFrom purrr set_names
 #' @importFrom readr cols
 #' @importFrom readr col_character
 #' @importFrom readr read_fwf
@@ -71,11 +70,12 @@ das_read <- function(file, tz = "UTC") {
     na = c("", " ", "  ", "   ", "    ", "     ", "      "),
     col_types = cols(.default = col_character()),
     trim_ws = FALSE
-  )) %>%
-    set_names(c("event_num", "Event", "EffortDot", "Time", "Date",
+  ))
+
+  names(x) <- c("event_num", "Event", "EffortDot", "Time", "Date",
                 "Lat1", "Lat2", "Lat3", "Lon1", "Lon2", "Lon3",
                 "Data1", "Data2", "Data3", "Data4", "Data5", "Data6",
-                "Data7", "Data8"))
+                "Data7", "Data8")
 
   # Process data, and add file and line number columns
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
@@ -83,7 +83,6 @@ das_read <- function(file, tz = "UTC") {
   event_num <- suppressWarnings(as.numeric(x$event_num)) #blank for # events
   line_num  <- seq_along(x$Event)
 
-  browser()
   Lat <- ifelse(x$Lat1 == "N", 1, -1) * (as.numeric(x$Lat2) + as.numeric(x$Lat3)/60)
   Lon <- ifelse(x$Lon1 == "E", 1, -1) * (as.numeric(x$Lon2) + as.numeric(x$Lon3)/60)
   # ll.na <- is.na(Lat) | is.na(Lon)
@@ -104,10 +103,10 @@ das_read <- function(file, tz = "UTC") {
   dt.na.event <- c("*", "#", "?", "C", 1:8)
   dt.na.which <- which(!(x$Event[dt.na] %in% dt.na.event))
   if (length(dt.na.which) > 0) {
-    warning("There are unexpected DateTime NAs in row(s): ",
-            paste(dt.na.which, collapse = ", "), ".\n",
-            "'Unexpected' means for events other than: ",
-            paste(dt.na.event, collapse = ", "))
+    warning("There are unexpected (i.e., for events other than ",
+            paste(dt.na.event, collapse = ", "),
+            ") DateTime NAs in row(s): ",
+            paste(dt.na.which, collapse = ", "), ".\n")
   }
   rm(dt.na, dt.na.event, dt.na.which)
 
