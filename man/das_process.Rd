@@ -13,60 +13,78 @@ das_process(x, ...)
 \method{das_process}{data.frame}(x, days.gap = 10, reset.event = TRUE, reset.day = TRUE, ...)
 }
 \arguments{
-\item{x}{Either a data frame (the output of \link{das_read}) or
-a character which is then passed to \link{das_read}}
+\item{x}{either a data frame (the output of \code{\link{das_read}}),
+or a character (filepath) which is first passed to \code{\link{das_read}}}
 
-\item{...}{Ignore}
+\item{...}{ignored}
 
 \item{days.gap}{numeric of length 1; time gap (in days) used to identify
-a new cruise in concatenated DAS files, and thus also when propogated
-info (weather/env, observers, etc) is reset.
-The default is 10 days}
+a new cruise in concatenated DAS files, and thus also when
+state/condition information (weather, Bft, Mode, etc) is reset.
+Default is 10 days}
 
-\item{reset.event}{logical; indicates if condition/effort info
-(Bft, Mode, etc) should be reset to NA if there is an
-applicable event with an NA for that value}
+\item{reset.event}{logical; indicates if state/condition information
+(weather, Bft, Mode, etc) should be reset to \code{NA} if there is an
+applicable event with an \code{NA} for that state/condition}
 
-\item{reset.day}{logical; indicates if condition/effort info
-(Bft, Mode, etc) should be reset to NA at the beginning of each day.
+\item{reset.day}{logical; indicates if state/condition information
+(weather, Bft, Mode, etc) should be reset to \code{NA} at the beginning of each day.
 This argument should only be set to \code{FALSE}
 for comparison with older methods, such as Report}
 }
 \value{
-data frame with 'carry-over info' columns added (e.g., Mode and Bft)
-  OnEffort is On/Off effort as determiend by R and E events: from R event
-    to the event before the next E event are considered on effort.
-    The effort dot is not used to determine effort.
-  Columns added to data frame (not in order):
-    OnEffort, Cruise (cruise #), Mode, EffType,
-    Bft, SwellHght, RainFog, HorizSun, VertSun, Glare, Vis, Course
+Data frame; the input data frame, i.e. the output of \code{\link{das_read}},
+  with the following columns added:
+  \tabular{ll}{
+    \emph{State/condition}        \tab \emph{Column name}\cr
+    On/off effort                 \tab OnEffort\cr
+    Cruise number                 \tab Cruise\cr
+    Effort mode                   \tab Mode\cr
+    Effort type                   \tab EffType\cr
+    Course (ship direction)       \tab Course\cr
+    Beaufort sea state            \tab Bft\cr
+    Swell height (ft)             \tab SwellHght\cr
+    Rain/fog/haze code            \tab RainFog\cr
+    Horizontal sun (clock system) \tab HorizSun\cr
+    Vertical sun (clock system)   \tab VertSun\cr
+    Glare                         \tab Glare\cr
+    Visibility (nm)               \tab Vis\cr
+  }
 }
 \description{
-Process output of \link{das_read}
+Process DAS data (the output of \code{\link{das_read}}),
+  including extracting state and condition information for each DAS event
 }
 \details{
-das_process() is an S3 that either calls das_read() on a character vector,
-  or das_read() data frame as input and outputs a data frame with additional columns, e.g. for Mode or Bft
-  TODO: describe columns created?
-  # TODO 1? If/how to incorporate these assumptions
-  Effort assumptions; Specified by Jeff Moore June 2018 for CruzPlot for sake of early cruises
-    \code{Mode[is.na(Mode)] <- "C"}
-    \code{EffType[is.na(EffType)] <- "S"}
+If \code{x} is a character, it is assumed to be a filepath and first passed to \code{\link{das_read}}.
+  This output is then passed to \code{das_process}.
 
- TODO 2? Add warning() checks for unexpected values, e.g. for EffType or Event?
-   any(!(EffType %in% c("S", "N", "F", NA)))
-   Ties into broader question of how much data checking should this do?
+  DAS data is event-based, meaning most events indicate when a state or weather condition changes.
+  For instance, a 'V' event indicates when the Beaufort sea state changes, and
+  the Beaufort is the same for subsequent events until the next 'V' event.
+  For each state/condition: a new column is created,
+  the state/condition information is extracted from relevant events,
+  and extracted information is propagated to appropriate subsequent rows (events).
+  Thus, each row in the output data frame contains all
+  pertinent state/condition information for that row.
 
-  Assumptions made during processing
+  The following assumptions/decisions are made during processing:
   \itemize{
-    \item The effort dot (column 5) is ignored; effort (column \code{OnEffort}is determined using R and E events (TODO: use B events?)
-    \item Resets all data at the beginning of each cruise; a new cruise is identifed using \code{days.gap}
-    \item Mode letter is capitalized
-    \item Glare: TRUE if HzSun = 11, 12 or 1 and VtSun = 2 or 3, or if HzSun = 12 and VtSun = 1;
-      NA if HzSun or VtSun is NA; otherwise FALSE
-    \item RainFog is TRUE if 2, 3, or 4; otherwise FALSE (or NA)
+    \item All '#' events (deleted events) are removed
+    \item 'Datetime', 'Lat', and 'Lon' information are added to '?' and '1-8' events
+    \item Effort is determined as follows: R events turn effort on, and E events turn effort off (TODO: B events??).
+      The 'EffortDot' column is ignored
+    \item All state/condition information is reset at the beginning of each cruise
+      (as identifed using \code{days.gap})
+    \item 'Mode' is capitalized, and if 'Mode' is \code{NA}, it is assigned a value of "C"
+    \item If 'EffType' is \code{NA}, it is assigned a value of "S"
+    \item 'Glare': \code{TRUE} if 'HzSun' is 11, 12 or 1 and 'VtSun' is 2 or 3,
+      or if 'HzSun' is 12 and 'VtSun' is 1;
+      \code{NA} if 'HzSun' or 'VtSun' is \code{NA}; otherwise \code{FALSE}
+    \item Missing values are \code{NA} rather than \code{-1}
   }
-  Note that missing values are \code{NA} rather than \code{-1}
+
+  This function was inspired by \code{\link[swfscMisc]{das.read}}
 }
 \examples{
 # TODO
@@ -76,6 +94,6 @@ das_process() is an S3 that either calls das_read() on a character vector,
 
 }
 \seealso{
-For more details about WinCruz and expected DAS data format, see
+For more details about WinCruz, see
   \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
 }
