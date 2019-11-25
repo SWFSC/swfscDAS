@@ -56,9 +56,6 @@
 #'
 #' @examples
 #' # TODO
-#' # x <- das_read("../DAS_files/RV-Data/1986/MOPS0989.das")
-#' # x <- das_read("../DAS_files/1986-2007ETP.das")
-#'
 #' # das_read(system.file("das_sample.das", package = "swfscDAS"))
 #'
 #' @export
@@ -102,7 +99,7 @@ das_read <- function(file, tz = "UTC") {
   ll.na.event <- c("?", 1:8)
   ll.na.which <- line_num[(!(x$Event %in% ll.na.event)) & ll.na]
   if (length(ll.na.which) > 0) {
-    warning("There are unexpected (i.e., for events other than ",
+    warning("There are unexpected (i.e. for events other than ",
             paste(ll.na.event, collapse = ", "),
             ") Lat and/or Lon NAs in row(s): ",
             paste(ll.na.which, collapse = ", "), ".")
@@ -116,9 +113,9 @@ das_read <- function(file, tz = "UTC") {
 
   # Datetime NA check
   dt.na.event <- c("*", "#", "?", "C", 1:8)
-  dt.na.which <- which(!(x$Event[dt.na] %in% dt.na.event))
+  dt.na.which <- line_num[(!(x$Event %in% dt.na.event) & dt.na)]
   if (length(dt.na.which) > 0) {
-    warning("There are unexpected (i.e., for events other than ",
+    warning("There are unexpected (i.e. for events other than ",
             paste(dt.na.event, collapse = ", "),
             ") DateTime NAs in row(s): ",
             paste(dt.na.which, collapse = ", "), ".\n")

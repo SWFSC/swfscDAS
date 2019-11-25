@@ -58,9 +58,6 @@ Reads/parses DAS data into columns.
 }
 \examples{
 # TODO
-# x <- das_read("../DAS_files/RV-Data/1986/MOPS0989.das")
-# x <- das_read("../DAS_files/1986-2007ETP.das")
-
 # das_read(system.file("das_sample.das", package = "swfscDAS"))
 
 }
