@@ -33,6 +33,7 @@ das_process.character <- function(x, ...) {
 #'
 #' @importFrom dplyr %>%
 #' @importFrom dplyr select
+#' @importFrom lubridate day
 #' @importFrom rlang !!
 #' @importFrom utils head
 #'
@@ -89,9 +90,6 @@ das_process.character <- function(x, ...) {
 #'
 #' @examples
 #' # TODO
-#' # x <- das_read("../DAS_files/1986-2007ETP.das")
-#' # y <- das_process(x, reset.day = TRUE, days.gap = 10)
-#' # y <- das_process("../DAS_files/RV-Data/1986/MOPS0989.das")
 #'
 #' @export
 das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
@@ -126,7 +124,16 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
 
 
   #----------------------------------------------------------------------------
-  # Prep; determine R to E effort
+  # Prep;
+
+  ### Remove '#' events
+  das.del <- das.df$Event == "#"
+  das.df <- das.df[!das.del, ]
+  rm(das.del)
+
+  ### TODO: Fill in Lat/Lon/DateTime of ?, 1:8 event s
+
+  ### Determine R to E effort
   # TODO: B events should be on effort as well??
   nDAS <- nrow(das.df)
 
@@ -151,21 +158,18 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
   #----------------------------------------------------------------------------
   # Determine 'reset' rows, i.e. rows that mark a new cruise in concatenated
   #   DAS file or a new day for conditions
-  browser()
   dt.na <- is.na(das.df$DateTime)
 
   ### Determine indices where time-date change is by more than 'day.gap' days
   ###   Used to recognize data from new cruise in concatenated DAS files
   time_diff <- rep(NA, nDAS)
   time_diff[!dt.na] <- c(NA, abs(diff(das.df$DateTime[!dt.na]))) / (60*60*24)
-  # d <- c(NA, abs(diff(das.df$DateTime))) / (60*60*24)
-  # all.equal(d[!is.na(d)], time_diff[!is.na(d)])
 
   idx.new.cruise <- c(1, which(time_diff > days.gap))
 
   ### Determine row numbers of new days in das.df;
   ###   these will include idxs of new cruises. Used when reset.day is TRUE
-  idx.nona.new <- which(diff(das.df$Da[!dt.na]) != 0) + 1
+  idx.nona.new <- which(diff(day(das.df$DateTime)[!dt.na]) != 0) + 1
   idx.new.day <- c(1, seq_len(nDAS)[!dt.na][idx.nona.new])
 
   if (!all(idx.new.cruise %in% idx.new.day)) {
@@ -261,16 +265,13 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
 
 
   #----------------------------------------------------------------------------
-  ### Create and order data frame to be return
+  ### Create and order data frame to return
   cols.tokeep <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
-    # "CruiseName", "ShipName",
     paste0("Data", 1:8), "file_das", "event_num", "line_num"
   )
-
-  # CruiseName = as.character(cruise.name), ShipName = as.character(ship.name),
 
   data.frame(das.df, tmp, OnEffort, stringsAsFactors = FALSE) %>%
     select(!!cols.tokeep)
