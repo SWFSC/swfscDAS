@@ -2,6 +2,7 @@
 
 S3method(das_process,character)
 S3method(das_process,data.frame)
+export(das_format_pdf)
 export(das_process)
 export(das_read)
 importFrom(dplyr,"%>%")
