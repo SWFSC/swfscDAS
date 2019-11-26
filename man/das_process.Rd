@@ -70,17 +70,20 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
 
   The following assumptions/decisions are made during processing:
   \itemize{
+    \item Event codes are expected to be one of the following:
+      #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W
     \item All '#' events (deleted events) are removed
-    \item 'Datetime', 'Lat', and 'Lon' information are added to '?' and '1-8' events
-    \item Effort is determined as follows: R events turn effort on, and E events turn effort off (TODO: B events??).
+    \item An event is considered 'on effort' if it is 1) an R event,
+      2) a B event immediately preceding an R event, or 3) between corresponding R and E events.
       The 'EffortDot' column is ignored
-    \item All state/condition information is reset at the beginning of each cruise
-      (as identifed using \code{days.gap})
-    \item 'Mode' is capitalized, and if 'Mode' is \code{NA}, it is assigned a value of "C"
-    \item If 'EffType' is \code{NA}, it is assigned a value of "S"
+    \item All state/condition information is reset at the beginning of each cruise.
+      New cruises are identifed using \code{days.gap}.
+    \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
+    \item 'EffType' is capitalized, and values of \code{NA} are assigned a value of "S"
     \item 'Glare': \code{TRUE} if 'HzSun' is 11, 12 or 1 and 'VtSun' is 2 or 3,
       or if 'HzSun' is 12 and 'VtSun' is 1;
-      \code{NA} if 'HzSun' or 'VtSun' is \code{NA}; otherwise \code{FALSE}
+      \code{NA} if 'HzSun' or 'VtSun' is \code{NA};
+      otherwise \code{FALSE}
     \item Missing values are \code{NA} rather than \code{-1}
   }
 

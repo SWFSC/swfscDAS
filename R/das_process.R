@@ -51,17 +51,20 @@ das_process.character <- function(x, ...) {
 #'
 #'   The following assumptions/decisions are made during processing:
 #'   \itemize{
+#'     \item Event codes are expected to be one of the following:
+#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W
 #'     \item All '#' events (deleted events) are removed
-#'     \item 'Datetime', 'Lat', and 'Lon' information are added to '?' and '1-8' events
-#'     \item Effort is determined as follows: R events turn effort on, and E events turn effort off (TODO: B events??).
+#'     \item An event is considered 'on effort' if it is 1) an R event,
+#'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events.
 #'       The 'EffortDot' column is ignored
-#'     \item All state/condition information is reset at the beginning of each cruise
-#'       (as identifed using \code{days.gap})
-#'     \item 'Mode' is capitalized, and if 'Mode' is \code{NA}, it is assigned a value of "C"
-#'     \item If 'EffType' is \code{NA}, it is assigned a value of "S"
+#'     \item All state/condition information is reset at the beginning of each cruise.
+#'       New cruises are identifed using \code{days.gap}.
+#'     \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
+#'     \item 'EffType' is capitalized, and values of \code{NA} are assigned a value of "S"
 #'     \item 'Glare': \code{TRUE} if 'HzSun' is 11, 12 or 1 and 'VtSun' is 2 or 3,
 #'       or if 'HzSun' is 12 and 'VtSun' is 1;
-#'       \code{NA} if 'HzSun' or 'VtSun' is \code{NA}; otherwise \code{FALSE}
+#'       \code{NA} if 'HzSun' or 'VtSun' is \code{NA};
+#'       otherwise \code{FALSE}
 #'     \item Missing values are \code{NA} rather than \code{-1}
 #'   }
 #'
@@ -124,19 +127,15 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
 
 
   #----------------------------------------------------------------------------
-  # Prep;
+  # Prep
 
   ### Remove '#' events
-  das.del <- das.df$Event == "#"
-  das.df <- das.df[!das.del, ]
-  rm(das.del)
+  das.df <- das.df[das.df$Event != "#", ]
 
-  ### TODO: Fill in Lat/Lon/DateTime of ?, 1:8 event s
-
-  ### Determine R to E effort
-  # TODO: B events should be on effort as well??
+  ### Determine effort using B/R and E events
   nDAS <- nrow(das.df)
 
+  ndx.B <- which(das.df$Event == "B")
   ndx.R <- which(das.df$Event == "R")
   ndx.E <- which(das.df$Event == "E")
 
@@ -145,14 +144,14 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
          "in the provided DAS file")
   }
   if (!all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])) {
-    stop("Error: Not all 'R' events are follow by 'E' events")
+    stop("Error: Not all 'R' events are followed by 'E' events")
   }
 
   OnEffort.idx <- unlist(mapply(function(i, j) {
-    head(i:j, -1)
+    i:(j-1)
   }, ndx.R, ndx.E, SIMPLIFY = FALSE))
-  OnEffort <- seq_len(nDAS) %in% OnEffort.idx
-  rm(OnEffort.idx)
+  ndx.B.preR <- ndx.B[(ndx.B + 1) %in% ndx.R]
+  OnEffort <- seq_len(nDAS) %in% c(OnEffort.idx, ndx.B.preR)
 
 
   #----------------------------------------------------------------------------
@@ -256,12 +255,25 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
 
   # Post-for loop variable processing
   tmp$Glare <- ifelse(
-    is.na(tmp$HorizSun) | is.na(tmp$VertSun), NA, #Per JVR notes, should be FALSE to match Abund
-    (tmp$HorizSun %in% c(11, 12, 1) & tmp$VertSun %in% c(2, 3)) | (tmp$HorizSun %in% 12 & tmp$VertSun %in% 1)
-  )
+    is.na(tmp$HorizSun) | is.na(tmp$VertSun), NA,
+    (tmp$HorizSun %in% c(11, 12, 1) & tmp$VertSun %in% c(2, 3)) |
+      (tmp$HorizSun %in% 12 & tmp$VertSun %in% 1)
+  ) #Per JVR notes, NA Glare should be FALSE to match Abund
+
   tmp$EffType <- as.character(tmp$EffType)
   tmp$Mode <- as.character(toupper(tmp$Mode))
   # tmp$RainFog <- as.logical(ifelse(is.na(tmp$RainFog), NA, tmp$RainFog %in% c(2:4)))
+
+
+  #----------------------------------------------------------------------------
+  # A couple of warning checks
+  event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "N",
+                 "P", "Q", "R", "s", "S", "t", "V", "W")
+  if (!all(das.df$Event %in% event.acc))
+    warning("The following lines in the DAS file (from line_num in output ",
+            "DAS data frame) contain unexpected event codes:\n",
+            paste(das.df$line_num[!(das.df$Event %in% event.acc)], collapse = ", "),
+            "\nExpected event codes: ", paste(event.acc, collapse = ", "))
 
 
   #----------------------------------------------------------------------------
