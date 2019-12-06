@@ -12,7 +12,8 @@ das_format_pdf(file, ...)
 \item{...}{passed on to \code{\link[base:files]{file.copy}}; might included named argument \code{overwrite}}
 }
 \value{
-output of \code{\link[base:files]{file.copy}}; \code{TRUE} if writing of file was successful, and \code{FALSE} otherwise
+output of \code{\link[base:files]{file.copy}};
+  \code{TRUE} if writing of file was successful, and \code{FALSE} otherwise
 }
 \description{
 Save the pdf document describing the DAS format required by \code{swfscDAS} to a specified file

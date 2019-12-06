@@ -7,7 +7,7 @@
 das_read(file, tz = "UTC")
 }
 \arguments{
-\item{file}{filename of a DAS file}
+\item{file}{one or more DAS data filenames}
 
 \item{tz}{character; see \link[base]{strptime}. Default is UTC}
 }

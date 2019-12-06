@@ -13,7 +13,8 @@
 #'   This file can also be downloaded from
 #'   \url{https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_Format.pdf}
 #'
-#' @return output of \code{\link[base:files]{file.copy}}; \code{TRUE} if writing of file was successful, and \code{FALSE} otherwise
+#' @return output of \code{\link[base:files]{file.copy}};
+#'   \code{TRUE} if writing of file was successful, and \code{FALSE} otherwise
 #'
 #' @examples
 #' \dontrun{
