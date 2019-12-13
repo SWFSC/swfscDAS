@@ -273,7 +273,8 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
     warning("The following lines in the DAS file (from line_num in output ",
             "DAS data frame) contain unexpected event codes:\n",
             paste(das.df$line_num[!(das.df$Event %in% event.acc)], collapse = ", "),
-            "\nExpected event codes: ", paste(event.acc, collapse = ", "))
+            "\nExpected event codes (case sensitive): ",
+            paste(event.acc, collapse = ", "))
 
 
   #----------------------------------------------------------------------------
