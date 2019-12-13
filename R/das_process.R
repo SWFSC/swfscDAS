@@ -118,7 +118,7 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
   das.df.names <- c(
     'Event', 'EffortDot', 'DateTime',
     'Lat', 'Lon', 'Data1', 'Data2', 'Data3', 'Data4', 'Data5', 'Data6',
-    'Data7', 'Data8', "file_das", "event_num", 'line_num'
+    'Data7', 'Data8', 'Data9', "file_das", "event_num", 'line_num'
   )
   if (!identical(names(das.df), das.df.names)) {
     warning("x is expected to have the following column names:\n",
@@ -283,7 +283,7 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
-    paste0("Data", 1:8), "file_das", "event_num", "line_num"
+    paste0("Data", 1:9), "file_das", "event_num", "line_num"
   )
 
   data.frame(das.df, tmp, OnEffort, stringsAsFactors = FALSE) %>%

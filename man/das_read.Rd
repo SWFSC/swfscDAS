@@ -53,7 +53,8 @@ Reads/parses DAS data into columns of a data frame.
     Data5      \tab 60-64\cr
     Data6      \tab 65-69\cr
     Data7      \tab 70-74\cr
-    Data8      \tab 75+\cr
+    Data8      \tab 75-79\cr
+    Data9      \tab 80+\cr
   }
 
   See \code{\link{das_format_pdf}} for more information about DAS format requirements

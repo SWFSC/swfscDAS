@@ -33,7 +33,8 @@
 #'     Data5      \tab 60-64\cr
 #'     Data6      \tab 65-69\cr
 #'     Data7      \tab 70-74\cr
-#'     Data8      \tab 75+\cr
+#'     Data8      \tab 75-79\cr
+#'     Data9      \tab 80+\cr
 #'   }
 #'
 #'   See \code{\link{das_format_pdf}} for more information about DAS format requirements
@@ -84,8 +85,8 @@ das_read <- function(file, tz = "UTC") {
   #        "meaning file.exists(file) is FALSE")
 
   # Start and end (inclusive) column indices
-  fwf.start <- c(1,4,5, 06,13, 20,21,24, 30,31,35, 40,45,50,55,60,65,70,75)
-  fwf.end   <- c(3,4,5, 11,18, 20,22,28, 30,33,39, 44,49,54,59,64,69,74,NA)
+  fwf.start <- c(1,4,5, 06,13, 20,21,24, 30,31,35, 40,45,50,55,60,65,70,75,80)
+  fwf.end   <- c(3,4,5, 11,18, 20,22,28, 30,33,39, 44,49,54,59,64,69,74,79,NA)
 
   # suppressWarnings() is for lines that do not have data in all columns
   x <- suppressWarnings(read_fwf(
@@ -99,7 +100,7 @@ das_read <- function(file, tz = "UTC") {
   names(x) <- c("event_num", "Event", "EffortDot", "Time", "Date",
                 "Lat1", "Lat2", "Lat3", "Lon1", "Lon2", "Lon3",
                 "Data1", "Data2", "Data3", "Data4", "Data5", "Data6",
-                "Data7", "Data8")
+                "Data7", "Data8", "Data9")
 
   # Process data, and add file and line number columns
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
@@ -146,12 +147,13 @@ das_read <- function(file, tz = "UTC") {
     Data5 = ifelse(x$Event == "C", x$Data5, trimws(x$Data5)),
     Data6 = ifelse(x$Event == "C", x$Data6, trimws(x$Data6)),
     Data7 = ifelse(x$Event == "C", x$Data7, trimws(x$Data7)),
-    Data8 = ifelse(x$Event == "C",
-                   ifelse(trimws(x$Data8) == "", NA, x$Data8),
-                   trimws(x$Data8)),
+    Data8 = ifelse(x$Event == "C", x$Data8, trimws(x$Data8)),
+    Data9 = ifelse(x$Event == "C",
+                   ifelse(trimws(x$Data9) == "", NA, x$Data9),
+                   trimws(x$Data9)),
     stringsAsFactors = FALSE
   )
-  # Data8 extra ^ is for entries with >6 spaces (eg "       ")
+  # Data9 extra ^ is for entries with >6 spaces (eg "       ")
   data.df[data.df == ""] <- NA
 
   # Data frame to return
