@@ -4,16 +4,22 @@
 \alias{das_process}
 \alias{das_process.character}
 \alias{das_process.data.frame}
+\alias{das_process.tbl_df}
+\alias{das_process.das_dfr}
 \title{Process DAS data}
 \usage{
 das_process(x, ...)
 
 \method{das_process}{character}(x, ...)
 
-\method{das_process}{data.frame}(x, days.gap = 10, reset.event = TRUE, reset.day = TRUE, ...)
+\method{das_process}{data.frame}(x, ...)
+
+\method{das_process}{tbl_df}(x, ...)
+
+\method{das_process}{das_dfr}(x, days.gap = 10, reset.event = TRUE, reset.day = TRUE, ...)
 }
 \arguments{
-\item{x}{either a data frame (the output of \code{\link{das_read}}),
+\item{x}{either a \code{das_dfr} object (the output of \code{\link{das_read}}),
 or a character (filepath) which is first passed to \code{\link{das_read}}}
 
 \item{...}{ignored}
@@ -33,7 +39,8 @@ This argument should only be set to \code{FALSE}
 for comparison with older methods, such as Report}
 }
 \value{
-Data frame; the input data frame, i.e. the output of \code{\link{das_read}},
+A \code{das_df} object, which is also a data frame.
+  It consists of the input data frame, i.e. the output of \code{\link{das_read}},
   with the following columns added:
   \tabular{ll}{
     \emph{State/condition}        \tab \emph{Column name}\cr

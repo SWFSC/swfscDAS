@@ -12,7 +12,7 @@ das_read(file, tz = "UTC")
 \item{tz}{character; see \link[base]{strptime}. Default is UTC}
 }
 \value{
-Data frame with DAS data read into columns.
+A \code{das_dfr} object, which is also a data frame, with DAS data read into columns.
   The data are read into the data frame as characters as described in 'Details',
   with the following exceptions:
   \tabular{lll}{
@@ -57,7 +57,8 @@ Reads/parses DAS data into columns of a data frame.
     Data9      \tab 80+\cr
   }
 
-  See \code{\link{das_format_pdf}} for more information about DAS format requirements
+  See \code{\link{das_format_pdf}} for more information about DAS format requirements.
+  This function was inspired by \code{\link[swfscMisc]{das.read}}
 }
 \examples{
 # TODO

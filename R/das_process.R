@@ -3,7 +3,7 @@
 #' Process DAS data (the output of \code{\link{das_read}}),
 #'   including extracting state and condition information for each DAS event
 #'
-#' @param x either a data frame (the output of \code{\link{das_read}}),
+#' @param x either a \code{das_dfr} object (the output of \code{\link{das_read}}),
 #'   or a character (filepath) which is first passed to \code{\link{das_read}}
 #' @param ... ignored
 #' @export
@@ -14,6 +14,20 @@ das_process <- function(x, ...) UseMethod("das_process")
 #' @export
 das_process.character <- function(x, ...) {
   das_process(das_read(x), ...)
+}
+
+
+#' @name das_process
+#' @export
+das_process.data.frame <- function(x, ...) {
+  das_process(as_das_dfr(x), ...)
+}
+
+
+#' @name das_process
+#' @export
+das_process.tbl_df <- function(x, ...) {
+  das_process(as_das_dfr(x), ...)
 }
 
 
@@ -31,8 +45,7 @@ das_process.character <- function(x, ...) {
 #'   This argument should only be set to \code{FALSE}
 #'   for comparison with older methods, such as Report
 #'
-#' @importFrom dplyr %>%
-#' @importFrom dplyr select
+#' @importFrom dplyr %>% select
 #' @importFrom lubridate day
 #' @importFrom rlang !!
 #' @importFrom utils head
@@ -70,7 +83,8 @@ das_process.character <- function(x, ...) {
 #'
 #'   This function was inspired by \code{\link[swfscMisc]{das.read}}
 #'
-#' @return Data frame; the input data frame, i.e. the output of \code{\link{das_read}},
+#' @return A \code{das_df} object, which is also a data frame.
+#'   It consists of the input data frame, i.e. the output of \code{\link{das_read}},
 #'   with the following columns added:
 #'   \tabular{ll}{
 #'     \emph{State/condition}        \tab \emph{Column name}\cr
@@ -95,8 +109,8 @@ das_process.character <- function(x, ...) {
 #' # TODO
 #'
 #' @export
-das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
-                                   reset.day = TRUE, ...)
+das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
+                                reset.day = TRUE, ...)
 {
   #----------------------------------------------------------------------------
   ### Input checks
@@ -286,6 +300,8 @@ das_process.data.frame <- function(x, days.gap = 10, reset.event = TRUE,
     paste0("Data", 1:9), "file_das", "event_num", "line_num"
   )
 
-  data.frame(das.df, tmp, OnEffort, stringsAsFactors = FALSE) %>%
-    select(!!cols.tokeep)
+  as_das_df(
+    select(data.frame(das.df, tmp, OnEffort, stringsAsFactors = FALSE),
+           !!cols.tokeep)
+  )
 }
