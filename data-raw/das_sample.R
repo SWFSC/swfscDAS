@@ -10,39 +10,39 @@ library(swfscDAS)
 
 
 ###############################################################################
-# # Browse through ALLDAS for section with most event types
-# x.all <- das_read("../DAS_files/AllDas.das")
-# x.all <- x.all[-753324, ]
-#
-# window.size <- 200
-# window.start <- seq(1, nrow(x.all) - window.size, by = 50)
-#
-# # system.time({ #~15s for window size of 300
-# tmp <- list()
-# for (i in window.start) {
-#   x.curr <- x.all[i:(i + window.size), ]
-#   tmp <- c(tmp, list(sort(unique(x.curr$Event))))
-#   rm(x.curr)
-# }; rm(i)
-# # })
-#
-# table(sapply(tmp, length))
-# tmp.good <- which(sapply(tmp, length) >= 24)
-# x.sel <- lapply(window.start[tmp.good], function(i) {
-#   x.all[i:(i + window.size), ]
+# Browse through ALLDAS for section with most event types
+x.all <- das_read("../DAS_files/AllDas.das")
+x.all <- x.all[-753324, ]
+
+window.size <- 200
+window.start <- seq(1, nrow(x.all) - window.size, by = 50)
+
+# system.time({ #~15s for window size of 300
+tmp <- list()
+for (i in window.start) {
+  x.curr <- x.all[i:(i + window.size), ]
+  tmp <- c(tmp, list(sort(unique(x.curr$Event))))
+  rm(x.curr)
+}; rm(i)
 # })
-# table(x.all$Event)
-# lapply(x.sel, function(j) table(j$Event))
+
+table(sapply(tmp, length))
+tmp.good <- which(sapply(tmp, length) >= 24)
+x.sel <- lapply(window.start[tmp.good], function(i) {
+  x.all[i:(i + window.size), ]
+})
+table(x.all$Event)
+lapply(x.sel, function(j) table(j$Event))
 
 
 ###############################################################################
 #------------------------------------------------------------------------------
 # # Get 'original' data that will be jiggered
-# x.orig <- x.sel[[4]][29:193, ]
+x.orig <- x.sel[[4]][29:193, ]
 # saveRDS(x.orig, file = "data-raw/x_orig.rds")
-x.orig <- readRDS("data-raw/x_orig.rds")
+# x.orig <- readRDS("data-raw/x_orig.rds")
 
-# rm(list = ls()[!(ls() %in% "x.orig")])
+rm(list = ls()[!(ls() %in% "x.orig")])
 source("data-raw/das_sample_funcs.R")
 
 #------------------------------------------------------------------------------
@@ -129,7 +129,6 @@ x$line_num <- seq_len(nrow(x))
 # Write DAS data to file
 raw_das_fwf(x, file = "inst/das_sample.das", 47)
 
-
 # usethis::use_data("das_sample")
 
 
@@ -140,8 +139,7 @@ raw_das_fwf(x, file = "inst/das_sample.das", 47)
 # x2 <- das_read("data-raw/STAR1630_test.das")
 #
 # all.equal(x, x2)
-# # Data column differences are due to original files not having extra spaces for
-# #   comment rows after the text ends
-
+# # Data column differences are due to original files not having extra spaces
+# #   for comment rows after the text ends
 
 ###############################################################################
