@@ -6,11 +6,7 @@
 #' @param file filename(s) of one or more DAS files
 #' @param tz character; see \link[base]{strptime}. Default is UTC
 #'
-#' @importFrom readr read_fwf
-#' @importFrom readr cols
-#' @importFrom readr col_character
-#' @importFrom readr read_fwf
-#' @importFrom readr fwf_positions
+#' @importFrom readr cols col_character fwf_positions read_fwf
 #'
 #' @details Reads/parses DAS data into columns of a data frame.
 #'   If \code{file} contains multiple filenames, then the individual
@@ -37,9 +33,10 @@
 #'     Data9      \tab 80+\cr
 #'   }
 #'
-#'   See \code{\link{das_format_pdf}} for more information about DAS format requirements
+#'   See \code{\link{das_format_pdf}} for more information about DAS format requirements.
+#'   This function was inspired by \code{\link[swfscMisc]{das.read}}
 #'
-#' @return Data frame with DAS data read into columns.
+#' @return A \code{das_dfr} object, which is also a data frame, with DAS data read into columns.
 #'   The data are read into the data frame as characters as described in 'Details',
 #'   with the following exceptions:
 #'   \tabular{lll}{
@@ -69,8 +66,9 @@ das_read <- function(file, tz = "UTC") {
     stop("file must be a vector of one or more filename(s)")
 
   if (!all(file.exists(file)))
-    stop("The supplied character string does not all name an existing file(s), ",
-         "meaning file.exists(file) is FALSE")
+    stop("The supplied character string(s) does (do) not (all) name ",
+         "an existing file(s), ",
+         "aka file.exists(file) is FALSE")
 
   do.call(rbind, lapply(file, .das_read, tz = tz))
 }
@@ -157,9 +155,9 @@ das_read <- function(file, tz = "UTC") {
   data.df[data.df == ""] <- NA
 
   # Data frame to return
-  data.frame(
+  as_das_dfr(data.frame(
     Event = x$Event, EffortDot = x$EffortDot, DateTime, Lat, Lon, data.df,
     file_das, event_num, line_num,
     stringsAsFactors = FALSE
-  )
+  ))
 }

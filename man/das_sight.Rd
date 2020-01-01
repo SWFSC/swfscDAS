@@ -2,12 +2,18 @@
 % Please edit documentation in R/das_sight.R
 \name{das_sight}
 \alias{das_sight}
+\alias{das_sight.data.frame}
+\alias{das_sight.das_df}
 \title{DAS sightings}
 \usage{
-das_sight(das.df, mixed.multi)
+das_sight(x, mixed.multi)
+
+\method{das_sight}{data.frame}(x, mixed.multi)
+
+\method{das_sight}{das_df}(x, mixed.multi)
 }
 \arguments{
-\item{das.df}{data frame; processed DAS data.. TODO}
+\item{x}{\code{das_df} object; output from \code{\link{das_process}}}
 
 \item{mixed.multi}{logical; indicates if mixed-species sightings should be output in multiple rows}
 }
@@ -15,7 +21,7 @@ das_sight(das.df, mixed.multi)
 Data frame with ...
   Associated information (observer, species, etc.) is extracted
   from \code{Data#} columns as specified in Details.
-  Other columns from \code{das.df} will be included in the output
+  Other columns from \code{x} will be included in the output
 }
 \description{
 Extract sightings and associated information from processed DAS data
