@@ -35,6 +35,9 @@ This function requires that the following assumptions be true:
   }
 }
 \examples{
-#TODO
+y <- system.file("das_sample.das", package = "swfscDAS")
+y.proc <- das_process(y)
+
+das_sight(y.proc)
 
 }

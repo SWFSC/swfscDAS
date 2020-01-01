@@ -106,7 +106,11 @@ das_process.tbl_df <- function(x, ...) {
 #'   \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
 #'
 #' @examples
-#' # TODO
+#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' das_process(y)
+#'
+#' y.read <- das_read(y)
+#' das_process(y.read)
 #'
 #' @export
 das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,

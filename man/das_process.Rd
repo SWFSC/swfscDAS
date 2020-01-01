@@ -97,7 +97,11 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
   This function was inspired by \code{\link[swfscMisc]{das.read}}
 }
 \examples{
-# TODO
+y <- system.file("das_sample.das", package = "swfscDAS")
+das_process(y)
+
+y.read <- das_read(y)
+das_process(y.read)
 
 }
 \seealso{

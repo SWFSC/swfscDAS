@@ -21,7 +21,10 @@
 #'   Other columns from \code{x} will be included in the output
 #'
 #' @examples
-#' #TODO
+#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' y.proc <- das_process(y)
+#'
+#' das_sight(y.proc)
 #'
 #' @export
 das_sight <- function(x, mixed.multi) UseMethod("das_sight")
@@ -145,7 +148,7 @@ das_sight.das_df <- function(x, mixed.multi) {
   #--------------------------------------------------------
   ### Turtle sightings; Events t
   sight.info.t <- sight.df %>%
-    filter(Event == "t") %>%
+    filter(.data$Event == "t") %>%
     mutate(turtle_sp = .data$Data2,
            turtle_num = as.numeric(.data$Data5),
            turtle_jfr = .data$Data6,
@@ -158,7 +161,7 @@ das_sight.das_df <- function(x, mixed.multi) {
   #--------------------------------------------------------
   ### Fishing boats; Events F
   sight.info.f <- sight.df %>%
-    filter(Event == "F") %>%
+    filter(.data$Event == "F") %>%
     mutate(boat_type = .data$Data5,
            boat_num = as.numeric(.data$Data6)) %>%
     select(.data$sight_cumsum, .data$boat_type, .data$boat_num)

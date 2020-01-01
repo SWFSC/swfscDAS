@@ -55,8 +55,8 @@
 #'   \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
 #'
 #' @examples
-#' # TODO
-#' # das_read(system.file("das_sample.das", package = "swfscDAS"))
+#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' das_read(y)
 #'
 #' @export
 das_read <- function(file, tz = "UTC") {

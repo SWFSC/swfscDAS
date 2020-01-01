@@ -61,8 +61,8 @@ Reads/parses DAS data into columns of a data frame.
   This function was inspired by \code{\link[swfscMisc]{das.read}}
 }
 \examples{
-# TODO
-# das_read(system.file("das_sample.das", package = "swfscDAS"))
+y <- system.file("das_sample.das", package = "swfscDAS")
+das_read(y)
 
 }
 \seealso{
