@@ -8,30 +8,71 @@
 \usage{
 das_sight(x, mixed.multi)
 
-\method{das_sight}{data.frame}(x, mixed.multi)
+\method{das_sight}{data.frame}(x, mixed.multi = FALSE)
 
-\method{das_sight}{das_df}(x, mixed.multi)
+\method{das_sight}{das_df}(x, mixed.multi = FALSE)
 }
 \arguments{
-\item{x}{\code{das_df} object; output from \code{\link{das_process}}}
+\item{x}{\code{das_df} object; output from \code{\link{das_process}}.
+Can also be a data frame that can be coerced to a \code{das_df} object}
 
 \item{mixed.multi}{logical; indicates if mixed-species sightings should be output in multiple rows}
 }
 \value{
-Data frame with ...
-  Associated information (observer, species, etc.) is extracted
-  from \code{Data#} columns as specified in Details.
-  Other columns from \code{x} will be included in the output
+Data frame with 1) the columns from \code{x} and 2) columns with sighting information
+  (observer, species, etc.) extracted from \code{Data#} columns as specified in Details.
+  The data frame has one row for each sighting,
+  or one row for each species of each sighting if \code{mixed.multi} is \code{TRUE}.
 }
 \description{
 Extract sightings and associated information from processed DAS data
 }
 \details{
-This function requires that the following assumptions be true:
+DAS events contain specific information in the 'Data#' columns,
+  with the information depending on the event code for that row.
+  The output data frame contains columns with this specific information extracted to dedicated columns as described below.
+  This function recognizes the following types of sightings: marine mammal sightings (event codes "S", "K", or "M"),
+  marine mammal resights (codes "s" or "K"), turtle sightings (code "t"), and fishing vessel sightings (code "F").
+  See the format PDF, \code{\link{das_format_pdf}}, for the required format for each of these events.
 
+  \tabular{llllll}{
+    \emph{Information} \tab \emph{Mammal sighting} \tab \emph{Mammal resight} \tab \emph{Turtle} \tab
+      \emph{Vessel} \tab \emph{New column name}\cr
+    Sighting number \tab Data1 \tab \tab sight_no\cr
+    Observer \tab Data2 \tab \tab Data1 \tab Data1 \tab Obs\cr
+    Cue \tab Data3 \tab Data2 \tab angle_declination\cr
+    Group size (best estimate) \tab Data4 \tab NA \tab todo \cr
+    Species code 1 \tab Data5 \tab Data3 \tab todo \cr
+    Species code 2 \tab Data6 \tab NA \tab todo \cr
+    Species code 3 \tab Data7 \tab NA \tab todo \cr
+    Turtle size (ft) \tab NA \tab Data4 \tab todo\cr
+    Travel direction (deg) \tab NA \tab Data5 \tab todo\cr
+    Tail visible? \tab NA \tab Data6 \tab todo\cr
+  }
+
+  This function makes the following assumptions, and alterations to the raw data:
   \itemize{
-    \item All (and only) "S", "K", and "M" events are immediately followed by an "A" event
-    \item TODO
+    \item "S", "K", and "M" events, and only these events, are immediately followed by an "A" event
+    \item The 'Mixed' column is \code{TRUE} if two or more of the 'Data5', 'Data6', 'Data7', and 'Data8' values
+      for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
+      This column has a non-\code{NA} value for only "S", "K", and "M" events
+    \item The 'Prob' column is \code{TRUE} is the sighting has an associated "?" event,
+      and \code{FALSE} otherwise.
+      This column has a non-\code{NA} value for only "S", "K", and "M" events
+    \item The 'GS_total_best' column is the mean of the 'Data2' columns (with \code{NA}s removed) for the associated "1"-"8" events
+    \item The 'Sp1_perc', 'Sp2_perc', 'Sp3_perc', and 'Sp4_perc' columns are the
+      means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{NA}s removed), respectively,
+      for the associated "1"-"8" events
+    \item The values for the following columns were capitalized using \code{\link[base:chartr]{toupper}}:
+      'Birds', 'Photos', 'turtle_age', and 'turtle_captured'
+  }
+
+  Outstanding questions:
+  \itemize{
+    \item Should any columns be converted to logicals,
+      e.g. 'Birds', 'Photos', 'turtle_age', and 'turtle_captured'?
+    \item Should \code{NA} values for columns 'Sp1', 'Sp1_perc', 'GS_Sp1', etc.,
+      be changed from \code{NA} to \code{0}?
   }
 }
 \examples{

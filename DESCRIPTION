@@ -15,7 +15,8 @@ Imports:
     methods, 
     purrr, 
     readr, 
-    rlang
+    rlang, 
+    tidyr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

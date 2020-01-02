@@ -58,4 +58,9 @@ Note that `das_read` can read multiple files simultaneously
 y.read.mult <- das_read(c(y, y))
 ```
 
-Then you can summarize the processed DAS data…todo
+Next, you can summarize the processed DAS data
+
+``` r
+# Summarize sighting information
+y.sight <- das_sight(y.proc, mixed.multi = TRUE)
+```
