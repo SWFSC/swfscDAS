@@ -77,16 +77,25 @@ x <- head(x.orig, 1) %>%
 
 
 # Add F event, remove Q events, and set cruise number
-stopifnot(x$Event[136] == "N")
+# stopifnot(x$Event[50] == "*", x$Event[136] == "N")
 x <- x %>%
   add_row(Event = "F", EffortDot = FALSE, Lat = x[136, "Lat"], Lon = x[136, "Lon"],
           DateTime = x[136, "DateTime"],
           Data1 = "126", Data2 = "000", Data3 = "2.7", Data4 = "0.5",
           file_das = "das_sample.das",
           .after = 136) %>%
+  add_row(Event = "t", EffortDot = TRUE, Lat = x[50, "Lat"], Lon = x[50, "Lon"],
+          DateTime = x[50, "DateTime"],
+          Data1 = "001", Data2 = "DC", Data3 = "180", Data4 = "0.2",
+          Data5 = "1", Data6 = "J", Data7 = "12.2", Data8 = "A", Data9 = "N",
+          file_das = "das_sample.das",
+          .after = 50) %>%
   filter(Event != "Q") %>%
   mutate(Data1 = ifelse(Event == "B", 1000, Data1))
 
+# Remove extra Data9 bit from sighting
+# TODO: Check with Jim about this..?
+x$Data9[x$Event == "S" & x$Data1 == "081"] <- "2.0"
 
 # Adjust species code and groupsizes; make on sighitng multi-species
 event.A <- which(x$Event == "A")
