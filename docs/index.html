@@ -103,7 +103,9 @@
 <span id="cb2-10"><a href="#cb2-10"></a>y.proc &lt;-<span class="st"> </span><span class="kw"><a href="reference/das_process.html">das_process</a></span>(y)</span></code></pre></div>
 <p>Note that <code>das_read</code> can read multiple files simultaneously</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>y.read.mult &lt;-<span class="st"> </span><span class="kw"><a href="reference/das_read.html">das_read</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(y, y))</span></code></pre></div>
-<p>Then you can summarize the processed DAS data…todo</p>
+<p>Next, you can summarize the processed DAS data</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Summarize sighting information</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>y.sight &lt;-<span class="st"> </span><span class="kw"><a href="reference/das_sight.html">das_sight</a></span>(y.proc, <span class="dt">mixed.multi =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 </div>
 </div>
   </div>

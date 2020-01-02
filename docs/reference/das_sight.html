@@ -117,17 +117,18 @@
     <pre class="usage"><span class='fu'>das_sight</span>(<span class='no'>x</span>, <span class='no'>mixed.multi</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_sight</span>(<span class='no'>x</span>, <span class='no'>mixed.multi</span>)
+<span class='fu'>das_sight</span>(<span class='no'>x</span>, <span class='kw'>mixed.multi</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'># S3 method for das_df</span>
-<span class='fu'>das_sight</span>(<span class='no'>x</span>, <span class='no'>mixed.multi</span>)</pre>
+<span class='fu'>das_sight</span>(<span class='no'>x</span>, <span class='kw'>mixed.multi</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p><code>das_df</code> object; output from <code><a href='das_process.html'>das_process</a></code></p></td>
+      <td><p><code>das_df</code> object; output from <code><a href='das_process.html'>das_process</a></code>.
+Can also be a data frame that can be coerced to a <code>das_df</code> object</p></td>
     </tr>
     <tr>
       <th>mixed.multi</th>
@@ -137,16 +138,38 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Data frame with ...
-  Associated information (observer, species, etc.) is extracted
-  from <code>Data#</code> columns as specified in Details.
-  Other columns from <code>x</code> will be included in the output</p>
+    <p>Data frame with 1) the columns from <code>x</code> and 2) columns with sighting information
+  (observer, species, etc.) extracted from 'Data#' columns as specified in Details.
+  The data frame has one row for each sighting,
+  or one row for each species of each sighting if <code>mixed.multi</code> is <code>TRUE</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function requires that the following assumptions be true:</p>
-<p></p><ul>
-<li><p>All (and only) "S", "K", and "M" events are immediately followed by an "A" event</p></li>
-<li><p>TODO</p></li>
+    <p>DAS events contain specific information in the 'Data#' columns,
+  with the information depending on the event code for that row.
+  The output data frame contains columns with this specific information extracted to dedicated columns as described below.
+  This function recognizes the following types of sightings: marine mammal sightings (event codes "S", "K", or "M"),
+  marine mammal resights (codes "s" or "K"), turtle sightings (code "t"), and fishing vessel sightings (code "F").
+  See the format PDF, <code><a href='das_format_pdf.html'>das_format_pdf</a></code>, for the required format for each of these events.</p>
+<p>Abbreviations used in column names: Gs = group size, Sp = species, Nm = nautical mile, Perc = percentage</p>
+<p>This function makes the following assumptions, and alterations to the raw data:</p><ul>
+<li><p>"S", "K", and "M" events, and only these events, are immediately followed by an "A" event</p></li>
+<li><p>The 'Mixed' column is <code>TRUE</code> if two or more of the 'Data5', 'Data6', 'Data7', and 'Data8' values
+      for the corresponding "A" event are not <code>NA</code>, and <code>FALSE</code> otherwise.
+      This column has a non-<code>NA</code> value for only "S", "K", and "M" events</p></li>
+<li><p>The 'Prob' column is <code>TRUE</code> is the sighting has an associated "?" event,
+      and <code>FALSE</code> otherwise.
+      This column has a non-<code>NA</code> value for only "S", "K", and "M" events</p></li>
+<li><p>The 'GsTotal' column is the mean of the 'Data2' columns (with <code>NA</code>s removed) for the associated "1"-"8" events</p></li>
+<li><p>The 'Sp1Perc', 'Sp2Perc', 'Sp3Perc', and 'Sp4Perc' columns are the
+      means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with <code>NA</code>s removed), respectively,
+      for the associated "1"-"8" events</p></li>
+<li><p>The values for the following columns were capitalized using <code><a href='https://rdrr.io/r/base/chartr.html'>toupper</a></code>:
+      'Birds', 'Photos', 'turtle_age', and 'turtle_captured'</p></li>
+</ul>
+
+<p>Outstanding questions:</p><ul>
+<li><p>Should any columns be converted to logicals, e.g. 'Birds', 'Photos', 'turtle_age', and 'turtle_captured'?</p></li>
+<li><p>Should <code>NA</code> values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc., be changed from <code>NA</code> to <code>0</code>?</p></li>
 </ul>
 
 
@@ -155,103 +178,110 @@
 <span class='no'>y.proc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='no'>y</span>)
 
 <span class='fu'>das_sight</span>(<span class='no'>y.proc</span>)</div><div class='output co'>#&gt;    Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
-#&gt; 1      S 2014-07-02 12:17:00 27.53617 -125.5988     TRUE   1000    C       S
-#&gt; 2      S 2014-07-02 13:07:16 27.51750 -125.7502     TRUE   1000    C       S
-#&gt; 3      K 2014-07-02 16:28:37 27.37233 -126.3248     TRUE   1000    C       S
-#&gt; 4      k 2014-07-02 16:37:44 27.36700 -126.3510    FALSE   1000    C       S
-#&gt; 5      S 2014-07-02 16:47:22 27.36317 -126.3718     TRUE   1000    C       S
-#&gt; 6      s 2014-07-02 16:58:43 27.34817 -126.3832    FALSE   1000    C       S
-#&gt; 7      s 2014-07-02 17:21:01 27.32683 -126.3672    FALSE   1000    C       S
-#&gt; 8      s 2014-07-02 17:29:44 27.31633 -126.3655    FALSE   1000    C       S
-#&gt; 9      s 2014-07-02 17:50:15 27.32083 -126.3608    FALSE   1000    C       S
-#&gt; 10     F 2014-07-02 17:51:13 27.32200 -126.3625    FALSE   1000    C       S
-#&gt; 11     s 2014-07-02 18:10:25 27.32800 -126.3790    FALSE   1000    C       S
-#&gt; 12     s 2014-07-02 18:22:24 27.32600 -126.3650    FALSE   1000    C       S
-#&gt; 13     S 2014-07-03 06:53:54 27.08883 -127.7702     TRUE   1000    C       S
+#&gt; 1      S 2009-11-29 12:17:00 24.82967 -124.2333     TRUE   1000    C       S
+#&gt; 2      S 2009-11-29 13:07:16 24.81100 -124.3847     TRUE   1000    C       S
+#&gt; 3      t 2009-11-29 13:55:54 24.76750 -124.5145     TRUE   1000    C       S
+#&gt; 4      K 2009-11-29 16:28:37 24.66583 -124.9593     TRUE   1000    C       S
+#&gt; 5      k 2009-11-29 16:37:44 24.66050 -124.9855    FALSE   1000    C       S
+#&gt; 6      S 2009-11-29 16:47:22 24.65667 -125.0063     TRUE   1000    C       S
+#&gt; 7      s 2009-11-29 16:58:43 24.64167 -125.0177    FALSE   1000    C       S
+#&gt; 8      s 2009-11-29 17:21:01 24.62033 -125.0017    FALSE   1000    C       S
+#&gt; 9      s 2009-11-29 17:29:44 24.60983 -125.0000    FALSE   1000    C       S
+#&gt; 10     s 2009-11-29 17:50:15 24.61433 -124.9953    FALSE   1000    C       S
+#&gt; 11     F 2009-11-29 17:51:13 24.61550 -124.9970    FALSE   1000    C       S
+#&gt; 12     s 2009-11-29 18:10:25 24.62150 -125.0135    FALSE   1000    C       S
+#&gt; 13     s 2009-11-29 18:22:24 24.61950 -124.9995    FALSE   1000    C       S
+#&gt; 14     S 2009-11-30 06:53:54 24.38233 -126.4047     TRUE   1000    C       S
 #&gt;    Course Bft SwellHght RainFog HorizSun VertSun Glare Vis Data1 Data2 Data3
 #&gt; 1     259   3         4       1        4       1 FALSE   6   079   073     3
 #&gt; 2     259   3         4       1        3       1 FALSE   7   080   001     3
-#&gt; 3     252   3         4       1       NA      NA    NA   6  1014   186     6
-#&gt; 4     252   3         4       1       NA      NA    NA   6  1014   315   1.0
-#&gt; 5     252   3         4       3       NA      NA    NA   5   081   126     6
-#&gt; 6     252   3         4       3       NA      NA    NA   5   081   330   2.0
-#&gt; 7     125   3         4       3       NA      NA    NA   5   081   329   6.0
-#&gt; 8     125   3         4       3       NA      NA    NA   5   081   320   9.0
-#&gt; 9     125   3         4       3       NA      NA    NA   5   081   280  15.0
-#&gt; 10    290   3         4       3       NA      NA    NA   5   126   000   2.7
-#&gt; 11    175   3         4       3       NA      NA    NA   5   081   341   2.5
-#&gt; 12    105   3         4       3       NA      NA    NA   5   081   000  &lt;NA&gt;
-#&gt; 13    259   3         6       1       NA      NA    NA   5   082   153     6
-#&gt;    Data4 Data5 Data6 Data7 Data8    Data9       file_das event_num line_num
-#&gt; 1      4   012   0.2   3.6   210      4.0 das_sample.das        14       14
-#&gt; 2      4   025   0.6   2.5   330      2.0 das_sample.das        29       31
-#&gt; 3      4   340   1.5   2.2  &lt;NA&gt;     &lt;NA&gt; das_sample.das        82       85
-#&gt; 4    2.7   257  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; das_sample.das        92       96
-#&gt; 5      1   080   2.0   1.3   230 2.0 1014 das_sample.das        99      103
-#&gt; 6    1.3   252  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; das_sample.das       104      114
-#&gt; 7    0.6   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; das_sample.das       108      118
-#&gt; 8    0.4   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; das_sample.das       110      120
-#&gt; 9    0.3   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; das_sample.das       113      123
-#&gt; 10   0.5  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; das_sample.das       115      125
-#&gt; 11   1.1   175  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; das_sample.das       119      129
-#&gt; 12   0.5   105  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;     &lt;NA&gt; das_sample.das       122      132
-#&gt; 13     1   070   2.2   1.2   090      4.0 das_sample.das        10      145
-#&gt;     Obs Bearing Reticle Dist_nm SightNo Cue Method Photos Birds Mixed Spp1 Spp2
-#&gt; 1   073     012     0.2     3.6     079   3      4      N     N FALSE  075 &lt;NA&gt;
-#&gt; 2   001     025     0.6     2.5     080   3      4      N     N  TRUE  018  016
-#&gt; 3   186     340     1.5     2.2    1014   6      4      N     N FALSE  079 &lt;NA&gt;
-#&gt; 4  &lt;NA&gt;     315     1.0     2.7    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA &lt;NA&gt; &lt;NA&gt;
-#&gt; 5   126     080     2.0     1.3     081   6      1      N     N FALSE  079 &lt;NA&gt;
-#&gt; 6  &lt;NA&gt;     330     2.0     1.3    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA &lt;NA&gt; &lt;NA&gt;
-#&gt; 7  &lt;NA&gt;     329     6.0     0.6    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA &lt;NA&gt; &lt;NA&gt;
-#&gt; 8  &lt;NA&gt;     320     9.0     0.4    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA &lt;NA&gt; &lt;NA&gt;
-#&gt; 9  &lt;NA&gt;     280    15.0     0.3    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA &lt;NA&gt; &lt;NA&gt;
-#&gt; 10  126     000     0.5     2.7    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA &lt;NA&gt; &lt;NA&gt;
-#&gt; 11 &lt;NA&gt;     341     2.5     1.1    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA &lt;NA&gt; &lt;NA&gt;
-#&gt; 12 &lt;NA&gt;     000    &lt;NA&gt;     0.5    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA &lt;NA&gt; &lt;NA&gt;
-#&gt; 13  153     070     2.2     1.2     082   6      1      N     Y FALSE  096 &lt;NA&gt;
-#&gt;    Spp3 Spp4  Prob TotalGS_best Sp1_perc Sp2_perc Sp3_perc Sp4_perc
-#&gt; 1  &lt;NA&gt; &lt;NA&gt;  TRUE     3.000000      100        0        0        0
-#&gt; 2  &lt;NA&gt; &lt;NA&gt; FALSE    20.000000       60       40        0        0
-#&gt; 3  &lt;NA&gt; &lt;NA&gt; FALSE     3.000000      100      NaN      NaN      NaN
-#&gt; 4  &lt;NA&gt; &lt;NA&gt;    NA           NA       NA       NA       NA       NA
-#&gt; 5  &lt;NA&gt; &lt;NA&gt; FALSE     4.833333      100        0        0        0
-#&gt; 6  &lt;NA&gt; &lt;NA&gt;    NA           NA       NA       NA       NA       NA
-#&gt; 7  &lt;NA&gt; &lt;NA&gt;    NA           NA       NA       NA       NA       NA
-#&gt; 8  &lt;NA&gt; &lt;NA&gt;    NA           NA       NA       NA       NA       NA
-#&gt; 9  &lt;NA&gt; &lt;NA&gt;    NA           NA       NA       NA       NA       NA
-#&gt; 10 &lt;NA&gt; &lt;NA&gt;    NA           NA       NA       NA       NA       NA
-#&gt; 11 &lt;NA&gt; &lt;NA&gt;    NA           NA       NA       NA       NA       NA
-#&gt; 12 &lt;NA&gt; &lt;NA&gt;    NA           NA       NA       NA       NA       NA
-#&gt; 13 &lt;NA&gt; &lt;NA&gt; FALSE     4.857143      100        0        0        0
-#&gt;    resight_course turtle_sp turtle_num turtle_jfr turtle_age turtle_captured
-#&gt; 1              NA      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 2              NA      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 3              NA      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 4             257      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 5              NA      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 6             252      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 7             125      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 8             125      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 9             125      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 10             NA      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 11            175      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 12            105      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt; 13             NA      &lt;NA&gt;         NA       &lt;NA&gt;       &lt;NA&gt;              NA
-#&gt;    boat_type boat_num
-#&gt; 1       &lt;NA&gt;       NA
-#&gt; 2       &lt;NA&gt;       NA
-#&gt; 3       &lt;NA&gt;       NA
-#&gt; 4       &lt;NA&gt;       NA
-#&gt; 5       &lt;NA&gt;       NA
-#&gt; 6       &lt;NA&gt;       NA
-#&gt; 7       &lt;NA&gt;       NA
-#&gt; 8       &lt;NA&gt;       NA
-#&gt; 9       &lt;NA&gt;       NA
-#&gt; 10      &lt;NA&gt;       NA
-#&gt; 11      &lt;NA&gt;       NA
-#&gt; 12      &lt;NA&gt;       NA
-#&gt; 13      &lt;NA&gt;       NA</div><div class='input'>
+#&gt; 3     252   3         4       1       NA      NA    NA   6   001    DC   180
+#&gt; 4     252   3         4       1       NA      NA    NA   6  1014   186     6
+#&gt; 5     252   3         4       1       NA      NA    NA   6  1014   315   1.0
+#&gt; 6     252   3         4       3       NA      NA    NA   5   081   126     6
+#&gt; 7     252   3         4       3       NA      NA    NA   5   081   330   2.0
+#&gt; 8     125   3         4       3       NA      NA    NA   5   081   329   6.0
+#&gt; 9     125   3         4       3       NA      NA    NA   5   081   320   9.0
+#&gt; 10    125   3         4       3       NA      NA    NA   5   081   280  15.0
+#&gt; 11    290   3         4       3       NA      NA    NA   5   126   000   2.7
+#&gt; 12    175   3         4       3       NA      NA    NA   5   081   341   2.5
+#&gt; 13    105   3         4       3       NA      NA    NA   5   081   000  &lt;NA&gt;
+#&gt; 14    259   3         6       1       NA      NA    NA   5   082   153     6
+#&gt;    Data4 Data5 Data6 Data7 Data8 Data9 EventNum       file_das line_num  Obs
+#&gt; 1      4   012   0.2   3.6   210   4.0       14 das_sample.das       14  073
+#&gt; 2      4   025   0.6   2.5   330   2.0       29 das_sample.das       31  001
+#&gt; 3    0.2     1     J  12.2     A     N       43 das_sample.das       46  001
+#&gt; 4      4   340   1.5   2.2  &lt;NA&gt;  &lt;NA&gt;       83 das_sample.das       86  186
+#&gt; 5    2.7   257  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;       93 das_sample.das       97 &lt;NA&gt;
+#&gt; 6      1   080   2.0   1.3   230   2.0      100 das_sample.das      104  126
+#&gt; 7    1.3   252  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      105 das_sample.das      115 &lt;NA&gt;
+#&gt; 8    0.6   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      109 das_sample.das      119 &lt;NA&gt;
+#&gt; 9    0.4   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      111 das_sample.das      121 &lt;NA&gt;
+#&gt; 10   0.3   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      114 das_sample.das      124 &lt;NA&gt;
+#&gt; 11   0.5  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      116 das_sample.das      126  126
+#&gt; 12   1.1   175  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      120 das_sample.das      130 &lt;NA&gt;
+#&gt; 13   0.5   105  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;      123 das_sample.das      133 &lt;NA&gt;
+#&gt; 14     1   070   2.2   1.2   090   4.0       10 das_sample.das      146  153
+#&gt;    Bearing Reticle DistNm SightNo Cue Method Photos Birds Mixed  Prob   GsTotal
+#&gt; 1      012     0.2    3.6     079   3      4      N     N FALSE  TRUE  3.000000
+#&gt; 2      025     0.6    2.5     080   3      4      N     N  TRUE FALSE 20.000000
+#&gt; 3      180    12.2    0.2    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 4      340     1.5    2.2    1014   6      4      N     N FALSE FALSE  4.000000
+#&gt; 5      315     1.0    2.7    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 6      080     2.0    1.3     081   6      1      N     N FALSE FALSE  4.500000
+#&gt; 7      330     2.0    1.3    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 8      329     6.0    0.6    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 9      320     9.0    0.4    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 10     280    15.0    0.3    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 11     000     0.5    2.7    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 12     341     2.5    1.1    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 13     000    &lt;NA&gt;    0.5    &lt;NA&gt;  NA     NA   &lt;NA&gt;  &lt;NA&gt;    NA    NA        NA
+#&gt; 14     070     2.2    1.2     082   6      1      N     Y FALSE FALSE  4.714286
+#&gt;     Sp1  Sp2  Sp3  Sp4 Sp1Perc Sp2Perc Sp3Perc Sp4Perc     GsSp1 GsSp2 GsSp3
+#&gt; 1   075 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;     100       0       0       0  3.000000     0     0
+#&gt; 2   018  016 &lt;NA&gt; &lt;NA&gt;      60      40       0       0 12.000000     8     0
+#&gt; 3  &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 4   079 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;     100     NaN     NaN     NaN  4.000000   NaN   NaN
+#&gt; 5  &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 6   079 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;     100       0       0       0  4.500000     0     0
+#&gt; 7  &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 8  &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 9  &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 10 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 11 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 12 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 13 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;      NA      NA      NA      NA        NA    NA    NA
+#&gt; 14  096 &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;     100       0       0       0  4.714286     0     0
+#&gt;    GsSp4 ResightCourse TurtleSp TurtleNum TurtleJFR TurtleAge TurtleCapt
+#&gt; 1      0            NA     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 2      0            NA     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 3     NA            NA       DC         1         J         A          N
+#&gt; 4    NaN            NA     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 5     NA           257     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 6      0            NA     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 7     NA           252     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 8     NA           125     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 9     NA           125     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 10    NA           125     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 11    NA            NA     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 12    NA           175     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 13    NA           105     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt; 14     0            NA     &lt;NA&gt;        NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;
+#&gt;    BoatType BoatNum
+#&gt; 1      &lt;NA&gt;      NA
+#&gt; 2      &lt;NA&gt;      NA
+#&gt; 3      &lt;NA&gt;      NA
+#&gt; 4      &lt;NA&gt;      NA
+#&gt; 5      &lt;NA&gt;      NA
+#&gt; 6      &lt;NA&gt;      NA
+#&gt; 7      &lt;NA&gt;      NA
+#&gt; 8      &lt;NA&gt;      NA
+#&gt; 9      &lt;NA&gt;      NA
+#&gt; 10     &lt;NA&gt;      NA
+#&gt; 11     &lt;NA&gt;      NA
+#&gt; 12     &lt;NA&gt;      NA
+#&gt; 13     &lt;NA&gt;      NA
+#&gt; 14     &lt;NA&gt;      NA</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

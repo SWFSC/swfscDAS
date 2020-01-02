@@ -142,8 +142,8 @@
 <tr><td>Lat</td><td>numeric</td><td>'Latitude' column converted to decimal degrees in range [-90, 90]</td></tr>
 <tr><td>Lon</td><td>numeric</td><td>'Longitude' column converted to decimal degrees in range [-180, 180]</td></tr>
 <tr><td>Data#</td><td>character</td><td>leading/trailing whitespace trimmed for non-comment events (i.e. rows where 'Event' is not "C" or "c")</td></tr>
+<tr><td>EventNum</td><td>integer</td><td>'Event number' coerced to an integer using <code><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></code></td></tr>
 <tr><td>file_das</td><td>character</td><td>filename, extracted from the <code>file</code> argument using <code><a href='https://rdrr.io/r/base/basename.html'>basename</a></code></td></tr>
-<tr><td>event_num</td><td>integer</td><td>'Event number' coerced to an integer using <code><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></code></td></tr>
 <tr><td>line_num</td><td>integer</td><td>line number of each data row</td></tr>
 </table>
 
@@ -152,11 +152,11 @@
 
     <p>Reads/parses DAS data into columns of a data frame.
   If <code>file</code> contains multiple filenames, then the individual
-  data frames will be concatenated.
-  The provided DAS file must adhere to the following column number and format specifications;
+  data frames will be concatenated.</p>
+<p>The provided DAS file must adhere to the following column number and format specifications;
   note that 'Data#' columns may be referred to as 'Field#' columns in other documentation:</p><table class='table'>
 <tr><td><em>Item</em></td><td><em>Columns</em></td><td><em>Format</em></td></tr>
-<tr><td>Sequence (event number)</td><td>1-3</td><td>Event</td></tr>
+<tr><td>Event number</td><td>1-3</td><td>Event</td></tr>
 <tr><td>4</td><td>Effort dot</td><td>5</td></tr>
 <tr><td>Time</td><td>6-11</td><td>HHMMSS or HHMM</td></tr>
 <tr><td>Date</td><td>13-18</td><td>MMDDYY</td></tr>
@@ -181,160 +181,161 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
 <span class='fu'>das_read</span>(<span class='no'>y</span>)</div><div class='output co'>#&gt;     Event EffortDot            DateTime      Lat       Lon Data1 Data2 Data3
-#&gt; 1       B      TRUE 2014-07-02 11:49:09 27.53600 -125.5173  1000     C     7
-#&gt; 2       R      TRUE 2014-07-02 11:49:09 27.53600 -125.5173     S  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 3       P      TRUE 2014-07-02 11:49:09 27.53600 -125.5173   153   073   126
-#&gt; 4       V      TRUE 2014-07-02 11:49:09 27.53600 -125.5173     3    04   120
-#&gt; 5       N      TRUE 2014-07-02 11:49:09 27.53600 -125.5173   259  10.0  &lt;NA&gt;
-#&gt; 6       W      TRUE 2014-07-02 11:49:09 27.53600 -125.5173     3    04    01
-#&gt; 7       *      TRUE 2014-07-02 11:55:54 27.54100 -125.5352  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 8       P      TRUE 2014-07-02 12:00:34 27.54033 -125.5490   126   185   073
-#&gt; 9       V      TRUE 2014-07-02 12:00:34 27.54033 -125.5490     3    04   120
-#&gt; 10      N      TRUE 2014-07-02 12:00:34 27.54033 -125.5490   259  10.0  &lt;NA&gt;
-#&gt; 11      W      TRUE 2014-07-02 12:00:34 27.54033 -125.5490     1    04    01
-#&gt; 12      *      TRUE 2014-07-02 12:05:54 27.53900 -125.5647  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 13      *      TRUE 2014-07-02 12:15:54 27.53650 -125.5955  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 14      S      TRUE 2014-07-02 12:17:00 27.53617 -125.5988   079   073     3
-#&gt; 15      A      TRUE 2014-07-02 12:17:00 27.53617 -125.5988   079  &lt;NA&gt;     N
+#&gt; 1       B      TRUE 2009-11-29 11:49:09 24.82950 -124.1518  1000     C     7
+#&gt; 2       R      TRUE 2009-11-29 11:49:09 24.82950 -124.1518     S  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 3       P      TRUE 2009-11-29 11:49:09 24.82950 -124.1518   153   073   126
+#&gt; 4       V      TRUE 2009-11-29 11:49:09 24.82950 -124.1518     3    04   120
+#&gt; 5       N      TRUE 2009-11-29 11:49:09 24.82950 -124.1518   259  10.0  &lt;NA&gt;
+#&gt; 6       W      TRUE 2009-11-29 11:49:09 24.82950 -124.1518     3    04    01
+#&gt; 7       *      TRUE 2009-11-29 11:55:54 24.83450 -124.1697  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 8       P      TRUE 2009-11-29 12:00:34 24.83383 -124.1835   126   185   073
+#&gt; 9       V      TRUE 2009-11-29 12:00:34 24.83383 -124.1835     3    04   120
+#&gt; 10      N      TRUE 2009-11-29 12:00:34 24.83383 -124.1835   259  10.0  &lt;NA&gt;
+#&gt; 11      W      TRUE 2009-11-29 12:00:34 24.83383 -124.1835     1    04    01
+#&gt; 12      *      TRUE 2009-11-29 12:05:54 24.83250 -124.1992  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 13      *      TRUE 2009-11-29 12:15:54 24.83000 -124.2300  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 14      S      TRUE 2009-11-29 12:17:00 24.82967 -124.2333   079   073     3
+#&gt; 15      A      TRUE 2009-11-29 12:17:00 24.82967 -124.2333   079  &lt;NA&gt;     N
 #&gt; 16      ?     FALSE                &lt;NA&gt;       NA        NA   079  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 17      1     FALSE                &lt;NA&gt;       NA        NA   073     3     4
-#&gt; 18      *      TRUE 2014-07-02 12:25:54 27.53400 -125.6262  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 19      P      TRUE 2014-07-02 12:29:48 27.53283 -125.6383   184   126   185
-#&gt; 20      V      TRUE 2014-07-02 12:29:48 27.53283 -125.6383     3    04   120
-#&gt; 21      N      TRUE 2014-07-02 12:29:48 27.53283 -125.6383   259  10.0  &lt;NA&gt;
-#&gt; 22      W      TRUE 2014-07-02 12:29:48 27.53283 -125.6383     1    04    01
-#&gt; 23      *      TRUE 2014-07-02 12:35:54 27.53117 -125.6572  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 24      *      TRUE 2014-07-02 12:45:54 27.52867 -125.6875  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 25      *      TRUE 2014-07-02 12:55:54 27.52483 -125.7170  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 26      P      TRUE 2014-07-02 13:00:20 27.52233 -125.7302   001   184   126
-#&gt; 27      V      TRUE 2014-07-02 13:00:20 27.52233 -125.7302     3    04   180
-#&gt; 28      N      TRUE 2014-07-02 13:00:20 27.52233 -125.7302   259  10.0  &lt;NA&gt;
-#&gt; 29      W      TRUE 2014-07-02 13:00:20 27.52233 -125.7302     1    03    01
-#&gt; 30      *      TRUE 2014-07-02 13:05:54 27.51833 -125.7462  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 31      S      TRUE 2014-07-02 13:07:16 27.51750 -125.7502   080   001     3
-#&gt; 32      A      TRUE 2014-07-02 13:07:16 27.51750 -125.7502   080  &lt;NA&gt;     N
+#&gt; 17      1     FALSE                &lt;NA&gt;       NA        NA   073     3     3
+#&gt; 18      *      TRUE 2009-11-29 12:25:54 24.82750 -124.2607  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 19      P      TRUE 2009-11-29 12:29:48 24.82633 -124.2728   184   126   185
+#&gt; 20      V      TRUE 2009-11-29 12:29:48 24.82633 -124.2728     3    04   120
+#&gt; 21      N      TRUE 2009-11-29 12:29:48 24.82633 -124.2728   259  10.0  &lt;NA&gt;
+#&gt; 22      W      TRUE 2009-11-29 12:29:48 24.82633 -124.2728     1    04    01
+#&gt; 23      *      TRUE 2009-11-29 12:35:54 24.82467 -124.2917  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 24      *      TRUE 2009-11-29 12:45:54 24.82217 -124.3220  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 25      *      TRUE 2009-11-29 12:55:54 24.81833 -124.3515  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 26      P      TRUE 2009-11-29 13:00:20 24.81583 -124.3647   001   184   126
+#&gt; 27      V      TRUE 2009-11-29 13:00:20 24.81583 -124.3647     3    04   180
+#&gt; 28      N      TRUE 2009-11-29 13:00:20 24.81583 -124.3647   259  10.0  &lt;NA&gt;
+#&gt; 29      W      TRUE 2009-11-29 13:00:20 24.81583 -124.3647     1    03    01
+#&gt; 30      *      TRUE 2009-11-29 13:05:54 24.81183 -124.3807  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 31      S      TRUE 2009-11-29 13:07:16 24.81100 -124.3847   080   001     3
+#&gt; 32      A      TRUE 2009-11-29 13:07:16 24.81100 -124.3847   080  &lt;NA&gt;     N
 #&gt; 33      1     FALSE                &lt;NA&gt;       NA        NA   001    20    30
-#&gt; 34      E     FALSE 2014-07-02 13:07:53 27.51717 -125.7520     C  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 35      *     FALSE 2014-07-02 13:15:54 27.50750 -125.7725  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 36      N     FALSE 2014-07-02 13:19:07 27.50167 -125.7795   220  10.0  &lt;NA&gt;
-#&gt; 37      *     FALSE 2014-07-02 13:25:54 27.49467 -125.7918  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 38      R      TRUE 2014-07-02 13:34:27 27.48833 -125.8168     S  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 39      P      TRUE 2014-07-02 13:34:27 27.48833 -125.8168   182   001   186
-#&gt; 40      V      TRUE 2014-07-02 13:34:27 27.48833 -125.8168     3    04   180
-#&gt; 41      N      TRUE 2014-07-02 13:34:27 27.48833 -125.8168   252  10.0  &lt;NA&gt;
-#&gt; 42      W      TRUE 2014-07-02 13:34:27 27.48833 -125.8168     1  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 43      *      TRUE 2014-07-02 13:35:54 27.48767 -125.8212  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 44      *      TRUE 2014-07-02 13:45:54 27.48100 -125.8505  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 45      *      TRUE 2014-07-02 13:55:54 27.47400 -125.8800  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 46      V      TRUE 2014-07-02 13:56:10 27.47383 -125.8808     3    04   180
-#&gt; 47      W      TRUE 2014-07-02 13:56:25 27.47367 -125.8815     1  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 48      P      TRUE 2014-07-02 14:01:49 27.47100 -125.8973   153   182   001
-#&gt; 49      V      TRUE 2014-07-02 14:01:49 27.47100 -125.8973     3    04   180
-#&gt; 50      N      TRUE 2014-07-02 14:01:49 27.47100 -125.8973   252  10.0  &lt;NA&gt;
-#&gt; 51      W      TRUE 2014-07-02 14:01:49 27.47100 -125.8973     3  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 52      *      TRUE 2014-07-02 14:05:54 27.46783 -125.9090  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 53      *      TRUE 2014-07-02 14:15:54 27.46067 -125.9383  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 54      *      TRUE 2014-07-02 14:25:54 27.45417 -125.9675  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 55      W      TRUE 2014-07-02 14:29:31 27.45183 -125.9780     3  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 56      P      TRUE 2014-07-02 14:31:21 27.45133 -125.9833   186   153   182
-#&gt; 57      V      TRUE 2014-07-02 14:31:21 27.45133 -125.9833     3    04   180
-#&gt; 58      N      TRUE 2014-07-02 14:31:21 27.45133 -125.9833   252  10.0  &lt;NA&gt;
-#&gt; 59      W      TRUE 2014-07-02 14:31:21 27.45133 -125.9833     3  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 60      *      TRUE 2014-07-02 14:35:54 27.44767 -125.9965  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 61      *      TRUE 2014-07-02 14:45:54 27.44067 -126.0263  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 62      *      TRUE 2014-07-02 14:55:54 27.43483 -126.0552  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 63      P      TRUE 2014-07-02 14:59:57 27.43267 -126.0662   073   186   153
-#&gt; 64      V      TRUE 2014-07-02 14:59:57 27.43267 -126.0662     3    04   180
-#&gt; 65      N      TRUE 2014-07-02 14:59:57 27.43267 -126.0662   252  10.0  &lt;NA&gt;
-#&gt; 66      W      TRUE 2014-07-02 14:59:57 27.43267 -126.0662     3  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 67      *      TRUE 2014-07-02 15:05:54 27.42867 -126.0838  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 68      *      TRUE 2014-07-02 15:15:54 27.42117 -126.1125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 69      *      TRUE 2014-07-02 15:25:54 27.41467 -126.1410  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 70      P      TRUE 2014-07-02 15:30:31 27.41117 -126.1543   185   073   186
-#&gt; 71      V      TRUE 2014-07-02 15:30:31 27.41117 -126.1543     3    04   180
-#&gt; 72      N      TRUE 2014-07-02 15:30:31 27.41117 -126.1543   252  10.0  &lt;NA&gt;
-#&gt; 73      W      TRUE 2014-07-02 15:30:31 27.41117 -126.1543     3  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 74      *      TRUE 2014-07-02 15:35:54 27.40700 -126.1702  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 75      *      TRUE 2014-07-02 15:45:54 27.40017 -126.1993  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 76      *      TRUE 2014-07-02 15:55:54 27.39250 -126.2277  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 77      P      TRUE 2014-07-02 16:00:09 27.39000 -126.2408   126   185   073
-#&gt; 78      V      TRUE 2014-07-02 16:00:09 27.39000 -126.2408     3    04   180
-#&gt; 79      N      TRUE 2014-07-02 16:00:09 27.39000 -126.2408   252  10.0  &lt;NA&gt;
-#&gt; 80      W      TRUE 2014-07-02 16:00:09 27.39000 -126.2408     3  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 81      *      TRUE 2014-07-02 16:05:54 27.38583 -126.2572  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 82      *      TRUE 2014-07-02 16:15:54 27.37983 -126.2863  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 83      W      TRUE 2014-07-02 16:17:31 27.37867 -126.2910     1  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 84      *      TRUE 2014-07-02 16:25:54 27.37400 -126.3168  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 85      K      TRUE 2014-07-02 16:28:37 27.37233 -126.3248  1014   186     6
-#&gt; 86      A      TRUE 2014-07-02 16:28:37 27.37233 -126.3248  1014  &lt;NA&gt;     N
-#&gt; 87      1     FALSE                &lt;NA&gt;       NA        NA   186     3     3
-#&gt; 88      P      TRUE 2014-07-02 16:30:15 27.37150 -126.3295   184   126   185
-#&gt; 89      V      TRUE 2014-07-02 16:30:15 27.37150 -126.3295     3    04   180
-#&gt; 90      N      TRUE 2014-07-02 16:30:15 27.37150 -126.3295   252  10.0  &lt;NA&gt;
-#&gt; 91      W      TRUE 2014-07-02 16:30:15 27.37150 -126.3295     1  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 92      #      TRUE 2014-07-02 16:33:57 27.36967 -126.3405   081   185     2
-#&gt; 93      #      TRUE 2014-07-02 16:33:57 27.36967 -126.3405   081  &lt;NA&gt;     N
-#&gt; 94      *      TRUE 2014-07-02 16:35:54 27.36800 -126.3458  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 95      E     FALSE 2014-07-02 16:36:34 27.36750 -126.3477     U  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 96      k     FALSE 2014-07-02 16:37:44 27.36700 -126.3510  1014   315   1.0
-#&gt; 97      R      TRUE 2014-07-02 16:43:46 27.36517 -126.3620     S  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 98      P      TRUE 2014-07-02 16:43:46 27.36517 -126.3620   184   126   185
-#&gt; 99      V      TRUE 2014-07-02 16:43:46 27.36517 -126.3620     3    04   180
-#&gt; 100     N      TRUE 2014-07-02 16:43:46 27.36517 -126.3620   252  10.0  &lt;NA&gt;
-#&gt; 101     W      TRUE 2014-07-02 16:43:46 27.36517 -126.3620     3  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 102     *      TRUE 2014-07-02 16:45:54 27.36400 -126.3673  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 103     S      TRUE 2014-07-02 16:47:22 27.36317 -126.3718   081   126     6
-#&gt; 104     A      TRUE 2014-07-02 16:47:22 27.36317 -126.3718   081  &lt;NA&gt;     N
-#&gt; 105     1     FALSE                &lt;NA&gt;       NA        NA   001     6     6
-#&gt; 106     2     FALSE                &lt;NA&gt;       NA        NA   073     4     5
-#&gt; 107     3     FALSE                &lt;NA&gt;       NA        NA   126     3     5
-#&gt; 108     4     FALSE                &lt;NA&gt;       NA        NA   153     4     5
-#&gt; 109     5     FALSE                &lt;NA&gt;       NA        NA   184     5     8
-#&gt; 110     6     FALSE                &lt;NA&gt;       NA        NA   185     7     9
-#&gt; 111     E     FALSE 2014-07-02 16:48:44 27.36217 -126.3758     C  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 112     C     FALSE 2014-07-02 16:51:19 27.35967 -126.3827  The  sight ing 8
-#&gt; 113     *     FALSE 2014-07-02 16:55:54 27.35117 -126.3835  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 114     s     FALSE 2014-07-02 16:58:43 27.34817 -126.3832   081   330   2.0
-#&gt; 115     N     FALSE 2014-07-02 17:04:50 27.34133 -126.3792   125  10.0  &lt;NA&gt;
-#&gt; 116     *     FALSE 2014-07-02 17:05:54 27.34033 -126.3777  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 117     *     FALSE 2014-07-02 17:15:54 27.33267 -126.3687  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 118     s     FALSE 2014-07-02 17:21:01 27.32683 -126.3672   081   329   6.0
-#&gt; 119     *     FALSE 2014-07-02 17:25:54 27.32083 -126.3662  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 120     s     FALSE 2014-07-02 17:29:44 27.31633 -126.3655   081   320   9.0
-#&gt; 121     *     FALSE 2014-07-02 17:35:54 27.31233 -126.3597  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 122     *     FALSE 2014-07-02 17:45:54 27.31617 -126.3535  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 123     s     FALSE 2014-07-02 17:50:15 27.32083 -126.3608   081   280  15.0
-#&gt; 124     N     FALSE 2014-07-02 17:51:13 27.32200 -126.3625   290  10.0  &lt;NA&gt;
-#&gt; 125     F     FALSE 2014-07-02 17:51:13 27.32200 -126.3625   126   000   2.7
-#&gt; 126     *     FALSE 2014-07-02 17:55:54 27.32650 -126.3703  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 127     *     FALSE 2014-07-02 18:05:54 27.33050 -126.3833  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 128     N     FALSE 2014-07-02 18:06:51 27.33000 -126.3822   175  10.0  &lt;NA&gt;
-#&gt; 129     s     FALSE 2014-07-02 18:10:25 27.32800 -126.3790   081   341   2.5
-#&gt; 130     *     FALSE 2014-07-02 18:15:54 27.32700 -126.3727  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 131     N     FALSE 2014-07-02 18:18:49 27.32683 -126.3692   105  10.0  &lt;NA&gt;
-#&gt; 132     s     FALSE 2014-07-02 18:22:24 27.32600 -126.3650   081   000  &lt;NA&gt;
-#&gt; 133     *     FALSE 2014-07-02 18:25:54 27.32317 -126.3627  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 134     *     FALSE 2014-07-02 18:35:54 27.31783 -126.3530  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 135     C     FALSE 2014-07-02 18:39:42 27.31750 -126.3523  clos ing d own o
-#&gt; 136     B      TRUE 2014-07-03 06:31:44 27.10233 -127.7068  1000     C     7
-#&gt; 137     R      TRUE 2014-07-03 06:31:44 27.10233 -127.7068     S  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 138     P      TRUE 2014-07-03 06:31:44 27.10233 -127.7068   186   153   182
-#&gt; 139     V      TRUE 2014-07-03 06:31:44 27.10233 -127.7068     3    04   125
-#&gt; 140     N      TRUE 2014-07-03 06:31:44 27.10233 -127.7068   259  10.0  &lt;NA&gt;
-#&gt; 141     W      TRUE 2014-07-03 06:31:44 27.10233 -127.7068     1  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 142     *      TRUE 2014-07-03 06:41:41 27.09617 -127.7353  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 143     V      TRUE 2014-07-03 06:47:57 27.09283 -127.7537     3    06   175
-#&gt; 144     *      TRUE 2014-07-03 06:51:41 27.09050 -127.7640  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 145     S      TRUE 2014-07-03 06:53:54 27.08883 -127.7702   082   153     6
-#&gt; 146     A      TRUE 2014-07-03 06:53:54 27.08883 -127.7702   082  &lt;NA&gt;     N
-#&gt; 147     1     FALSE                &lt;NA&gt;       NA        NA   001     3     4
-#&gt; 148     2     FALSE                &lt;NA&gt;       NA        NA   073     6     6
-#&gt; 149     3     FALSE                &lt;NA&gt;       NA        NA   126     5     6
-#&gt; 150     4     FALSE                &lt;NA&gt;       NA        NA   153     6     6
-#&gt; 151     5     FALSE                &lt;NA&gt;       NA        NA   182     4     6
-#&gt; 152     6     FALSE                &lt;NA&gt;       NA        NA   185     6     9
-#&gt; 153     7     FALSE                &lt;NA&gt;       NA        NA   186     4     7
-#&gt; 154     E     FALSE 2014-07-03 06:53:54 27.08883 -127.7702     C  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 34      E     FALSE 2009-11-29 13:07:53 24.81067 -124.3865     C  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 35      *     FALSE 2009-11-29 13:15:54 24.80100 -124.4070  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 36      N     FALSE 2009-11-29 13:19:07 24.79517 -124.4140   220  10.0  &lt;NA&gt;
+#&gt; 37      *     FALSE 2009-11-29 13:25:54 24.78817 -124.4263  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 38      R      TRUE 2009-11-29 13:34:27 24.78183 -124.4513     S  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 39      P      TRUE 2009-11-29 13:34:27 24.78183 -124.4513   182   001   186
+#&gt; 40      V      TRUE 2009-11-29 13:34:27 24.78183 -124.4513     3    04   180
+#&gt; 41      N      TRUE 2009-11-29 13:34:27 24.78183 -124.4513   252  10.0  &lt;NA&gt;
+#&gt; 42      W      TRUE 2009-11-29 13:34:27 24.78183 -124.4513     1  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 43      *      TRUE 2009-11-29 13:35:54 24.78117 -124.4557  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 44      *      TRUE 2009-11-29 13:45:54 24.77450 -124.4850  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 45      *      TRUE 2009-11-29 13:55:54 24.76750 -124.5145  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 46      t      TRUE 2009-11-29 13:55:54 24.76750 -124.5145   001    DC   180
+#&gt; 47      V      TRUE 2009-11-29 13:56:10 24.76733 -124.5153     3    04   180
+#&gt; 48      W      TRUE 2009-11-29 13:56:25 24.76717 -124.5160     1  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 49      P      TRUE 2009-11-29 14:01:49 24.76450 -124.5318   153   182   001
+#&gt; 50      V      TRUE 2009-11-29 14:01:49 24.76450 -124.5318     3    04   180
+#&gt; 51      N      TRUE 2009-11-29 14:01:49 24.76450 -124.5318   252  10.0  &lt;NA&gt;
+#&gt; 52      W      TRUE 2009-11-29 14:01:49 24.76450 -124.5318     3  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 53      *      TRUE 2009-11-29 14:05:54 24.76133 -124.5435  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 54      *      TRUE 2009-11-29 14:15:54 24.75417 -124.5728  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 55      *      TRUE 2009-11-29 14:25:54 24.74767 -124.6020  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 56      W      TRUE 2009-11-29 14:29:31 24.74533 -124.6125     3  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 57      P      TRUE 2009-11-29 14:31:21 24.74483 -124.6178   186   153   182
+#&gt; 58      V      TRUE 2009-11-29 14:31:21 24.74483 -124.6178     3    04   180
+#&gt; 59      N      TRUE 2009-11-29 14:31:21 24.74483 -124.6178   252  10.0  &lt;NA&gt;
+#&gt; 60      W      TRUE 2009-11-29 14:31:21 24.74483 -124.6178     3  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 61      *      TRUE 2009-11-29 14:35:54 24.74117 -124.6310  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 62      *      TRUE 2009-11-29 14:45:54 24.73417 -124.6608  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 63      *      TRUE 2009-11-29 14:55:54 24.72833 -124.6897  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 64      P      TRUE 2009-11-29 14:59:57 24.72617 -124.7007   073   186   153
+#&gt; 65      V      TRUE 2009-11-29 14:59:57 24.72617 -124.7007     3    04   180
+#&gt; 66      N      TRUE 2009-11-29 14:59:57 24.72617 -124.7007   252  10.0  &lt;NA&gt;
+#&gt; 67      W      TRUE 2009-11-29 14:59:57 24.72617 -124.7007     3  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 68      *      TRUE 2009-11-29 15:05:54 24.72217 -124.7183  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 69      *      TRUE 2009-11-29 15:15:54 24.71467 -124.7470  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 70      *      TRUE 2009-11-29 15:25:54 24.70817 -124.7755  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 71      P      TRUE 2009-11-29 15:30:31 24.70467 -124.7888   185   073   186
+#&gt; 72      V      TRUE 2009-11-29 15:30:31 24.70467 -124.7888     3    04   180
+#&gt; 73      N      TRUE 2009-11-29 15:30:31 24.70467 -124.7888   252  10.0  &lt;NA&gt;
+#&gt; 74      W      TRUE 2009-11-29 15:30:31 24.70467 -124.7888     3  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 75      *      TRUE 2009-11-29 15:35:54 24.70050 -124.8047  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 76      *      TRUE 2009-11-29 15:45:54 24.69367 -124.8338  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 77      *      TRUE 2009-11-29 15:55:54 24.68600 -124.8622  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 78      P      TRUE 2009-11-29 16:00:09 24.68350 -124.8753   126   185   073
+#&gt; 79      V      TRUE 2009-11-29 16:00:09 24.68350 -124.8753     3    04   180
+#&gt; 80      N      TRUE 2009-11-29 16:00:09 24.68350 -124.8753   252  10.0  &lt;NA&gt;
+#&gt; 81      W      TRUE 2009-11-29 16:00:09 24.68350 -124.8753     3  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 82      *      TRUE 2009-11-29 16:05:54 24.67933 -124.8917  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 83      *      TRUE 2009-11-29 16:15:54 24.67333 -124.9208  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 84      W      TRUE 2009-11-29 16:17:31 24.67217 -124.9255     1  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 85      *      TRUE 2009-11-29 16:25:54 24.66750 -124.9513  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 86      K      TRUE 2009-11-29 16:28:37 24.66583 -124.9593  1014   186     6
+#&gt; 87      A      TRUE 2009-11-29 16:28:37 24.66583 -124.9593  1014  &lt;NA&gt;     N
+#&gt; 88      1     FALSE                &lt;NA&gt;       NA        NA   186     4     4
+#&gt; 89      P      TRUE 2009-11-29 16:30:15 24.66500 -124.9640   184   126   185
+#&gt; 90      V      TRUE 2009-11-29 16:30:15 24.66500 -124.9640     3    04   180
+#&gt; 91      N      TRUE 2009-11-29 16:30:15 24.66500 -124.9640   252  10.0  &lt;NA&gt;
+#&gt; 92      W      TRUE 2009-11-29 16:30:15 24.66500 -124.9640     1  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 93      #      TRUE 2009-11-29 16:33:57 24.66317 -124.9750   081   185     2
+#&gt; 94      #      TRUE 2009-11-29 16:33:57 24.66317 -124.9750   081  &lt;NA&gt;     N
+#&gt; 95      *      TRUE 2009-11-29 16:35:54 24.66150 -124.9803  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 96      E     FALSE 2009-11-29 16:36:34 24.66100 -124.9822     U  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 97      k     FALSE 2009-11-29 16:37:44 24.66050 -124.9855  1014   315   1.0
+#&gt; 98      R      TRUE 2009-11-29 16:43:46 24.65867 -124.9965     S  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 99      P      TRUE 2009-11-29 16:43:46 24.65867 -124.9965   184   126   185
+#&gt; 100     V      TRUE 2009-11-29 16:43:46 24.65867 -124.9965     3    04   180
+#&gt; 101     N      TRUE 2009-11-29 16:43:46 24.65867 -124.9965   252  10.0  &lt;NA&gt;
+#&gt; 102     W      TRUE 2009-11-29 16:43:46 24.65867 -124.9965     3  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 103     *      TRUE 2009-11-29 16:45:54 24.65750 -125.0018  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 104     S      TRUE 2009-11-29 16:47:22 24.65667 -125.0063   081   126     6
+#&gt; 105     A      TRUE 2009-11-29 16:47:22 24.65667 -125.0063   081  &lt;NA&gt;     N
+#&gt; 106     1     FALSE                &lt;NA&gt;       NA        NA   001     3     5
+#&gt; 107     2     FALSE                &lt;NA&gt;       NA        NA   073     8    10
+#&gt; 108     3     FALSE                &lt;NA&gt;       NA        NA   126     2     2
+#&gt; 109     4     FALSE                &lt;NA&gt;       NA        NA   153     5     6
+#&gt; 110     5     FALSE                &lt;NA&gt;       NA        NA   184     4     6
+#&gt; 111     6     FALSE                &lt;NA&gt;       NA        NA   185     5     6
+#&gt; 112     E     FALSE 2009-11-29 16:48:44 24.65567 -125.0103     C  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 113     C     FALSE 2009-11-29 16:51:19 24.65317 -125.0172  The  sight ing 8
+#&gt; 114     *     FALSE 2009-11-29 16:55:54 24.64467 -125.0180  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 115     s     FALSE 2009-11-29 16:58:43 24.64167 -125.0177   081   330   2.0
+#&gt; 116     N     FALSE 2009-11-29 17:04:50 24.63483 -125.0137   125  10.0  &lt;NA&gt;
+#&gt; 117     *     FALSE 2009-11-29 17:05:54 24.63383 -125.0122  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 118     *     FALSE 2009-11-29 17:15:54 24.62617 -125.0032  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 119     s     FALSE 2009-11-29 17:21:01 24.62033 -125.0017   081   329   6.0
+#&gt; 120     *     FALSE 2009-11-29 17:25:54 24.61433 -125.0007  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 121     s     FALSE 2009-11-29 17:29:44 24.60983 -125.0000   081   320   9.0
+#&gt; 122     *     FALSE 2009-11-29 17:35:54 24.60583 -124.9942  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 123     *     FALSE 2009-11-29 17:45:54 24.60967 -124.9880  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 124     s     FALSE 2009-11-29 17:50:15 24.61433 -124.9953   081   280  15.0
+#&gt; 125     N     FALSE 2009-11-29 17:51:13 24.61550 -124.9970   290  10.0  &lt;NA&gt;
+#&gt; 126     F     FALSE 2009-11-29 17:51:13 24.61550 -124.9970   126   000   2.7
+#&gt; 127     *     FALSE 2009-11-29 17:55:54 24.62000 -125.0048  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 128     *     FALSE 2009-11-29 18:05:54 24.62400 -125.0178  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 129     N     FALSE 2009-11-29 18:06:51 24.62350 -125.0167   175  10.0  &lt;NA&gt;
+#&gt; 130     s     FALSE 2009-11-29 18:10:25 24.62150 -125.0135   081   341   2.5
+#&gt; 131     *     FALSE 2009-11-29 18:15:54 24.62050 -125.0072  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 132     N     FALSE 2009-11-29 18:18:49 24.62033 -125.0037   105  10.0  &lt;NA&gt;
+#&gt; 133     s     FALSE 2009-11-29 18:22:24 24.61950 -124.9995   081   000  &lt;NA&gt;
+#&gt; 134     *     FALSE 2009-11-29 18:25:54 24.61667 -124.9972  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 135     *     FALSE 2009-11-29 18:35:54 24.61133 -124.9875  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 136     C     FALSE 2009-11-29 18:39:42 24.61100 -124.9868  clos ing d own o
+#&gt; 137     B      TRUE 2009-11-30 06:31:44 24.39583 -126.3413  1000     C     7
+#&gt; 138     R      TRUE 2009-11-30 06:31:44 24.39583 -126.3413     S  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 139     P      TRUE 2009-11-30 06:31:44 24.39583 -126.3413   186   153   182
+#&gt; 140     V      TRUE 2009-11-30 06:31:44 24.39583 -126.3413     3    04   125
+#&gt; 141     N      TRUE 2009-11-30 06:31:44 24.39583 -126.3413   259  10.0  &lt;NA&gt;
+#&gt; 142     W      TRUE 2009-11-30 06:31:44 24.39583 -126.3413     1  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 143     *      TRUE 2009-11-30 06:41:41 24.38967 -126.3698  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 144     V      TRUE 2009-11-30 06:47:57 24.38633 -126.3882     3    06   175
+#&gt; 145     *      TRUE 2009-11-30 06:51:41 24.38400 -126.3985  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 146     S      TRUE 2009-11-30 06:53:54 24.38233 -126.4047   082   153     6
+#&gt; 147     A      TRUE 2009-11-30 06:53:54 24.38233 -126.4047   082  &lt;NA&gt;     N
+#&gt; 148     1     FALSE                &lt;NA&gt;       NA        NA   001     3     4
+#&gt; 149     2     FALSE                &lt;NA&gt;       NA        NA   073     6    10
+#&gt; 150     3     FALSE                &lt;NA&gt;       NA        NA   126     4     4
+#&gt; 151     4     FALSE                &lt;NA&gt;       NA        NA   153     7     8
+#&gt; 152     5     FALSE                &lt;NA&gt;       NA        NA   182     4     6
+#&gt; 153     6     FALSE                &lt;NA&gt;       NA        NA   185     4     5
+#&gt; 154     7     FALSE                &lt;NA&gt;       NA        NA   186     5     5
+#&gt; 155     E     FALSE 2009-11-30 06:53:54 24.38233 -126.4047     C  &lt;NA&gt;  &lt;NA&gt;
 #&gt;     Data4 Data5 Data6 Data7 Data8
 #&gt; 1       Y  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 2    &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
@@ -352,7 +353,7 @@
 #&gt; 14      4   012   0.2   3.6   210
 #&gt; 15      N   075  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 16   &lt;NA&gt;   074  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 17      2   100   000   000   000
+#&gt; 17      3   100   000   000   000
 #&gt; 18   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 19   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 20   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
@@ -381,270 +382,272 @@
 #&gt; 43   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 44   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 45   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 46   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 47    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 48   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 49   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 50   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 51    140   4.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 52   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 46    0.2     1     J  12.2     A
+#&gt; 47   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 48    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 49   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 50   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 51   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 52    140   4.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 53   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 54   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 55    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 56   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 57   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 58   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 59    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 60   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 55   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 56    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 57   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 58   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 59   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 60    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 61   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 62   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 63   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 64   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 65   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 66    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 67   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 64   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 65   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 66   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 67    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 68   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 69   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 70   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 71   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 72   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 73    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 74   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 71   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 72   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 73   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 74    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 75   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 76   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 77   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 78   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 79   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 80    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 81   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 78   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 79   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 80   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 81    140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 82   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 83    140   6.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 84   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 85      4   340   1.5   2.2  &lt;NA&gt;
-#&gt; 86      N   079  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 87      2   100  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 88   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 89   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 90   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 91    140   6.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 92      4   020   3.0   1.0  &lt;NA&gt;
-#&gt; 93      n  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 94   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 83   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 84    140   6.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 85   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 86      4   340   1.5   2.2  &lt;NA&gt;
+#&gt; 87      N   079  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 88      4   100  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 89   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 90   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 91   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 92    140   6.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 93      4   020   3.0   1.0  &lt;NA&gt;
+#&gt; 94      n  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 95   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 96    2.7   257  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 97   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 96   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 97    2.7   257  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 98   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 99   &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 100  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 101   140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 102  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 103     1   080   2.0   1.3   230
-#&gt; 104     N   079  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 105     5   100   000   000   000
-#&gt; 106     4   100   000   000   000
-#&gt; 107     1   100   000   000   000
-#&gt; 108     3   100   000   000   000
-#&gt; 109     5   100   000   000   000
-#&gt; 110     6   100   000   000   000
-#&gt; 111  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 112 1 is  a mat ch wi th th e sig
-#&gt; 113  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 114   1.3   252  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 115  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 99   &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 100  &lt;NA&gt;  09.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 101  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 102   140   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 103  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 104     1   080   2.0   1.3   230
+#&gt; 105     N   079  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 106     3   100   000   000   000
+#&gt; 107     7   100   000   000   000
+#&gt; 108     1   100   000   000   000
+#&gt; 109     3   100   000   000   000
+#&gt; 110     3   100   000   000   000
+#&gt; 111     4   100   000   000   000
+#&gt; 112  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 113 1 is  a mat ch wi th th e sig
+#&gt; 114  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 115   1.3   252  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 116  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 117  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 118   0.6   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 119  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 120   0.4   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 121  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 118  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 119   0.6   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 120  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 121   0.4   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 122  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 123   0.3   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 124  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 125   0.5  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 126  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 123  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 124   0.3   125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 125  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 126   0.5  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 127  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 128  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 129   1.1   175  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 130  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 129  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 130   1.1   175  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 131  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 132   0.5   105  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 133  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 132  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 133   0.5   105  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 134  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 135 n fly ing b ridge .  be en tr
-#&gt; 136     Y  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 137  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 135  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 136 n fly ing b ridge .  be en tr
+#&gt; 137     Y  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 138  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 139  &lt;NA&gt;  10.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 140  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 141   138   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 142  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 143  &lt;NA&gt;  10.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 144  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 145     1   070   2.2   1.2   090
-#&gt; 146     Y   096  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 147     3   100   000   000   000
-#&gt; 148     5   100   000   000   000
-#&gt; 149     3   100   000   000   000
-#&gt; 150     4   100   000   000   000
-#&gt; 151     1   100   000   000   000
-#&gt; 152     5   100   000   000   000
-#&gt; 153     3   100   000   000   000
-#&gt; 154  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt;                                               Data9       file_das event_num
-#&gt; 1                                              &lt;NA&gt; das_sample.das         1
-#&gt; 2                                              &lt;NA&gt; das_sample.das         2
-#&gt; 3                                              &lt;NA&gt; das_sample.das         3
-#&gt; 4                                              &lt;NA&gt; das_sample.das         4
-#&gt; 5                                              &lt;NA&gt; das_sample.das         5
-#&gt; 6                                              &lt;NA&gt; das_sample.das         6
-#&gt; 7                                              &lt;NA&gt; das_sample.das         7
-#&gt; 8                                              &lt;NA&gt; das_sample.das         8
-#&gt; 9                                              &lt;NA&gt; das_sample.das         9
-#&gt; 10                                             &lt;NA&gt; das_sample.das        10
-#&gt; 11                                             &lt;NA&gt; das_sample.das        11
-#&gt; 12                                             &lt;NA&gt; das_sample.das        12
-#&gt; 13                                             &lt;NA&gt; das_sample.das        13
-#&gt; 14                                              4.0 das_sample.das        14
-#&gt; 15                                             &lt;NA&gt; das_sample.das        15
-#&gt; 16                                             &lt;NA&gt; das_sample.das        NA
-#&gt; 17                                             &lt;NA&gt; das_sample.das        NA
-#&gt; 18                                             &lt;NA&gt; das_sample.das        16
-#&gt; 19                                             &lt;NA&gt; das_sample.das        17
-#&gt; 20                                             &lt;NA&gt; das_sample.das        18
-#&gt; 21                                             &lt;NA&gt; das_sample.das        19
-#&gt; 22                                             &lt;NA&gt; das_sample.das        20
-#&gt; 23                                             &lt;NA&gt; das_sample.das        21
-#&gt; 24                                             &lt;NA&gt; das_sample.das        22
-#&gt; 25                                             &lt;NA&gt; das_sample.das        23
-#&gt; 26                                             &lt;NA&gt; das_sample.das        24
-#&gt; 27                                             &lt;NA&gt; das_sample.das        25
-#&gt; 28                                             &lt;NA&gt; das_sample.das        26
-#&gt; 29                                             &lt;NA&gt; das_sample.das        27
-#&gt; 30                                             &lt;NA&gt; das_sample.das        28
-#&gt; 31                                              2.0 das_sample.das        29
-#&gt; 32                                             &lt;NA&gt; das_sample.das        30
-#&gt; 33                                             &lt;NA&gt; das_sample.das        NA
-#&gt; 34                                             &lt;NA&gt; das_sample.das        31
-#&gt; 35                                             &lt;NA&gt; das_sample.das        32
-#&gt; 36                                             &lt;NA&gt; das_sample.das        33
-#&gt; 37                                             &lt;NA&gt; das_sample.das        34
-#&gt; 38                                             &lt;NA&gt; das_sample.das        35
-#&gt; 39                                             &lt;NA&gt; das_sample.das        36
-#&gt; 40                                             &lt;NA&gt; das_sample.das        37
-#&gt; 41                                             &lt;NA&gt; das_sample.das        38
-#&gt; 42                                             &lt;NA&gt; das_sample.das        39
-#&gt; 43                                             &lt;NA&gt; das_sample.das        40
-#&gt; 44                                             &lt;NA&gt; das_sample.das        41
-#&gt; 45                                             &lt;NA&gt; das_sample.das        42
-#&gt; 46                                             &lt;NA&gt; das_sample.das        43
-#&gt; 47                                             &lt;NA&gt; das_sample.das        44
-#&gt; 48                                             &lt;NA&gt; das_sample.das        45
-#&gt; 49                                             &lt;NA&gt; das_sample.das        46
-#&gt; 50                                             &lt;NA&gt; das_sample.das        47
-#&gt; 51                                             &lt;NA&gt; das_sample.das        48
-#&gt; 52                                             &lt;NA&gt; das_sample.das        49
-#&gt; 53                                             &lt;NA&gt; das_sample.das        50
-#&gt; 54                                             &lt;NA&gt; das_sample.das        51
-#&gt; 55                                             &lt;NA&gt; das_sample.das        52
-#&gt; 56                                             &lt;NA&gt; das_sample.das        53
-#&gt; 57                                             &lt;NA&gt; das_sample.das        54
-#&gt; 58                                             &lt;NA&gt; das_sample.das        55
-#&gt; 59                                             &lt;NA&gt; das_sample.das        56
-#&gt; 60                                             &lt;NA&gt; das_sample.das        57
-#&gt; 61                                             &lt;NA&gt; das_sample.das        58
-#&gt; 62                                             &lt;NA&gt; das_sample.das        59
-#&gt; 63                                             &lt;NA&gt; das_sample.das        60
-#&gt; 64                                             &lt;NA&gt; das_sample.das        61
-#&gt; 65                                             &lt;NA&gt; das_sample.das        62
-#&gt; 66                                             &lt;NA&gt; das_sample.das        63
-#&gt; 67                                             &lt;NA&gt; das_sample.das        64
-#&gt; 68                                             &lt;NA&gt; das_sample.das        65
-#&gt; 69                                             &lt;NA&gt; das_sample.das        66
-#&gt; 70                                             &lt;NA&gt; das_sample.das        67
-#&gt; 71                                             &lt;NA&gt; das_sample.das        68
-#&gt; 72                                             &lt;NA&gt; das_sample.das        69
-#&gt; 73                                             &lt;NA&gt; das_sample.das        70
-#&gt; 74                                             &lt;NA&gt; das_sample.das        71
-#&gt; 75                                             &lt;NA&gt; das_sample.das        72
-#&gt; 76                                             &lt;NA&gt; das_sample.das        73
-#&gt; 77                                             &lt;NA&gt; das_sample.das        74
-#&gt; 78                                             &lt;NA&gt; das_sample.das        75
-#&gt; 79                                             &lt;NA&gt; das_sample.das        76
-#&gt; 80                                             &lt;NA&gt; das_sample.das        77
-#&gt; 81                                             &lt;NA&gt; das_sample.das        78
-#&gt; 82                                             &lt;NA&gt; das_sample.das        79
-#&gt; 83                                             &lt;NA&gt; das_sample.das        80
-#&gt; 84                                             &lt;NA&gt; das_sample.das        81
-#&gt; 85                                             &lt;NA&gt; das_sample.das        82
-#&gt; 86                                             &lt;NA&gt; das_sample.das        83
-#&gt; 87                                             &lt;NA&gt; das_sample.das        NA
-#&gt; 88                                             &lt;NA&gt; das_sample.das        84
-#&gt; 89                                             &lt;NA&gt; das_sample.das        85
-#&gt; 90                                             &lt;NA&gt; das_sample.das        86
-#&gt; 91                                             &lt;NA&gt; das_sample.das        87
-#&gt; 92                                             &lt;NA&gt; das_sample.das        88
-#&gt; 93                                             &lt;NA&gt; das_sample.das        89
-#&gt; 94                                             &lt;NA&gt; das_sample.das        90
-#&gt; 95                                             &lt;NA&gt; das_sample.das        91
-#&gt; 96                                             &lt;NA&gt; das_sample.das        92
-#&gt; 97                                             &lt;NA&gt; das_sample.das        93
-#&gt; 98                                             &lt;NA&gt; das_sample.das        94
-#&gt; 99                                             &lt;NA&gt; das_sample.das        95
-#&gt; 100                                            &lt;NA&gt; das_sample.das        96
-#&gt; 101                                            &lt;NA&gt; das_sample.das        97
-#&gt; 102                                            &lt;NA&gt; das_sample.das        98
-#&gt; 103                                        2.0 1014 das_sample.das        99
-#&gt; 104                                            &lt;NA&gt; das_sample.das       100
-#&gt; 105                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 106                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 107                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 108                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 109                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 110                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 111                                            &lt;NA&gt; das_sample.das       101
-#&gt; 112 hting 1014                                      das_sample.das       102
-#&gt; 113                                            &lt;NA&gt; das_sample.das       103
-#&gt; 114                                            &lt;NA&gt; das_sample.das       104
-#&gt; 115                                            &lt;NA&gt; das_sample.das       105
-#&gt; 116                                            &lt;NA&gt; das_sample.das       106
-#&gt; 117                                            &lt;NA&gt; das_sample.das       107
-#&gt; 118                                            &lt;NA&gt; das_sample.das       108
-#&gt; 119                                            &lt;NA&gt; das_sample.das       109
-#&gt; 120                                            &lt;NA&gt; das_sample.das       110
-#&gt; 121                                            &lt;NA&gt; das_sample.das       111
-#&gt; 122                                            &lt;NA&gt; das_sample.das       112
-#&gt; 123                                            &lt;NA&gt; das_sample.das       113
-#&gt; 124                                            &lt;NA&gt; das_sample.das       114
-#&gt; 125                                            &lt;NA&gt; das_sample.das       115
-#&gt; 126                                            &lt;NA&gt; das_sample.das       116
-#&gt; 127                                            &lt;NA&gt; das_sample.das       117
-#&gt; 128                                            &lt;NA&gt; das_sample.das       118
-#&gt; 129                                            &lt;NA&gt; das_sample.das       119
-#&gt; 130                                            &lt;NA&gt; das_sample.das       120
-#&gt; 131                                            &lt;NA&gt; das_sample.das       121
-#&gt; 132                                            &lt;NA&gt; das_sample.das       122
-#&gt; 133                                            &lt;NA&gt; das_sample.das       123
-#&gt; 134                                            &lt;NA&gt; das_sample.das       124
-#&gt; 135 acking sighting 081 and prey patches until dark das_sample.das       125
-#&gt; 136                                            &lt;NA&gt; das_sample.das         1
-#&gt; 137                                            &lt;NA&gt; das_sample.das         2
-#&gt; 138                                            &lt;NA&gt; das_sample.das         3
-#&gt; 139                                            &lt;NA&gt; das_sample.das         4
-#&gt; 140                                            &lt;NA&gt; das_sample.das         5
-#&gt; 141                                            &lt;NA&gt; das_sample.das         6
-#&gt; 142                                            &lt;NA&gt; das_sample.das         7
-#&gt; 143                                            &lt;NA&gt; das_sample.das         8
-#&gt; 144                                            &lt;NA&gt; das_sample.das         9
-#&gt; 145                                             4.0 das_sample.das        10
-#&gt; 146                                            &lt;NA&gt; das_sample.das        11
-#&gt; 147                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 148                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 149                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 150                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 151                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 152                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 153                                            &lt;NA&gt; das_sample.das        NA
-#&gt; 154                                            &lt;NA&gt; das_sample.das        12
+#&gt; 139  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 140  &lt;NA&gt;  10.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 141  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 142   138   5.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 143  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 144  &lt;NA&gt;  10.0  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 145  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 146     1   070   2.2   1.2   090
+#&gt; 147     Y   096  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 148     2   100   000   000   000
+#&gt; 149     5   100   000   000   000
+#&gt; 150     3   100   000   000   000
+#&gt; 151     7   100   000   000   000
+#&gt; 152     1   100   000   000   000
+#&gt; 153     2   100   000   000   000
+#&gt; 154     4   100   000   000   000
+#&gt; 155  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt;                                               Data9 EventNum       file_das
+#&gt; 1                                              &lt;NA&gt;        1 das_sample.das
+#&gt; 2                                              &lt;NA&gt;        2 das_sample.das
+#&gt; 3                                              &lt;NA&gt;        3 das_sample.das
+#&gt; 4                                              &lt;NA&gt;        4 das_sample.das
+#&gt; 5                                              &lt;NA&gt;        5 das_sample.das
+#&gt; 6                                              &lt;NA&gt;        6 das_sample.das
+#&gt; 7                                              &lt;NA&gt;        7 das_sample.das
+#&gt; 8                                              &lt;NA&gt;        8 das_sample.das
+#&gt; 9                                              &lt;NA&gt;        9 das_sample.das
+#&gt; 10                                             &lt;NA&gt;       10 das_sample.das
+#&gt; 11                                             &lt;NA&gt;       11 das_sample.das
+#&gt; 12                                             &lt;NA&gt;       12 das_sample.das
+#&gt; 13                                             &lt;NA&gt;       13 das_sample.das
+#&gt; 14                                              4.0       14 das_sample.das
+#&gt; 15                                             &lt;NA&gt;       15 das_sample.das
+#&gt; 16                                             &lt;NA&gt;       NA das_sample.das
+#&gt; 17                                             &lt;NA&gt;       NA das_sample.das
+#&gt; 18                                             &lt;NA&gt;       16 das_sample.das
+#&gt; 19                                             &lt;NA&gt;       17 das_sample.das
+#&gt; 20                                             &lt;NA&gt;       18 das_sample.das
+#&gt; 21                                             &lt;NA&gt;       19 das_sample.das
+#&gt; 22                                             &lt;NA&gt;       20 das_sample.das
+#&gt; 23                                             &lt;NA&gt;       21 das_sample.das
+#&gt; 24                                             &lt;NA&gt;       22 das_sample.das
+#&gt; 25                                             &lt;NA&gt;       23 das_sample.das
+#&gt; 26                                             &lt;NA&gt;       24 das_sample.das
+#&gt; 27                                             &lt;NA&gt;       25 das_sample.das
+#&gt; 28                                             &lt;NA&gt;       26 das_sample.das
+#&gt; 29                                             &lt;NA&gt;       27 das_sample.das
+#&gt; 30                                             &lt;NA&gt;       28 das_sample.das
+#&gt; 31                                              2.0       29 das_sample.das
+#&gt; 32                                             &lt;NA&gt;       30 das_sample.das
+#&gt; 33                                             &lt;NA&gt;       NA das_sample.das
+#&gt; 34                                             &lt;NA&gt;       31 das_sample.das
+#&gt; 35                                             &lt;NA&gt;       32 das_sample.das
+#&gt; 36                                             &lt;NA&gt;       33 das_sample.das
+#&gt; 37                                             &lt;NA&gt;       34 das_sample.das
+#&gt; 38                                             &lt;NA&gt;       35 das_sample.das
+#&gt; 39                                             &lt;NA&gt;       36 das_sample.das
+#&gt; 40                                             &lt;NA&gt;       37 das_sample.das
+#&gt; 41                                             &lt;NA&gt;       38 das_sample.das
+#&gt; 42                                             &lt;NA&gt;       39 das_sample.das
+#&gt; 43                                             &lt;NA&gt;       40 das_sample.das
+#&gt; 44                                             &lt;NA&gt;       41 das_sample.das
+#&gt; 45                                             &lt;NA&gt;       42 das_sample.das
+#&gt; 46                                                N       43 das_sample.das
+#&gt; 47                                             &lt;NA&gt;       44 das_sample.das
+#&gt; 48                                             &lt;NA&gt;       45 das_sample.das
+#&gt; 49                                             &lt;NA&gt;       46 das_sample.das
+#&gt; 50                                             &lt;NA&gt;       47 das_sample.das
+#&gt; 51                                             &lt;NA&gt;       48 das_sample.das
+#&gt; 52                                             &lt;NA&gt;       49 das_sample.das
+#&gt; 53                                             &lt;NA&gt;       50 das_sample.das
+#&gt; 54                                             &lt;NA&gt;       51 das_sample.das
+#&gt; 55                                             &lt;NA&gt;       52 das_sample.das
+#&gt; 56                                             &lt;NA&gt;       53 das_sample.das
+#&gt; 57                                             &lt;NA&gt;       54 das_sample.das
+#&gt; 58                                             &lt;NA&gt;       55 das_sample.das
+#&gt; 59                                             &lt;NA&gt;       56 das_sample.das
+#&gt; 60                                             &lt;NA&gt;       57 das_sample.das
+#&gt; 61                                             &lt;NA&gt;       58 das_sample.das
+#&gt; 62                                             &lt;NA&gt;       59 das_sample.das
+#&gt; 63                                             &lt;NA&gt;       60 das_sample.das
+#&gt; 64                                             &lt;NA&gt;       61 das_sample.das
+#&gt; 65                                             &lt;NA&gt;       62 das_sample.das
+#&gt; 66                                             &lt;NA&gt;       63 das_sample.das
+#&gt; 67                                             &lt;NA&gt;       64 das_sample.das
+#&gt; 68                                             &lt;NA&gt;       65 das_sample.das
+#&gt; 69                                             &lt;NA&gt;       66 das_sample.das
+#&gt; 70                                             &lt;NA&gt;       67 das_sample.das
+#&gt; 71                                             &lt;NA&gt;       68 das_sample.das
+#&gt; 72                                             &lt;NA&gt;       69 das_sample.das
+#&gt; 73                                             &lt;NA&gt;       70 das_sample.das
+#&gt; 74                                             &lt;NA&gt;       71 das_sample.das
+#&gt; 75                                             &lt;NA&gt;       72 das_sample.das
+#&gt; 76                                             &lt;NA&gt;       73 das_sample.das
+#&gt; 77                                             &lt;NA&gt;       74 das_sample.das
+#&gt; 78                                             &lt;NA&gt;       75 das_sample.das
+#&gt; 79                                             &lt;NA&gt;       76 das_sample.das
+#&gt; 80                                             &lt;NA&gt;       77 das_sample.das
+#&gt; 81                                             &lt;NA&gt;       78 das_sample.das
+#&gt; 82                                             &lt;NA&gt;       79 das_sample.das
+#&gt; 83                                             &lt;NA&gt;       80 das_sample.das
+#&gt; 84                                             &lt;NA&gt;       81 das_sample.das
+#&gt; 85                                             &lt;NA&gt;       82 das_sample.das
+#&gt; 86                                             &lt;NA&gt;       83 das_sample.das
+#&gt; 87                                             &lt;NA&gt;       84 das_sample.das
+#&gt; 88                                             &lt;NA&gt;       NA das_sample.das
+#&gt; 89                                             &lt;NA&gt;       85 das_sample.das
+#&gt; 90                                             &lt;NA&gt;       86 das_sample.das
+#&gt; 91                                             &lt;NA&gt;       87 das_sample.das
+#&gt; 92                                             &lt;NA&gt;       88 das_sample.das
+#&gt; 93                                             &lt;NA&gt;       89 das_sample.das
+#&gt; 94                                             &lt;NA&gt;       90 das_sample.das
+#&gt; 95                                             &lt;NA&gt;       91 das_sample.das
+#&gt; 96                                             &lt;NA&gt;       92 das_sample.das
+#&gt; 97                                             &lt;NA&gt;       93 das_sample.das
+#&gt; 98                                             &lt;NA&gt;       94 das_sample.das
+#&gt; 99                                             &lt;NA&gt;       95 das_sample.das
+#&gt; 100                                            &lt;NA&gt;       96 das_sample.das
+#&gt; 101                                            &lt;NA&gt;       97 das_sample.das
+#&gt; 102                                            &lt;NA&gt;       98 das_sample.das
+#&gt; 103                                            &lt;NA&gt;       99 das_sample.das
+#&gt; 104                                             2.0      100 das_sample.das
+#&gt; 105                                            &lt;NA&gt;      101 das_sample.das
+#&gt; 106                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 107                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 108                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 109                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 110                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 111                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 112                                            &lt;NA&gt;      102 das_sample.das
+#&gt; 113 hting 1014                                           103 das_sample.das
+#&gt; 114                                            &lt;NA&gt;      104 das_sample.das
+#&gt; 115                                            &lt;NA&gt;      105 das_sample.das
+#&gt; 116                                            &lt;NA&gt;      106 das_sample.das
+#&gt; 117                                            &lt;NA&gt;      107 das_sample.das
+#&gt; 118                                            &lt;NA&gt;      108 das_sample.das
+#&gt; 119                                            &lt;NA&gt;      109 das_sample.das
+#&gt; 120                                            &lt;NA&gt;      110 das_sample.das
+#&gt; 121                                            &lt;NA&gt;      111 das_sample.das
+#&gt; 122                                            &lt;NA&gt;      112 das_sample.das
+#&gt; 123                                            &lt;NA&gt;      113 das_sample.das
+#&gt; 124                                            &lt;NA&gt;      114 das_sample.das
+#&gt; 125                                            &lt;NA&gt;      115 das_sample.das
+#&gt; 126                                            &lt;NA&gt;      116 das_sample.das
+#&gt; 127                                            &lt;NA&gt;      117 das_sample.das
+#&gt; 128                                            &lt;NA&gt;      118 das_sample.das
+#&gt; 129                                            &lt;NA&gt;      119 das_sample.das
+#&gt; 130                                            &lt;NA&gt;      120 das_sample.das
+#&gt; 131                                            &lt;NA&gt;      121 das_sample.das
+#&gt; 132                                            &lt;NA&gt;      122 das_sample.das
+#&gt; 133                                            &lt;NA&gt;      123 das_sample.das
+#&gt; 134                                            &lt;NA&gt;      124 das_sample.das
+#&gt; 135                                            &lt;NA&gt;      125 das_sample.das
+#&gt; 136 acking sighting 081 and prey patches until dark      126 das_sample.das
+#&gt; 137                                            &lt;NA&gt;        1 das_sample.das
+#&gt; 138                                            &lt;NA&gt;        2 das_sample.das
+#&gt; 139                                            &lt;NA&gt;        3 das_sample.das
+#&gt; 140                                            &lt;NA&gt;        4 das_sample.das
+#&gt; 141                                            &lt;NA&gt;        5 das_sample.das
+#&gt; 142                                            &lt;NA&gt;        6 das_sample.das
+#&gt; 143                                            &lt;NA&gt;        7 das_sample.das
+#&gt; 144                                            &lt;NA&gt;        8 das_sample.das
+#&gt; 145                                            &lt;NA&gt;        9 das_sample.das
+#&gt; 146                                             4.0       10 das_sample.das
+#&gt; 147                                            &lt;NA&gt;       11 das_sample.das
+#&gt; 148                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 149                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 150                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 151                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 152                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 153                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 154                                            &lt;NA&gt;       NA das_sample.das
+#&gt; 155                                            &lt;NA&gt;       12 das_sample.das
 #&gt;     line_num
 #&gt; 1          1
 #&gt; 2          2
@@ -799,7 +802,8 @@
 #&gt; 151      151
 #&gt; 152      152
 #&gt; 153      153
-#&gt; 154      154</div><div class='input'>
+#&gt; 154      154
+#&gt; 155      155</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
