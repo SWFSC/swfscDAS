@@ -17,20 +17,7 @@
 #'   marine mammal resights (codes "s" or "K"), turtle sightings (code "t"), and fishing vessel sightings (code "F").
 #'   See the format PDF, \code{\link{das_format_pdf}}, for the required format for each of these events.
 #'
-#'   \tabular{llllll}{
-#'     \emph{Information} \tab \emph{Mammal sighting} \tab \emph{Mammal resight} \tab \emph{Turtle} \tab
-#'       \emph{Vessel} \tab \emph{Output column name}\cr
-#'     Sighting number \tab Data1 \tab \tab sight_no\cr
-#'     Observer \tab Data2 \tab \tab Data1 \tab Data1 \tab Obs\cr
-#'     Cue \tab Data3 \tab Data2 \tab angle_declination\cr
-#'     Group size (best estimate) \tab Data4 \tab NA \tab todo \cr
-#'     Species code 1 \tab Data5 \tab Data3 \tab todo \cr
-#'     Species code 2 \tab Data6 \tab NA \tab todo \cr
-#'     Species code 3 \tab Data7 \tab NA \tab todo \cr
-#'     Turtle size (ft) \tab NA \tab Data4 \tab todo\cr
-#'     Travel direction (deg) \tab NA \tab Data5 \tab todo\cr
-#'     Tail visible? \tab NA \tab Data6 \tab todo\cr
-#'   }
+#'   Abbreviations used in column names: Gs = group size, Sp = species, Nm = nautical mile, Perc = percentage
 #'
 #'   This function makes the following assumptions, and alterations to the raw data:
 #'   \itemize{
@@ -41,8 +28,8 @@
 #'     \item The 'Prob' column is \code{TRUE} is the sighting has an associated "?" event,
 #'       and \code{FALSE} otherwise.
 #'       This column has a non-\code{NA} value for only "S", "K", and "M" events
-#'     \item The 'GS_total_best' column is the mean of the 'Data2' columns (with \code{NA}s removed) for the associated "1"-"8" events
-#'     \item The 'Sp1_perc', 'Sp2_perc', 'Sp3_perc', and 'Sp4_perc' columns are the
+#'     \item The 'GsTotal' column is the mean of the 'Data2' columns (with \code{NA}s removed) for the associated "1"-"8" events
+#'     \item The 'Sp1Perc', 'Sp2Perc', 'Sp3Perc', and 'Sp4Perc' columns are the
 #'       means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{NA}s removed), respectively,
 #'       for the associated "1"-"8" events
 #'     \item The values for the following columns were capitalized using \code{\link[base:chartr]{toupper}}:
@@ -51,14 +38,12 @@
 #'
 #'   Outstanding questions:
 #'   \itemize{
-#'     \item Should any columns be converted to logicals,
-#'       e.g. 'Birds', 'Photos', 'turtle_age', and 'turtle_captured'?
-#'     \item Should \code{NA} values for columns 'Sp1', 'Sp1_perc', 'GS_Sp1', etc.,
-#'       be changed from \code{NA} to \code{0}?
+#'     \item Should any columns be converted to logicals, e.g. 'Birds', 'Photos', 'turtle_age', and 'turtle_captured'?
+#'     \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc., be changed from \code{NA} to \code{0}?
 #'   }
 #'
 #' @return Data frame with 1) the columns from \code{x} and 2) columns with sighting information
-#'   (observer, species, etc.) extracted from \code{Data#} columns as specified in Details.
+#'   (observer, species, etc.) extracted from 'Data#' columns as specified in Details.
 #'   The data frame has one row for each sighting,
 #'   or one row for each species of each sighting if \code{mixed.multi} is \code{TRUE}.
 #'
@@ -120,12 +105,12 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
                                .data$Event %in% c("s", "k") ~ .data$Data3,
                                .data$Event == "t" ~ .data$Data7,
                                .data$Event == "F" ~ .data$Data4),
-           Dist_nm = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data7,
+           DistNm = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data7,
                                .data$Event %in% c("s", "k") ~ .data$Data4,
                                .data$Event == "t" ~ .data$Data4,
                                .data$Event == "F" ~ .data$Data3)) %>%
     select(.data$sight_cumsum,
-           .data$Obs, .data$Bearing, .data$Reticle, .data$Dist_nm)
+           .data$Obs, .data$Bearing, .data$Reticle, .data$DistNm)
 
 
   #--------------------------------------------------------
@@ -160,16 +145,16 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
   sight.info.skm4 <- sight.df %>%
     filter(.data$Event %in% as.character(1:8)) %>%
     group_by(.data$sight_cumsum) %>%
-    summarise(GS_total_best = mean(as.numeric(.data$Data2), na.rm = TRUE),
-              Sp1_perc = mean(as.numeric(.data$Data5), na.rm = TRUE),
-              Sp2_perc = mean(as.numeric(.data$Data6), na.rm = TRUE),
-              Sp3_perc = mean(as.numeric(.data$Data7), na.rm = TRUE),
-              Sp4_perc = mean(as.numeric(.data$Data8), na.rm = TRUE),
-              GS_Sp1 = .data$GS_total_best * .data$Sp1_perc / 100,
-              GS_Sp2 = .data$GS_total_best * .data$Sp2_perc / 100,
-              GS_Sp3 = .data$GS_total_best * .data$Sp3_perc / 100,
-              GS_Sp4 = .data$GS_total_best * .data$Sp4_perc / 100) #%>%
-  # replace_na(list(Sp2_perc = 0, Sp3_perc = 0, Sp4_perc = 0))
+    summarise(GsTotal = mean(as.numeric(.data$Data2), na.rm = TRUE),
+              Sp1Perc = mean(as.numeric(.data$Data5), na.rm = TRUE),
+              Sp2Perc = mean(as.numeric(.data$Data6), na.rm = TRUE),
+              Sp3Perc = mean(as.numeric(.data$Data7), na.rm = TRUE),
+              Sp4Perc = mean(as.numeric(.data$Data8), na.rm = TRUE),
+              GsSp1 = .data$GsTotal * .data$Sp1Perc / 100,
+              GsSp2 = .data$GsTotal * .data$Sp2Perc / 100,
+              GsSp3 = .data$GsTotal * .data$Sp3Perc / 100,
+              GsSp4 = .data$GsTotal * .data$Sp4Perc / 100) #%>%
+  # replace_na(list(Sp2Perc = 0, Sp3Perc = 0, Sp4Perc = 0))
   # @importFrom tidyr replace_na
 
   sight.info.skm <- sight.info.skm1 %>%
@@ -177,7 +162,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     left_join(sight.info.skm3, by = "sight_cumsum") %>%
     left_join(sight.info.skm4, by = "sight_cumsum") %>%
     select(.data$sight_cumsum, .data$SightNo, .data$Cue, .data$Method, .data$Photos, .data$Birds,
-           .data$Mixed, .data$Prob, .data$GS_total_best, everything())
+           .data$Mixed, .data$Prob, .data$GsTotal, everything())
   rm(sight.info.skm1, sight.info.skm2, sight.info.skm3, sight.info.skm4)
 
 
@@ -185,30 +170,30 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
   ### Marine mammal resights; Events s, k, m
   sight.info.resight <- sight.df %>%
     filter(.data$Event %in% c("s", "k", "m")) %>%
-    mutate(resight_course = as.numeric(.data$Data5)) %>%
-    select(.data$sight_cumsum, .data$resight_course)
+    mutate(ResightCourse = as.numeric(.data$Data5)) %>%
+    select(.data$sight_cumsum, .data$ResightCourse)
 
 
   #--------------------------------------------------------
   ### Turtle sightings; Events t
   sight.info.t <- sight.df %>%
     filter(.data$Event == "t") %>%
-    mutate(turtle_sp = .data$Data2,
-           turtle_num = as.numeric(.data$Data5),
-           turtle_jfr = .data$Data6,
-           turtle_age = toupper(.data$Data8),
-           turtle_captured = toupper(.data$Data9)) %>%
-    select(.data$sight_cumsum, .data$turtle_sp, .data$turtle_num,
-           .data$turtle_jfr, .data$turtle_age, .data$turtle_captured)
+    mutate(TurtleSp = .data$Data2,
+           TurtleNum = as.numeric(.data$Data5),
+           TurtleJFR = .data$Data6,
+           TurtleAge = toupper(.data$Data8),
+           TurtleCapt = toupper(.data$Data9)) %>%
+    select(.data$sight_cumsum, .data$TurtleSp, .data$TurtleNum,
+           .data$TurtleJFR, .data$TurtleAge, .data$TurtleCapt)
 
 
   #--------------------------------------------------------
   ### Fishing boats; Events F
   sight.info.f <- sight.df %>%
     filter(.data$Event == "F") %>%
-    mutate(boat_type = .data$Data5,
-           boat_num = as.numeric(.data$Data6)) %>%
-    select(.data$sight_cumsum, .data$boat_type, .data$boat_num)
+    mutate(BoatType = .data$Data5,
+           BoatNum = as.numeric(.data$Data6)) %>%
+    select(.data$sight_cumsum, .data$BoatType, .data$BoatNum)
 
 
   #----------------------------------------------------------------------------
@@ -228,30 +213,30 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     to.return.multi <- to.return %>%
       filter(.data$Event %in% c("S", "K", "M")) %>%
       group_by(.data$idx) %>%
-      summarise(Sp1_list = list(c(.data$Sp1, .data$GS_Sp1)),
-                Sp2_list = list(c(.data$Sp2, .data$GS_Sp2)),
-                Sp3_list = list(c(.data$Sp3, .data$GS_Sp3)),
-                Sp4_list = list(c(.data$Sp4, .data$GS_Sp4))) %>%
+      summarise(Sp1_list = list(c(.data$Sp1, .data$GsSp1)),
+                Sp2_list = list(c(.data$Sp2, .data$GsSp2)),
+                Sp3_list = list(c(.data$Sp3, .data$GsSp3)),
+                Sp4_list = list(c(.data$Sp4, .data$GsSp4))) %>%
       gather(.data$Sp1_list, .data$Sp2_list, .data$Sp3_list, .data$Sp4_list,
-             key = "Sp_list_name", value = "Sp_list", na.rm = TRUE) %>%
-      mutate(Species = map_chr(.data$Sp_list, function(i) i[1]),
-             GS_species = as.numeric(map_chr(.data$Sp_list, function(i) i[2]))) %>%
+             key = "sp_list_name", value = "sp_list", na.rm = TRUE) %>%
+      mutate(Species = map_chr(.data$sp_list, function(i) i[1]),
+             GsSpecies = as.numeric(map_chr(.data$sp_list, function(i) i[2]))) %>%
       filter(!is.na(.data$Species)) %>%
-      select(.data$idx, .data$Species, .data$GS_species) %>%
+      select(.data$idx, .data$Species, .data$GsSpecies) %>%
       arrange(.data$idx)
 
     to.return %>%
-      select(-starts_with("Sp"), -starts_with("GS_Sp")) %>%
+      select(-starts_with("Sp"), -starts_with("GsSp")) %>%
       full_join(to.return.multi, by = "idx") %>%
-      select(1:40, .data$Species, .data$GS_species, .data$resight_course,
-             starts_with("turtle"), starts_with("boat"))
+      select(1:40, .data$Species, .data$GsSpecies, .data$ResightCourse,
+             starts_with("Turtle"), starts_with("Boat"))
 
     # TODO: Make unit test ensuring that first 40 column names of das_sight() are always:
     # c("Event", "DateTime", "Lat", "Lon", "OnEffort", "Cruise", "Mode", "EffType", "Course",
     #   "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
     #   "Data1", "Data2", "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
-    #   "EventNum", "file_das", "line_num", "Obs", "Bearing", "Reticle", "Dist_nm",
-    #   "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GS_total_best")
+    #   "EventNum", "file_das", "line_num", "Obs", "Bearing", "Reticle", "DistNm",
+    #   "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal")
 
 
   } else {
