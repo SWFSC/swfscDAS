@@ -124,24 +124,11 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 
   # Input classes
   stopifnot(
-    inherits(x, "data.frame"),
     inherits(days.gap, c("integer", "numeric")),
     length(days.gap) == 1,
     days.gap > 0,
     inherits(reset.day, "logical")
   )
-
-  # das.df has expected columns
-  # TODO: fix
-  das.df.names <- c(
-    'Event', 'EffortDot', 'DateTime',
-    'Lat', 'Lon', 'Data1', 'Data2', 'Data3', 'Data4', 'Data5', 'Data6',
-    'Data7', 'Data8', 'Data9', "file_das", "event_num", 'line_num'
-  )
-  if (!identical(names(das.df), das.df.names)) {
-    warning("x is expected to have the following column names:\n",
-            paste(das.df.names, collapse = ", "))
-  }
 
 
   #----------------------------------------------------------------------------
@@ -301,7 +288,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
-    paste0("Data", 1:9), "file_das", "event_num", "line_num"
+    paste0("Data", 1:9), "EventNum", "file_das", "line_num"
   )
 
   as_das_df(

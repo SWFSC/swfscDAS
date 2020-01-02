@@ -250,7 +250,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     # c("Event", "DateTime", "Lat", "Lon", "OnEffort", "Cruise", "Mode", "EffType", "Course",
     #   "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
     #   "Data1", "Data2", "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
-    #   "file_das", "event_num", "line_num", "Obs", "Bearing", "Reticle", "Dist_nm",
+    #   "EventNum", "file_das", "line_num", "Obs", "Bearing", "Reticle", "Dist_nm",
     #   "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GS_total_best")
 
 

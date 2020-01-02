@@ -37,7 +37,7 @@ DAS events contain specific information in the 'Data#' columns,
 
   \tabular{llllll}{
     \emph{Information} \tab \emph{Mammal sighting} \tab \emph{Mammal resight} \tab \emph{Turtle} \tab
-      \emph{Vessel} \tab \emph{New column name}\cr
+      \emph{Vessel} \tab \emph{Output column name}\cr
     Sighting number \tab Data1 \tab \tab sight_no\cr
     Observer \tab Data2 \tab \tab Data1 \tab Data1 \tab Obs\cr
     Cue \tab Data3 \tab Data2 \tab angle_declination\cr
