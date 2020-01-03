@@ -3,7 +3,7 @@
 #' Process DAS data (the output of \code{\link{das_read}}),
 #'   including extracting state and condition information for each DAS event
 #'
-#' @param x either a \code{das_dfr} object (the output of \code{\link{das_read}}),
+#' @param x either test test a \code{das_dfr} object (the output of \code{\link{das_read}}),
 #'   or a character (filepath) which is first passed to \code{\link{das_read}}
 #' @param ... ignored
 #' @export
