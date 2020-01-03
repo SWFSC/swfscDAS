@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • swfscDAS</title>
+<title><code>das_dfr</code> class — das_dfr-class • swfscDAS</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,19 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="<code>das_dfr</code> class — das_dfr-class" />
+<meta property="og:description" content="The das_dfr class is a subclass of data.frame,
+  created to provide a concise and robust way to ensure that the input to das_process
+  adheres to certain requirements.
+  Specifically, objects of class das_dfr are data frames with specific column names and classes,
+  as detailed in the 'Properties of das_dfr' section. Objects of class das_dfr are created by
+  das_read or as_das_dfr, and are intended to be passed directly to
+  das_process.
+Subsetting or otherwise altering an object of class das_dfr will cause the object to drop its
+  das_dfr class attribute. das_process will then try to coerce the object to a
+  das_dfr object. It is strongly recommended to pass an object of class das_dfr to
+  das_process before subsetting, e.g. for events from a certain date range." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -54,7 +66,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -101,84 +113,69 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1><code>das_dfr</code> class</h1>
+    <small class="dont-index">Source: <a href='https://github.com/smwoodman/swfscDAS/blob/master/R/das_class.R'><code>R/das_class.R</code></a></small>
+    <div class="hidden name"><code>das_dfr-class.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>The <code>das_dfr</code> class is a subclass of <code><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></code>,
+  created to provide a concise and robust way to ensure that the input to <code><a href='das_process.html'>das_process</a></code>
+  adheres to certain requirements.
+  Specifically, objects of class <code>das_dfr</code> are data frames with specific column names and classes,
+  as detailed in the 'Properties of <code>das_dfr</code>' section. Objects of class <code>das_dfr</code> are created by
+  <code><a href='das_read.html'>das_read</a></code> or <code><a href='as_das_dfr.html'>as_das_dfr</a></code>, and are intended to be passed directly to
+  <code><a href='das_process.html'>das_process</a></code>.</p>
+<p>Subsetting or otherwise altering an object of class <code>das_dfr</code> will cause the object to drop its
+  <code>das_dfr</code> class attribute. <code><a href='das_process.html'>das_process</a></code> will then try to coerce the object to a
+  <code>das_dfr</code> object. It is <b>strongly</b> recommended to pass an object of class <code>das_dfr</code> to
+  <code><a href='das_process.html'>das_process</a></code> before subsetting, e.g. for events from a certain date range.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="as_das_df.html">as_das_df()</a></code> </p>
-        </td>
-        <td><p>Coerce object to a das_df object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as_das_dfr.html">as_das_dfr()</a></code> </p>
-        </td>
-        <td><p>Coerce object to a das_dfr object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="das_df-class.html">das_df-class</a></code> </p>
-        </td>
-        <td><p><code>das_df</code> class</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="das_dfr-class.html">das_dfr-class</a></code> </p>
-        </td>
-        <td><p><code>das_dfr</code> class</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="das_format_pdf.html">das_format_pdf()</a></code> </p>
-        </td>
-        <td><p>DAS format requirements</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="das_process.html">das_process()</a></code> </p>
-        </td>
-        <td><p>Process DAS data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="das_read.html">das_read()</a></code> </p>
-        </td>
-        <td><p>Read DAS file(s)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="das_sight.html">das_sight()</a></code> </p>
-        </td>
-        <td><p>DAS sightings</p></td>
-      </tr>
-    </tbody>
-    </table>
+
+    <h2 class="hasAnchor" id="properties-of-das-dfr"><a class="anchor" href="#properties-of-das-dfr"></a>Properties of <code>das_dfr</code></h2>
+
+    
+
+
+<p>Objects of class <code>das_dfr</code> have a class attribute of <code><a href='https://rdrr.io/r/base/c.html'>c("das_dfr", "data.frame")</a></code>.
+  In addition, they must have the following column names and classes:</p><table class='table'>
+<tr><td><em>Column name</em></td><td><em>Column class</em></td></tr>
+<tr><td>Event</td><td>"character"</td></tr>
+<tr><td>EffortDot</td><td>"logical"</td></tr>
+<tr><td>DateTime</td><td>c("POSIXct", "POSIXt")</td></tr>
+<tr><td>Lat</td><td>"numeric"</td></tr>
+<tr><td>Lon</td><td>"numeric"</td></tr>
+<tr><td>Data1</td><td>"character"</td></tr>
+<tr><td>Data2</td><td>"character"</td></tr>
+<tr><td>Data3</td><td>"character"</td></tr>
+<tr><td>Data4</td><td>"character"</td></tr>
+<tr><td>Data5</td><td>"character"</td></tr>
+<tr><td>Data6</td><td>"character"</td></tr>
+<tr><td>Data7</td><td>"character"</td></tr>
+<tr><td>Data8</td><td>"character"</td></tr>
+<tr><td>Data9</td><td>"character"</td></tr>
+<tr><td>EventNum</td><td>"integer"</td></tr>
+<tr><td>file_das</td><td>"character"</td></tr>
+<tr><td>line_num</td><td>"integer"</td></tr>
+</table>
+
+
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='as_das_dfr.html'>as_das_dfr</a></code></p></div>
+
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#properties-of-das-dfr">Properties of <code>das_dfr</code></a></li>
+      <li><a href="#see-also">See also</a></li>
     </ul>
+
   </div>
 </div>
 
