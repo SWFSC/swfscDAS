@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Sam", "Woodman", email = "sam.woodman@noaa.gov", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6071-8186"))
 Description: Process and summarize DAS data collected using the 
-    Southwest Fisheries Science Center (SWFSC) 'WinCruz' program. Test test test. 
+    Southwest Fisheries Science Center (SWFSC) 'WinCruz' program.
     A PDF with the DAS data format requirements is included in this package.
 URL: https://smwoodman.github.io/swfscDAS, https://github.com/smwoodman/swfscDAS
 BugReports: https://github.com/smwoodman/swfscDAS/issues
