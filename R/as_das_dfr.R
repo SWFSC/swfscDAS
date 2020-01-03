@@ -1,12 +1,17 @@
-#' Convert object to a das_dfr object
+#' Coerce object to a das_dfr object
 #'
-#' Convert object to a das_dfr object
+#' Check if an object is of class \code{\link{das_dfr}}, or coerce it if possible.
 #'
-#' @param x object to be converted to a `das_dfr` object
+#' @param x A object to be coerced to class \code{das_dfr}
 #'
-#' @details todo
+#' @details Currently only data frames can be coerced to an object of class \code{\link{das_dfr}}.
+#'   If the \code{x} does not have column names and classes as specified in \code{\link{das_dfr}},
+#'   then the function returns an error message detailing the first column that does not
+#'   meet the \code{\link{das_dfr}} requirements.
 #'
-#' @return an object of class `das_dfr`
+#' @return An object of class `das_dfr`
+#'
+#' @seealso \code{\link{das_dfr-class}}
 #'
 #' @export
 as_das_dfr <- function(x) UseMethod("as_das_dfr")

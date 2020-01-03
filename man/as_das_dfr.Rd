@@ -4,7 +4,7 @@
 \alias{as_das_dfr}
 \alias{as_das_dfr.das_dfr}
 \alias{as_das_dfr.data.frame}
-\title{Convert object to a das_dfr object}
+\title{Coerce object to a das_dfr object}
 \usage{
 as_das_dfr(x)
 
@@ -13,14 +13,20 @@ as_das_dfr(x)
 \method{as_das_dfr}{data.frame}(x)
 }
 \arguments{
-\item{x}{object to be converted to a `das_dfr` object}
+\item{x}{A object to be coerced to class \code{das_dfr}}
 }
 \value{
-an object of class `das_dfr`
+An object of class `das_dfr`
 }
 \description{
-Convert object to a das_dfr object
+Check if an object is of class \code{\link{das_dfr}}, or coerce it if possible.
 }
 \details{
-todo
+Currently only data frames can be coerced to an object of class \code{\link{das_dfr}}.
+  If the \code{x} does not have column names and classes as specified in \code{\link{das_dfr}},
+  then the function returns an error message detailing the first column that does not
+  meet the \code{\link{das_dfr}} requirements.
+}
+\seealso{
+\code{\link{das_dfr-class}}
 }
