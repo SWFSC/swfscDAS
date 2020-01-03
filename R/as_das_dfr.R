@@ -33,7 +33,7 @@ as_das_dfr.data.frame <- function(x) {
     Data7 = "character",
     Data8 = "character",
     Data9 = "character",
-    EventNum = "numeric",
+    EventNum = "integer",
     file_das = "character",
     line_num = "integer"
   )

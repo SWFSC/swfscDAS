@@ -103,7 +103,8 @@ das_read <- function(file, tz = "UTC") {
 
   # Process data, and add file and line number columns
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
-  EventNum <- suppressWarnings(as.numeric(x$EventNum)) #blank for # events
+  EventNum <- suppressWarnings(as.integer(x$EventNum))
+  #^blank for # events, suppressWarnings() for some "#C" event nums
   file_das  <- basename(file)
   line_num  <- seq_along(x$Event)
 
