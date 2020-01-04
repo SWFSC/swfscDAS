@@ -107,3 +107,13 @@ raw_das_fwf <- function(x, file, data9len = 100) {
     justify = "left", width = fwf.width
   )
 }
+
+### Testing raw_das_fwf
+# x <- das_read("../DAS_files/STAR1630.das")
+# raw_das_fwf(x, file = "data-raw/STAR1630_test.das", 130)
+# x2 <- das_read("data-raw/STAR1630_test.das")
+#
+# all.equal(x, x2)
+# # Data column differences are due to original files not having extra spaces
+# #   for comment rows after the text ends
+#------------------------------------------------------------------------------
