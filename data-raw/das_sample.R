@@ -16,14 +16,12 @@ x.all <- das_read("../DAS_files/STAR1630.das")
 window.size <- 300
 window.start <- seq(1, nrow(x.all) - window.size, by = 10)
 
-# system.time({ #~15s for window size of 300
 tmp <- list()
 for (i in window.start) {
   x.curr <- x.all[i:(i + window.size), ]
   tmp <- c(tmp, list(sort(unique(x.curr$Event))))
   rm(x.curr)
 }; rm(i)
-# })
 
 table(sapply(tmp, length))
 tmp.good <- which(sapply(tmp, length) >= max(sapply(tmp, length)))
@@ -36,7 +34,7 @@ lapply(x.sel, function(j) table(j$Event))
 
 ###############################################################################
 #------------------------------------------------------------------------------
-# # Get 'original' data that will be jiggered
+# Extract 'original' data that will be jiggered
 x.orig <- x.sel[[2]]
 rm(list = ls()[!(ls() %in% "x.orig")])
 
@@ -57,18 +55,11 @@ x <- x.orig %>%
 
 #------------------------------------------------------------------------------
 # 'Randomize' data reported in DAS file
-# TODO: Change:
+# Change the following:
 #   Cruise number in B events
 #   Remove specific comments
-#   Sightings: Sight no (S, K, A), species, group size
-#     Make sure resighting info matches
-#   Turtle sighings: species, number
-
-# Items not changed: TO CHECK WITH JIM
-#   Sighting species percentages
-#   P events, as well as sighting observer codes
-#   V and W events
-#   N events, but Data (esp Data1, ship course) is going to not match with 'random' positions..
+#   Mammal sightings species and group size
+#   Turtle sightings species and number
 
 # Set cruise number and remove a specific comments
 stopifnot(x$Event[which(grepl("j3", x$Data3))] == "C") #x[165, ]
