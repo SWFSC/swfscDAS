@@ -65,7 +65,10 @@ das_process.tbl_df <- function(x, ...) {
 #'   The following assumptions/decisions are made during processing:
 #'   \itemize{
 #'     \item Event codes are expected to be one of the following:
-#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W
+#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+#'       The codes g (subgroup of a current sighting), p (pinniped sighting), X
+#'       (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
+#'       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
 #'     \item All '#' events (deleted events) are removed
 #'     \item An event is considered 'on effort' if it is 1) an R event,
 #'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events.
@@ -273,7 +276,8 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   #----------------------------------------------------------------------------
   # A couple of warning checks
   event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "N",
-                 "P", "Q", "R", "s", "S", "t", "V", "W")
+                 "P", "Q", "R", "s", "S", "t", "V", "W",
+                 "g", "p", "X", "Y", "Z")
   if (!all(das.df$Event %in% event.acc))
     warning("The following lines in the DAS file (from line_num in output ",
             "DAS data frame) contain unexpected event codes:\n",
