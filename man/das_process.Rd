@@ -60,7 +60,7 @@ A \code{das_df} object, which is also a data frame.
 }
 \description{
 Process DAS data (the output of \code{\link{das_read}}),
-  including extracting state and condition information for each DAS event. Pkgdown test
+  including extracting state and condition information for each DAS event
 }
 \details{
 If \code{x} is a character, it is assumed to be a filepath and first passed to \code{\link{das_read}}.
