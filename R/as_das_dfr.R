@@ -2,10 +2,10 @@
 #'
 #' Check if an object is of class \code{\link{das_dfr}}, or coerce it if possible.
 #'
-#' @param x A object to be coerced to class \code{das_dfr}
+#' @param x An object to be coerced to class \code{das_dfr}
 #'
 #' @details Currently only data frames can be coerced to an object of class \code{\link{das_dfr}}.
-#'   If the \code{x} does not have column names and classes as specified in \code{\link{das_dfr}},
+#'   If \code{x} does not have column names and classes as specified in \code{\link{das_dfr}},
 #'   then the function returns an error message detailing the first column that does not
 #'   meet the \code{\link{das_dfr}} requirements.
 #'
@@ -42,17 +42,21 @@ as_das_dfr.data.frame <- function(x) {
     file_das = "character",
     line_num = "integer"
   )
+  exp.class.names <- names(exp.class)
 
   x.class <- lapply(x, class)
-  if (!identical(exp.class, x.class)) {
-    for (i in seq_along(x)) {
-      if (!identical(exp.class[i], x.class[i])) {
-        stop("The provided object (x) cannot be coerced to an object of class das_dfr ",
-             "because it does not contain the correct columns. ",
-             "Specifically, column ", i, " must be named '", names(exp.class)[i], "' ",
-             "and be of class '", exp.class[[i]], "'\n",
-             "Was x created using das_read()? See TODO for more details.")
-      }
+
+  for (i in seq_along(exp.class)) {
+    name.curr <- exp.class.names[i]
+    x.curr <- x.class[[name.curr]]
+
+    if (!identical(x.curr, exp.class[[i]])) {
+      stop("The provided object (x) cannot be coerced to an object of class das_dfr ",
+           "because it does not contain the correct columns. ",
+           "Specifically, it must contain a column with the name '", names(exp.class)[i], "' ",
+           "and class '", exp.class[[i]], "'\n",
+           "Was x created using das_read()? ",
+           "See `?as_das_dfr` or `?das_dfr-class` for more details.")
     }
   }
 
