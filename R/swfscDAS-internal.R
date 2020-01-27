@@ -24,3 +24,16 @@
 }
 
 ###############################################################################
+# Helper functions for das_check
+.numeric_NA_diff <- function(x.df, e.code, data.col, x.lines) {
+  ### Inputs:
+  # x.df:
+  # e.code: Event code
+  # data.col: numeric;
+  # x.lines: character;
+
+}
+
+
+
+###############################################################################
