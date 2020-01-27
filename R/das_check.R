@@ -6,21 +6,26 @@
 #' @param file.out filename to which to write the error log; default is NULL
 #'
 #' @importFrom dplyr left_join
+#' @importFrom utils write.csv
 #'
-#' @details Precursor to DASCHECK. Checks that the following is true:
+#' @details
+#' Precursor to DASCHECK. Checks that the following is true:
+#' \itemize{
+#'   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
+#'     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+#'   \item
+#' }
+#' \tabular{lrr}{
+#'   \emph{Item}  \tab \emph{Columns} \tab \emph{Format}\cr
+#'   Event number \tab 1-3\cr
+#' }
 #'
-#'   \itemize{
-#'     \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
-#'       A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
-#'     \item
-#'   }
-#'   \tabular{lrr}{
-#'     \emph{Item}  \tab \emph{Columns} \tab \emph{Format}\cr
-#'     Event number \tab 1-3\cr
-#'   }
+#' @return
+#' A data frame with three columns: the line number,
+#' 'ID' (columns 4-39 form the DAS file), and description of the issue
 #'
-#' @return A list...
-#'   If file.out is not NULL, then the error log is also written to a text file
+#' If \code{file.out} is not \code{NULL}, then the error log is also
+#' written to a text file
 #'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
@@ -28,7 +33,7 @@
 #'
 #' @export
 das_check <- function(file, file.out = NULL) {
-  error.out <- data.frame(ID = NA, Description = NA)
+  error.out <- data.frame(LineNum = NA, ID = NA, Description = NA)
   x <- das_read(file)
   x.proc <- das_process(x)
   x.all <- left_join(
@@ -61,9 +66,10 @@ das_check <- function(file, file.out = NULL) {
   )
   #^ will be of length 0 if none, so nothing will be added to error.out
 
+  browser()
   error.out <- rbind(
     error.out,
-    list(x.lines[err.eff.which],
+    list(err.eff.which, x.lines[err.eff.which],
          rep("Effort dot does not match B/R to E effort", length(err.eff.which)))
   )
 
@@ -120,16 +126,16 @@ das_check <- function(file, file.out = NULL) {
   # Add text to error.out as needed and return
   error.out <- rbind(
     error.out,
-    list(z.b.1, rep(txt.b.1, length(z.b.1))),
-    list(z.b.2, rep(txt.b.2, length(z.b.2))),
-    list(z.r.1, rep(txt.r.1, length(z.r.1))),
-    list(z.n.1, rep(txt.n.1, length(z.n.1))),
-    list(z.v.1, rep(txt.v.1, length(z.v.1))),
-    list(z.v.2, rep(txt.v.2, length(z.v.2))),
-    list(z.w.1, rep(txt.w.1, length(z.w.1))),
-    list(z.w.2, rep(txt.w.2, length(z.w.2))),
-    list(z.w.3, rep(txt.w.3, length(z.w.3))),
-    list(z.w.5, rep(txt.w.5, length(z.w.5)))
+    list(z.b.1, x.lines[z.b.1], rep(txt.b.1, length(z.b.1))),
+    list(z.b.2, x.lines[z.b.2], rep(txt.b.2, length(z.b.2))),
+    list(z.r.1, x.lines[z.r.1], rep(txt.r.1, length(z.r.1))),
+    list(z.n.1, x.lines[z.n.1], rep(txt.n.1, length(z.n.1))),
+    list(z.v.1, x.lines[z.v.1], rep(txt.v.1, length(z.v.1))),
+    list(z.v.2, x.lines[z.v.2], rep(txt.v.2, length(z.v.2))),
+    list(z.w.1, x.lines[z.w.1], rep(txt.w.1, length(z.w.1))),
+    list(z.w.2, x.lines[z.w.2], rep(txt.w.2, length(z.w.2))),
+    list(z.w.3, x.lines[z.w.3], rep(txt.w.3, length(z.w.3))),
+    list(z.w.5, x.lines[z.w.5], rep(txt.w.5, length(z.w.5)))
   )
 
 
@@ -138,7 +144,8 @@ das_check <- function(file, file.out = NULL) {
 
 
   #----------------------------------------------------------------------------
-  to.return <- tail(error.out, -1)
+  # Remove first line and return
+  to.return <- error.out[-1, ]
   row.names(to.return) <- seq_len(nrow(to.return))
 
   if (!is.null(file.out)) write.csv(to.return, file = file.out)

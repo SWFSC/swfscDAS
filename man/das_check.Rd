@@ -12,24 +12,26 @@ das_check(file, file.out = NULL)
 \item{file.out}{filename to which to write the error log; default is NULL}
 }
 \value{
-A list...
-  If file.out is not NULL, then the error log is also written to a text file
+A data frame with three columns: the line number,
+'ID' (columns 4-39 form the DAS file), and description of the issue
+
+If \code{file.out} is not \code{NULL}, then the error log is also
+written to a text file
 }
 \description{
 Check that DAS file has accepted values
 }
 \details{
 Precursor to DASCHECK. Checks that the following is true:
-
-  \itemize{
-    \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
-      A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
-    \item
-  }
-  \tabular{lrr}{
-    \emph{Item}  \tab \emph{Columns} \tab \emph{Format}\cr
-    Event number \tab 1-3\cr
-  }
+\itemize{
+  \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
+    A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+  \item
+}
+\tabular{lrr}{
+  \emph{Item}  \tab \emph{Columns} \tab \emph{Format}\cr
+  Event number \tab 1-3\cr
+}
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
