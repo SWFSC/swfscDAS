@@ -32,7 +32,7 @@ DAS events contain specific information in the 'Data#' columns,
   with the information depending on the event code for that row.
   The output data frame contains columns with this specific information extracted to dedicated columns as described below.
   This function recognizes the following types of sightings: marine mammal sightings (event codes "S", "K", or "M"),
-  marine mammal resights (codes "s" or "K"), turtle sightings (code "t"), and fishing vessel sightings (code "F").
+  marine mammal resights (codes "s" or "k"), turtle sightings (code "t"), and fishing vessel sightings (code "F").
   See the format PDF, \code{\link{das_format_pdf}}, for the required format for each of these events.
 
   Abbreviations used in column names: Gs = group size, Sp = species, Nm = nautical mile, Perc = percentage
@@ -51,12 +51,12 @@ DAS events contain specific information in the 'Data#' columns,
       means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{NA}s removed), respectively,
       for the associated "1"-"8" events
     \item The values for the following columns were capitalized using \code{\link[base:chartr]{toupper}}:
-      'Birds', 'Photos', 'turtle_age', and 'turtle_captured'
+      'Birds', 'Photos', 'TurtleAge', and 'TurtleCapt'
   }
 
   Outstanding questions:
   \itemize{
-    \item Should any columns be converted to logicals, e.g. 'Birds', 'Photos', 'turtle_age', and 'turtle_captured'?
+    \item Should any columns be converted to logicals, e.g. 'Birds', 'Photos', and 'TurtleCapt'?
     \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc., be changed from \code{NA} to \code{0}?
   }
 }
