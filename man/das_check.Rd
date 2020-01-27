@@ -32,10 +32,7 @@ Precursor to DASCHECK. Checks that the following is true:
   }
 }
 \examples{
-# file <- system.file("das_sample.das", package = "swfscDAS")
 y <- system.file("das_sample.das", package = "swfscDAS")
 das_check(y)
-
-das_check("../DAS/AllDas.das")
 
 }

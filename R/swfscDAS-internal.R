@@ -25,13 +25,43 @@
 
 ###############################################################################
 # Helper functions for das_check
-.numeric_NA_diff <- function(x.df, e.code, data.col, x.lines) {
-  ### Inputs:
-  # x.df:
-  # e.code: Event code
-  # data.col: numeric;
-  # x.lines: character;
+.check_numeric <- function(z, event.code, z.col) {
+  # z: das_df object
+  # event.code: character; event code by which to filter z
+  # z.col: Column which to check; must be one of the Data# columns
+  ### Output: indices of z that cannot be converted to a numeric
 
+  stopifnot(
+    inherits(z, "das_df"),
+    z.col %in% paste0("Data", 1:9)
+  )
+
+  z.curr <- z[z$Event == event.code, ]
+  z.vec <- z.curr[[z.col]]
+
+  z1.na <- which(is.na(z.vec))
+  z2.na <- which(is.na(suppressWarnings(as.numeric(z.vec))))
+
+  z$line_num[z2.na[!(z2.na %in% z1.na)]]
+}
+
+
+.check_character <- function(z, event.code, z.col, vals.accepted) {
+  # z: das_df object
+  # event.code: character; event code by which to filter z
+  # z.col: Column which to check
+  # vals.accepted: character; accepted (expected) values
+  ### Output: indices of z where z.col is not one of vals.accepted
+
+  stopifnot(
+    inherits(z, "das_df"),
+    z.col %in% paste0("Data", 1:9)
+  )
+
+  z.curr <- z[z$Event == event.code, ]
+  z.vec <- z.curr[[z.col]]
+
+  z.curr$line_num[!(z.vec %in% vals.accepted)]
 }
 
 
