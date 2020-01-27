@@ -63,4 +63,13 @@ Next, you can summarize the processed DAS data
 ``` r
 # Summarize sighting information
 y.sight <- das_sight(y.proc, mixed.multi = TRUE)
+
+# Summarize effort - coming soon..
+```
+
+You can also check that your DAS data has accepted formatting and
+values:
+
+``` r
+das_check(y)
 ```

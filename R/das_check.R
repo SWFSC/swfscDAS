@@ -13,6 +13,7 @@
 #' \itemize{
 #'   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
 #'     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+#'   \item The effort dot matches effort determined using B, R, and E events
 #'   \item
 #' }
 #' \tabular{lrr}{
@@ -66,7 +67,6 @@ das_check <- function(file, file.out = NULL) {
   )
   #^ will be of length 0 if none, so nothing will be added to error.out
 
-  browser()
   error.out <- rbind(
     error.out,
     list(err.eff.which, x.lines[err.eff.which],
@@ -141,11 +141,16 @@ das_check <- function(file, file.out = NULL) {
 
   #----------------------------------------------------------------------------
   # Check Data# columns for sightings
+  # TODO
 
 
   #----------------------------------------------------------------------------
   # Remove first line and return
-  to.return <- error.out[-1, ]
+  to.return <- if (nrow(error.out) == 1) {
+    data.frame(LineNum = NA, ID = NA, Description = "No errors found")
+  } else {
+    to.return <- error.out[-1, ]
+  }
   row.names(to.return) <- seq_len(nrow(to.return))
 
   if (!is.null(file.out)) write.csv(to.return, file = file.out)

@@ -26,6 +26,7 @@ Precursor to DASCHECK. Checks that the following is true:
 \itemize{
   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+  \item The effort dot matches effort determined using B, R, and E events
   \item
 }
 \tabular{lrr}{
