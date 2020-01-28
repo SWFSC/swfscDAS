@@ -29,11 +29,21 @@
 #'   Horizontal sun \tab W \tab Data2 \tab Can be converted to a numeric value\cr
 #'   Vertical sun   \tab W \tab Data3 \tab Can be converted to a numeric value\cr
 #'   Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
-#'   NA \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value \cr
-#'   NA \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value \cr
-#'   NA \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value \cr
-#'   NA \tab F       \tab Data2-4    \tab Can be converted to a numeric value \cr
-#'   NA \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value \cr
+#'   NA \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value\cr
+#'   NA \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
+#'   NA \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value\cr
+#'   NA \tab F       \tab Data2-4    \tab Can be converted to a numeric value\cr
+#'   NA \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value\cr
+#'   Photos \tab A \tab Data3 \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   Birds  \tab A \tab Data4 \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   JFR    \tab t \tab Data6 \tab Must be one of F, J, N, R, or NA (blank)\cr
+#'   Blank \tab 1-8 \tab Data9 \tab The Data9 column must be NA (blank) for events 1-8\cr
+#' }
+#'
+#' Current questions:
+#' \itemize{
+#'   \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
+#'   \item
 #' }
 #'
 #' @return
@@ -47,17 +57,12 @@
 #' y <- system.file("das_sample.das", package = "swfscDAS")
 #' das_check(y)
 #'
+#' #das_check("U:/RV-Data/AllDas.das", file.out = "../tmp.csv")
+#'
 #' @export
 das_check <- function(file, file.out = NULL) {
   error.out <- data.frame(LineNum = NA, ID = NA, Description = NA)
   x <- das_read(file)
-  # x.proc <- das_process(x)
-  # x.all <- left_join(
-  #   x, x.proc,
-  #   by = c("Event", "DateTime", "Lat", "Lon", "Data1", "Data2", "Data3",
-  #          "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
-  #          "EventNum", "file_das", "line_num")
-  # )
   x.lines <- substr(readLines(file), 4, 39)
   stopifnot(nrow(x) == length(x.lines))
 
@@ -176,44 +181,68 @@ das_check <- function(file, file.out = NULL) {
 
 
   #----------------------------------------------------------------------------
-  # Check Data# columns for sightings data format
+  ### Check Data# columns for sightings data format
+  # Marine mammal sightings (SKM)
   idx.skm.num <- .check_numeric_sight(x, c("S", "K", "M"), paste0("Data", 3:7)) #3:9
   txt.skm.num <- paste(
     "At least one of the Data3-9 columns for S, K, and M events",
     "cannot be converted to a numeric"
   )
 
+  # Auxillary info (A)
+  idx.a.3 <- .check_character(x, "A", "Data3", c("N", "Y", "n", "y", NA))
+  txt.a.3 <- "Photos (Data3 of A events) is not one of N, Y, n, y, or NA"
+
+  idx.a.4 <- .check_character(x, "A", "Data4", c("N", "Y", "n", "y", NA))
+  txt.a.4 <- "Birds (Data4 of A events) is not one of N, Y, n, y, or NA"
+
+  # Resights (s and k)
   idx.res.num <- .check_numeric_sight(x, c("s", "k"), paste0("Data", 2:5))
   txt.res.num <- paste(
     "At least one of the Data2-5 columns for s and k events",
     "cannot be converted to a numeric"
   )
 
+  # Turtle
   idx.t.num <- .check_numeric_sight(x, "t", paste0("Data", c(3:5, 7)))
   txt.t.num <- paste(
     "At least one of the Data3-5/Data7 columns for t events",
     "cannot be converted to a numeric"
   )
 
+  idx.t.6 <- .check_character(x, "t", "Data6", c("F", "J", "N", "R", NA))
+  txt.t.6 <- "Assocaited JFR (Data6 of t events) is not one of F, J, N, R, or NA"
+
+  # Fishing boat
   idx.f.num <- .check_numeric_sight(x, "F", paste0("Data", 2:4))
   txt.f.num <- paste(
     "At least one of the Data2-4 columns for F events",
     "cannot be converted to a numeric"
   )
 
+  # Numeric events (1-8)
   idx.num.num <- .check_numeric_sight(x, 1:8, paste0("Data", 2:8))
   txt.num.num <- paste(
     "At least one of the Data2-8 columns for 1-8 events",
     "cannot be converted to a numeric"
   )
 
+  idx.num.9 <- .check_character(x, 1:8, "Data9", c(NA))
+  txt.num.9 <- "The data9 column for 1-8 events is not NA (blank)"
+
+
+  # Add to error.out
   error.out <- rbind(
     error.out,
     .check_list(x, x.lines, idx.skm.num, txt.skm.num),
     .check_list(x, x.lines, idx.res.num, txt.res.num),
     .check_list(x, x.lines, idx.t.num, txt.t.num),
     .check_list(x, x.lines, idx.f.num, txt.f.num),
-    .check_list(x, x.lines, idx.num.num, txt.num.num)
+    .check_list(x, x.lines, idx.num.num, txt.num.num),
+    .check_list(x, x.lines, idx.a.3, txt.a.3),
+    .check_list(x, x.lines, idx.a.4, txt.a.4),
+    .check_list(x, x.lines, idx.t.6, txt.t.6),
+    .check_list(x, x.lines, idx.num.9, txt.num.9)
   )
 
 

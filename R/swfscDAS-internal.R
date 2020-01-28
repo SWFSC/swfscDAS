@@ -62,11 +62,21 @@
   )
 
   z$idx <- seq_len(nrow(z))
+  z.out <- c()
 
-  z.curr <- z[z$Event == event.code, ]
-  z.vec <- z.curr[[z.col]]
+  for (i in event.code) {
+    z.curr <- z[z$Event == i, ]
+    z.vec <- z.curr[[z.col]]
 
-  z.curr$idx[!(z.vec %in% vals.accepted)]
+    z.out <- c(z.out, z.curr$idx[!(z.vec %in% vals.accepted)])
+  }
+
+  sort(unique(z.out))
+
+  # z.curr <- z[z$Event == event.code, ]
+  # z.vec <- z.curr[[z.col]]
+  #
+  # z.curr$idx[!(z.vec %in% vals.accepted)]
 }
 
 

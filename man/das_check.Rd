@@ -42,15 +42,27 @@ Precursor to DASCHECK. Checks that the following is true:
   Horizontal sun \tab W \tab Data2 \tab Can be converted to a numeric value\cr
   Vertical sun   \tab W \tab Data3 \tab Can be converted to a numeric value\cr
   Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
-  NA \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value \cr
-  NA \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value \cr
-  NA \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value \cr
-  NA \tab F       \tab Data2-4    \tab Can be converted to a numeric value \cr
-  NA \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value \cr
+  NA \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value\cr
+  NA \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
+  NA \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value\cr
+  NA \tab F       \tab Data2-4    \tab Can be converted to a numeric value\cr
+  NA \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value\cr
+  Photos \tab A \tab Data3 \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  Birds  \tab A \tab Data4 \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  JFR    \tab t \tab Data6 \tab Must be one of F, J, N, R, or NA (blank)\cr
+  Blank \tab 1-8 \tab Data9 \tab The Data9 column must be NA (blank) for events 1-8\cr
+}
+
+Current questions:
+\itemize{
+  \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
+  \item
 }
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
 das_check(y)
+
+#das_check("U:/RV-Data/AllDas.das", file.out = "../tmp.csv")
 
 }
