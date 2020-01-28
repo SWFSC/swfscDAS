@@ -27,11 +27,26 @@ Precursor to DASCHECK. Checks that the following is true:
   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
   \item The effort dot matches effort determined using B, R, and E events
-  \item
+  \item And event/column pairs meet the following requirements:
 }
-\tabular{lrr}{
-  \emph{Item}  \tab \emph{Columns} \tab \emph{Format}\cr
-  Event number \tab 1-3\cr
+
+\tabular{llll}{
+  \emph{Item} \tab \emph{Event} \tab \emph{Column} \tab \emph{Requirement}\cr
+  Cruise number  \tab B \tab Data1 \tab Can be converted to a numeric value\cr
+  Mode           \tab B \tab Data2 \tab Must be one of C, P, c, p, or NA (blank)\cr
+  Effort type    \tab R \tab Data1 \tab Must be one of F, N, S, or NA (blank)\cr
+  Course         \tab N \tab Data1 \tab Can be converted to a numeric value\cr
+  Beaufort       \tab V \tab Data1 \tab Can be converted to a numeric value\cr
+  Swell height   \tab V \tab Data2 \tab Can be converted to a numeric value\cr
+  Rain or fog    \tab W \tab Data1 \tab Can be converted to a numeric value\cr
+  Horizontal sun \tab W \tab Data2 \tab Can be converted to a numeric value\cr
+  Vertical sun   \tab W \tab Data3 \tab Can be converted to a numeric value\cr
+  Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
+  NA \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value \cr
+  NA \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value \cr
+  NA \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value \cr
+  NA \tab F       \tab Data2-4    \tab Can be converted to a numeric value \cr
+  NA \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value \cr
 }
 }
 \examples{
