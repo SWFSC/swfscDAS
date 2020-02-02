@@ -231,7 +231,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
       select(.data$idx, .data$Species, .data$GsSpecies) %>%
       arrange(.data$idx)
 
-    to.return %>%
+    to.return <- to.return %>%
       select(-starts_with("Sp"), -starts_with("GsSp")) %>%
       full_join(to.return.multi, by = "idx") %>%
       select(1:40, .data$Species, .data$GsSpecies, .data$ResightCourse,
@@ -245,7 +245,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     #   "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal")
 
 
-  } else {
-    to.return
   }
+
+  as_das_df(to.return)
 }
