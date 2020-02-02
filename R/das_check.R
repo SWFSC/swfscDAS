@@ -61,7 +61,10 @@
 #'
 #' @export
 das_check <- function(file, file.out = NULL) {
-  error.out <- data.frame(LineNum = NA, ID = NA, Description = NA)
+  error.out <- data.frame(
+    LineNum = NA, ID = NA, Description = NA,
+    stringsAsFactors = FALSE
+  )
   x <- das_read(file)
   x.lines <- substr(readLines(file), 4, 39)
   stopifnot(nrow(x) == length(x.lines))
@@ -249,7 +252,10 @@ das_check <- function(file, file.out = NULL) {
   #----------------------------------------------------------------------------
   # Remove first line and return
   to.return <- if (nrow(error.out) == 1) {
-    data.frame(LineNum = NA, ID = NA, Description = "No errors found")
+    data.frame(
+      LineNum = NA, ID = NA, Description = "No errors found",
+      stringsAsFactors = FALSE
+    )
   } else {
     to.return <- error.out[-1, ]
   }
