@@ -231,21 +231,12 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
       select(.data$idx, .data$Species, .data$GsSpecies) %>%
       arrange(.data$idx)
 
-    to.return %>%
+    to.return <- to.return %>%
       select(-starts_with("Sp"), -starts_with("GsSp")) %>%
       full_join(to.return.multi, by = "idx") %>%
       select(1:40, .data$Species, .data$GsSpecies, .data$ResightCourse,
              starts_with("Turtle"), starts_with("Boat"))
-
-    # TODO: Make unit test ensuring that first 40 column names of das_sight() are always:
-    # c("Event", "DateTime", "Lat", "Lon", "OnEffort", "Cruise", "Mode", "EffType", "Course",
-    #   "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
-    #   "Data1", "Data2", "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
-    #   "EventNum", "file_das", "line_num", "Obs", "Bearing", "Reticle", "DistNm",
-    #   "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal")
-
-
-  } else {
-    to.return
   }
+
+  as_das_df(to.return)
 }
