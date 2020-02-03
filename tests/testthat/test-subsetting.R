@@ -1,4 +1,4 @@
-test_that("subsetting returns a data frame", {
+test_that("subsetting das_ objects returns a data frame", {
   y.read <- das_read(system.file("das_sample.das", package = "swfscDAS"))
   y.proc <- das_process(y.read)
 

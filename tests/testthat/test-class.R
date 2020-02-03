@@ -5,7 +5,7 @@ test_that("functions return expected das_ classes", {
 
   expect_identical(c("das_dfr", "data.frame"), class(y.read))
   expect_identical(c("das_df", "data.frame"), class(y.proc))
-  expect_identical(c("das_df", "data.frame"), class(y.sight))
+  expect_identical("data.frame", class(y.sight))
 })
 
 

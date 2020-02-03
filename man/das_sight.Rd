@@ -19,7 +19,8 @@ Can also be a data frame that can be coerced to a \code{das_df} object}
 \item{mixed.multi}{logical; indicates if mixed-species sightings should be output in multiple rows}
 }
 \value{
-Data frame with 1) the columns from \code{x} and 2) columns with sighting information
+Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
+  and 2) columns with sighting information
   (observer, species, etc.) extracted from 'Data#' columns as specified in Details.
   The data frame has one row for each sighting,
   or one row for each species of each sighting if \code{mixed.multi} is \code{TRUE}.

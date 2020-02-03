@@ -3,7 +3,7 @@
 #' Extract sightings and associated information from processed DAS data
 #'
 #' @param x \code{das_df} object; output from \code{\link{das_process}}.
-#'  Can also be a data frame that can be coerced to a \code{das_df} object
+#'   Can also be a data frame that can be coerced to a \code{das_df} object
 #' @param mixed.multi logical; indicates if mixed-species sightings should be output in multiple rows
 #'
 #' @importFrom dplyr %>% .data arrange case_when everything filter full_join group_by left_join mutate starts_with summarise
@@ -42,7 +42,8 @@
 #'     \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc., be changed from \code{NA} to \code{0}?
 #'   }
 #'
-#' @return Data frame with 1) the columns from \code{x} and 2) columns with sighting information
+#' @return Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
+#'   and 2) columns with sighting information
 #'   (observer, species, etc.) extracted from 'Data#' columns as specified in Details.
 #'   The data frame has one row for each sighting,
 #'   or one row for each species of each sighting if \code{mixed.multi} is \code{TRUE}.
@@ -205,6 +206,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
   #----------------------------------------------------------------------------
   to.return <- sight.df %>%
     filter(.data$Event %in% event.sight) %>%
+    select(-starts_with("Data")) %>%
     left_join(sight.info.all, by = "sight_cumsum") %>%
     left_join(sight.info.skm, by = "sight_cumsum") %>%
     left_join(sight.info.resight, by = "sight_cumsum") %>%
@@ -234,9 +236,9 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     to.return <- to.return %>%
       select(-starts_with("Sp"), -starts_with("GsSp")) %>%
       full_join(to.return.multi, by = "idx") %>%
-      select(1:40, .data$Species, .data$GsSpecies, .data$ResightCourse,
+      select(1:31, .data$Species, .data$GsSpecies, .data$ResightCourse,
              starts_with("Turtle"), starts_with("Boat"))
   }
 
-  as_das_df(to.return)
+  to.return
 }

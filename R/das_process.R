@@ -77,9 +77,9 @@ das_process.tbl_df <- function(x, ...) {
 #'       New cruises are identifed using \code{days.gap}.
 #'     \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
 #'     \item 'EffType' is capitalized, and values of \code{NA} are assigned a value of "S"
-#'     \item 'Glare': \code{TRUE} if 'HzSun' is 11, 12 or 1 and 'VtSun' is 2 or 3,
-#'       or if 'HzSun' is 12 and 'VtSun' is 1;
-#'       \code{NA} if 'HzSun' or 'VtSun' is \code{NA};
+#'     \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,
+#'       or if 'HorizSun' is 12 and 'VertSun' is 1;
+#'       \code{NA} if 'HorizSun' or 'VertSun' is \code{NA};
 #'       otherwise \code{FALSE}
 #'     \item Missing values are \code{NA} rather than \code{-1}
 #'   }
@@ -89,20 +89,20 @@ das_process.tbl_df <- function(x, ...) {
 #' @return A \code{das_df} object, which is also a data frame.
 #'   It consists of the input data frame, i.e. the output of \code{\link{das_read}},
 #'   with the following columns added:
-#'   \tabular{ll}{
-#'     \emph{State/condition}        \tab \emph{Column name}\cr
-#'     On/off effort                 \tab OnEffort\cr
-#'     Cruise number                 \tab Cruise\cr
-#'     Effort mode                   \tab Mode\cr
-#'     Effort type                   \tab EffType\cr
-#'     Course (ship direction)       \tab Course\cr
-#'     Beaufort sea state            \tab Bft\cr
-#'     Swell height (ft)             \tab SwellHght\cr
-#'     Rain/fog/haze code            \tab RainFog\cr
-#'     Horizontal sun (clock system) \tab HorizSun\cr
-#'     Vertical sun (clock system)   \tab VertSun\cr
-#'     Glare                         \tab Glare\cr
-#'     Visibility (nm)               \tab Vis\cr
+#'   \tabular{lll}{
+#'     \emph{State/condition}        \tab \emph{Column name} \tab \emph{Data source}\cr
+#'     On/off effort                 \tab OnEffort  \tab B/R and E events\cr
+#'     Cruise number                 \tab Cruise    \tab Event: B; Column: Data1\cr
+#'     Effort mode                   \tab Mode      \tab Event: B; Column: Data2\cr
+#'     Effort type                   \tab EffType   \tab Event: R; Column: Data1\cr
+#'     Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
+#'     Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr
+#'     Swell height (ft)             \tab SwellHght \tab Event: V; Column: Data2\cr
+#'     Rain/fog/haze code            \tab RainFog   \tab Event: W; Column: Data1\cr
+#'     Horizontal sun (clock system) \tab HorizSun  \tab Event: W; Column: Data2\cr
+#'     Vertical sun (clock system)   \tab VertSun   \tab Event: W; Column: Data3\cr
+#'     Glare                         \tab Glare     \tab HorizSun and VertSun\cr
+#'     Visibility (nm)               \tab Vis       \tab Event: W; Column: Data5\cr
 #'   }
 #'
 #' @seealso For more details about WinCruz, see
