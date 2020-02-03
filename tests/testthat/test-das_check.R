@@ -7,4 +7,6 @@ test_that("das_check no error output", {
   )
 
   expect_identical(y.check, exp.df)
+
+  # TODO: Make das_sample_error.das with some errors to check here
 })

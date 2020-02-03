@@ -94,9 +94,12 @@ test_that("das_sight output has expected column names and classes", {
     "BoatType", "BoatNum"
   )
 
-  expect_identical(exp.name, names(y.sight)[1:40])
-  expect_identical(exp.name, names(y.sight.multi)[1:40])
-  expect_identical(exp.name.nomulti, names(y.sight)[-c(1:40)])
-  expect_identical(exp.name.multi, names(y.sight.multi)[-c(1:40)])
+  # expect_identical(exp.name, names(y.sight)[1:40])
+  # expect_identical(exp.name, names(y.sight.multi)[1:40])
+  # expect_identical(exp.name.nomulti, names(y.sight)[-c(1:40)])
+  # expect_identical(exp.name.multi, names(y.sight.multi)[-c(1:40)])
+
+  expect_identical(c(exp.name, exp.name.nomulti), names(y.sight))
+  expect_identical(c(exp.name, exp.name.multi), names(y.sight.multi))
 })
 
