@@ -2,8 +2,8 @@
 #'
 #' Extract sightings and associated information from processed DAS data
 #'
-#' @param x \code{das_df} object; output from \code{\link{das_process}}.
-#'   Can also be a data frame that can be coerced to a \code{das_df} object
+#' @param x \code{das_df} object; output from \code{\link{das_process}},
+#'   or a data frame that can be coerced to a \code{das_df} object
 #' @param mixed.multi logical; indicates if mixed-species sightings should be output in multiple rows
 #'
 #' @importFrom dplyr %>% .data arrange case_when everything filter full_join group_by left_join mutate starts_with summarise

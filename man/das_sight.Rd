@@ -13,8 +13,8 @@ das_sight(x, mixed.multi)
 \method{das_sight}{das_df}(x, mixed.multi = FALSE)
 }
 \arguments{
-\item{x}{\code{das_df} object; output from \code{\link{das_process}}.
-Can also be a data frame that can be coerced to a \code{das_df} object}
+\item{x}{\code{das_df} object; output from \code{\link{das_process}},
+or a data frame that can be coerced to a \code{das_df} object}
 
 \item{mixed.multi}{logical; indicates if mixed-species sightings should be output in multiple rows}
 }
