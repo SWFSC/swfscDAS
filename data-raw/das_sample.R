@@ -108,7 +108,7 @@ e.rownum1 <- sum(e.rownum < which(x$Event == "B")[2])
 e.vals <- c(seq_len(e.rownum1), 1:(length(e.rownum) - e.rownum1))
 
 stopifnot(length(e.vals) == length(e.rownum))
-x$event_num[!(x$Event %in% c(1:9, "?"))] <- e.vals
+x$EventNum[!(x$Event %in% c(1:9, "?"))] <- e.vals
 rm(e.rownum, e.rownum1, e.vals)
 
 # ... and set file name and line numbers, post inserting/deleting rows
@@ -118,7 +118,7 @@ x$line_num <- seq_len(nrow(x))
 
 #------------------------------------------------------------------------------
 # Write DAS data to file
-raw_das_fwf(x, file = "inst/das_sample.das", 10)
+raw_das_fwf(x, file = "inst/das_sample2.das", 10)
 
 # usethis::use_data("das_sample")
 
