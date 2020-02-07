@@ -3,7 +3,8 @@
 #' Check that DAS file has accepted values
 #'
 #' @param file filename(s) of one or more DAS files
-#' @param file.out filename to which to write the error log; default is NULL
+#' @param file.out filename to which to write the error log;
+#'   default is \code{NULL}
 #'
 #' @importFrom dplyr left_join
 #' @importFrom utils write.csv
@@ -29,26 +30,27 @@
 #'   Horizontal sun \tab W \tab Data2 \tab Can be converted to a numeric value\cr
 #'   Vertical sun   \tab W \tab Data3 \tab Can be converted to a numeric value\cr
 #'   Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
-#'   NA \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value\cr
-#'   NA \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
-#'   NA \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value\cr
-#'   NA \tab F       \tab Data2-4    \tab Can be converted to a numeric value\cr
-#'   NA \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value\cr
+#'   Sighting (mammal) \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value\cr
 #'   Photos \tab A \tab Data3 \tab Must be one of N, Y, n, y, or NA (blank)\cr
 #'   Birds  \tab A \tab Data4 \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   JFR    \tab t \tab Data6 \tab Must be one of F, J, N, R, or NA (blank)\cr
-#'   Blank \tab 1-8 \tab Data9 \tab The Data9 column must be NA (blank) for events 1-8\cr
+#'   Resighting      \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
+#'   Turtle sighting \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value\cr
+#'   JFR             \tab t \tab Data6 \tab Must be one of F, J, N, R, or NA (blank)\cr
+#'   Fishing vessel  \tab F       \tab Data2-4    \tab Can be converted to a numeric value\cr
+#'   Sighting info \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value\cr
+#'   Sighting info \tab 1-8 \tab Data9 \tab The Data9 column must be NA (blank) for events 1-8\cr
 #' }
 #'
-#' Current questions:
+#' Outstanding questions:
 #' \itemize{
 #'   \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
-#'   \item
+#'   \item What to add?
 #' }
 #'
 #' @return
-#' A data frame with three columns: the line number,
-#' 'ID' (columns 4-39 form the DAS file), and description of the issue
+#' A data frame with five columns: the file name, line number,
+#' index (row number) from the \code{das_read(file)} data frame,
+#' 'ID' (columns 4-39 from the DAS file), and description of the issue
 #'
 #' If \code{file.out} is not \code{NULL}, then the error log is also
 #' written to a text file
@@ -57,12 +59,10 @@
 #' y <- system.file("das_sample.das", package = "swfscDAS")
 #' das_check(y)
 #'
-#' #das_check("U:/RV-Data/AllDas.das", file.out = "../tmp.csv")
-#'
 #' @export
 das_check <- function(file, file.out = NULL) {
   error.out <- data.frame(
-    LineNum = NA, ID = NA, Description = NA,
+    File = NA, LineNum = NA, Idx = NA, ID = NA, Description = NA,
     stringsAsFactors = FALSE
   )
   x <- das_read(file)
@@ -75,12 +75,13 @@ das_check <- function(file, file.out = NULL) {
   event.acc <- c("#", "*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "N",
                  "P", "Q", "R", "s", "S", "t", "V", "W",
                  "g", "p", "X", "Y", "Z")
-  if (!all(x$Event %in% event.acc))
-    stop("The following lines in the DAS file (from line_num in output ",
-         "DAS data frame) contain unexpected event codes:\n",
-         paste(x$line_num[!(x$Event %in% event.acc)], collapse = ", "),
-         "\nExpected event codes (case sensitive): ",
-         paste(event.acc, collapse = ", "))
+  ev.which <- which(!(x$Event %in% event.acc))
+  error.out <- rbind(
+    error.out,
+    list(x$file_das[ev.which], x$line_num[ev.which], ev.which,
+         x.lines[ev.which],
+         rep("The event code is not recognized", length(ev.which)))
+  )
 
 
   #----------------------------------------------------------------------------
@@ -90,13 +91,22 @@ das_check <- function(file, file.out = NULL) {
   ndx.E <- which(x$Event == "E")
 
   if (length(ndx.E) != length(ndx.R)) {
-    # TODO
-    # stop("Error: There are not an equal number of 'R' and 'E' events",
-    #      "in the provided DAS file")
+    error.out <- rbind(
+      error.out,
+      list(NA, NA, NA, NA,
+           paste("Error: There are not an equal number of 'R' and 'E'",
+                 "events in the provided DAS file"))
+    )
 
   } else if (!all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])) {
-    # TODO
-    # stop("Error: Not all 'R' events are followed by 'E' events")
+    e.which <- which(
+      !all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])
+    )
+    error.out <- rbind(
+      error.out,
+      list(x$file_das[e.which], x$line_num[e.which], e.which, x.lines[e.which],
+           "Error: Not all 'R' events are followed by 'E' events")
+    )
 
   } else {
     x.eff.idx <- unlist(mapply(function(i, j) {
@@ -105,15 +115,14 @@ das_check <- function(file, file.out = NULL) {
     ndx.B.preR <- ndx.B[(ndx.B + 1) %in% ndx.R]
     x.eff <- seq_len(nrow(x)) %in% c(x.eff.idx, ndx.B.preR)
 
-    err.eff.which <- which(
-      x.eff != x$EffortDot & !(x$Event %in% c("?", 1:8, "#"))
+    e.which <- which(
+      (x.eff != x$EffortDot) & !(x$Event %in% c("?", 1:8, "#"))
     )
-    #^ will be of length 0 if none, so nothing will be added to error.out
 
     error.out <- rbind(
       error.out,
-      list(err.eff.which, x.lines[err.eff.which],
-           rep("Effort dot does not match B/R to E effort", length(err.eff.which)))
+      list(x$file_das[e.which], x$line_num[e.which], e.which, x.lines[e.which],
+           rep("Effort dot does not match B/R to E effort", length(e.which)))
     )
   }
 
@@ -186,7 +195,7 @@ das_check <- function(file, file.out = NULL) {
   #----------------------------------------------------------------------------
   ### Check Data# columns for sightings data format
   # Marine mammal sightings (SKM)
-  idx.skm.num <- .check_numeric_sight(x, c("S", "K", "M"), paste0("Data", 3:7)) #3:9
+  idx.skm.num <- .check_numeric(x, c("S", "K", "M"), paste0("Data", 3:7)) #3:9
   txt.skm.num <- paste(
     "At least one of the Data3-9 columns for S, K, and M events",
     "cannot be converted to a numeric"
@@ -200,14 +209,14 @@ das_check <- function(file, file.out = NULL) {
   txt.a.4 <- "Birds (Data4 of A events) is not one of N, Y, n, y, or NA"
 
   # Resights (s and k)
-  idx.res.num <- .check_numeric_sight(x, c("s", "k"), paste0("Data", 2:5))
+  idx.res.num <- .check_numeric(x, c("s", "k"), paste0("Data", 2:5))
   txt.res.num <- paste(
     "At least one of the Data2-5 columns for s and k events",
     "cannot be converted to a numeric"
   )
 
   # Turtle
-  idx.t.num <- .check_numeric_sight(x, "t", paste0("Data", c(3:5, 7)))
+  idx.t.num <- .check_numeric(x, "t", paste0("Data", c(3:5, 7)))
   txt.t.num <- paste(
     "At least one of the Data3-5/Data7 columns for t events",
     "cannot be converted to a numeric"
@@ -217,14 +226,14 @@ das_check <- function(file, file.out = NULL) {
   txt.t.6 <- "Assocaited JFR (Data6 of t events) is not one of F, J, N, R, or NA"
 
   # Fishing boat
-  idx.f.num <- .check_numeric_sight(x, "F", paste0("Data", 2:4))
+  idx.f.num <- .check_numeric(x, "F", paste0("Data", 2:4))
   txt.f.num <- paste(
     "At least one of the Data2-4 columns for F events",
     "cannot be converted to a numeric"
   )
 
   # Numeric events (1-8)
-  idx.num.num <- .check_numeric_sight(x, 1:8, paste0("Data", 2:8))
+  idx.num.num <- .check_numeric(x, 1:8, paste0("Data", 2:8))
   txt.num.num <- paste(
     "At least one of the Data2-8 columns for 1-8 events",
     "cannot be converted to a numeric"
@@ -251,9 +260,10 @@ das_check <- function(file, file.out = NULL) {
 
   #----------------------------------------------------------------------------
   # Remove first line and return
-  to.return <- if (nrow(error.out) == 1) {
-    data.frame(
-      LineNum = NA, ID = NA, Description = "No errors found",
+  if (nrow(error.out) == 1) {
+    to.return <- data.frame(
+      File = NA, LineNum = NA, Idx = NA, ID = NA,
+      Description = "No errors found",
       stringsAsFactors = FALSE
     )
   } else {

@@ -31,10 +31,12 @@ Extract sightings and associated information from processed DAS data
 \details{
 DAS events contain specific information in the 'Data#' columns,
   with the information depending on the event code for that row.
-  The output data frame contains columns with this specific information extracted to dedicated columns as described below.
-  This function recognizes the following types of sightings: marine mammal sightings (event codes "S", "K", or "M"),
-  marine mammal resights (codes "s" or "k"), turtle sightings (code "t"), and fishing vessel sightings (code "F").
-  See the format PDF, \code{\link{das_format_pdf}}, for the required format for each of these events.
+  The output data frame contains columns with this specific information
+  extracted to dedicated columns as described below.
+  This function recognizes the following types of sightings:
+  marine mammal sightings (event codes "S", "K", or "M"), marine mammal resights (codes "s" or "k"),
+  turtle sightings (code "t"), and fishing vessel sightings (code "F").
+  See \code{\link{das_format_pdf}} for more information about events and event formats.
 
   Abbreviations used in column names: Gs = group size, Sp = species, Nm = nautical mile, Perc = percentage
 
