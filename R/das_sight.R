@@ -235,10 +235,19 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
       select(.data$idx, .data$Species, .data$GsSpecies) %>%
       arrange(.data$idx)
 
+    sight.names <- c( #same as 'exp.name' in test-output.R
+      "Event", "DateTime", "Lat", "Lon", "OnEffort",
+      "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
+      "HorizSun", "VertSun", "Glare", "Vis",
+      "EffortDot", "EventNum", "file_das", "line_num",
+      "Obs", "Bearing", "Reticle", "DistNm",
+      "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal"
+    )
+
     to.return <- to.return %>%
       select(-starts_with("Sp"), -starts_with("GsSp")) %>%
       full_join(to.return.multi, by = "idx") %>%
-      select(1:31, .data$Species, .data$GsSpecies, .data$ResightCourse,
+      select(!!sight.names, .data$Species, .data$GsSpecies, .data$ResightCourse,
              starts_with("Turtle"), starts_with("Boat"))
   }
 

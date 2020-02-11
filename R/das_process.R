@@ -71,8 +71,8 @@ das_process.tbl_df <- function(x, ...) {
 #'       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
 #'     \item All '#' events (deleted events) are removed
 #'     \item An event is considered 'on effort' if it is 1) an R event,
-#'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events.
-#'       The 'EffortDot' column is ignored
+#'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
+#'       (not including the E event). The 'EffortDot' column is ignored here
 #'     \item All state/condition information is reset at the beginning of each cruise.
 #'       New cruises are identifed using \code{days.gap}.
 #'     \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
@@ -121,8 +121,6 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 {
   #----------------------------------------------------------------------------
   ### Input checks
-  das.df <- x
-
   # TODO: verbosely ignore arguments passed via ... ?
 
   # Input classes
@@ -138,7 +136,8 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   # Prep
 
   ### Remove '#' events
-  das.df <- das.df[das.df$Event != "#", ]
+  das.df <- x[x$Event != "#", ]
+  rownames(das.df) <- NULL # for debugging purposes
 
   ### Determine effort using B/R and E events
   nDAS <- nrow(das.df)
@@ -148,18 +147,18 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   ndx.E <- which(das.df$Event == "E")
 
   if (length(ndx.E) != length(ndx.R)) {
-    stop("Error: There are not an equal number of 'R' and 'E' events",
-         "in the provided DAS file")
+    warning("Error: There are not an equal number of 'R' and 'E' events",
+            "in the provided DAS file")
   }
   if (!all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])) {
-    stop("Error: Not all 'R' events are followed by 'E' events")
+    warning("Error: Not all 'R' events are followed by 'E' events")
   }
 
-  OnEffort.idx <- unlist(mapply(function(i, j) {
-    i:(j-1)
-  }, ndx.R, ndx.E, SIMPLIFY = FALSE))
-  ndx.B.preR <- ndx.B[(ndx.B + 1) %in% ndx.R]
-  OnEffort <- seq_len(nDAS) %in% c(OnEffort.idx, ndx.B.preR)
+  # OnEffort.idx <- unlist(mapply(function(i, j) {
+  #   i:(j-1)
+  # }, ndx.R, ndx.E, SIMPLIFY = FALSE))
+  # ndx.B.preR <- ndx.B[(ndx.B + 1) %in% ndx.R]
+  # OnEffort <- seq_len(nDAS) %in% c(OnEffort.idx, ndx.B.preR)
 
 
   #----------------------------------------------------------------------------
@@ -194,8 +193,11 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   event.B <- das.df$Event == "B"
   event.N <- das.df$Event == "N"
   event.R <- das.df$Event == "R"
+  event.E <- das.df$Event == "E"
   event.V <- das.df$Event == "V"
   event.W <- das.df$Event == "W"
+
+  event.B.preR <- (das.df$Event == "B") & (c(das.df$Event[-1], NA) == "R")
 
   init.val <- as.numeric(rep(NA, nDAS))
   event.na <- ifelse(reset.event, -9999, NA)
@@ -211,6 +213,11 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   VertSun   <- .das_process_num(init.val, das.df, "Data3", event.W, event.na)
   Vis       <- .das_process_num(init.val, das.df, "Data5", event.W, event.na)
 
+  Eff <- as.logical(init.val)
+  Eff[sort(unique(c(idx.new.cruise, idx.new.day)))] <- FALSE
+  Eff[event.B.preR | event.R] <- TRUE
+  Eff[event.E] <- FALSE
+
   # Additional processing done after for loop
 
 
@@ -220,14 +227,14 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   for (i in 1:nDAS) {
     # Reset cruise info when starting data for a new cruise
     if (i %in% idx.new.cruise) {
-      LastBft <- LastCourse <- LastEMode <- LastEType <-
+      LastBft <- LastCourse <- LastEff <- LastEMode <- LastEType <-
         LastHS <- LastVS <- LastOP <- LastRF <- LastSwH <- LastVis <-
         LastCruise <- NA
     }
 
     # Reset applicable info (aka all but 'LastCruise') when starting a new day
     if ((i %in% idx.new.day) & reset.day) {
-      LastBft <- LastCourse <- LastEMode <- LastEType <-
+      LastBft <- LastCourse <- LastEff <- LastEMode <- LastEType <-
         LastHS <- LastVS <- LastOP <- LastRF <- LastSwH <- LastVis <- NA
     }
 
@@ -242,6 +249,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     if (is.na(HorizSun[i]))  HorizSun[i] <- LastHS   else LastHS <- HorizSun[i]   #Horizontal sun
     if (is.na(VertSun[i]))   VertSun[i] <- LastVS    else LastVS <- VertSun[i]    #Vertical sun
     if (is.na(Vis[i]))       Vis[i] <- LastVis       else LastVis <- Vis[i]       #Visibility
+    if (is.na(Eff[i]))       Eff[i] <- LastEff       else LastEff <- Eff[i]       #Effort
   }
 
 
@@ -250,7 +258,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   tmp <- list(
     Cruise = Cruise, Mode = Mode, Course = Course, EffType = EffType,
     Bft = Bft, SwellHght = SwellHght, RainFog = RainFog,
-    HorizSun = HorizSun, VertSun = VertSun, Vis = Vis
+    HorizSun = HorizSun, VertSun = VertSun, Vis = Vis, OnEffort = Eff
   )
 
   # Replace event.reset values with NAs
@@ -292,11 +300,11 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
-    paste0("Data", 1:9), "EventNum", "file_das", "line_num"
+    paste0("Data", 1:9), "EffortDot", "EventNum", "file_das", "line_num"
   )
 
   as_das_df(
-    select(data.frame(das.df, tmp, OnEffort, stringsAsFactors = FALSE),
+    select(data.frame(das.df, tmp, stringsAsFactors = FALSE),
            !!cols.tokeep)
   )
 }

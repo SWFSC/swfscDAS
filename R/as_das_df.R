@@ -49,6 +49,7 @@ as_das_df.data.frame <- function(x) {
     Data7 = "character",
     Data8 = "character",
     Data9 = "character",
+    EffortDot = "logical",
     EventNum = "integer",
     file_das = "character",
     line_num = "integer"

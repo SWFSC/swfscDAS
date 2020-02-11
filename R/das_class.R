@@ -98,6 +98,7 @@ setOldClass("das_df")
 #'     Data7 \tab "character"\cr
 #'     Data8 \tab "character"\cr
 #'     Data9 \tab "character"\cr
+#'     EffortDot \tab "logical"\cr
 #'     EventNum \tab "integer"\cr
 #'     file_das \tab "character"\cr
 #'     line_num \tab "integer"\cr

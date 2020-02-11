@@ -59,6 +59,7 @@ test_that("das_process output has expected column names and classes", {
     Data7 = "character",
     Data8 = "character",
     Data9 = "character",
+    EffortDot = "logical",
     EventNum = "integer",
     file_das = "character",
     line_num = "integer"
@@ -73,10 +74,12 @@ test_that("das_sight output has expected column names and classes", {
   y.sight <- das_sight(y.proc)
   y.sight.multi <- das_sight(y.proc, mixed.multi = TRUE)
 
-  exp.name <- c(
-    "Event", "DateTime", "Lat", "Lon", "OnEffort", "Cruise", "Mode", "EffType", "Course",
-    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
-    "EventNum", "file_das", "line_num", "Obs", "Bearing", "Reticle", "DistNm",
+  exp.name <- c( #if updated, must update 'sight.names' in das_sight()
+    "Event", "DateTime", "Lat", "Lon", "OnEffort",
+    "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
+    "HorizSun", "VertSun", "Glare", "Vis",
+    "EffortDot", "EventNum", "file_das", "line_num",
+    "Obs", "Bearing", "Reticle", "DistNm",
     "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal"
   )
 

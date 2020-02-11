@@ -84,8 +84,8 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
     \item All '#' events (deleted events) are removed
     \item An event is considered 'on effort' if it is 1) an R event,
-      2) a B event immediately preceding an R event, or 3) between corresponding R and E events.
-      The 'EffortDot' column is ignored
+      2) a B event immediately preceding an R event, or 3) between corresponding R and E events
+      (not including the E event). The 'EffortDot' column is ignored here
     \item All state/condition information is reset at the beginning of each cruise.
       New cruises are identifed using \code{days.gap}.
     \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
