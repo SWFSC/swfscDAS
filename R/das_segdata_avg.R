@@ -12,7 +12,7 @@
 #' @param eff.id numeric; the ID of \code{x} (the current continuous effort section)
 #' @param ... ignored
 #'
-#' @importFrom dplyr %>% .data bind_cols everything mutate select slice
+#' @importFrom dplyr %>% .data bind_cols everything mutate n select slice
 #' @importFrom lubridate year month day tz
 #' @importFrom stats na.omit
 #' @importFrom swfscMisc bearing destination
@@ -23,7 +23,7 @@
 #'   It loops through the events in \code{x}, calculating and storing relevant
 #'   information for each modeling segment as it goes.
 #'   Because \code{x} is a continuous effort section, it must begin with
-#'   a "T" or "R" event and end with the corresponding "E" or "O" event.
+#'   a "B" or "R" event and end with the corresponding "E"event.
 #'
 #'   For each segment, this function reports the
 #'   segment ID, transect code, the start/end/midpoints (lat/lon), segment length,
@@ -35,17 +35,18 @@
 #'
 #'   The average condition values are calculated as a weighted average by distance,
 #'   and reported for the following:
-#'   TODO
-#'   TODO: add note about what score is for "percentage score" columns?
-#'
-#'   Cruise number, mode, effort type, Beaufort, swell ht, rain/fog, horizontal sun, vertical sun, glare, visibility.
-#'
-#'   Cruise number, mode, and effort type are all consistent across the effort section (and thus across all segments in \code{x}).
+#'   Beaufort, swell height, rain/fog/haze code (TODO - does this make sense?), horizontal sun, vertical sun, glare, and visibility.
+#'   For logical columns such as Glare, the reported value is the percentage
+#'   (in decimals) of the segment in which that condition was \code{TRUE}.
+#'   Cruise number, mode, effort type, and file name are also also incldued in the segdata output;
+#'   these values are (should be) all consistent across the whole effort section,
+#'   and thus across all segments in \code{x}.
 #'
 #'   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
-#'   are used to calculate the segment midpoints.
+#'   are used to calculate the segment start, mid, and end points.
 #'
 #' @return Data frame with the segdata information described above
+#'   and in \code{\link{das_effort}}
 #'
 #' @keywords internal
 #'
@@ -99,7 +100,7 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
   df.out1 <- das.df %>%
     select(!!df.out1.cols) %>%
     select(file = .data$file_das, everything()) %>%
-    slice(nrow(.))
+    slice(n())
 
   ### Prep - objects for for loop
   n.subseg <- length(seg.lengths)

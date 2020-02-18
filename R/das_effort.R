@@ -84,9 +84,9 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
 
   x.oneff.all <- x[x.oneff.which, ]
 
-  x.oneff <- x.oneff.all %>% filter(!(Event %in% event.tmp))
+  x.oneff <- x.oneff.all %>% filter(!(.data$Event %in% event.tmp))
   x.oneff.tmp <- x.oneff.all %>%
-    filter(Event %in% event.tmp) %>%
+    filter(.data$Event %in% event.tmp) %>%
     mutate(dist_from_prev = NA, cont_eff_section = NA,
            effort_seg = NA, seg_idx = NA, segnum = NA)
 
@@ -149,7 +149,7 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
   # Add back in ? and 1:8 (events.tmp) events
   # Only for siteinfo groupsizes, and thus no segdata info doesn't matter
   x.eff.all <- rbind(x.eff, x.oneff.tmp) %>%
-    arrange(idx)
+    arrange(.data$idx)
 
 
   #----------------------------------------------------------------------------

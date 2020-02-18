@@ -16,6 +16,7 @@ Imports:
     purrr, 
     readr, 
     rlang, 
+    swfscMisc, 
     tidyr
 License: GPL-3
 Encoding: UTF-8
