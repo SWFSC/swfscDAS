@@ -97,6 +97,12 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
   )
 
   # For each event, calculate distance to previous event
+  if (any(is.na(x.oneff$Lat)) | any(is.na(x.oneff$Lon))) {
+    stop("Error in das_effort: Some unexpected events ",
+         "(i.e. not one of ?, 1, 2, 3, 4, 5, 6, 7, 8) ",
+         "have NA values in the Lat and/or Lon columns, ",
+         "and thus this data cannot currently be processed")
+  }
   dist.from.prev <- mapply(function(x1, y1, x2, y2) {
     distance(y1, x1, y2, x2, units = "km", method = "vincenty")
   },
