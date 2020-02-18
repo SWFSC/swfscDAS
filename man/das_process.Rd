@@ -85,9 +85,15 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
     \item All '#' events (deleted events) are removed
     \item An event is considered 'on effort' if it is 1) an R event,
       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
-      (not including the E event). The 'EffortDot' column is ignored here
+      (not including the E event). The 'EffortDot' column is ignored here.
     \item All state/condition information is reset at the beginning of each cruise.
       New cruises are identifed using \code{days.gap}.
+    \item All state/condition information relating to B, R, P, V, N, and W events
+      are reset every time there is a BR event sequence, because
+      a BR event sequence is (nearly) always a BRPVNW event sequence.
+      An event sequence means that all of the events have the same Lat/Lon/DateTime info,
+      and thus previous values for conditions set during the event sequence should not
+      carry over to any part of the event sequence.
     \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
     \item 'EffType' is capitalized, and values of \code{NA} are assigned a value of "S"
     \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,

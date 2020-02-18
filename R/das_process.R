@@ -45,9 +45,15 @@
 #'     \item All '#' events (deleted events) are removed
 #'     \item An event is considered 'on effort' if it is 1) an R event,
 #'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
-#'       (not including the E event). The 'EffortDot' column is ignored here
+#'       (not including the E event). The 'EffortDot' column is ignored here.
 #'     \item All state/condition information is reset at the beginning of each cruise.
 #'       New cruises are identifed using \code{days.gap}.
+#'     \item All state/condition information relating to B, R, P, V, N, and W events
+#'       are reset every time there is a BR event sequence, because
+#'       a BR event sequence is (nearly) always a BRPVNW event sequence.
+#'       An event sequence means that all of the events have the same Lat/Lon/DateTime info,
+#'       and thus previous values for conditions set during the event sequence should not
+#'       carry over to any part of the event sequence.
 #'     \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
 #'     \item 'EffType' is capitalized, and values of \code{NA} are assigned a value of "S"
 #'     \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,
@@ -197,6 +203,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   event.W <- das.df$Event == "W"
 
   event.B.preR <- (das.df$Event == "B") & (c(das.df$Event[-1], NA) == "R")
+  idx.B.preR <- which(event.B.preR)
 
   init.val <- as.numeric(rep(NA, nDAS))
   event.na <- ifelse(reset.event, -9999, NA)
@@ -227,14 +234,20 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     # Reset cruise info when starting data for a new cruise
     if (i %in% idx.new.cruise) {
       LastBft <- LastCourse <- LastEff <- LastEMode <- LastEType <-
-        LastHS <- LastVS <- LastOP <- LastRF <- LastSwH <- LastVis <-
+        LastHS <- LastVS <- LastRF <- LastSwH <- LastVis <-
         LastCruise <- NA
     }
 
     # Reset applicable info (aka all but 'LastCruise') when starting a new day
     if ((i %in% idx.new.day) & reset.day) {
       LastBft <- LastCourse <- LastEff <- LastEMode <- LastEType <-
-        LastHS <- LastVS <- LastOP <- LastRF <- LastSwH <- LastVis <- NA
+        LastHS <- LastVS <- LastRF <- LastSwH <- LastVis <- NA
+    }
+
+    # Reset applicable info (all BRPVNW-related) when starting BR event sequence
+    if (i %in% idx.B.preR) {
+      LastCruise <- LastEMode <- LastEType <- LastBft <- LastSwH <-
+        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <- NA
     }
 
     # Set/pass along 'carry-over info'
