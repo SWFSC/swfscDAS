@@ -114,7 +114,6 @@ das_process.tbl_df <- function(x, ...) {
 
 
 #' @name das_process
-#'
 #' @export
 das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
                                 reset.day = TRUE, ...)
