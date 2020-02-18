@@ -60,7 +60,7 @@ y <- system.file("das_sample.das", package = "swfscDAS")
 
 y.proc <- das_process(y)
 das_effort(
-  y.proc, method = "equallength", sp.codes = c("mn", "bm"),
+  y.proc, method = "equallength", sp.codes = c("016", "018"),
   seg.km = 10
 )
 

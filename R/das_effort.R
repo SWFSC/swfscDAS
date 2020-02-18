@@ -9,7 +9,7 @@
 #' @param sp.codes character; species code(s) to include in segdata
 #' @param ... arguments passed to the chopping function specified using \code{method}
 #'
-#' @importFrom dplyr %>% between bind_cols filter full_join group_by left_join slice summarise
+#' @importFrom dplyr %>% arrange between bind_cols filter full_join group_by left_join mutate slice summarise
 #' @importFrom swfscMisc distance
 #' @importFrom utils head
 #'
@@ -45,7 +45,7 @@
 #'
 #' y.proc <- das_process(y)
 #' das_effort(
-#'   y.proc, method = "equallength", sp.codes = c("mn", "bm"),
+#'   y.proc, method = "equallength", sp.codes = c("016", "018"),
 #'   seg.km = 10
 #' )
 #'
@@ -73,18 +73,28 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
 
   #----------------------------------------------------------------------------
   # Prep
-  # Filter for and number continuous effort sections
-  #   'on effort + 1' is to capture O/E event
+  # Add index column for adding back in ? and 1:8 events, and extract those evtns
+  x$idx <- seq_len(nrow(x))
+  event.tmp <- c("?", 1:8)
+
+  # Filter for continuous effort sections; extract ? and 1:8 events
+  #   'on effort + 1' is to capture O/E event.
   x.oneff.which <- sort(unique(c(which(x$OnEffort), which(x$OnEffort) + 1)))
   stopifnot(all(between(x.oneff.which, 1, nrow(x))))
 
-  x.oneff <- x %>%
-    slice(x.oneff.which) %>%
-    filter(!(Event %in% c("?", 1:8)))
-  rownames(x.oneff) <- NULL
-  stopifnot(all(x.oneff[!x.oneff$OnEffort, "Event"] == "E"))
+  x.oneff.all <- x[x.oneff.which, ]
 
-  # TODO: How to re-integrate ? and 1:8 events?
+  x.oneff <- x.oneff.all %>% filter(!(Event %in% event.tmp))
+  x.oneff.tmp <- x.oneff.all %>%
+    filter(Event %in% event.tmp) %>%
+    mutate(dist_from_prev = NA, cont_eff_section = NA,
+           effort_seg = NA, seg_idx = NA, segnum = NA)
+
+  rownames(x.oneff) <- rownames(x.oneff.tmp) <- NULL
+  stopifnot(
+    all(x.oneff[!x.oneff$OnEffort, "Event"] == "E"),
+    sum(c(nrow(x.oneff), nrow(x.oneff.tmp))) == nrow(x.oneff.all)
+  )
 
   # For each event, calculate distance to previous event
   dist.from.prev <- mapply(function(x1, y1, x2, y2) {
@@ -113,12 +123,13 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
     randpicks <- NULL
   }
 
+  # Check that things are as expected
   x.eff.names <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
     "HorizSun", "VertSun", "Glare", "Vis", "Data1", "Data2",
     "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
-    "EffortDot", "EventNum", "file_das", "line_num", "dist_from_prev",
+    "EffortDot", "EventNum", "file_das", "line_num", "idx", "dist_from_prev",
     "cont_eff_section", "effort_seg", "seg_idx", "segnum"
   )
   if (!identical(names(x.eff), x.eff.names))
@@ -129,10 +140,15 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
     stop("Error in das_effort(): Error creating and processing ",
          "segement numbers. Please report this as an issue")
 
+  # Add back in ? and 1:8 (events.tmp) events
+  # Only for siteinfo groupsizes, and thus no segdata info doesn't matter
+  x.eff.all <- rbind(x.eff, x.oneff.tmp) %>%
+    arrange(idx)
+
 
   #----------------------------------------------------------------------------
   # Summarize sightings (based on siteinfo) and add applicable data to segdata
-  siteinfo <- x.eff %>%
+  siteinfo <- x.eff.all %>%
     left_join(select(segdata, .data$segnum, .data$mlat, .data$mlon),
               by = "segnum") %>%
     das_sight(mixed.multi = TRUE) %>%
