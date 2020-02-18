@@ -170,7 +170,8 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     left_join(sight.info.skm2, by = "sight_cumsum") %>%
     left_join(sight.info.skm3, by = "sight_cumsum") %>%
     left_join(sight.info.skm4, by = "sight_cumsum") %>%
-    select(.data$sight_cumsum, .data$SightNo, .data$Cue, .data$Method, .data$Photos, .data$Birds,
+    select(.data$sight_cumsum, .data$SightNo, .data$Cue, .data$Method,
+           .data$Photos, .data$Birds,
            .data$Mixed, .data$Prob, .data$GsTotal, everything())
   rm(sight.info.skm1, sight.info.skm2, sight.info.skm3, sight.info.skm4)
 
@@ -208,7 +209,9 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
   #----------------------------------------------------------------------------
   to.return <- sight.df %>%
     filter(.data$Event %in% event.sight) %>%
-    select(-starts_with("Data")) %>%
+    select(-.data$Data1, -.data$Data2, -.data$Data3,
+           -.data$Data4, -.data$Data5, -.data$Data6,
+           -.data$Data7, -.data$Data8, -.data$Data9) %>%
     left_join(sight.info.all, by = "sight_cumsum") %>%
     left_join(sight.info.skm, by = "sight_cumsum") %>%
     left_join(sight.info.resight, by = "sight_cumsum") %>%
@@ -235,20 +238,25 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
       select(.data$idx, .data$Species, .data$GsSpecies) %>%
       arrange(.data$idx)
 
-    sight.names <- c( #same as 'exp.name' in test-output.R
-      "Event", "DateTime", "Lat", "Lon", "OnEffort",
-      "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
-      "HorizSun", "VertSun", "Glare", "Vis",
-      "EffortDot", "EventNum", "file_das", "line_num",
-      "Obs", "Bearing", "Reticle", "DistNm",
-      "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal"
-    )
+    # Names and order of columns to reurn
+    names1 <- c(names(sight.df), names(sight.info.all), names(sight.info.skm))
+    names1 <- names1[!(names1 %in% c("sight_cumsum", paste0("Data", 1:9)))]
+    names1 <- names1[!grepl("Sp", names1)]
 
+    names2 <- c(
+      names(sight.info.resight), names(sight.info.t), names(sight.info.f)
+    )
+    names2 <- names2[!(names2 %in% "sight_cumsum")]
+
+    sight.names <- c(names1, "Species", "GsSpecies", names2)
+
+    # Prepmixed.multi return data frame
     to.return <- to.return %>%
-      select(-starts_with("Sp"), -starts_with("GsSp")) %>%
+      select(-.data$Sp1, -.data$Sp2, -.data$Sp3, -.data$Sp4,
+             -.data$Sp1Perc, -.data$Sp2Perc, -.data$Sp3Perc, -.data$Sp4Perc,
+             -.data$GsSp1, -.data$GsSp2, -.data$GsSp3, -.data$GsSp4) %>%
       full_join(to.return.multi, by = "idx") %>%
-      select(!!sight.names, .data$Species, .data$GsSpecies, .data$ResightCourse,
-             starts_with("Turtle"), starts_with("Boat"))
+      select(!!sight.names)
   }
 
   to.return

@@ -69,12 +69,13 @@ test_that("das_process output has expected column names and classes", {
   expect_identical(exp.class, lapply(y.proc2, class))
 })
 
+
 test_that("das_sight output has expected column names and classes", {
   y.proc <- das_process(system.file("das_sample.das", package = "swfscDAS"))
   y.sight <- das_sight(y.proc)
   y.sight.multi <- das_sight(y.proc, mixed.multi = TRUE)
 
-  exp.name <- c( #if updated, must update 'sight.names' in das_sight()
+  exp.name <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
     "HorizSun", "VertSun", "Glare", "Vis",
@@ -100,3 +101,35 @@ test_that("das_sight output has expected column names and classes", {
   expect_identical(c(exp.name, exp.name.multi), names(y.sight.multi))
 })
 
+
+test_that("das_sight output has expected column names and classes with extra column", {
+  y.proc <- das_process(system.file("das_sample.das", package = "swfscDAS"))
+  y.proc$testrr <- 4
+  y.sight <- das_sight(y.proc)
+  y.sight.multi <- das_sight(y.proc, mixed.multi = TRUE)
+
+  exp.name <- c(
+    "Event", "DateTime", "Lat", "Lon", "OnEffort",
+    "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
+    "HorizSun", "VertSun", "Glare", "Vis",
+    "EffortDot", "EventNum", "file_das", "line_num", "testrr",
+    "Obs", "Bearing", "Reticle", "DistNm",
+    "SightNo", "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal"
+  )
+
+  exp.name.nomulti <- c(
+    "Sp1", "Sp2","Sp3", "Sp4", "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
+    "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
+    "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
+    "BoatType", "BoatNum"
+  )
+
+  exp.name.multi <- c(
+    "Species", "GsSpecies", "ResightCourse",
+    "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
+    "BoatType", "BoatNum"
+  )
+
+  expect_identical(c(exp.name, exp.name.nomulti), names(y.sight))
+  expect_identical(c(exp.name, exp.name.multi), names(y.sight.multi))
+})
