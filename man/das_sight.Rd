@@ -68,5 +68,6 @@ y <- system.file("das_sample.das", package = "swfscDAS")
 y.proc <- das_process(y)
 
 das_sight(y.proc)
+das_sight(y.proc, mixed.multi = TRUE)
 
 }

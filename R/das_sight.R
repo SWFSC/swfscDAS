@@ -55,6 +55,7 @@
 #' y.proc <- das_process(y)
 #'
 #' das_sight(y.proc)
+#' das_sight(y.proc, mixed.multi = TRUE)
 #'
 #' @export
 das_sight <- function(x, mixed.multi) UseMethod("das_sight")
