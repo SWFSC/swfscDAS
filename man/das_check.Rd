@@ -59,6 +59,7 @@ Outstanding questions:
 \itemize{
   \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
   \item What to add?
+  \item How to check that everything is right-justified?
 }
 }
 \examples{
