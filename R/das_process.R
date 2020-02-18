@@ -6,33 +6,6 @@
 #' @param x either a \code{das_dfr} object (the output of \code{\link{das_read}}),
 #'   or a character (filepath) which is first passed to \code{\link{das_read}}
 #' @param ... ignored
-#' @export
-das_process <- function(x, ...) UseMethod("das_process")
-
-
-#' @name das_process
-#' @export
-das_process.character <- function(x, ...) {
-  das_process(das_read(x), ...)
-}
-
-
-#' @name das_process
-#' @export
-das_process.data.frame <- function(x, ...) {
-  das_process(as_das_dfr(x), ...)
-}
-
-
-#' @name das_process
-#' @export
-das_process.tbl_df <- function(x, ...) {
-  das_process(as_das_dfr(x), ...)
-}
-
-
-#' @name das_process
-#'
 #' @param days.gap numeric of length 1; time gap (in days) used to identify
 #'   a new cruise in concatenated DAS files, and thus also when
 #'   state/condition information (weather, Bft, Mode, etc) is reset.
@@ -114,6 +87,33 @@ das_process.tbl_df <- function(x, ...) {
 #'
 #' y.read <- das_read(y)
 #' das_process(y.read)
+#'
+#' @export
+das_process <- function(x, ...) UseMethod("das_process")
+
+
+#' @name das_process
+#' @export
+das_process.character <- function(x, ...) {
+  das_process(das_read(x), ...)
+}
+
+
+#' @name das_process
+#' @export
+das_process.data.frame <- function(x, ...) {
+  das_process(as_das_dfr(x), ...)
+}
+
+
+#' @name das_process
+#' @export
+das_process.tbl_df <- function(x, ...) {
+  das_process(as_das_dfr(x), ...)
+}
+
+
+#' @name das_process
 #'
 #' @export
 das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
