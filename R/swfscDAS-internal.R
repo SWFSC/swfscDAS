@@ -93,4 +93,82 @@
   list(z1$file_das[z3], z1$line_num[z3], z3, z2[z3], rep(z4, length(z3)))
 }
 
+
+###############################################################################
+# Helper functions for airdas_effort_segdata
+
+### Extract unique (and sorted) characters from a string
+# stackoverflow.com/questions/31814548
+fn_uniqchars <- function(x) sort(unique(strsplit(x, "")[[1]]))
+
+
+### Keep running sum of data (conditions) multiplied by distance ratio
+# Requires that names of cond.list elements are the same as
+#   the column names in curr.df
+fn_aggr_conditions <- function(data.list, curr.df, idx, dist.perc) {
+  stopifnot(
+    all(names(data.list) %in% names(curr.df)),
+    idx <= nrow(curr.df)#,
+    # dist.perc >= 0
+  )
+
+  if (is.na(dist.perc)) {
+    lapply(data.list, function(i) NA)
+
+  } else if (dist.perc != 0) {
+    tmp <- lapply(names(data.list), function(k, dist.perc) {
+      z <- data.list[[k]]
+      if (inherits(z, c("numeric", "integer"))) {
+        z + (dist.perc * curr.df[[k]][idx])
+      } else if (inherits(z, "character")) {
+        paste(fn_uniqchars(paste0(z, curr.df[[k]][idx])), collapse = "")
+      } else if (inherits(z, "logical")) {
+        browser()
+      } else {
+        print("class not recognized")
+        browser()
+      }
+    }, dist.perc = dist.perc)
+
+    names(tmp) <- names(data.list)
+    tmp
+
+  } else {
+    data.list
+  }
+}
+
+
+###############################################################################
+# Functions for doing < / > / <= / >= comparisons with floating points
+.less <- function(x, y) {
+  stopifnot(length(y) == 1)
+  vapply(x, function(i) {(i < y) & !isTRUE(all.equal(i, y))}, as.logical(1))
+  # (x < y) & !isTRUE(all.equal(x, y))
+}
+
+.greater <- function(x, y) {
+  stopifnot(length(y) == 1)
+  vapply(x, function(i) {(i > y) & !isTRUE(all.equal(i, y))}, as.logical(1))
+  # (x > y) & !isTRUE(all.equal(x, y))
+}
+
+.less_equal <- function(x, y) {
+  stopifnot(length(y) == 1)
+  vapply(x, function(i) {(i < y) | isTRUE(all.equal(i, y))}, as.logical(1))
+  # (x < y) | isTRUE(all.equal(x, y))
+}
+
+.greater_equal <- function(x, y) {
+  stopifnot(length(y) == 1)
+  vapply(x, function(i) {(i > y) | isTRUE(all.equal(i, y))}, as.logical(1))
+  # (x > y) | isTRUE(all.equal(x, y))
+}
+
+.equal <- function(x, y) {
+  stopifnot(length(y) == 1)
+  vapply(x, function(i) isTRUE(all.equal(i, y)), as.logical(1))
+  # isTRUE(all.equal(x, y))
+}
+
 ###############################################################################
