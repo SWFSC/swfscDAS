@@ -105,10 +105,9 @@ das_chop_equal.data.frame <- function(x, ...) {
 das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
-  if (missing(seg.km)) {
+  if (missing(seg.km))
     stop("You must specify a 'seg.km' argument when using the \"equallength\" ",
          "method. See `?das_chop_equal` for more details")
-  }
 
   if (!all(x$OnEffort | x$Event %in% "E"))
     stop("x must be filtered for on effort events; see `?das_shop_equal")
@@ -117,6 +116,12 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL, ...) {
   #----------------------------------------------------------------------------
   # Calculate distance between points if necessary
   if (!("dist_from_prev" %in% names(x))) {
+    if (any(is.na(x$Lat)) | any(is.na(x$Lon))) {
+      stop("Error in das_chop_equal: Some unexpected events ",
+           "(i.e. not one of ?, 1, 2, 3, 4, 5, 6, 7, 8) ",
+           "have NA values in the Lat and/or Lon columns, ",
+           "and thus the distance between each point cannot be determined")
+    }
     dist.from.prev <- mapply(function(x1, y1, x2, y2) {
       distance(y1, x1, y2, x2, units = "km", method = "vincenty")
     },
@@ -162,11 +167,13 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL, ...) {
   if (all(x$Event[which(event.B) + 1] == "R")) {
     x$cont_eff_section[event.B] <- x$cont_eff_section[event.B] + 1
   } else {
-    warning("das_chop_effort event B inconsistency")
-    browser()
+    warning("das_chop_effort event B inconsistency. ",
+            "Please report this as an issue",
+            immediate. = TRUE)
   }
 
   eff.uniq <- unique(x$cont_eff_section)
+  stopifnot(length(eff.uniq) == sum(x$Event == "R"))
   if (exists("r.eff.sect")) {
     if (length(eff.uniq) != length(r.eff.sect))
       stop("The provided DAS data (x) does not have the same number of ",

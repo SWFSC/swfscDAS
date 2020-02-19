@@ -74,7 +74,7 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
   #----------------------------------------------------------------------------
   # Prep
   # Add index column for adding back in ? and 1:8 events, and extract those evtns
-  x$idx <- seq_len(nrow(x))
+  x$idx_eff <- seq_len(nrow(x))
   event.tmp <- c("?", 1:8)
 
   # Filter for continuous effort sections; extract ? and 1:8 events
@@ -101,7 +101,7 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
     stop("Error in das_effort: Some unexpected events ",
          "(i.e. not one of ?, 1, 2, 3, 4, 5, 6, 7, 8) ",
          "have NA values in the Lat and/or Lon columns, ",
-         "and thus this data cannot currently be processed")
+         "and thus the distance between each point cannot be determined")
   }
   dist.from.prev <- mapply(function(x1, y1, x2, y2) {
     distance(y1, x1, y2, x2, units = "km", method = "vincenty")
@@ -122,7 +122,6 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
     randpicks <- eff.list[[3]]
 
   } else if (method == "condition") {
-    stop("The condition method is not ready yet")
     eff.list <- das_chop_condition(as_das_df(x.oneff), ...)
     x.eff <- eff.list[[1]]
     segdata <- eff.list[[2]]
@@ -135,7 +134,7 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
     "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
     "HorizSun", "VertSun", "Glare", "Vis", "Data1", "Data2",
     "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
-    "EffortDot", "EventNum", "file_das", "line_num", "idx", "dist_from_prev",
+    "EffortDot", "EventNum", "file_das", "line_num", "idx_eff", "dist_from_prev",
     "cont_eff_section", "effort_seg", "seg_idx", "segnum"
   )
   if (!identical(names(x.eff), x.eff.names))
@@ -149,7 +148,8 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
   # Add back in ? and 1:8 (events.tmp) events
   # Only for siteinfo groupsizes, and thus no segdata info doesn't matter
   x.eff.all <- rbind(x.eff, x.oneff.tmp) %>%
-    arrange(.data$idx)
+    arrange(.data$idx_eff) %>%
+    select(-.data$idx_eff)
 
 
   #----------------------------------------------------------------------------
