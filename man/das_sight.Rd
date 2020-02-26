@@ -43,13 +43,15 @@ DAS events contain specific information in the 'Data#' columns,
   This function makes the following assumptions, and alterations to the raw data:
   \itemize{
     \item "S", "K", and "M" events, and only these events, are immediately followed by an "A" event
-    \item The 'Mixed' column is \code{TRUE} if two or more of the 'Data5', 'Data6', 'Data7', and 'Data8' values
+    \item The 'Mixed' column is \code{TRUE} if two or more of the
+      'Data5', 'Data6', 'Data7', and 'Data8' values
       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
       This column has a non-\code{NA} value for only "S", "K", and "M" events
     \item The 'Prob' column is \code{TRUE} is the sighting has an associated "?" event,
       and \code{FALSE} otherwise.
       This column has a non-\code{NA} value for only "S", "K", and "M" events
-    \item The 'GsTotal' column is the mean of the 'Data2' columns (with \code{NA}s removed) for the associated "1"-"8" events
+    \item The 'GsTotal' column is the mean of the 'Data2' columns (with \code{NA}s removed)
+      for the associated "1"-"8" events
     \item The 'Sp1Perc', 'Sp2Perc', 'Sp3Perc', and 'Sp4Perc' columns are the
       means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{NA}s removed), respectively,
       for the associated "1"-"8" events

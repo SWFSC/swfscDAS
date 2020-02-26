@@ -24,13 +24,15 @@
 #'   This function makes the following assumptions, and alterations to the raw data:
 #'   \itemize{
 #'     \item "S", "K", and "M" events, and only these events, are immediately followed by an "A" event
-#'     \item The 'Mixed' column is \code{TRUE} if two or more of the 'Data5', 'Data6', 'Data7', and 'Data8' values
+#'     \item The 'Mixed' column is \code{TRUE} if two or more of the
+#'       'Data5', 'Data6', 'Data7', and 'Data8' values
 #'       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
 #'       This column has a non-\code{NA} value for only "S", "K", and "M" events
 #'     \item The 'Prob' column is \code{TRUE} is the sighting has an associated "?" event,
 #'       and \code{FALSE} otherwise.
 #'       This column has a non-\code{NA} value for only "S", "K", and "M" events
-#'     \item The 'GsTotal' column is the mean of the 'Data2' columns (with \code{NA}s removed) for the associated "1"-"8" events
+#'     \item The 'GsTotal' column is the mean of the 'Data2' columns (with \code{NA}s removed)
+#'       for the associated "1"-"8" events
 #'     \item The 'Sp1Perc', 'Sp2Perc', 'Sp3Perc', and 'Sp4Perc' columns are the
 #'       means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{NA}s removed), respectively,
 #'       for the associated "1"-"8" events
@@ -96,9 +98,12 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
 
   #--------------------------------------------------------
   ### Data that is in all sighting events
+  # SightNo is left as character because of entries such as "408A"
   sight.info.all <- sight.df %>%
     filter(.data$Event %in% event.sight) %>%
-    mutate(Obs = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data2,
+    mutate(SightNo = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data1,
+                               .data$Event %in% c("s", "k") ~ .data$Data1),
+           Obs = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data2,
                            .data$Event == "t" ~ .data$Data1,
                            .data$Event == "F" ~ .data$Data1),
            Bearing = as.numeric(
@@ -119,19 +124,17 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
                .data$Event %in% c("s", "k") ~ .data$Data4,
                .data$Event == "t" ~ .data$Data4,
                .data$Event == "F" ~ .data$Data3))) %>%
-    select(.data$sight_cumsum,
+    select(.data$sight_cumsum, .data$SightNo,
            .data$Obs, .data$Bearing, .data$Reticle, .data$DistNm)
 
 
   #--------------------------------------------------------
   ### Marine mammal initial sightings; Events S, K, M
-  # SightNo is left as character because of entries such as "408A"
-  # Obs, bearing, Reticle, and DistNm are extracted in sight.info.all
+  # SightNo, Obs, Bearing, Reticle, and DistNm are extracted in sight.info.all
   sight.info.skm1 <- sight.df %>%
     filter(.data$Event %in% c("S", "K", "M")) %>%
-    mutate(SightNo = .data$Data1,
-           Cue = as.numeric(.data$Data3), Method = as.numeric(.data$Data4)) %>%
-    select(.data$sight_cumsum, .data$SightNo, .data$Cue, .data$Method)
+    mutate(Cue = as.numeric(.data$Data3), Method = as.numeric(.data$Data4)) %>%
+    select(.data$sight_cumsum, .data$Cue, .data$Method)
 
   # Data from A row
   sight.info.skm2 <- sight.df %>%
@@ -171,7 +174,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     left_join(sight.info.skm2, by = "sight_cumsum") %>%
     left_join(sight.info.skm3, by = "sight_cumsum") %>%
     left_join(sight.info.skm4, by = "sight_cumsum") %>%
-    select(.data$sight_cumsum, .data$SightNo, .data$Cue, .data$Method,
+    select(.data$sight_cumsum, .data$Cue, .data$Method,
            .data$Photos, .data$Birds,
            .data$Mixed, .data$Prob, .data$GsTotal, everything())
   rm(sight.info.skm1, sight.info.skm2, sight.info.skm3, sight.info.skm4)
