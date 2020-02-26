@@ -81,7 +81,7 @@ test_that("das_sight output has expected column names and classes", {
     "HorizSun", "VertSun", "Glare", "Vis",
     "EffortDot", "EventNum", "file_das", "line_num",
     "SightNo", "Obs", "Bearing", "Reticle", "DistNm",
-    "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal"
+    "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
   )
 
   exp.name.nomulti <- c(
@@ -114,7 +114,7 @@ test_that("das_sight output has expected column names and classes with extra col
     "HorizSun", "VertSun", "Glare", "Vis",
     "EffortDot", "EventNum", "file_das", "line_num", "testrr",
     "SightNo", "Obs", "Bearing", "Reticle", "DistNm",
-    "Cue", "Method", "Photos", "Birds", "Mixed", "Prob", "GsTotal"
+    "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
   )
 
   exp.name.nomulti <- c(

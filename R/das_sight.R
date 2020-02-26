@@ -176,7 +176,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     left_join(sight.info.skm4, by = "sight_cumsum") %>%
     select(.data$sight_cumsum, .data$Cue, .data$Method,
            .data$Photos, .data$Birds,
-           .data$Mixed, .data$Prob, .data$GsTotal, everything())
+           .data$Prob, .data$Mixed, .data$GsTotal, everything())
   rm(sight.info.skm1, sight.info.skm2, sight.info.skm3, sight.info.skm4)
 
 
