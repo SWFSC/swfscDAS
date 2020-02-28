@@ -47,7 +47,7 @@
 #'     Lat       \tab numeric   \tab 'Latitude' column converted to decimal degrees in range [-90, 90]\cr
 #'     Lon       \tab numeric   \tab 'Longitude' column converted to decimal degrees in range [-180, 180]\cr
 #'     Data#     \tab character \tab leading/trailing whitespace trimmed for non-comment events (i.e. rows where 'Event' is not "C" or "c")\cr
-#'     EventNum  \tab integer   \tab 'Event number' coerced to an integer using \code{\link[base:integer]{as.integer}}\cr
+#'     EventNum  \tab character \tab leading/trailing whitespace trimmed; left as character for some special, project-specific codes\cr
 #'     file_das  \tab character \tab filename, extracted from the \code{file} argument using \code{\link[base]{basename}}\cr
 #'     line_num  \tab integer   \tab line number of each data row\cr
 #'   }
@@ -79,10 +79,6 @@ das_read <- function(file, tz = "UTC") {
   # Input checks
   stopifnot(inherits(file, "character"))
 
-  # if (!file.exists(file))
-  #   stop("The supplied character string does not name an existing file, ",
-  #        "meaning file.exists(file) is FALSE")
-
   # Start and end (inclusive) column indices
   fwf.start <- c(1,4,5, 06,13, 20,21,24, 30,31,35, 40,45,50,55,60,65,70,75,80)
   fwf.end   <- c(3,4,5, 11,18, 20,22,28, 30,33,39, 44,49,54,59,64,69,74,79,NA)
@@ -103,8 +99,7 @@ das_read <- function(file, tz = "UTC") {
 
   # Process data, and add file and line number columns
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
-  EventNum <- suppressWarnings(as.integer(x$EventNum))
-  #^blank for # events, suppressWarnings() for some "#C" event nums
+  EventNum <- trimws(x$EventNum)
   file_das  <- basename(file)
   line_num  <- seq_along(x$Event)
 

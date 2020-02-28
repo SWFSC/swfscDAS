@@ -18,7 +18,7 @@ test_that("das_read output has expected column names and classes", {
     Data7 = "character",
     Data8 = "character",
     Data9 = "character",
-    EventNum = "integer",
+    EventNum = "character",
     file_das = "character",
     line_num = "integer"
   )
@@ -60,7 +60,7 @@ test_that("das_process output has expected column names and classes", {
     Data8 = "character",
     Data9 = "character",
     EffortDot = "logical",
-    EventNum = "integer",
+    EventNum = "character",
     file_das = "character",
     line_num = "integer"
   )

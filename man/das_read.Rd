@@ -22,7 +22,7 @@ A \code{das_dfr} object, which is also a data frame, with DAS data read into col
     Lat       \tab numeric   \tab 'Latitude' column converted to decimal degrees in range [-90, 90]\cr
     Lon       \tab numeric   \tab 'Longitude' column converted to decimal degrees in range [-180, 180]\cr
     Data#     \tab character \tab leading/trailing whitespace trimmed for non-comment events (i.e. rows where 'Event' is not "C" or "c")\cr
-    EventNum  \tab integer   \tab 'Event number' coerced to an integer using \code{\link[base:integer]{as.integer}}\cr
+    EventNum  \tab character \tab leading/trailing whitespace trimmed; left as character for some special, project-specific codes\cr
     file_das  \tab character \tab filename, extracted from the \code{file} argument using \code{\link[base]{basename}}\cr
     line_num  \tab integer   \tab line number of each data row\cr
   }
