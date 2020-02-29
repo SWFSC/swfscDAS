@@ -57,6 +57,10 @@ A \code{das_df} object, which is also a data frame.
     Glare                         \tab Glare     \tab HorizSun and VertSun\cr
     Visibility (nm)               \tab Vis       \tab Event: W; Column: Data5\cr
   }
+
+  Warnings are printed with row numbers of unexpected event codes,
+  as well as if there is are potential issues with the number and/or order
+  of R and E events
 }
 \description{
 Process DAS data (the output of \code{\link{das_read}}),
@@ -78,7 +82,7 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
   The following assumptions/decisions are made during processing:
   \itemize{
     \item Event codes are expected to be one of the following:
-      #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+      #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
       The codes g (subgroup of a current sighting), p (pinniped sighting), X
       (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data

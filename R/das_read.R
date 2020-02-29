@@ -52,6 +52,9 @@
 #'     line_num  \tab integer   \tab line number of each data row\cr
 #'   }
 #'
+#'   Warnings are printed if any unexpected rows have \code{NA} DateTime/Lat/Lon values,
+#'   or if any Lat/Lon values cannot be converted to numeric values
+#'
 #' @seealso For more details about WinCruz, see
 #'   \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
 #'
@@ -92,10 +95,11 @@ das_read <- function(file, tz = "UTC") {
     trim_ws = FALSE
   ))
 
-  names(x) <- c("EventNum", "Event", "EffortDot", "Time", "Date",
-                "Lat1", "Lat2", "Lat3", "Lon1", "Lon2", "Lon3",
-                "Data1", "Data2", "Data3", "Data4", "Data5", "Data6",
-                "Data7", "Data8", "Data9")
+  names(x) <- c(
+    "EventNum", "Event", "EffortDot", "Time", "Date",
+    "Lat1", "Lat2", "Lat3", "Lon1", "Lon2", "Lon3",
+    "Data1", "Data2", "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9"
+  )
 
   # Process data, and add file and line number columns
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
@@ -103,21 +107,35 @@ das_read <- function(file, tz = "UTC") {
   file_das  <- basename(file)
   line_num  <- seq_along(x$Event)
 
+  # Convert lat and lon values to decimal degrees
   Lat <- ifelse(x$Lat1 == "N", 1, -1) * (as.numeric(x$Lat2) + as.numeric(x$Lat3)/60)
   Lon <- ifelse(x$Lon1 == "E", 1, -1) * (as.numeric(x$Lon2) + as.numeric(x$Lon3)/60)
+
+  # Print warning if unable to coerce lat/lon to numeric
+  ll.num.na <- unique(
+    c(.numeric_na(x$Lat2), .numeric_na(x$Lat3),
+      .numeric_na(x$Lon2), .numeric_na(x$Lon3))
+  )
+  if (length(ll.num.na) > 0)
+    warning("The following rows have values in the Latitude and/or Longitude ",
+            "columns that could not be converted to a numeric value:\n",
+            paste(ll.num.na, collapse = ", "))
+  rm(ll.num.na)
+
 
   # Lat/lon NA check
   ll.na <- is.na(Lat) | is.na(Lon)
   ll.na.event <- c("?", 1:8)
-  ll.na.which <- line_num[(!(x$Event %in% ll.na.event)) & ll.na]
+  ll.na.which <- which((!(x$Event %in% ll.na.event)) & ll.na)
   if (length(ll.na.which) > 0) {
     warning("There are unexpected (i.e. for events other than ",
             paste(ll.na.event, collapse = ", "),
-            ") Lat and/or Lon NAs in row(s): ",
-            paste(ll.na.which, collapse = ", "), ".")
+            ") Lat and/or Lon NAs in row(s):\n",
+            paste(ll.na.which, collapse = ", "))
   }
   rm(ll.na, ll.na.event, ll.na.which)
 
+  # Extract date/time
   DateTime <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M%S", tz)
   dt.na <- is.na(DateTime)
   DateTime[dt.na] <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M", tz)[dt.na]
@@ -125,15 +143,16 @@ das_read <- function(file, tz = "UTC") {
 
   # Datetime NA check
   dt.na.event <- c("*", "#", "?", "C", 1:8)
-  dt.na.which <- line_num[(!(x$Event %in% dt.na.event) & dt.na)]
+  dt.na.which <- which((!(x$Event %in% dt.na.event) & dt.na))
   if (length(dt.na.which) > 0) {
     warning("There are unexpected (i.e. for events other than ",
             paste(dt.na.event, collapse = ", "),
-            ") DateTime NAs in row(s): ",
-            paste(dt.na.which, collapse = ", "), ".\n")
+            ") DateTime NAs in row(s):\n",
+            paste(dt.na.which, collapse = ", "))
   }
   rm(dt.na, dt.na.event, dt.na.which)
 
+  # Extract Data# values, and trim whitespace as necessary
   data.df <- data.frame(
     Data1 = ifelse(x$Event == "C", x$Data1, trimws(x$Data1)),
     Data2 = ifelse(x$Event == "C", x$Data2, trimws(x$Data2)),
@@ -151,7 +170,7 @@ das_read <- function(file, tz = "UTC") {
   # Data9 extra ^ is for entries with >6 spaces (eg "       ")
   data.df[data.df == ""] <- NA
 
-  # Data frame to return
+  # Coerce data frame to das_dfr object and return
   as_das_dfr(data.frame(
     Event = x$Event, EffortDot = x$EffortDot, DateTime, Lat, Lon, data.df,
     EventNum, file_das, line_num,

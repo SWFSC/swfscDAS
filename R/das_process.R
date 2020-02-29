@@ -38,7 +38,7 @@
 #'   The following assumptions/decisions are made during processing:
 #'   \itemize{
 #'     \item Event codes are expected to be one of the following:
-#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
 #'       The codes g (subgroup of a current sighting), p (pinniped sighting), X
 #'       (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
 #'       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
@@ -84,6 +84,10 @@
 #'     Visibility (nm)               \tab Vis       \tab Event: W; Column: Data5\cr
 #'   }
 #'
+#'   Warnings are printed with row numbers of unexpected event codes,
+#'   as well as if there is are potential issues with the number and/or order
+#'   of R and E events
+#'
 #' @seealso For more details about WinCruz, see
 #'   \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
 #'
@@ -126,9 +130,6 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 {
   #----------------------------------------------------------------------------
   ### Input checks
-  # TODO: verbosely ignore arguments passed via ... ?
-
-  # Input classes
   stopifnot(
     inherits(days.gap, c("integer", "numeric")),
     length(days.gap) == 1,
@@ -152,18 +153,12 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   ndx.E <- which(das.df$Event == "E")
 
   if (length(ndx.E) != length(ndx.R)) {
-    warning("Error: There are not an equal number of 'R' and 'E' events",
-            "in the provided DAS file")
+    warning("There are not an equal number of 'R' and 'E' events in the ",
+            "provided DAS file; should this be fixed before processing?")
+  } else if (!all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])) {
+    warning("Error: Not all 'R' events are followed by 'E' events before ",
+            "another R event; should this be fixed before processing?")
   }
-  if (!all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])) {
-    warning("Error: Not all 'R' events are followed by 'E' events")
-  }
-
-  # OnEffort.idx <- unlist(mapply(function(i, j) {
-  #   i:(j-1)
-  # }, ndx.R, ndx.E, SIMPLIFY = FALSE))
-  # ndx.B.preR <- ndx.B[(ndx.B + 1) %in% ndx.R]
-  # OnEffort <- seq_len(nDAS) %in% c(OnEffort.idx, ndx.B.preR)
 
 
   #----------------------------------------------------------------------------
@@ -184,7 +179,8 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   idx.new.day <- c(1, seq_len(nDAS)[!dt.na][idx.nona.new])
 
   if (!all(idx.new.cruise %in% idx.new.day)) {
-    warning("Warning: not all new cruises row indices were new day indices",
+    warning("Warning: not all new cruises row indices were new day indices - ",
+            "is the data formatted correctly?",
             immediate. = TRUE)
   }
 
@@ -231,7 +227,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   ### Loop through data for 'carry-over info' that applies to subsequent events
   # idx.new.cruise always includes 1, so don't need to pre-set Last.. objects
   for (i in 1:nDAS) {
-    # Reset cruise info when starting data for a new cruise
+    # Reset all info when starting data for a new cruise
     if (i %in% idx.new.cruise) {
       LastBft <- LastCourse <- LastEff <- LastEMode <- LastEType <-
         LastHS <- LastVS <- LastRF <- LastSwH <- LastVis <-
@@ -245,6 +241,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     }
 
     # Reset applicable info (all BRPVNW-related) when starting BR event sequence
+    # TODO: add an argument flag for this
     if (i %in% idx.B.preR) {
       LastCruise <- LastEMode <- LastEType <- LastBft <- LastSwH <-
         LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <- NA
@@ -295,15 +292,16 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 
   #----------------------------------------------------------------------------
   # A couple of warning checks
-  event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "N",
+  event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "M", "N",
                  "P", "Q", "R", "s", "S", "t", "V", "W",
                  "g", "p", "X", "Y", "Z")
   if (!all(das.df$Event %in% event.acc))
-    warning("The following lines in the DAS file (from line_num in output ",
-            "DAS data frame) contain unexpected event codes:\n",
-            paste(das.df$line_num[!(das.df$Event %in% event.acc)], collapse = ", "),
-            "\nExpected event codes (case sensitive): ",
-            paste(event.acc, collapse = ", "))
+    warning(paste0("Expected event codes (case sensitive): ",
+                   paste(event.acc, collapse = ", "), "\n"),
+            "The following rows in the output  (note these ",
+            "are NOT necessarily the line numbers of the original file) ",
+            "contain unexpected event codes:\n",
+            paste(which(!(das.df$Event %in% event.acc)), collapse = ", "))
 
 
   #----------------------------------------------------------------------------
@@ -316,7 +314,6 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   )
 
   as_das_df(
-    select(data.frame(das.df, tmp, stringsAsFactors = FALSE),
-           !!cols.tokeep)
+    select(data.frame(das.df, tmp, stringsAsFactors = FALSE), !!cols.tokeep)
   )
 }

@@ -171,4 +171,19 @@ fn_aggr_conditions <- function(data.list, curr.df, idx, dist.perc) {
   # isTRUE(all.equal(x, y))
 }
 
+
+###############################################################################
+# as.numeric with suppressed warnings
+.sup_num <- function(x) suppressWarnings(as.numeric(x))
+
+
+# Return indices of values made NA when coercing to numeric
+.numeric_na <- function(x) {
+  x.na <- which(is.na(x))
+  x.num.na <- which(is.na(suppressWarnings(as.numeric(x))))
+
+  x.num.na[!(x.num.na %in% x.na)]
+}
+
+
 ###############################################################################
