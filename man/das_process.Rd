@@ -16,7 +16,14 @@ das_process(x, ...)
 
 \method{das_process}{tbl_df}(x, ...)
 
-\method{das_process}{das_dfr}(x, days.gap = 10, reset.event = TRUE, reset.day = TRUE, ...)
+\method{das_process}{das_dfr}(
+  x,
+  days.gap = 10,
+  reset.event = TRUE,
+  reset.effort = TRUE,
+  reset.day = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{either a \code{das_dfr} object (the output of \code{\link{das_read}}),
@@ -24,19 +31,23 @@ or a character (filepath) which is first passed to \code{\link{das_read}}}
 
 \item{...}{ignored}
 
-\item{days.gap}{numeric of length 1; time gap (in days) used to identify
-a new cruise in concatenated DAS files, and thus also when
-state/condition information (weather, Bft, Mode, etc) is reset.
-Default is 10 days}
+\item{days.gap}{numeric of length 1; default is \code{10}.
+Time gap (in days) used to identify a new cruise in concatenated DAS files,
+and thus also when state/condition information
+(cruise number, weather, Bft, Mode, etc) is reset}
 
-\item{reset.event}{logical; indicates if state/condition information
-(weather, Bft, Mode, etc) should be reset to \code{NA} if there is an
-applicable event with an \code{NA} for that state/condition}
+\item{reset.event}{logical; default is \code{TRUE}.
+Indicates if state/condition information (weather, Bft, Mode, etc) should be reset to \code{NA}
+if there is an applicable event with an \code{NA} for that state/condition}
 
-\item{reset.day}{logical; indicates if state/condition information
-(weather, Bft, Mode, etc) should be reset to \code{NA} at the beginning of each day.
-This argument should only be set to \code{FALSE}
-for comparison with older methods, such as Report}
+\item{reset.effort}{logical; default is \code{TRUE}.
+Indicates if state/condition information should be reset to \code{NA}
+when beginning a new continuous effort section. See Details section}
+
+\item{reset.day}{logical; default is \code{TRUE}.
+Indicates if state/condition information should be reset to \code{NA}
+at the beginning of each day. This argument should only
+be set to \code{FALSE} for comparison with older methods, such as REPORT}
 }
 \value{
 A \code{das_df} object, which is also a data frame.
@@ -82,9 +93,9 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
   The following assumptions/decisions are made during processing:
   \itemize{
     \item Event codes are expected to be one of the following:
-      #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
-      The codes g (subgroup of a current sighting), p (pinniped sighting), X
-      (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
+      #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
+      The codes G, g (subgroup of a current sighting, and resight of subgroup, resepctively),
+      p (pinniped sighting), X (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
     \item All '#' events (deleted events) are removed
     \item An event is considered 'on effort' if it is 1) an R event,
@@ -106,6 +117,11 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
       otherwise \code{FALSE}
     \item Missing values are \code{NA} rather than \code{-1}
   }
+
+  In WinCruz, a BR or R event series (to indicate starting/resuming effort)
+  are supposed to be immediately followed by a PVNW event series.
+  The \code{reset.effort} argument causes the conditions set in the RPVNW event series
+  (effort mode, Beaufort, visibility, etc.) to be reset to \code{NA} at each BR or R event series
 
   This function was inspired by \code{\link[swfscMisc]{das.read}}
 }

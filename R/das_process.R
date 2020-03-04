@@ -6,17 +6,20 @@
 #' @param x either a \code{das_dfr} object (the output of \code{\link{das_read}}),
 #'   or a character (filepath) which is first passed to \code{\link{das_read}}
 #' @param ... ignored
-#' @param days.gap numeric of length 1; time gap (in days) used to identify
-#'   a new cruise in concatenated DAS files, and thus also when
-#'   state/condition information (weather, Bft, Mode, etc) is reset.
-#'   Default is 10 days
-#' @param reset.event logical; indicates if state/condition information
-#'   (weather, Bft, Mode, etc) should be reset to \code{NA} if there is an
-#'   applicable event with an \code{NA} for that state/condition
-#' @param reset.day logical; indicates if state/condition information
-#'   (weather, Bft, Mode, etc) should be reset to \code{NA} at the beginning of each day.
-#'   This argument should only be set to \code{FALSE}
-#'   for comparison with older methods, such as Report
+#' @param days.gap numeric of length 1; default is \code{10}.
+#'   Time gap (in days) used to identify a new cruise in concatenated DAS files,
+#'   and thus also when state/condition information
+#'   (cruise number, weather, Bft, Mode, etc) is reset
+#' @param reset.event logical; default is \code{TRUE}.
+#'   Indicates if state/condition information (weather, Bft, Mode, etc) should be reset to \code{NA}
+#'   if there is an applicable event with an \code{NA} for that state/condition
+#' @param reset.effort logical; default is \code{TRUE}.
+#'   Indicates if state/condition information should be reset to \code{NA}
+#'   when beginning a new continuous effort section. See Details section
+#' @param reset.day logical; default is \code{TRUE}.
+#'   Indicates if state/condition information should be reset to \code{NA}
+#'   at the beginning of each day. This argument should only
+#'   be set to \code{FALSE} for comparison with older methods, such as REPORT
 #'
 #' @importFrom dplyr %>% select
 #' @importFrom lubridate day
@@ -38,9 +41,9 @@
 #'   The following assumptions/decisions are made during processing:
 #'   \itemize{
 #'     \item Event codes are expected to be one of the following:
-#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
-#'       The codes g (subgroup of a current sighting), p (pinniped sighting), X
-#'       (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
+#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
+#'       The codes G, g (subgroup of a current sighting, and resight of subgroup, resepctively),
+#'       p (pinniped sighting), X (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
 #'       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
 #'     \item All '#' events (deleted events) are removed
 #'     \item An event is considered 'on effort' if it is 1) an R event,
@@ -62,6 +65,11 @@
 #'       otherwise \code{FALSE}
 #'     \item Missing values are \code{NA} rather than \code{-1}
 #'   }
+#'
+#'   In WinCruz, a BR or R event series (to indicate starting/resuming effort)
+#'   are supposed to be immediately followed by a PVNW event series.
+#'   The \code{reset.effort} argument causes the conditions set in the RPVNW event series
+#'   (effort mode, Beaufort, visibility, etc.) to be reset to \code{NA} at each BR or R event series
 #'
 #'   This function was inspired by \code{\link[swfscMisc]{das.read}}
 #'
@@ -126,7 +134,7 @@ das_process.tbl_df <- function(x, ...) {
 #' @name das_process
 #' @export
 das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
-                                reset.day = TRUE, ...)
+                                reset.effort = TRUE, reset.day = TRUE, ...)
 {
   #----------------------------------------------------------------------------
   ### Input checks
@@ -148,14 +156,14 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   ### Determine effort using B/R and E events
   nDAS <- nrow(das.df)
 
-  ndx.B <- which(das.df$Event == "B")
-  ndx.R <- which(das.df$Event == "R")
-  ndx.E <- which(das.df$Event == "E")
+  idx.B <- which(das.df$Event == "B")
+  idx.R <- which(das.df$Event == "R")
+  idx.E <- which(das.df$Event == "E")
 
-  if (length(ndx.E) != length(ndx.R)) {
+  if (length(idx.E) != length(idx.R)) {
     warning("There are not an equal number of 'R' and 'E' events in the ",
             "provided DAS file; should this be fixed before processing?")
-  } else if (!all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])) {
+  } else if (!all(idx.E - idx.R > 0) | !all(head(idx.E, -1) < idx.R[-1])) {
     warning("Error: Not all 'R' events are followed by 'E' events before ",
             "another R event; should this be fixed before processing?")
   }
@@ -163,7 +171,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 
   #----------------------------------------------------------------------------
   # Determine 'reset' rows, i.e. rows that mark a new cruise in concatenated
-  #   DAS file or a new day for conditions
+  #   DAS file, or a new day for conditions
   dt.na <- is.na(das.df$DateTime)
 
   ### Determine indices where time-date change is by more than 'day.gap' days
@@ -178,11 +186,10 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   idx.nona.new <- which(diff(day(das.df$DateTime)[!dt.na]) != 0) + 1
   idx.new.day <- c(1, seq_len(nDAS)[!dt.na][idx.nona.new])
 
-  if (!all(idx.new.cruise %in% idx.new.day)) {
+  if (!all(idx.new.cruise %in% idx.new.day))
     warning("Warning: not all new cruises row indices were new day indices - ",
             "is the data formatted correctly?",
             immediate. = TRUE)
-  }
 
 
   #----------------------------------------------------------------------------
@@ -199,7 +206,6 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   event.W <- das.df$Event == "W"
 
   event.B.preR <- (das.df$Event == "B") & (c(das.df$Event[-1], NA) == "R")
-  idx.B.preR <- which(event.B.preR)
 
   init.val <- as.numeric(rep(NA, nDAS))
   event.na <- ifelse(reset.event, -9999, NA)
@@ -222,6 +228,9 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 
   # Additional processing done after for loop
 
+  # Determine reset rows for effort reset
+  idx.eff <- sort(unique(c(which(event.B.preR), idx.R)))
+
 
   #--------------------------------------------------------
   ### Loop through data for 'carry-over info' that applies to subsequent events
@@ -229,21 +238,20 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   for (i in 1:nDAS) {
     # Reset all info when starting data for a new cruise
     if (i %in% idx.new.cruise) {
-      LastBft <- LastCourse <- LastEff <- LastEMode <- LastEType <-
-        LastHS <- LastVS <- LastRF <- LastSwH <- LastVis <-
+      LastEff <- LastEMode <- LastEType <- LastBft <- LastSwH <-
+        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <-
         LastCruise <- NA
     }
 
     # Reset applicable info (aka all but 'LastCruise') when starting a new day
     if ((i %in% idx.new.day) & reset.day) {
-      LastBft <- LastCourse <- LastEff <- LastEMode <- LastEType <-
-        LastHS <- LastVS <- LastRF <- LastSwH <- LastVis <- NA
+      LastEff <- LastEMode <- LastEType <- LastBft <- LastSwH <-
+        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <- NA
     }
 
-    # Reset applicable info (all BRPVNW-related) when starting BR event sequence
-    # TODO: add an argument flag for this
-    if (i %in% idx.B.preR) {
-      LastCruise <- LastEMode <- LastEType <- LastBft <- LastSwH <-
+    # Reset applicable info (all RPVNW-related) when starting BR/R event sequence
+    if ((i %in% idx.eff) & reset.effort) {
+      LastEType <- LastBft <- LastSwH <-
         LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <- NA
     }
 
@@ -294,7 +302,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   # A couple of warning checks
   event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "M", "N",
                  "P", "Q", "R", "s", "S", "t", "V", "W",
-                 "g", "p", "X", "Y", "Z")
+                 "G", "g", "p", "X", "Y", "Z")
   if (!all(das.df$Event %in% event.acc))
     warning(paste0("Expected event codes (case sensitive): ",
                    paste(event.acc, collapse = ", "), "\n"),
