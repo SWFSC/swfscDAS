@@ -10,7 +10,7 @@ das_effort(x, ...)
 
 \method{das_effort}{data.frame}(x, ...)
 
-\method{das_effort}{das_df}(x, method, sp.codes, ...)
+\method{das_effort}{das_df}(x, method, sp.codes, dist.method = "vincenty", ...)
 }
 \arguments{
 \item{x}{\code{das_df} object; output from \code{\link{das_process}},
@@ -22,6 +22,12 @@ or a data frame that can be coerced to a \code{das_df} object}
 Can be "equallength" or "condition" (case-sensitive)}
 
 \item{sp.codes}{character; species code(s) to include in segdata}
+
+\item{dist.method}{character;
+method to use to calculate distance between lat/lon coordinates.
+Can be "greatcircle" to use the great circle distance method,
+or one of "lawofcosines", "haversine", or "vincenty" to use
+\code{\link[swfscMisc]{distance}}. Default is "vincenty"}
 }
 \value{
 List of three data frames:

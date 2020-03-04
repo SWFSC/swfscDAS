@@ -10,7 +10,7 @@ das_chop_condition(x, ...)
 
 \method{das_chop_condition}{data.frame}(x, ...)
 
-\method{das_chop_condition}{das_df}(x, seg.km.min = 0.1, ...)
+\method{das_chop_condition}{das_df}(x, seg.km.min = 0.1, dist.method = NULL, ...)
 }
 \arguments{
 \item{x}{\code{das_df} object,
@@ -22,6 +22,14 @@ see the Details section below}
 
 \item{seg.km.min}{numeric; minimum allowable segment length (in kilometers).
 Default is 0.1. See the Details section below for more information}
+
+\item{dist.method}{character;
+method to use to calculate distance between lat/lon coordinates.
+Can be "greatcircle" to use the great circle distance method,
+or one of "lawofcosines", "haversine", or "vincenty" to use
+\code{\link[swfscMisc]{distance}}.
+Default is \code{NULL} since these distances should have already been
+calculated in \code{\link{das_effort}}}
 }
 \value{
 List of two data frames:
@@ -72,7 +80,11 @@ This function is intended to only be called by \code{\link{das_effort}}
   into a single segment (such as a 'BRPVNW' series of events)
   is followed even if \code{seg.km.min = 0}.
 
-  Outstanding question: should das_segdata_avg be used, i.e. do we need a different function
-  that doesn't average conditions?
+  If the column \code{dist_from_prev} does not exist
+  (it should be calculated and added to \code{x} in \code{\link{das_effort}}),
+  then the distance between the lat/lon points of subsequent events
+  is calculated using the method specified in \code{dist.method}
+
+  TODO: Make das_segdata_max function so that conditions from tiny segments aren't averaged in
 }
 \keyword{internal}

@@ -11,6 +11,13 @@
 #'   filename of past randpicks output to load and use
 #'   (passed to \code{file} argument of \code{\link[utils:read.table]{read.csv}}).
 #'   \code{NULL} if new randpicks values should be generated
+#' @param dist.method character;
+#'   method to use to calculate distance between lat/lon coordinates.
+#'   Can be "greatcircle" to use the great circle distance method,
+#'   or one of "lawofcosines", "haversine", or "vincenty" to use
+#'   \code{\link[swfscMisc]{distance}}.
+#'   Default is \code{NULL} since these distances should have already been
+#'   calculated in \code{\link{das_effort}}
 #' @param ... ignored
 #'
 #' @importFrom dplyr %>% .data between filter left_join mutate select
@@ -76,7 +83,7 @@
 #'   If the column \code{dist_from_prev} does not exist
 #'   (it should be calculated and added to \code{x} in \code{\link{das_effort}}),
 #'   then the distance between the lat/lon points of subsequent events
-#'   is calculated using \code{\link[swfscMisc]{distance}}, \code{method = "vincenty"}.
+#'   is calculated using the method specified in \code{dist.method}
 #'
 #' @return List of three data frames:
 #' \itemize{
@@ -102,7 +109,8 @@ das_chop_equal.data.frame <- function(x, ...) {
 
 #' @name das_chop_equal
 #' @export
-das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL, ...) {
+das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
+                                  dist.method = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
   if (missing(seg.km))
@@ -112,24 +120,18 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL, ...) {
   if (!all(x$OnEffort | x$Event %in% "E"))
     stop("x must be filtered for on effort events; see `?das_shop_equal")
 
+  #Check for dist.method happens in .dist_from_prev()
+
 
   #----------------------------------------------------------------------------
   # Calculate distance between points if necessary
   if (!("dist_from_prev" %in% names(x))) {
-    if (any(is.na(x$Lat)) | any(is.na(x$Lon))) {
-      stop("Error in das_chop_equal: Some unexpected events ",
-           "(i.e. not one of ?, 1, 2, 3, 4, 5, 6, 7, 8) ",
-           "have NA values in the Lat and/or Lon columns, ",
-           "and thus the distance between each point cannot be determined")
-    }
-    dist.from.prev <- mapply(function(x1, y1, x2, y2) {
-      distance(y1, x1, y2, x2, units = "km", method = "vincenty")
-    },
-    x1 = head(x$Lon, -1), y1 = head(x$Lat, -1),
-    x2 = x$Lon[-1], y2 = x$Lat[-1],
-    SIMPLIFY = TRUE)
+    if (is.null(dist.method))
+      stop("If the distance between consectutive points (events) ",
+           "has not already been calculated, ",
+           "then you must provide a valid argument for dist.method")
 
-    x$dist_from_prev <- c(NA, dist.from.prev)
+    x$dist_from_prev <- .dist_from_prev(x, dist.method)
   }
 
 

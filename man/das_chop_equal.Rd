@@ -10,7 +10,7 @@ das_chop_equal(x, ...)
 
 \method{das_chop_equal}{data.frame}(x, ...)
 
-\method{das_chop_equal}{das_df}(x, seg.km, randpicks.load = NULL, ...)
+\method{das_chop_equal}{das_df}(x, seg.km, randpicks.load = NULL, dist.method = NULL, ...)
 }
 \arguments{
 \item{x}{\code{das_df} object,
@@ -26,6 +26,14 @@ see the Details section below}
 filename of past randpicks output to load and use
 (passed to \code{file} argument of \code{\link[utils:read.table]{read.csv}}).
 \code{NULL} if new randpicks values should be generated}
+
+\item{dist.method}{character;
+method to use to calculate distance between lat/lon coordinates.
+Can be "greatcircle" to use the great circle distance method,
+or one of "lawofcosines", "haversine", or "vincenty" to use
+\code{\link[swfscMisc]{distance}}.
+Default is \code{NULL} since these distances should have already been
+calculated in \code{\link{das_effort}}}
 }
 \value{
 List of three data frames:
@@ -99,6 +107,6 @@ This function is intended to only be called by \code{\link{das_effort}}
   If the column \code{dist_from_prev} does not exist
   (it should be calculated and added to \code{x} in \code{\link{das_effort}}),
   then the distance between the lat/lon points of subsequent events
-  is calculated using \code{\link[swfscMisc]{distance}}, \code{method = "vincenty"}.
+  is calculated using the method specified in \code{dist.method}
 }
 \keyword{internal}

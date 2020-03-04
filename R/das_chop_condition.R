@@ -6,6 +6,13 @@
 #'   or a data frame that can be coerced to a \code{das_df} object.
 #'   This data must be filtered for 'OnEffort' events;
 #'   see the Details section below
+#' @param dist.method character;
+#'   method to use to calculate distance between lat/lon coordinates.
+#'   Can be "greatcircle" to use the great circle distance method,
+#'   or one of "lawofcosines", "haversine", or "vincenty" to use
+#'   \code{\link[swfscMisc]{distance}}.
+#'   Default is \code{NULL} since these distances should have already been
+#'   calculated in \code{\link{das_effort}}
 #' @param seg.km.min numeric; minimum allowable segment length (in kilometers).
 #'   Default is 0.1. See the Details section below for more information
 #' @param ... ignored
@@ -51,8 +58,12 @@
 #'   into a single segment (such as a 'BRPVNW' series of events)
 #'   is followed even if \code{seg.km.min = 0}.
 #'
-#'   Outstanding question: should das_segdata_avg be used, i.e. do we need a different function
-#'   that doesn't average conditions?
+#'   If the column \code{dist_from_prev} does not exist
+#'   (it should be calculated and added to \code{x} in \code{\link{das_effort}}),
+#'   then the distance between the lat/lon points of subsequent events
+#'   is calculated using the method specified in \code{dist.method}
+#'
+#'   TODO: Make das_segdata_max function so that conditions from tiny segments aren't averaged in
 #'
 #' @return List of two data frames:
 #' \itemize{
@@ -76,7 +87,7 @@ das_chop_condition.data.frame <- function(x, ...) {
 
 #' @name das_chop_condition
 #' @export
-das_chop_condition.das_df <- function(x, seg.km.min = 0.1, ...) {
+das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
   if (!all(x$OnEffort | x$Event == "E"))
@@ -90,24 +101,18 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, ...) {
     stop("seg.km.min must be greater than or equal to 0; ",
          "see `?das_chop_condition")
 
+  #Check for dist.method happens in .dist_from_prev()
+
 
   #----------------------------------------------------------------------------
   # Calculate distance between points if necessary
   if (!("dist_from_prev" %in% names(x))) {
-    if (any(is.na(x$Lat)) | any(is.na(x$Lon))) {
-      stop("Error in das_chop_condition: Some unexpected events ",
-           "(i.e. not one of ?, 1, 2, 3, 4, 5, 6, 7, 8) ",
-           "have NA values in the Lat and/or Lon columns, ",
-           "and thus the distance between each point cannot be determined")
-    }
-    dist.from.prev <- mapply(function(x1, y1, x2, y2) {
-      distance(y1, x1, y2, x2, units = "km", method = "vincenty")
-    },
-    x1 = head(x$Lon, -1), y1 = head(x$Lat, -1),
-    x2 = x$Lon[-1], y2 = x$Lat[-1],
-    SIMPLIFY = TRUE)
+    if (is.null(dist.method))
+      stop("If the distance between consectutive points (events) ",
+           "has not already been calculated, ",
+           "then you must provide a valid argument for dist.method")
 
-    x$dist_from_prev <- c(NA, dist.from.prev)
+    x$dist_from_prev <- .dist_from_prev(x, dist.method)
   }
 
   # Get distance to next point
@@ -237,6 +242,6 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, ...) {
 
 
   #----------------------------------------------------------------------------
-  # Return
-  list(as_das_df(x.eff), segdata)
+  # Return; NULL is for randpicks
+  list(as_das_df(x.eff), segdata, NULL)
 }

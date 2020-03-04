@@ -7,6 +7,11 @@
 #' @param method character; method to use to chop DAS data into effort segments
 #'   Can be "equallength" or "condition" (case-sensitive)
 #' @param sp.codes character; species code(s) to include in segdata
+#' @param dist.method character;
+#'   method to use to calculate distance between lat/lon coordinates.
+#'   Can be "greatcircle" to use the great circle distance method,
+#'   or one of "lawofcosines", "haversine", or "vincenty" to use
+#'   \code{\link[swfscMisc]{distance}}. Default is "vincenty"
 #' @param ... arguments passed to the chopping function specified using \code{method}
 #'
 #' @importFrom dplyr %>% arrange between bind_cols filter full_join group_by left_join mutate slice summarise
@@ -62,18 +67,20 @@ das_effort.data.frame <- function(x, ...) {
 
 #' @name das_effort
 #' @export
-das_effort.das_df <- function(x, method, sp.codes, ...) {
+das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...) {
   #----------------------------------------------------------------------------
   # Input checks
   methods.acc <- c("equallength", "condition")
   if (!(length(method) == 1 & (method %in% methods.acc)))
-    stop("method must be a string, and must be one of: ",
+    stop("method must be a string of length one, and must be one of: ",
          paste0("\"", paste(methods.acc, collapse = "\", \""), "\""))
+
+  #Check for dist.method happens in .dist_from_prev()
 
 
   #----------------------------------------------------------------------------
   # Prep
-  # Add index column for adding back in ? and 1:8 events, and extract those evtns
+  # Add index column for adding back in ? and 1:8 events, and extract those events
   x$idx_eff <- seq_len(nrow(x))
   event.tmp <- c("?", 1:8)
 
@@ -97,36 +104,22 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
   )
 
   # For each event, calculate distance to previous event
-  if (any(is.na(x.oneff$Lat)) | any(is.na(x.oneff$Lon))) {
-    stop("Error in das_effort: Some unexpected events ",
-         "(i.e. not one of ?, 1, 2, 3, 4, 5, 6, 7, 8) ",
-         "have NA values in the Lat and/or Lon columns, ",
-         "and thus the distance between each point cannot be determined")
-  }
-  dist.from.prev <- mapply(function(x1, y1, x2, y2) {
-    distance(y1, x1, y2, x2, units = "km", method = "vincenty")
-  },
-  x1 = head(x.oneff$Lon, -1), y1 = head(x.oneff$Lat, -1),
-  x2 = x.oneff$Lon[-1], y2 = x.oneff$Lat[-1],
-  SIMPLIFY = TRUE)
-
-  x.oneff$dist_from_prev <- c(NA, dist.from.prev)
-
+  x.oneff$dist_from_prev <- .dist_from_prev(x.oneff, dist.method)
 
   #----------------------------------------------------------------------------
   # Chop and summarize effort using specified method
-  if (method == "equallength") {
-    eff.list <- das_chop_equal(as_das_df(x.oneff), ...)
-    x.eff <- eff.list[[1]]
-    segdata <- eff.list[[2]]
-    randpicks <- eff.list[[3]]
-
+  eff.list <- if (method == "equallength") {
+    das_chop_equal(as_das_df(x.oneff), ...)
   } else if (method == "condition") {
-    eff.list <- das_chop_condition(as_das_df(x.oneff), ...)
-    x.eff <- eff.list[[1]]
-    segdata <- eff.list[[2]]
-    randpicks <- NULL
+    das_chop_condition(as_das_df(x.oneff), ...)
+  } else {
+    stop("Error in effort chopping - ",
+         "are you passing an accepted argument to method?")
   }
+
+  x.eff <- eff.list[[1]]
+  segdata <- eff.list[[2]]
+  randpicks <- eff.list[[3]]
 
   # Check that things are as expected
   x.eff.names <- c(
@@ -193,4 +186,49 @@ das_effort.das_df <- function(x, method, sp.codes, ...) {
   #----------------------------------------------------------------------------
   # Return list
   list(segdata = segdata, siteinfo = siteinfo, randpicks = randpicks)
+}
+
+
+# For each event, calculate distance to previous event
+# Also called in _chop functions
+.dist_from_prev <- function(z, z.dist.method) {
+  # Input check
+  dist.methods.acc <- c("greatcircle", "lawofcosines", "haversine", "vincenty")
+  if (!(length(z.dist.method) == 1 & (z.dist.method %in% dist.methods.acc)))
+    stop("dist.method must be a string of length one, and must be one of: ",
+         paste0("\"", paste(dist.methods.acc, collapse = "\", \""), "\""))
+
+  # Check for NA LAt/Lon
+  z.llna <- which(is.na(z$Lat) | is.na(z$Lon))
+  if (length(z.llna) > 0)
+    stop("Error in das_effort: Some unexpected events ",
+         "(i.e. not one of ?, 1, 2, 3, 4, 5, 6, 7, 8) ",
+         "have NA values in the Lat and/or Lon columns, ",
+         "and thus the distance between each point cannot be determined. ",
+         "Please remove or fix these events before running this function. ",
+         "These events are in the following lines of the original file:\n",
+         paste(z$line_num[z.llna], collapse = ", "))
+
+  # Calcualte distances
+  if (identical(z.dist.method, "greatcircle")) {
+    dist.from.prev <- mapply(function(x1, y1, x2, y2) {
+      .fn.grcirclkm(y1, x1, y2, x2)
+    },
+    y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
+    SIMPLIFY = TRUE)
+
+  } else if (z.dist.method %in% c("lawofcosines", "haversine", "vincenty")) {
+    dist.from.prev <- mapply(function(x1, y1, x2, y2) {
+      distance(y1, x1, y2, x2, units = "km", method = z.dist.method)
+    },
+    y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
+    SIMPLIFY = TRUE)
+
+  } else {
+    stop("Error in distance calcualtion - ",
+         "are you passing an accepted argument to dist.method?")
+  }
+
+  # Return distances, with inital NA since this are distances from previous point
+  c(NA, dist.from.prev)
 }
