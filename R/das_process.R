@@ -211,12 +211,12 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   event.na <- ifelse(reset.event, -9999, NA)
 
   Cruise    <- .das_process_num(init.val, das.df, "Data1", event.B, event.na)
-  Mode      <- .das_process_chr(init.val, das.df, "Data2", event.B, event.na)
-  Course    <- .das_process_num(init.val, das.df, "Data1", event.N, event.na)
-  EffType   <- .das_process_chr(init.val, das.df, "Data1", event.R, event.na)
-  ESWsides  <- .das_process_chr(init.val, das.df, "Data2", event.R, event.na)
+  Mode      <- .das_process_chr(init.val, das.df, "Data2", event.B, "C")
+  EffType   <- .das_process_chr(init.val, das.df, "Data1", event.R, "S")
+  ESWsides  <- .das_process_chr(init.val, das.df, "Data2", event.R, "F")
   Bft       <- .das_process_num(init.val, das.df, "Data1", event.V, event.na)
   SwellHght <- .das_process_num(init.val, das.df, "Data2", event.V, event.na)
+  Course    <- .das_process_num(init.val, das.df, "Data1", event.N, event.na)
   RainFog   <- .das_process_num(init.val, das.df, "Data1", event.W, event.na)
   HorizSun  <- .das_process_num(init.val, das.df, "Data2", event.W, event.na)
   VertSun   <- .das_process_num(init.val, das.df, "Data3", event.W, event.na)
@@ -252,7 +252,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 
     # Reset applicable info (all RPVNW-related) when starting BR/R event sequence
     if ((i %in% idx.eff) & reset.effort) {
-      LastEType <- LastBft <- LastSwH <-
+      LastEType <- LastESW <- LastBft <- LastSwH <-
         LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <- NA
     }
 
@@ -297,9 +297,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 
   tmp$Mode <- as.character(toupper(tmp$Mode))
   tmp$EffType <- as.character(tmp$EffType)
-  tmp$ESWsides <- case_when(
-    tmp$ESWsides == "F" ~ 2, tmp$ESWsides == "H" ~ 1, is.na(tmp$ESWsides) ~ 2
-  )
+  tmp$ESWsides <- case_when(tmp$ESWsides == "F" ~ 2, tmp$ESWsides == "H" ~ 1)
   # tmp$RainFog <- as.logical(ifelse(is.na(tmp$RainFog), NA, tmp$RainFog %in% c(2:4)))
 
 
