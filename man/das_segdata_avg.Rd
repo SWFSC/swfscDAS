@@ -51,10 +51,11 @@ This function should be called by \code{\link{das_chop_equal}};
 
   The average condition values are calculated as a weighted average by distance,
   and reported for the following:
-  Beaufort, swell height, rain/fog/haze code (TODO - does this make sense?), horizontal sun, vertical sun, glare, and visibility.
+  Beaufort, swell height, horizontal sun, vertical sun, glare, and visibility.
   For logical columns such as Glare, the reported value is the percentage
   (in decimals) of the segment in which that condition was \code{TRUE}.
-  Cruise number, mode, effort type, and file name are also also incldued in the segdata output;
+  Cruise number, mode, effort type, sides searched, and file name
+  are also also incldued in the segdata output;
   these values are (should be) all consistent across the whole effort section,
   and thus across all segments in \code{x}.
 

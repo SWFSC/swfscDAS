@@ -35,10 +35,11 @@
 #'
 #'   The average condition values are calculated as a weighted average by distance,
 #'   and reported for the following:
-#'   Beaufort, swell height, rain/fog/haze code (TODO - does this make sense?), horizontal sun, vertical sun, glare, and visibility.
+#'   Beaufort, swell height, horizontal sun, vertical sun, glare, and visibility.
 #'   For logical columns such as Glare, the reported value is the percentage
 #'   (in decimals) of the segment in which that condition was \code{TRUE}.
-#'   Cruise number, mode, effort type, and file name are also also incldued in the segdata output;
+#'   Cruise number, mode, effort type, sides searched, and file name
+#'   are also also incldued in the segdata output;
 #'   these values are (should be) all consistent across the whole effort section,
 #'   and thus across all segments in \code{x}.
 #'
@@ -87,10 +88,11 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
 
   ### Prep - get the info that is consistent for the entire effort length
   # ymd determined below to be safe
-  df.out1.cols <- c("file_das", "Cruise", "Mode", "EffType")
+  df.out1.cols <- c("file_das", "Cruise", "Mode", "EffType", "ESWsides")
 
+  # <=1 accounts for when all
   df.out1.check <- vapply(df.out1.cols, function(i) {
-    length(unique(na.omit(das.df[[i]]))) == 1
+    length(unique(na.omit(das.df[[i]]))) <= 1
   }, as.logical(1))
   if (!all(df.out1.check))
     warning("Not all of the following data were consistent across ",
@@ -113,7 +115,7 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
 
   # Store condition data in list for organization and readability
   conditions.list.init <- list(
-    Bft = 0, SwellHght = 0, RainFog = 0,
+    Bft = 0, SwellHght = 0, #RainFog = 0,
     HorizSun = 0, VertSun = 0, Glare = 0, Vis = 0
   )
 
