@@ -124,7 +124,7 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
   # Check that things are as expected
   x.eff.names <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
+    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
     "HorizSun", "VertSun", "Glare", "Vis", "Data1", "Data2",
     "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
     "EffortDot", "EventNum", "file_das", "line_num", "idx_eff", "dist_from_prev",
@@ -151,6 +151,7 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
     left_join(select(segdata, .data$segnum, .data$mlat, .data$mlon),
               by = "segnum") %>%
     das_sight(mixed.multi = TRUE) %>%
+    filter(.data$Event == "S") %>%
     mutate(included = (.data$Bft <= 5 & .data$OnEffort),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-.data$dist_from_prev, -.data$cont_eff_section, -.data$effort_seg)
@@ -179,8 +180,13 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
   siteinfo.forsegdata.df <- segdata.col1 %>%
     bind_cols(siteinfo.forsegdata.list)
 
+  # Format outputs as desired
   segdata <- segdata %>%
     left_join(siteinfo.forsegdata.df, by = "seg_idx")
+
+  siteinfo <- siteinfo %>%
+    select(-.data$seg_idx) %>%
+    select(.data$segnum, .data$mlat, .data$mlon, everything())
 
 
   #----------------------------------------------------------------------------
@@ -189,8 +195,11 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
 }
 
 
-# For each event, calculate distance to previous event
-# Also called in _chop functions
+
+
+###############################################################################
+### For each event, calculate distance to previous event
+### Also called in _chop functions
 .dist_from_prev <- function(z, z.dist.method) {
   # Input check
   dist.methods.acc <- c("greatcircle", "lawofcosines", "haversine", "vincenty")
@@ -232,3 +241,4 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
   # Return distances, with inital NA since this are distances from previous point
   c(NA, dist.from.prev)
 }
+

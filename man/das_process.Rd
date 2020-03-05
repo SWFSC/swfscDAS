@@ -59,6 +59,7 @@ A \code{das_df} object, which is also a data frame.
     Cruise number                 \tab Cruise    \tab Event: B; Column: Data1\cr
     Effort mode                   \tab Mode      \tab Event: B; Column: Data2\cr
     Effort type                   \tab EffType   \tab Event: R; Column: Data1\cr
+    Effort type                   \tab ESWSide   \tab Event: R; Column: Data2\cr
     Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
     Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr
     Swell height (ft)             \tab SwellHght \tab Event: V; Column: Data2\cr
@@ -94,7 +95,7 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
   \itemize{
     \item Event codes are expected to be one of the following:
       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
-      The codes G, g (subgroup of a current sighting, and resight of subgroup, resepctively),
+      The codes G, g (subgroup of a current sighting, and resight of subgroup, respectively),
       p (pinniped sighting), X (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
     \item All '#' events (deleted events) are removed
@@ -102,26 +103,25 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
       (not including the E event). The 'EffortDot' column is ignored here.
     \item All state/condition information is reset at the beginning of each cruise.
-      New cruises are identifed using \code{days.gap}.
+      New cruises are identified using \code{days.gap}.
     \item All state/condition information relating to B, R, P, V, N, and W events
-      are reset every time there is a BR event sequence, because
-      a BR event sequence is (nearly) always a BRPVNW event sequence.
+      are reset every time there is a BR event sequence if \code{reset.effort == TRUE},
+      because in WinCruz a BR event sequence should always be a BRPVNW event sequence.
       An event sequence means that all of the events have the same Lat/Lon/DateTime info,
       and thus previous values for conditions set during the event sequence should not
       carry over to any part of the event sequence.
     \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
     \item 'EffType' is capitalized, and values of \code{NA} are assigned a value of "S"
+    \item 'ESWsides' represents the number of sides being searched during that effort section -
+      a value of \code{NA} (for compatibility with older data) or "F" means 2 sides are being searched,
+      and a value of "H" means 1 side is being searched.
+      A value that is not one of "F", \code{NA}, or "H" means ESWsides will be \code{NA}
     \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,
       or if 'HorizSun' is 12 and 'VertSun' is 1;
       \code{NA} if 'HorizSun' or 'VertSun' is \code{NA};
       otherwise \code{FALSE}
     \item Missing values are \code{NA} rather than \code{-1}
   }
-
-  In WinCruz, a BR or R event series (to indicate starting/resuming effort)
-  are supposed to be immediately followed by a PVNW event series.
-  The \code{reset.effort} argument causes the conditions set in the RPVNW event series
-  (effort mode, Beaufort, visibility, etc.) to be reset to \code{NA} at each BR or R event series
 
   This function was inspired by \code{\link[swfscMisc]{das.read}}
 }

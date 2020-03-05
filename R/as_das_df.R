@@ -32,6 +32,7 @@ as_das_df.data.frame <- function(x) {
     Cruise = "numeric",
     Mode = "character",
     EffType = "character",
+    ESWsides = "numeric",
     Course = "numeric",
     Bft = "numeric",
     SwellHght = "numeric",

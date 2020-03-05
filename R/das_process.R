@@ -21,7 +21,7 @@
 #'   at the beginning of each day. This argument should only
 #'   be set to \code{FALSE} for comparison with older methods, such as REPORT
 #'
-#' @importFrom dplyr %>% select
+#' @importFrom dplyr %>% case_when select
 #' @importFrom lubridate day
 #' @importFrom rlang !!
 #' @importFrom utils head
@@ -42,7 +42,7 @@
 #'   \itemize{
 #'     \item Event codes are expected to be one of the following:
 #'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
-#'       The codes G, g (subgroup of a current sighting, and resight of subgroup, resepctively),
+#'       The codes G, g (subgroup of a current sighting, and resight of subgroup, respectively),
 #'       p (pinniped sighting), X (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
 #'       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
 #'     \item All '#' events (deleted events) are removed
@@ -50,26 +50,25 @@
 #'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
 #'       (not including the E event). The 'EffortDot' column is ignored here.
 #'     \item All state/condition information is reset at the beginning of each cruise.
-#'       New cruises are identifed using \code{days.gap}.
+#'       New cruises are identified using \code{days.gap}.
 #'     \item All state/condition information relating to B, R, P, V, N, and W events
-#'       are reset every time there is a BR event sequence, because
-#'       a BR event sequence is (nearly) always a BRPVNW event sequence.
+#'       are reset every time there is a BR event sequence if \code{reset.effort == TRUE},
+#'       because in WinCruz a BR event sequence should always be a BRPVNW event sequence.
 #'       An event sequence means that all of the events have the same Lat/Lon/DateTime info,
 #'       and thus previous values for conditions set during the event sequence should not
 #'       carry over to any part of the event sequence.
 #'     \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
 #'     \item 'EffType' is capitalized, and values of \code{NA} are assigned a value of "S"
+#'     \item 'ESWsides' represents the number of sides being searched during that effort section -
+#'       a value of \code{NA} (for compatibility with older data) or "F" means 2 sides are being searched,
+#'       and a value of "H" means 1 side is being searched.
+#'       A value that is not one of "F", \code{NA}, or "H" means ESWsides will be \code{NA}
 #'     \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,
 #'       or if 'HorizSun' is 12 and 'VertSun' is 1;
 #'       \code{NA} if 'HorizSun' or 'VertSun' is \code{NA};
 #'       otherwise \code{FALSE}
 #'     \item Missing values are \code{NA} rather than \code{-1}
 #'   }
-#'
-#'   In WinCruz, a BR or R event series (to indicate starting/resuming effort)
-#'   are supposed to be immediately followed by a PVNW event series.
-#'   The \code{reset.effort} argument causes the conditions set in the RPVNW event series
-#'   (effort mode, Beaufort, visibility, etc.) to be reset to \code{NA} at each BR or R event series
 #'
 #'   This function was inspired by \code{\link[swfscMisc]{das.read}}
 #'
@@ -82,6 +81,7 @@
 #'     Cruise number                 \tab Cruise    \tab Event: B; Column: Data1\cr
 #'     Effort mode                   \tab Mode      \tab Event: B; Column: Data2\cr
 #'     Effort type                   \tab EffType   \tab Event: R; Column: Data1\cr
+#'     Effort type                   \tab ESWSide   \tab Event: R; Column: Data2\cr
 #'     Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
 #'     Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr
 #'     Swell height (ft)             \tab SwellHght \tab Event: V; Column: Data2\cr
@@ -214,6 +214,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   Mode      <- .das_process_chr(init.val, das.df, "Data2", event.B, event.na)
   Course    <- .das_process_num(init.val, das.df, "Data1", event.N, event.na)
   EffType   <- .das_process_chr(init.val, das.df, "Data1", event.R, event.na)
+  ESWsides  <- .das_process_chr(init.val, das.df, "Data2", event.R, event.na)
   Bft       <- .das_process_num(init.val, das.df, "Data1", event.V, event.na)
   SwellHght <- .das_process_num(init.val, das.df, "Data2", event.V, event.na)
   RainFog   <- .das_process_num(init.val, das.df, "Data1", event.W, event.na)
@@ -238,14 +239,14 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   for (i in 1:nDAS) {
     # Reset all info when starting data for a new cruise
     if (i %in% idx.new.cruise) {
-      LastEff <- LastEMode <- LastEType <- LastBft <- LastSwH <-
+      LastEff <- LastEMode <- LastEType <- LastESW <- LastBft <- LastSwH <-
         LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <-
         LastCruise <- NA
     }
 
     # Reset applicable info (aka all but 'LastCruise') when starting a new day
     if ((i %in% idx.new.day) & reset.day) {
-      LastEff <- LastEMode <- LastEType <- LastBft <- LastSwH <-
+      LastEff <- LastEMode <- LastEType <- LastESW <- LastBft <- LastSwH <-
         LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <- NA
     }
 
@@ -260,6 +261,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     if (is.na(Mode[i]))      Mode[i] <- LastEMode    else LastEMode <- Mode[i]    #Mode
     if (is.na(Course[i]))    Course[i] <- LastCourse else LastCourse <- Course[i] #Course
     if (is.na(EffType[i]))   EffType[i] <- LastEType else LastEType <- EffType[i] #Effort type
+    if (is.na(ESWsides[i]))  ESWsides[i] <- LastESW  else LastESW <- ESWsides[i]  #Sides being surveyed
     if (is.na(Bft[i]))       Bft[i] <- LastBft       else LastBft <- Bft[i]       #Beaufort
     if (is.na(SwellHght[i])) SwellHght[i] <- LastSwH else LastSwH <- SwellHght[i] #Swell height
     if (is.na(RainFog[i]))   RainFog[i] <- LastRF    else LastRF <- RainFog[i]    #Rain or fog
@@ -274,7 +276,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   ### Post-processing
   tmp <- list(
     Cruise = Cruise, Mode = Mode, Course = Course, EffType = EffType,
-    Bft = Bft, SwellHght = SwellHght, RainFog = RainFog,
+    ESWsides = ESWsides, Bft = Bft, SwellHght = SwellHght, RainFog = RainFog,
     HorizSun = HorizSun, VertSun = VertSun, Vis = Vis, OnEffort = Eff
   )
 
@@ -293,8 +295,11 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
       (tmp$HorizSun %in% 12 & tmp$VertSun %in% 1)
   ) #Per JVR notes, NA Glare should be FALSE to match Abund
 
-  tmp$EffType <- as.character(tmp$EffType)
   tmp$Mode <- as.character(toupper(tmp$Mode))
+  tmp$EffType <- as.character(tmp$EffType)
+  tmp$ESWsides <- case_when(
+    tmp$ESWsides == "F" ~ 2, tmp$ESWsides == "H" ~ 1, is.na(tmp$ESWsides) ~ 2
+  )
   # tmp$RainFog <- as.logical(ifelse(is.na(tmp$RainFog), NA, tmp$RainFog %in% c(2:4)))
 
 
@@ -316,7 +321,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   ### Create and order data frame to return
   cols.tokeep <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght",
+    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
     paste0("Data", 1:9), "EffortDot", "EventNum", "file_das", "line_num"
   )

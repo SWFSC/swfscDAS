@@ -42,6 +42,7 @@ test_that("das_process output has expected column names and classes", {
     Cruise = "numeric",
     Mode = "character",
     EffType = "character",
+    ESWsides = "numeric",
     Course = "numeric",
     Bft = "numeric",
     SwellHght = "numeric",
@@ -77,7 +78,7 @@ test_that("das_sight output has expected column names and classes", {
 
   exp.name <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
+    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
     "HorizSun", "VertSun", "Glare", "Vis",
     "EffortDot", "EventNum", "file_das", "line_num",
     "SightNo", "Obs", "Bearing", "Reticle", "DistNm",
@@ -110,7 +111,7 @@ test_that("das_sight output has expected column names and classes with extra col
 
   exp.name <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "Course", "Bft", "SwellHght", "RainFog",
+    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
     "HorizSun", "VertSun", "Glare", "Vis",
     "EffortDot", "EventNum", "file_das", "line_num", "testrr",
     "SightNo", "Obs", "Bearing", "Reticle", "DistNm",
