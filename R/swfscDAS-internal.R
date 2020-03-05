@@ -212,7 +212,7 @@ fn_aggr_conditions <- function(data.list, curr.df, idx, dist.perc) {
       } else if (laf < 1) {
         dacos <- (pi/2) - atan(laf/sqrt(1-(laf*laf)));
       } else {
-        error ('laf value out of bounds')
+        stop('laf value out of bounds')
       }
       dist <- (dacos * D * 60) * 1.852           #calculate distance in km
     }
@@ -220,4 +220,5 @@ fn_aggr_conditions <- function(data.list, curr.df, idx, dist.perc) {
 
   dist
 }
+
 ###############################################################################
