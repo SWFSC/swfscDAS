@@ -12,6 +12,7 @@ Depends: R (>= 3.5.0)
 Imports:
     dplyr, 
     lubridate, 
+    magrittr,
     methods, 
     parallel, 
     purrr, 

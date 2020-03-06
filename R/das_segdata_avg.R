@@ -12,12 +12,6 @@
 #' @param eff.id numeric; the ID of \code{x} (the current continuous effort section)
 #' @param ... ignored
 #'
-#' @importFrom dplyr %>% .data bind_cols everything mutate n select slice
-#' @importFrom lubridate year month day tz
-#' @importFrom stats na.omit
-#' @importFrom swfscMisc bearing destination
-#' @importFrom utils head
-#'
 #' @details This function should be called by \code{\link{das_chop_equal}};
 #'   users should (nearly always) not call it themselves.
 #'   It loops through the events in \code{x}, calculating and storing relevant

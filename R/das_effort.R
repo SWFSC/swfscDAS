@@ -14,10 +14,6 @@
 #'   \code{\link[swfscMisc]{distance}}. Default is "vincenty"
 #' @param ... arguments passed to the chopping function specified using \code{method}
 #'
-#' @importFrom dplyr %>% arrange between bind_cols filter full_join group_by left_join mutate slice summarise
-#' @importFrom swfscMisc distance
-#' @importFrom utils head
-#'
 #' @details This is the top-level function for chopping processed DAS data
 #'   into modeling segments (henceforth 'segments'), and assigning sightings
 #'   and related information (e.g., weather conditions) to each segment.

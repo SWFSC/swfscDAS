@@ -7,8 +7,6 @@
 #' @param x.segdata Data frame; segdata that corresponds to \code{x.randpicks}
 #' @param seg.km numeric; target segment length used when creating \code{x.segdata}
 #'
-#' @importFrom dplyr %>% .data bind_cols group_by mutate n right_join select summarise
-#'
 #' @details Past DAS processing code used a different randpicks format,
 #'   where only the generated random values were recorded.
 #'   This function 'converts' a data frame with those values to a data frame

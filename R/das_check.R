@@ -6,9 +6,6 @@
 #' @param file.out filename to which to write the error log;
 #'   default is \code{NULL}
 #'
-#' @importFrom dplyr left_join
-#' @importFrom utils write.csv
-#'
 #' @details
 #' Precursor to DASCHECK. Checks that the following is true:
 #' \itemize{

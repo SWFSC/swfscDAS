@@ -1,7 +1,3 @@
-#' @importFrom methods setOldClass
-#' @exportClass das_dfr
-setOldClass("das_dfr")
-
 #' \code{das_dfr} class
 #'
 #' @description The \code{das_dfr} class is a subclass of \code{\link[base]{data.frame}},
@@ -48,9 +44,6 @@ setOldClass("das_dfr")
 NULL
 
 
-
-#' @exportClass das_df
-setOldClass("das_df")
 
 #' \code{das_df} class
 #'

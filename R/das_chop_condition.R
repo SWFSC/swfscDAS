@@ -20,11 +20,6 @@
 #'   Defaults to \code{NULL} which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}.
 #'
-#' @importFrom dplyr %>% filter group_by left_join mutate select summarise
-#' @importFrom parallel clusterExport detectCores parLapplyLB stopCluster
-#' @importFrom swfscMisc distance setupClusters
-#' @importFrom utils head
-#'
 #' @details This function is intended to only be called by \code{\link{das_effort}}
 #'   when the "condition" method is specified.
 #'   Thus, \code{x} must be filtered for events (rows) where either

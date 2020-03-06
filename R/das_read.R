@@ -6,8 +6,6 @@
 #' @param file filename(s) of one or more DAS files
 #' @param tz character; see \link[base]{strptime}. Default is UTC
 #'
-#' @importFrom readr cols col_character fwf_positions read_fwf
-#'
 #' @details Reads/parses DAS data into columns of a data frame.
 #'   If \code{file} contains multiple filenames, then the individual
 #'   data frames will be concatenated.

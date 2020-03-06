@@ -6,10 +6,6 @@
 #'   or a data frame that can be coerced to a \code{das_df} object
 #' @param mixed.multi logical; indicates if mixed-species sightings should be output in multiple rows
 #'
-#' @importFrom dplyr %>% .data arrange case_when everything filter full_join group_by left_join mutate starts_with summarise
-#' @importFrom purrr map_chr pmap
-#' @importFrom tidyr gather
-#'
 #' @details DAS events contain specific information in the 'Data#' columns,
 #'   with the information depending on the event code for that row.
 #'   The output data frame contains columns with this specific information
@@ -83,18 +79,28 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     mutate(sight_cumsum = cumsum(.data$Event %in% event.sight))
 
   # Check that all SKM events are followed by an A event
-  skma.check <- identical(
-    sight.df$Data1[sight.df$Event %in% c("S", "K", "M")],
-    sight.df$Data1[sight.df$Event == "A"]
-  )
-  if (!skma.check)
+  idx.skm <- which(x$Event %in% c("S", "K", "M"))
+  skma.check1 <- all(x$Event[idx.skm + 1] == "A")
+  skma.check2 <- identical(x$Data1[idx.skm], x$Data1[idx.skm + 1])
+
+  if (!skma.check1) {
     stop("All 'S', 'K', and 'M' events (and only these events) ",
          "must be immediately followed by an 'A' event")
-  rm(skma.check)
+  } else if (!skma.check2) {
+    stop("The sighting number in some 'S', 'K', and 'M' events do not match ",
+         "the sighting numbers of their corresponding 'A' events")
+  }
+  rm(skma.check1, skma.check2)
+
+  if (!isTRUE(all.equal(which(x$Event == "A"), idx.skm + 1)))
+    warning("Not all 'A' events immediately follow an 'S', 'K', or 'M' event; ",
+            "these 'A' events will be ignored")
 
 
   #----------------------------------------------------------------------------
   # Get applicable data for each type of sighting event
+
+  # TODO: Don't filter for A events - slice based on idx above?
 
   #--------------------------------------------------------
   ### Data that is in all sighting events

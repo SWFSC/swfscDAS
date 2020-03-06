@@ -21,11 +21,6 @@
 #'   at the beginning of each day. This argument should only
 #'   be set to \code{FALSE} for comparison with older methods, such as REPORT
 #'
-#' @importFrom dplyr %>% case_when select
-#' @importFrom lubridate day
-#' @importFrom rlang !!
-#' @importFrom utils head
-#'
 #' @details If \code{x} is a character, it is assumed to be a filepath and first passed to \code{\link{das_read}}.
 #'   This output is then passed to \code{das_process}.
 #'
