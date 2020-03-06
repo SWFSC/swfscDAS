@@ -13,6 +13,7 @@ Imports:
     dplyr, 
     lubridate, 
     methods, 
+    parallel, 
     purrr, 
     readr, 
     rlang, 

@@ -6,6 +6,7 @@
 #'   or a data frame that can be coerced to a \code{das_df} object.
 #'   This data must be filtered for 'OnEffort' events;
 #'   see the Details section below
+#' @param ... ignored
 #' @param seg.km numeric; target segment length in kilometers
 #' @param randpicks.load character or \code{NULL}; if character,
 #'   filename of past randpicks output to load and use
@@ -18,11 +19,14 @@
 #'   \code{\link[swfscMisc]{distance}}.
 #'   Default is \code{NULL} since these distances should have already been
 #'   calculated in \code{\link{das_effort}}
-#' @param ... ignored
+#' @param num.cores Number of CPUs to over which to distribute computations.
+#'   Defaults to \code{NULL} which uses one fewer than the number of cores
+#'   reported by \code{\link[parallel]{detectCores}}.
 #'
 #' @importFrom dplyr %>% .data between filter left_join mutate select
+#' @importFrom parallel clusterExport detectCores parLapplyLB stopCluster
 #' @importFrom stats runif
-#' @importFrom swfscMisc distance
+#' @importFrom swfscMisc distance setupClusters
 #' @importFrom utils head read.csv
 #'
 #' @details This function is intended to only be called by \code{\link{das_effort}}
@@ -110,7 +114,7 @@ das_chop_equal.data.frame <- function(x, ...) {
 #' @name das_chop_equal
 #' @export
 das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
-                                  dist.method = NULL, ...) {
+                                  dist.method = NULL, num.cores = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
   if (missing(seg.km))
@@ -186,87 +190,39 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
 
 
   #----------------------------------------------------------------------------
-  # For each continuous effort section, get segment lengths and segdata
-  eff.list <- lapply(eff.uniq, function(i, x, seg.km, r.pos) {
-    #------------------------------------------------------
-    ### Get lengths of effort segments
-    # Prep
-    das.df <- filter(x, .data$cont_eff_section == i)
-    pos <- r.pos[i]
+  # Parallel thorugh each continuous effort section,
+  #   getting segment lengths and segdata
+  call.x <- x
+  call.seg.km <- seg.km
+  call.r.pos <- r.pos
 
-    das.df$dist_from_prev[1] <- 0 #Ignore distance from last effort
+  # Setup number of cores
+  if(is.null(num.cores)) num.cores <- parallel::detectCores() - 1
+  if(is.na(num.cores)) num.cores <- 1
+  num.cores <- max(1, num.cores)
+  num.cores <- min(parallel::detectCores() - 1, num.cores)
 
-    seg.dist <- sum(das.df$dist_from_prev)
-    seg.dist.mod <- seg.dist %% seg.km
 
-    # Determine segment lengths
-    if (.equal(seg.dist, 0)) {
-      # If current segment length is 0 and there are other events, throw warning
-      if (nrow(das.df) > 2)
-        warning("The length of continuous effort section ", i, " was zero, ",
-                "and there were events between start and end points",
-                immediate. = TRUE)
+  cl <- swfscMisc::setupClusters(num.cores)
+  eff.list <- tryCatch({
+    if(is.null(cl)) { # Don't parallelize if num.cores == 1
+      lapply(
+        eff.uniq, .eff.list.func,
+        call.x = call.x, call.seg.km = call.seg.km, call.r.pos = call.r.pos
+      )
 
-      # EAB makes a 0.1km segment if it includes a sighting - ?
-      seg.lengths <- 0
-      pos <- NA
-
-    } else {
-      if (.less_equal(seg.dist, seg.km)) {
-        # If current segment length is less than target length,
-        #   only make one segment
-        n.subseg <- 1
-        if (is.null(pos)) pos <- NA
-        seg.lengths <- seg.dist
-
-      } else if (.greater_equal(seg.dist.mod, (seg.km / 2))) {
-        # If current segment length is greater than the target length and
-        #   remainder is greater than or equal to half of the target length,
-        #   the remainder is its own (randomly placed) segment
-        n.subseg <- ceiling(seg.dist/seg.km)
-        if (is.null(pos)) pos <- ceiling(runif(1, 0, 1) * n.subseg)
-        if (is.na(pos) | !between(pos, 1, n.subseg))
-          stop("Randpicks value is not in proper range")
-        seg.lengths <- rep(seg.km, n.subseg)
-        seg.lengths[pos] <- seg.dist.mod
-
-      } else if (.less(seg.dist.mod, (seg.km / 2))) {
-        # If current segment length is greater than the target length and
-        #   remainder is less than half of the target length,
-        #   the remainder added to a random segment
-        n.subseg <- floor(seg.dist/seg.km)
-        if (is.null(pos)) pos <- ceiling(runif(1, 0, 1) * n.subseg)
-        if (is.na(pos) | !between(pos, 1, n.subseg))
-          stop("Randpicks value is not in proper range")
-        seg.lengths <- rep(seg.km, n.subseg)
-        seg.lengths[pos] <- seg.km + seg.dist.mod
-
-      } else {
-        stop("Error in das_chop_equal() - unrecognized effort situation. ",
-             "Please report this as an issue")
-      }
+    } else { # Run lapply using parLapplyLB
+      parallel::clusterExport(
+        cl = cl,
+        varlist = c("call.x", "call.seg.km", "call.r.pos"),
+        envir = environment()
+      )
+      parallel::parLapplyLB(
+        cl, eff.uniq, .eff.list.func,
+        call.x = call.x, call.seg.km = call.seg.km, call.r.pos = call.r.pos
+      )
     }
-
-
-    #------------------------------------------------------
-    ### Assign each event to a segment
-    subseg.cumsum <- cumsum(seg.lengths)
-    das.cumsum <- cumsum(das.df$dist_from_prev)
-
-    das.df$effort_seg <- findInterval(
-      round(das.cumsum, 4), round(c(-1, subseg.cumsum), 4),
-      left.open = TRUE, rightmost.closed = TRUE
-    )
-    das.df$seg_idx <- paste0(i, "_", das.df$effort_seg)
-
-
-    #------------------------------------------------------
-    ### Get segdata, and return
-    das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
-
-    list(das.df = das.df, seg.lengths = seg.lengths, pos = pos,
-         das.df.segdata = das.df.segdata)
-  }, x = x, seg.km = seg.km, r.pos = r.pos)
+  }, finally = if(!is.null(cl)) parallel::stopCluster(cl) else NULL)
 
 
   #----------------------------------------------------------------------------
@@ -298,4 +254,87 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
   #----------------------------------------------------------------------------
   # Return
   list(as_das_df(x.eff), segdata, randpicks)
+}
+
+
+###############################################################################
+# Function for determining segment lengths when chopping into ~equal lengths
+.eff.list.func <- function(i, call.x, call.seg.km, call.r.pos) {
+  #------------------------------------------------------
+  ### Get lengths of effort segments
+  # Prep
+  das.df <- filter(call.x, .data$cont_eff_section == i)
+  pos <- call.r.pos[i]
+
+  das.df$dist_from_prev[1] <- 0 #Ignore distance from last effort
+
+  seg.dist <- sum(das.df$dist_from_prev)
+  seg.dist.mod <- seg.dist %% call.seg.km
+
+  # Determine segment lengths
+  if (.equal(seg.dist, 0)) {
+    # If current segment length is 0 and there are other events, throw warning
+    if (nrow(das.df) > 2)
+      warning("The length of continuous effort section ", i, " was zero, ",
+              "and there were events between start and end points",
+              immediate. = TRUE)
+
+    # EAB makes a 0.1km segment if it includes a sighting - ?
+    seg.lengths <- 0
+    pos <- NA
+
+  } else {
+    if (.less_equal(seg.dist, call.seg.km)) {
+      # If current segment length is less than target length,
+      #   only make one segment
+      n.subseg <- 1
+      if (is.null(pos)) pos <- NA
+      seg.lengths <- seg.dist
+
+    } else if (.greater_equal(seg.dist.mod, (call.seg.km / 2))) {
+      # If current segment length is greater than the target length and
+      #   remainder is greater than or equal to half of the target length,
+      #   the remainder is its own (randomly placed) segment
+      n.subseg <- ceiling(seg.dist/call.seg.km)
+      if (is.null(pos)) pos <- ceiling(runif(1, 0, 1) * n.subseg)
+      if (is.na(pos) | !between(pos, 1, n.subseg))
+        stop("Randpicks value is not in proper range")
+      seg.lengths <- rep(call.seg.km, n.subseg)
+      seg.lengths[pos] <- seg.dist.mod
+
+    } else if (.less(seg.dist.mod, (call.seg.km / 2))) {
+      # If current segment length is greater than the target length and
+      #   remainder is less than half of the target length,
+      #   the remainder added to a random segment
+      n.subseg <- floor(seg.dist/call.seg.km)
+      if (is.null(pos)) pos <- ceiling(runif(1, 0, 1) * n.subseg)
+      if (is.na(pos) | !between(pos, 1, n.subseg))
+        stop("Randpicks value is not in proper range")
+      seg.lengths <- rep(call.seg.km, n.subseg)
+      seg.lengths[pos] <- call.seg.km + seg.dist.mod
+
+    } else {
+      stop("Error in das_chop_equal() - unrecognized effort situation. ",
+           "Please report this as an issue")
+    }
+  }
+
+  #------------------------------------------------------
+  ### Assign each event to a segment
+  subseg.cumsum <- cumsum(seg.lengths)
+  das.cumsum <- cumsum(das.df$dist_from_prev)
+
+  das.df$effort_seg <- findInterval(
+    round(das.cumsum, 4), round(c(-1, subseg.cumsum), 4),
+    left.open = TRUE, rightmost.closed = TRUE
+  )
+  das.df$seg_idx <- paste0(i, "_", das.df$effort_seg)
+
+
+  #------------------------------------------------------
+  ### Get segdata, and return
+  das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
+
+  list(das.df = das.df, seg.lengths = seg.lengths, pos = pos,
+       das.df.segdata = das.df.segdata)
 }

@@ -6,6 +6,7 @@
 #'   or a data frame that can be coerced to a \code{das_df} object.
 #'   This data must be filtered for 'OnEffort' events;
 #'   see the Details section below
+#' @param ... ignored
 #' @param dist.method character;
 #'   method to use to calculate distance between lat/lon coordinates.
 #'   Can be "greatcircle" to use the great circle distance method,
@@ -15,10 +16,13 @@
 #'   calculated in \code{\link{das_effort}}
 #' @param seg.km.min numeric; minimum allowable segment length (in kilometers).
 #'   Default is 0.1. See the Details section below for more information
-#' @param ... ignored
+#' @param num.cores Number of CPUs to over which to distribute computations.
+#'   Defaults to \code{NULL} which uses one fewer than the number of cores
+#'   reported by \code{\link[parallel]{detectCores}}.
 #'
 #' @importFrom dplyr %>% filter group_by left_join mutate select summarise
-#' @importFrom swfscMisc distance
+#' @importFrom parallel clusterExport detectCores parLapplyLB stopCluster
+#' @importFrom swfscMisc distance setupClusters
 #' @importFrom utils head
 #'
 #' @details This function is intended to only be called by \code{\link{das_effort}}
@@ -87,7 +91,8 @@ das_chop_condition.data.frame <- function(x, ...) {
 
 #' @name das_chop_condition
 #' @export
-das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL, ...) {
+das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
+                                      num.cores = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
   if (!all(x$OnEffort | x$Event == "E"))
@@ -141,80 +146,39 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL, .
     "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Vis"
   )
 
-  eff.list <- lapply(eff.uniq, function(i, x) {
-    #------------------------------------------------------
-    # Prep
-    das.df <- filter(x, .data$cont_eff_section == i)
+  #--------------------------------------------------------
+  ### Parallel through continuous effort sections
+  call.x <- x
+  call.cond.names <- cond.names
+  call.seg.km.min <- seg.km.min
 
-    # Ignore distance from last effort
-    das.df$dist_from_prev[1] <- 0
-    # Ignore distance past this continuous effort section
-    das.df$dist_to_next[nrow(das.df)] <- 0
-
-
-    #------------------------------------------------------
-    ### Determine indices of condition changes, and combine as needed
-    cond.list <- lapply(cond.names, function(j) {
-      which(c(NA, head(das.df[[j]], -1) != das.df[[j]][-1]))
-    })
-    cond.idx.pre <- sort(unique(c(1, unlist(cond.list))))
-
-    effort.seg.pre <- rep(FALSE, nrow(das.df))
-    effort.seg.pre[cond.idx.pre] <- TRUE
-
-    das.df$effort_seg_pre <- cumsum(effort.seg.pre)
-    das.df$idx <- seq_len(nrow(das.df))
-
-    # Get distances of current effort sections
-    d.pre <- das.df %>%
-      group_by(.data$effort_seg_pre) %>%
-      summarise(idx_start = min(.data$idx),
-                idx_end = max(.data$idx),
-                dist_length = sum(.data$dist_to_next))
-
-    # == 0 check is here in case seg.km.min is 0
-    seg.len0 <- d.pre$idx_end[.equal(d.pre$dist_length, 0)] + 1
-    seg.len1 <- d.pre$idx_end[.less(d.pre$dist_length, seg.km.min)] + 1
-
-    seg.diff <- setdiff(seg.len1, seg.len0)
-    if (length(seg.diff) > 0 & all(seg.diff <= nrow(das.df)))
-      warning("Because of combining based on seg.km.min, ",
-              "not all conditions are the same ",
-              "for each segment in continuous effort section ", i,
-              immediate. = TRUE)
-
-    idx.torm <- sort(unique(c(seg.len0, seg.len1)))
-
-    # Remove segment breaks that create too-small segments
-    #   Ignores idx.torm values > nrow(das.df)
-    cond.idx <- cond.idx.pre[!(cond.idx.pre %in% idx.torm)]
-    effort.seg <- rep(FALSE, nrow(das.df))
-    effort.seg[cond.idx] <- TRUE
-
-    das.df <- das.df %>%
-      select(-.data$effort_seg_pre, -.data$idx) %>%
-      mutate(effort_seg = cumsum(effort.seg),
-             seg_idx = paste(i, .data$effort_seg, sep = "_"))
+  # Setup number of cores
+  if(is.null(num.cores)) num.cores <- parallel::detectCores() - 1
+  if(is.na(num.cores)) num.cores <- 1
+  num.cores <- max(1, num.cores)
+  num.cores <- min(parallel::detectCores() - 1, num.cores)
 
 
-    #------------------------------------------------------
-    ### Calculate lengths of effort segments
-    d <- das.df %>%
-      group_by(.data$effort_seg) %>%
-      summarise(sum_dist = sum(.data$dist_to_next))
+  cl <- swfscMisc::setupClusters(num.cores)
+  eff.list <- tryCatch({
+    if(is.null(cl)) { # Don't parallelize if num.cores == 1
+      lapply(
+        eff.uniq, .chop_condition_eff, call.x = call.x,
+        call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min
+      )
 
-    seg.lengths <- d$sum_dist
-
-    #------------------------------------------------------
-    ### Get segdata and return
-    das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
-    # TODO: rename avg?
-
-    list(
-      das.df = das.df, seg.lengths = seg.lengths,
-      das.df.segdata = das.df.segdata
-    )
-  }, x = x)
+    } else { # Run lapply using parLapplyLB
+      parallel::clusterExport(
+        cl = cl,
+        varlist = c("call.x", "call.cond.names", "call.seg.km.min"),
+        envir = environment()
+      )
+      parallel::parLapplyLB(
+        cl, eff.uniq, .chop_condition_eff, call.x = call.x,
+        call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min
+      )
+    }
+  }, finally = if(!is.null(cl)) parallel::stopCluster(cl) else NULL)
 
 
   #----------------------------------------------------------------------------
@@ -244,4 +208,85 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL, .
   #----------------------------------------------------------------------------
   # Return; NULL is for randpicks
   list(as_das_df(x.eff), segdata, NULL)
+}
+
+
+###############################################################################
+.chop_condition_eff <- function(i, call.x, call.cond.names, call.seg.km.min) {
+  ### Inputs
+  # i:
+  # call.x: das data frame
+
+  #------------------------------------------------------
+  # Prep
+  das.df <- filter(call.x, .data$cont_eff_section == i)
+
+  # Ignore distance from last effort
+  das.df$dist_from_prev[1] <- 0
+  # Ignore distance past this continuous effort section
+  das.df$dist_to_next[nrow(das.df)] <- 0
+
+
+  #------------------------------------------------------
+  ### Determine indices of condition changes, and combine as needed
+  cond.list <- lapply(call.cond.names, function(j) {
+    which(c(NA, head(das.df[[j]], -1) != das.df[[j]][-1]))
+  })
+  cond.idx.pre <- sort(unique(c(1, unlist(cond.list))))
+
+  effort.seg.pre <- rep(FALSE, nrow(das.df))
+  effort.seg.pre[cond.idx.pre] <- TRUE
+
+  das.df$effort_seg_pre <- cumsum(effort.seg.pre)
+  das.df$idx <- seq_len(nrow(das.df))
+
+  # Get distances of current effort sections
+  d.pre <- das.df %>%
+    group_by(.data$effort_seg_pre) %>%
+    summarise(idx_start = min(.data$idx),
+              idx_end = max(.data$idx),
+              dist_length = sum(.data$dist_to_next))
+
+  # == 0 check is here in case seg.km.min is 0
+  seg.len0 <- d.pre$idx_end[.equal(d.pre$dist_length, 0)] + 1
+  seg.len1 <- d.pre$idx_end[.less(d.pre$dist_length, call.seg.km.min)] + 1
+
+  seg.diff <- setdiff(seg.len1, seg.len0)
+  if (length(seg.diff) > 0 & all(seg.diff <= nrow(das.df)))
+    warning("Because of combining based on seg.km.min, ",
+            "not all conditions are the same ",
+            "for each segment in continuous effort section ", i,
+            immediate. = TRUE)
+
+  idx.torm <- sort(unique(c(seg.len0, seg.len1)))
+
+  # Remove segment breaks that create too-small segments
+  #   Ignores idx.torm values > nrow(das.df)
+  cond.idx <- cond.idx.pre[!(cond.idx.pre %in% idx.torm)]
+  effort.seg <- rep(FALSE, nrow(das.df))
+  effort.seg[cond.idx] <- TRUE
+
+  das.df <- das.df %>%
+    select(-.data$effort_seg_pre, -.data$idx) %>%
+    mutate(effort_seg = cumsum(effort.seg),
+           seg_idx = paste(i, .data$effort_seg, sep = "_"))
+
+
+  #------------------------------------------------------
+  ### Calculate lengths of effort segments
+  d <- das.df %>%
+    group_by(.data$effort_seg) %>%
+    summarise(sum_dist = sum(.data$dist_to_next))
+
+  seg.lengths <- d$sum_dist
+
+  #------------------------------------------------------
+  ### Get segdata and return
+  das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
+  # TODO: rename avg?
+
+  list(
+    das.df = das.df, seg.lengths = seg.lengths,
+    das.df.segdata = das.df.segdata
+  )
 }

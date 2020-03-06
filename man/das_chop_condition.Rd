@@ -10,7 +10,13 @@ das_chop_condition(x, ...)
 
 \method{das_chop_condition}{data.frame}(x, ...)
 
-\method{das_chop_condition}{das_df}(x, seg.km.min = 0.1, dist.method = NULL, ...)
+\method{das_chop_condition}{das_df}(
+  x,
+  seg.km.min = 0.1,
+  dist.method = NULL,
+  num.cores = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{\code{das_df} object,
@@ -30,6 +36,10 @@ or one of "lawofcosines", "haversine", or "vincenty" to use
 \code{\link[swfscMisc]{distance}}.
 Default is \code{NULL} since these distances should have already been
 calculated in \code{\link{das_effort}}}
+
+\item{num.cores}{Number of CPUs to over which to distribute computations.
+Defaults to \code{NULL} which uses one fewer than the number of cores
+reported by \code{\link[parallel]{detectCores}}.}
 }
 \value{
 List of two data frames:

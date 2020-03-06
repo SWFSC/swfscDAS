@@ -63,11 +63,16 @@ This is the top-level function for chopping processed DAS data
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
-
 y.proc <- das_process(y)
+
 das_effort(
   y.proc, method = "equallength", sp.codes = c("016", "018"),
-  seg.km = 10
+  seg.km = 10, num.cores = 1
+)
+
+das_effort(
+  y.proc, method = "condition", sp.codes = c("016", "018"),
+  seg.km.min = 0.05, num.cores = 1
 )
 
 }
