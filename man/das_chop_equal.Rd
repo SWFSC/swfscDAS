@@ -44,7 +44,7 @@ calculated in \code{\link{das_effort}}}
 
 \item{num.cores}{Number of CPUs to over which to distribute computations.
 Defaults to \code{NULL} which uses one fewer than the number of cores
-reported by \code{\link[parallel]{detectCores}}.}
+reported by \code{\link[parallel]{detectCores}}}
 }
 \value{
 List of three data frames:

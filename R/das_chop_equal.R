@@ -21,7 +21,7 @@
 #'   calculated in \code{\link{das_effort}}
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL} which uses one fewer than the number of cores
-#'   reported by \code{\link[parallel]{detectCores}}.
+#'   reported by \code{\link[parallel]{detectCores}}
 #'
 #' @details This function is intended to only be called by \code{\link{das_effort}}
 #'   when the "equallength" method is specified.
@@ -189,6 +189,8 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
   call.x <- x
   call.seg.km <- seg.km
   call.r.pos <- r.pos
+  call.func1 <- das_segdata_avg
+  call.func2 <- as_das_df
 
   # Setup number of cores
   if(is.null(num.cores)) num.cores <- parallel::detectCores() - 1
@@ -201,19 +203,22 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
   eff.list <- tryCatch({
     if(is.null(cl)) { # Don't parallelize if num.cores == 1
       lapply(
-        eff.uniq, .eff.list.func,
-        call.x = call.x, call.seg.km = call.seg.km, call.r.pos = call.r.pos
+        eff.uniq, .chop_equal_eff,
+        call.x = call.x, call.seg.km = call.seg.km, call.r.pos = call.r.pos,
+        call.func1 = call.func1, call.func2 = call.func2
       )
 
     } else { # Run lapply using parLapplyLB
       parallel::clusterExport(
         cl = cl,
-        varlist = c("call.x", "call.seg.km", "call.r.pos"),
+        varlist = c("call.x", "call.seg.km", "call.r.pos",
+                    "call.func1", "call.func2"),
         envir = environment()
       )
       parallel::parLapplyLB(
-        cl, eff.uniq, .eff.list.func,
-        call.x = call.x, call.seg.km = call.seg.km, call.r.pos = call.r.pos
+        cl, eff.uniq, .chop_equal_eff,
+        call.x = call.x, call.seg.km = call.seg.km, call.r.pos = call.r.pos,
+        call.func1 = call.func1, call.func2 = call.func2
       )
     }
   }, finally = if(!is.null(cl)) parallel::stopCluster(cl) else NULL)
@@ -251,9 +256,30 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
 }
 
 
-###############################################################################
-# Function for determining segment lengths when chopping into ~equal lengths
-.eff.list.func <- function(i, call.x, call.seg.km, call.r.pos) {
+
+#' @name swfscAirDAS-funcs
+#' @param i ignore
+#' @param call.x ignore
+#' @param call.seg.km ignore
+#' @param call.r.pos ignore
+#' @param call.func1 ignore
+#' @param call.func2 ignore
+#' @export
+.chop_equal_eff <- function(i, call.x, call.seg.km, call.r.pos,
+                            call.func1, call.func2) {
+  ### Inputs
+  # i: Index of current continuous effort section
+  # call.x: DAS data frame
+  # call.seg.km: seg.km argument from das_chop_equal()
+  # call.r.pos: randpicks value; if NULL, a new value is generated
+  # call.func1: _segdata_ function - needs to be passed in since
+  #   this function is used by swfscAirDAS as well
+  # call.func2: as_..._df function
+
+  ### Output
+  # List with, for this continuous effort section:
+  #   1) DAS data frame, 2) segment lengths, 3) randpicks value, and 4) segdata
+
   #------------------------------------------------------
   ### Get lengths of effort segments
   # Prep
@@ -327,8 +353,11 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
 
   #------------------------------------------------------
   ### Get segdata, and return
-  das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
+  # das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
+  das.df.segdata <- call.func1(call.func2(das.df), seg.lengths, i)
 
-  list(das.df = das.df, seg.lengths = seg.lengths, pos = pos,
-       das.df.segdata = das.df.segdata)
+  list(
+    das.df = das.df, seg.lengths = seg.lengths, pos = pos,
+    das.df.segdata = das.df.segdata
+  )
 }

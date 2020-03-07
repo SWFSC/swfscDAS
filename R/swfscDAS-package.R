@@ -14,9 +14,9 @@
 #' @seealso \url{https://smwoodman.github.io/swfscDAS/}
 #'
 #' @importFrom dplyr arrange between bind_cols case_when everything filter full_join group_by left_join mutate n right_join select slice starts_with summarise
+#' @importFrom lubridate year month day tz
 #' @importFrom magrittr %>%
 #' @importFrom parallel clusterExport detectCores parLapplyLB stopCluster
-#' @importFrom lubridate year month day tz
 #' @importFrom readr cols col_character fwf_positions read_fwf
 #' @importFrom rlang !! .data
 #' @importFrom purrr map_chr pmap

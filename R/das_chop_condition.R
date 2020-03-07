@@ -18,7 +18,7 @@
 #'   Default is 0.1. See the Details section below for more information
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL} which uses one fewer than the number of cores
-#'   reported by \code{\link[parallel]{detectCores}}.
+#'   reported by \code{\link[parallel]{detectCores}}
 #'
 #' @details This function is intended to only be called by \code{\link{das_effort}}
 #'   when the "condition" method is specified.
@@ -141,11 +141,12 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
     "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Vis"
   )
 
-  #--------------------------------------------------------
-  ### Parallel through continuous effort sections
+  # Prep for parallel
   call.x <- x
   call.cond.names <- cond.names
   call.seg.km.min <- seg.km.min
+  call.func1 <- das_segdata_avg
+  call.func2 <- as_das_df
 
   # Setup number of cores
   if(is.null(num.cores)) num.cores <- parallel::detectCores() - 1
@@ -154,23 +155,27 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
   num.cores <- min(parallel::detectCores() - 1, num.cores)
 
 
+  # Use parallel to lapply through - modeled after rfPermute
   cl <- swfscMisc::setupClusters(num.cores)
   eff.list <- tryCatch({
     if(is.null(cl)) { # Don't parallelize if num.cores == 1
       lapply(
         eff.uniq, .chop_condition_eff, call.x = call.x,
-        call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min
+        call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min,
+        call.func1 = call.func1, call.func2 = call.func2
       )
 
     } else { # Run lapply using parLapplyLB
       parallel::clusterExport(
         cl = cl,
-        varlist = c("call.x", "call.cond.names", "call.seg.km.min"),
+        varlist = c("call.x", "call.cond.names", "call.seg.km.min",
+                    "call.func1", "call.func2"),
         envir = environment()
       )
       parallel::parLapplyLB(
         cl, eff.uniq, .chop_condition_eff, call.x = call.x,
-        call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min
+        call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min,
+        call.func1 = call.func1, call.func2 = call.func2
       )
     }
   }, finally = if(!is.null(cl)) parallel::stopCluster(cl) else NULL)
@@ -206,11 +211,31 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 }
 
 
-###############################################################################
-.chop_condition_eff <- function(i, call.x, call.cond.names, call.seg.km.min) {
+
+#' Functions exported only to be used internally by swfscAirDAS
+#' @name swfscAirDAS-funcs
+#' @param i ignore
+#' @param call.x ignore
+#' @param call.cond.names ignore
+#' @param call.seg.km.min ignore
+#' @param call.func1 ignore
+#' @param call.func2 ignore
+#' @export
+.chop_condition_eff <- function(i, call.x, call.cond.names, call.seg.km.min,
+                                call.func1, call.func2) {
   ### Inputs
-  # i:
+  # i: Index of current continuous effort section
   # call.x: das data frame
+  # call.cond.names: Names of condition columns to use to chop;
+  #   i.e., if there's a change inone of these columns, create new segment
+  # call.seg.km.min: seg.km.min argument from das_chop_condition()
+  # call.func1: _segdata_ function - needs to be passed in since
+  #   this function is used by swfscAirDAS as well
+  # call.func2: as_..._df function
+
+  ### Output
+  # List with, for this continuous effort section:
+  #   1) DAS data frame, 2) segment lengths, and 3) segdata
 
   #------------------------------------------------------
   # Prep
@@ -277,8 +302,9 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 
   #------------------------------------------------------
   ### Get segdata and return
-  das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
-  # TODO: rename avg?
+  # TODO: develop non-avg function
+  # das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
+  das.df.segdata <- call.func1(call.func2(das.df), seg.lengths, i)
 
   list(
     das.df = das.df, seg.lengths = seg.lengths,
