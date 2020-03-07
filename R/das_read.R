@@ -50,8 +50,10 @@
 #'     line_num  \tab integer   \tab line number of each data row\cr
 #'   }
 #'
-#'   Warnings are printed if any unexpected rows have \code{NA} DateTime/Lat/Lon values,
-#'   or if any Lat/Lon values cannot be converted to numeric values
+#'   Warnings are printed if any unexpected events have \code{NA} DateTime/Lat/Lon values,
+#'   or if any Lat/Lon values cannot be converted to numeric values.
+#'   Events that are 'expected' to have \code{NA} DateTime/Lat/Lon values are:
+#'   C, ?, 1, 2, 3, 4, 5, 6, 7, 8
 #'
 #' @seealso For more details about WinCruz, see
 #'   \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
@@ -123,7 +125,7 @@ das_read <- function(file, tz = "UTC") {
 
   # Lat/lon NA check
   ll.na <- is.na(Lat) | is.na(Lon)
-  ll.na.event <- c("?", 1:8)
+  ll.na.event <- c("C", "?", 1:8)
   ll.na.which <- which((!(x$Event %in% ll.na.event)) & ll.na)
   if (length(ll.na.which) > 0) {
     warning("There are unexpected (i.e. for events other than ",
