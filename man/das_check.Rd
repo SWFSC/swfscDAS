@@ -27,7 +27,7 @@ Check that DAS file has accepted values
 Precursor to DASCHECK. Checks that the following is true:
 \itemize{
   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
-    A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+    A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
   \item The effort dot matches effort determined using B, R, and E events
   \item And event/column pairs meet the following requirements:
 }
@@ -37,6 +37,7 @@ Precursor to DASCHECK. Checks that the following is true:
   Cruise number  \tab B \tab Data1 \tab Can be converted to a numeric value\cr
   Mode           \tab B \tab Data2 \tab Must be one of C, P, c, p, or NA (blank)\cr
   Effort type    \tab R \tab Data1 \tab Must be one of F, N, S, or NA (blank)\cr
+  Effective strip width sides \tab R \tab Data2 \tab Must be one of F, H, or NA (blank)\cr
   Course         \tab N \tab Data1 \tab Can be converted to a numeric value\cr
   Beaufort       \tab V \tab Data1 \tab Can be converted to a numeric value\cr
   Swell height   \tab V \tab Data2 \tab Can be converted to a numeric value\cr

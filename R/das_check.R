@@ -10,7 +10,7 @@
 #' Precursor to DASCHECK. Checks that the following is true:
 #' \itemize{
 #'   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
-#'     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, g, p, X, Y, Z.
+#'     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
 #'   \item The effort dot matches effort determined using B, R, and E events
 #'   \item And event/column pairs meet the following requirements:
 #' }
@@ -20,6 +20,7 @@
 #'   Cruise number  \tab B \tab Data1 \tab Can be converted to a numeric value\cr
 #'   Mode           \tab B \tab Data2 \tab Must be one of C, P, c, p, or NA (blank)\cr
 #'   Effort type    \tab R \tab Data1 \tab Must be one of F, N, S, or NA (blank)\cr
+#'   Effective strip width sides \tab R \tab Data2 \tab Must be one of F, H, or NA (blank)\cr
 #'   Course         \tab N \tab Data1 \tab Can be converted to a numeric value\cr
 #'   Beaufort       \tab V \tab Data1 \tab Can be converted to a numeric value\cr
 #'   Swell height   \tab V \tab Data2 \tab Can be converted to a numeric value\cr
@@ -72,7 +73,7 @@ das_check <- function(file, file.out = NULL) {
   ### Check event codes
   event.acc <- c("#", "*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "N",
                  "P", "Q", "R", "s", "S", "t", "V", "W",
-                 "g", "p", "X", "Y", "Z")
+                 "G", "g", "p", "X", "Y", "Z")
   ev.which <- which(!(x$Event %in% event.acc))
   error.out <- rbind(
     error.out,
@@ -145,6 +146,10 @@ das_check <- function(file, file.out = NULL) {
   idx.r.1 <- .check_character(x, "R", "Data1", c("F", "N", "S", NA))
   txt.r.1 <- "Effort type (Data1 of R events) is not one of F, N, S, or NA"
 
+  # Effective strip width sides
+  idx.r.2 <- .check_character(x, "R", "Data2", c("F", "H", NA))
+  txt.r.2 <- "Effective strip width sides (Data2 of R events) is not one of F, H, or NA"
+
   # Course
   idx.n.1 <- .check_numeric(x, "N", "Data1")
   txt.n.1 <- "Course (Data1 of N events) cannot be converted to a numeric"
@@ -180,6 +185,7 @@ das_check <- function(file, file.out = NULL) {
     .check_list(x, x.lines, idx.b.1, txt.b.1),
     .check_list(x, x.lines, idx.b.2, txt.b.2),
     .check_list(x, x.lines, idx.r.1, txt.r.1),
+    .check_list(x, x.lines, idx.r.2, txt.r.2),
     .check_list(x, x.lines, idx.n.1, txt.n.1),
     .check_list(x, x.lines, idx.v.1, txt.v.1),
     .check_list(x, x.lines, idx.v.2, txt.v.2),
