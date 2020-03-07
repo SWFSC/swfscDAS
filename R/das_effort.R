@@ -28,6 +28,10 @@
 #'   The distance between the lat/lon points of subsequent events
 #'   is calculated using the method specified in \code{dist.method}
 #'
+#'   All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
+#'   must not have \code{NA} Lat or Lon values.
+#'   TODO: Should this function verbosely remove these events?
+#'
 #'   TODO
 #'   included: On effort and Beaufort less than or equal to 5
 #'
@@ -223,7 +227,6 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
   z.llna <- which(is.na(z$Lat) | is.na(z$Lon))
   if (length(z.llna) > 0)
     stop("Error in das_effort: Some unexpected events ",
-         "(i.e. not one of ?, 1, 2, 3, 4, 5, 6, 7, 8) ",
          "have NA values in the Lat and/or Lon columns, ",
          "and thus the distance between each point cannot be determined. ",
          "Please remove or fix these events before running this function. ",

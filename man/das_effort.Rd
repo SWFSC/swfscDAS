@@ -61,6 +61,10 @@ This is the top-level function for chopping processed DAS data
   The distance between the lat/lon points of subsequent events
   is calculated using the method specified in \code{dist.method}
 
+  All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
+  must not have \code{NA} Lat or Lon values.
+  TODO: Should this function verbosely remove these events?
+
   TODO
   included: On effort and Beaufort less than or equal to 5
 }
