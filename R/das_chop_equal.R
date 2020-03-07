@@ -78,10 +78,8 @@
 #'   For an example randpicks file, see
 #'   \code{system.file("das_sample_randpicks.csv", package = "swfscDAS")}
 #'
-#'   If the column \code{dist_from_prev} does not exist
-#'   (it should be calculated and added to \code{x} in \code{\link{das_effort}}),
-#'   then the distance between the lat/lon points of subsequent events
-#'   is calculated using the method specified in \code{dist.method}
+#'   If the column \code{dist_from_prev} does not exist, the distance between
+#'   subsequent events is calculated as described in \code{\link{das_effort}}
 #'
 #' @return List of three data frames:
 #' \itemize{

@@ -9,7 +9,7 @@
 #' @param sp.codes character; species code(s) to include in segdata
 #' @param dist.method character;
 #'   method to use to calculate distance between lat/lon coordinates.
-#'   Can be "greatcircle" to use the great circle distance method,
+#'   Can be "greatcircle" to use the great circle distance method (TODO - add ref),
 #'   or one of "lawofcosines", "haversine", or "vincenty" to use
 #'   \code{\link[swfscMisc]{distance}}. Default is "vincenty"
 #' @param ... arguments passed to the chopping function specified using \code{method}
@@ -24,6 +24,9 @@
 #'   In other words, the data is filtered for continuous effort sections (henceforth 'effort sections'),
 #'   where effort sections run from "B"/"R" to "E" events (inclusive),
 #'   and then passed to the chopping function specified using \code{method}.
+#'
+#'   The distance between the lat/lon points of subsequent events
+#'   is calculated using the method specified in \code{dist.method}
 #'
 #'   TODO
 #'   included: On effort and Beaufort less than or equal to 5
@@ -198,17 +201,25 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
 
 
 
-###############################################################################
-### For each event, calculate distance to previous event
-### Also called in _chop functions
+#' Functions exported only to be used internally by swfscAirDAS
+#' @name swfscAirDAS-funcs
+#' @param z ignore
+#' @param z.dist.method ignore
+#' @export
 .dist_from_prev <- function(z, z.dist.method) {
+  ### Inputs
+  # z: data frame of class das_df
+  # z.dist.method: dist.method from das_effort()
+
+  ### Output: numeric of distance (km) to previous event; first element is NA
+
   # Input check
   dist.methods.acc <- c("greatcircle", "lawofcosines", "haversine", "vincenty")
   if (!(length(z.dist.method) == 1 & (z.dist.method %in% dist.methods.acc)))
     stop("dist.method must be a string of length one, and must be one of: ",
          paste0("\"", paste(dist.methods.acc, collapse = "\", \""), "\""))
 
-  # Check for NA LAt/Lon
+  # Check for NA Lat/Lon
   z.llna <- which(is.na(z$Lat) | is.na(z$Lon))
   if (length(z.llna) > 0)
     stop("Error in das_effort: Some unexpected events ",
@@ -236,10 +247,53 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
 
   } else {
     stop("Error in distance calcualtion - ",
-         "are you passing an accepted argument to dist.method?")
+         "please pass an accepted argument to dist.method")
   }
 
   # Return distances, with inital NA since this are distances from previous point
   c(NA, dist.from.prev)
 }
+
+
+
+#' @name swfscAirDAS-funcs
+#' @param lat1 ignore
+#' @param lon1 ignore
+#' @param lat2 ignore
+#' @param lon2 ignore
+#' @export
+.fn.grcirclkm <- function(lat1, lon1, lat2, lon2) {
+  # FUNCTION to calculate the great circle distance (in km) between two lat/lons
+  # From EAB and KAF
+
+  R <- pi/180      #angle in radians = angle in degrees * R
+  D <- 180/pi      #angle in degrees = angle in radains * D
+  dist <- 0
+
+  NAcheck <- sum(is.na(c(lat1, lon1, lat2, lon2)))
+  if (NAcheck == 0) {             #only continue if no NA positions
+    if ((lat1 != lat2) | (lon1 != lon2))  {
+      dlat1 <- lat1 * R              # convert to radian values:
+      dlng1 <- lon1 * R
+      dlat2 <- lat2 * R
+      dlng2 <- lon2 * R
+      las <- sin(dlat1) * sin(dlat2);   # compute distance
+      lac <- cos(dlat1) * cos(dlat2) * cos(dlng1 - dlng2)
+      laf <- las + lac
+      if (laf < -1) {
+        laf <- -1
+        dacos <- (pi/2) - atan(laf/sqrt(1-(laf*laf)))
+      } else if (laf < 1) {
+        dacos <- (pi/2) - atan(laf/sqrt(1-(laf*laf)));
+      } else {
+        stop('laf value out of bounds')
+      }
+      dist <- (dacos * D * 60) * 1.852           #calculate distance in km
+    }
+  }
+
+  dist
+}
+
+
 

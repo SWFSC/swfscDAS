@@ -185,40 +185,4 @@ fn_aggr_conditions <- function(data.list, curr.df, idx, dist.perc) {
   x.num.na[!(x.num.na %in% x.na)]
 }
 
-
-###############################################################################
-# Great circle distance function from segchopr
-
-# FUNCTION to calculate the great circle distance (in km) between two lat/lons
-# From EAB and KAF
-.fn.grcirclkm <- function(lat1, lon1, lat2, lon2) {
-  R <- pi/180      #angle in radians = angle in degrees * R
-  D <- 180/pi      #angle in degrees = angle in radains * D
-  dist <- 0
-
-  NAcheck <- sum(is.na(c(lat1,lon1,lat2,lon2)))
-  if (NAcheck == 0) {             #only continue if no NA positions
-    if ((lat1 != lat2) | (lon1 != lon2))  {
-      dlat1 <- lat1 * R              # convert to radian values:
-      dlng1 <- lon1 * R
-      dlat2 <- lat2 * R
-      dlng2 <- lon2 * R
-      las <- sin(dlat1) * sin(dlat2);   # compute distance
-      lac <- cos(dlat1) * cos(dlat2) * cos(dlng1 - dlng2)
-      laf <- las + lac
-      if (laf < -1) {
-        laf <- -1
-        dacos <- (pi/2) - atan(laf/sqrt(1-(laf*laf)))
-      } else if (laf < 1) {
-        dacos <- (pi/2) - atan(laf/sqrt(1-(laf*laf)));
-      } else {
-        stop('laf value out of bounds')
-      }
-      dist <- (dacos * D * 60) * 1.852           #calculate distance in km
-    }
-  }
-
-  dist
-}
-
 ###############################################################################

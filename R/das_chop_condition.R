@@ -57,10 +57,8 @@
 #'   into a single segment (such as a 'BRPVNW' series of events)
 #'   is followed even if \code{seg.km.min = 0}.
 #'
-#'   If the column \code{dist_from_prev} does not exist
-#'   (it should be calculated and added to \code{x} in \code{\link{das_effort}}),
-#'   then the distance between the lat/lon points of subsequent events
-#'   is calculated using the method specified in \code{dist.method}
+#'   If the column \code{dist_from_prev} does not exist, the distance between
+#'   subsequent events is calculated as described in \code{\link{das_effort}}
 #'
 #'   TODO: Make das_segdata_max function so that conditions from tiny segments aren't averaged in
 #'
@@ -212,7 +210,6 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 
 
 
-#' Functions exported only to be used internally by swfscAirDAS
 #' @name swfscAirDAS-funcs
 #' @param i ignore
 #' @param call.x ignore

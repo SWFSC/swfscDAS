@@ -25,7 +25,7 @@ Can be "equallength" or "condition" (case-sensitive)}
 
 \item{dist.method}{character;
 method to use to calculate distance between lat/lon coordinates.
-Can be "greatcircle" to use the great circle distance method,
+Can be "greatcircle" to use the great circle distance method (TODO - add ref),
 or one of "lawofcosines", "haversine", or "vincenty" to use
 \code{\link[swfscMisc]{distance}}. Default is "vincenty"}
 }
@@ -57,6 +57,9 @@ This is the top-level function for chopping processed DAS data
   In other words, the data is filtered for continuous effort sections (henceforth 'effort sections'),
   where effort sections run from "B"/"R" to "E" events (inclusive),
   and then passed to the chopping function specified using \code{method}.
+
+  The distance between the lat/lon points of subsequent events
+  is calculated using the method specified in \code{dist.method}
 
   TODO
   included: On effort and Beaufort less than or equal to 5
