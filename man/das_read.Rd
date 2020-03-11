@@ -4,10 +4,13 @@
 \alias{das_read}
 \title{Read DAS file(s)}
 \usage{
-das_read(file, tz = "UTC")
+das_read(file, skip = 0, tz = "UTC")
 }
 \arguments{
 \item{file}{filename(s) of one or more DAS files}
+
+\item{skip}{integer: number of lines to skip before reading data.
+Passed to \code{\link[readr]{read_fwf}}}
 
 \item{tz}{character; see \link[base]{strptime}. Default is UTC}
 }
