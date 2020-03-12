@@ -304,10 +304,11 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   if (!all(das.df$Event %in% event.acc))
     warning(paste0("Expected event codes (case sensitive): ",
                    paste(event.acc, collapse = ", "), "\n"),
-            "The following rows in the output  (note these ",
-            "are NOT necessarily the line numbers of the original file) ",
+            "The following lines of the input file ",
+            "(NOT necessarily the row numbers of output) ",
             "contain unexpected event codes:\n",
-            paste(which(!(das.df$Event %in% event.acc)), collapse = ", "))
+            paste(das.df$line_num[!(das.df$Event %in% event.acc)],
+                  collapse = ", "))
 
 
   #----------------------------------------------------------------------------

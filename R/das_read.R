@@ -104,7 +104,7 @@ das_read <- function(file, skip = 0, tz = "UTC") {
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
   EventNum <- trimws(x$EventNum)
   file_das  <- basename(file)
-  line_num  <- seq_along(x$Event)
+  line_num  <- as.integer(seq_along(x$Event) + skip)
 
   # Convert lat and lon values to decimal degrees
   Lat <- ifelse(x$Lat1 == "N", 1, -1) * (as.numeric(x$Lat2) + as.numeric(x$Lat3)/60)
