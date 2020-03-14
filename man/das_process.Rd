@@ -29,7 +29,8 @@ das_process(x, ...)
 \item{x}{either a \code{das_dfr} object (the output of \code{\link{das_read}}),
 or a character (filepath) which is first passed to \code{\link{das_read}}}
 
-\item{...}{ignored}
+\item{...}{passed to \code{\link{das_read}} if \code{x} is a character.
+Otherwise ignored}
 
 \item{days.gap}{numeric of length 1; default is \code{10}.
 Time gap (in days) used to identify a new cruise in concatenated DAS files,
@@ -83,8 +84,9 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
   This output is then passed to \code{das_process}.
 
   DAS data is event-based, meaning most events indicate when a state or weather condition changes.
-  For instance, a 'V' event indicates when the Beaufort sea state changes, and
-  the Beaufort is the same for subsequent events until the next 'V' event.
+  For instance, a 'V' event indicates when one or more sea state viewing conditions
+  (such as Beaufort sea state) change, and these conditions
+  are the same for subsequent events until the next 'V' event.
   For each state/condition: a new column is created,
   the state/condition information is extracted from relevant events,
   and extracted information is propagated to appropriate subsequent rows (events).

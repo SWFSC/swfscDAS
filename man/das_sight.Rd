@@ -16,14 +16,54 @@ das_sight(x, mixed.multi)
 \item{x}{\code{das_df} object; output from \code{\link{das_process}},
 or a data frame that can be coerced to a \code{das_df} object}
 
-\item{mixed.multi}{logical; indicates if mixed-species sightings should be output in multiple rows}
+\item{mixed.multi}{logical; indicates if mixed-species sightings
+should be output in multiple rows}
 }
 \value{
 Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
-  and 2) columns with sighting information
-  (observer, species, etc.) extracted from 'Data#' columns as specified in Details.
+  and 2) columns with sighting information extracted from 'Data#' columns (described below).
+  See \code{\link{das_format_pdf}} for more information the sighting information.
   The data frame has one row for each sighting,
   or one row for each species of each sighting if \code{mixed.multi} is \code{TRUE}.
+
+  Added sighting information columns:
+  \tabular{lll}{
+    \emph{Sighting information}     \tab \emph{Column name} \tab \emph{Notes}\cr
+    Sighting number                 \tab SightNo\cr
+    Observer that made the sighting \tab Obs\cr
+    Bearing to the sighting         \tab Bearing \tab Degrees, range 0 to 360\cr
+    Number of reticle marks         \tab Reticle\cr
+    Distance (nautical miles)       \tab DistNm\cr
+    Sighting cue                    \tab Cue\cr
+    Sighting method                 \tab Method\cr
+    Photos of school?               \tab Photos\cr
+    Birds present with school?      \tab Birds\cr
+    Probable sighting               \tab Prob  \tab Logical\cr
+    Mixed species sighting          \tab Mixed \tab Logical\cr
+    Total group size                \tab GsTotal \tab Only differnt from GsSp if mixed species sighting\cr
+    Species  code                 \tab Sp      \tab Only present when \code{mixed.multi = TRUE}\cr
+    Species-specific group size   \tab GsSp    \tab Only present when \code{mixed.multi = TRUE}\cr
+    Species 1 code                \tab Sp1     \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 2 code                \tab Sp2     \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 3 code                \tab Sp3     \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 4 code                \tab Sp4     \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 1-specific group size \tab Sp1Perc \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 2-specific group size \tab Sp2Perc \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 3-specific group size \tab Sp3Perc \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 4-specific group size \tab Sp4Perc \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 1 group size          \tab GsSp1   \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 2 group size          \tab GsSp2   \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 3 group size          \tab GsSp3   \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 4 group size          \tab GsSp4   \tab Only present when \code{mixed.multi = FALSE}\cr
+    Course of resight group    \tab ResightCourse \tab \code{NA} for non-"s" events\cr
+    Turtle species             \tab TurtleSp   \tab \code{NA} for non-"t" events\cr
+    Number of turtles          \tab TurtleNum  \tab \code{NA} for non-"t" events\cr
+    Presence of associated JFR \tab Turtle JFR \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
+    Estimated turtle maturity  \tab TurtleAge  \tab \code{NA} for non-"t" events\cr
+    Was turtle captured?       \tab TurtleCapt \tab \code{NA} for non-"t" events\cr
+    Boat or gear type          \tab BoatType   \tab \code{NA} for non-"F" events\cr
+    Number of boats            \tab BoatNum    \tab \code{NA} for non-"F" events\cr
+  }
 }
 \description{
 Extract sightings and associated information from processed DAS data
@@ -34,15 +74,18 @@ DAS events contain specific information in the 'Data#' columns,
   The output data frame contains columns with this specific information
   extracted to dedicated columns as described below.
   This function recognizes the following types of sightings:
-  marine mammal sightings (event codes "S", "K", or "M"), marine mammal resights (codes "s" or "k"),
+  marine mammal sightings (event codes "S", "K", or "M"),
+  marine mammal resights (codes "s" or "k"),
   turtle sightings (code "t"), and fishing vessel sightings (code "F").
   See \code{\link{das_format_pdf}} for more information about events and event formats.
 
-  Abbreviations used in column names: Gs = group size, Sp = species, Nm = nautical mile, Perc = percentage
+  Abbreviations used in column names: Gs = group size, Sp = species,
+  Nm = nautical mile, Perc = percentage
 
   This function makes the following assumptions, and alterations to the raw data:
   \itemize{
-    \item "S", "K", and "M" events, and only these events, are immediately followed by an "A" event
+    \item "S", "K", and "M" events, and only these events,
+    are immediately followed by an "A" event
     \item The 'Mixed' column is \code{TRUE} if two or more of the
       'Data5', 'Data6', 'Data7', and 'Data8' values
       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
@@ -52,17 +95,22 @@ DAS events contain specific information in the 'Data#' columns,
       This column has a non-\code{NA} value for only "S", "K", and "M" events
     \item The 'GsTotal' column is the mean of the 'Data2' columns (with \code{NA}s removed)
       for the associated "1"-"8" events
-    \item The 'Sp1Perc', 'Sp2Perc', 'Sp3Perc', and 'Sp4Perc' columns are the
-      means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{NA}s removed), respectively,
-      for the associated "1"-"8" events
-    \item The values for the following columns were capitalized using \code{\link[base:chartr]{toupper}}:
+    \item The 'Sp1Perc', 'Sp2Perc', 'Sp3Perc', and 'Sp4Perc' values are the
+      means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{na.rm = TRUE}),
+      respectively, for the associated "1"-"8" events
+    \item The 'GsSp1', 'GsSp2', 'GsSp3', and 'GsSp4' values are the product of
+      the 'GsTotal' and the respective '...Perc' columns
+    \item The values for the following columns were capitalized using
+      \code{\link[base:chartr]{toupper}}:
       'Birds', 'Photos', 'TurtleAge', and 'TurtleCapt'
   }
 
-  Outstanding questions:
+  Outstanding questions/todo:
   \itemize{
     \item Should any columns be converted to logicals, e.g. 'Birds', 'Photos', and 'TurtleCapt'?
-    \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc., be changed from \code{NA} to \code{0}?
+    \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc.,
+      be changed from \code{NA} to \code{0}?
+    \item Add flag for option to have comprehensive output of group size estimations
   }
 }
 \examples{

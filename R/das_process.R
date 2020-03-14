@@ -5,7 +5,8 @@
 #'
 #' @param x either a \code{das_dfr} object (the output of \code{\link{das_read}}),
 #'   or a character (filepath) which is first passed to \code{\link{das_read}}
-#' @param ... ignored
+#' @param ... passed to \code{\link{das_read}} if \code{x} is a character.
+#'   Otherwise ignored
 #' @param days.gap numeric of length 1; default is \code{10}.
 #'   Time gap (in days) used to identify a new cruise in concatenated DAS files,
 #'   and thus also when state/condition information
@@ -25,8 +26,9 @@
 #'   This output is then passed to \code{das_process}.
 #'
 #'   DAS data is event-based, meaning most events indicate when a state or weather condition changes.
-#'   For instance, a 'V' event indicates when the Beaufort sea state changes, and
-#'   the Beaufort is the same for subsequent events until the next 'V' event.
+#'   For instance, a 'V' event indicates when one or more sea state viewing conditions
+#'   (such as Beaufort sea state) change, and these conditions
+#'   are the same for subsequent events until the next 'V' event.
 #'   For each state/condition: a new column is created,
 #'   the state/condition information is extracted from relevant events,
 #'   and extracted information is propagated to appropriate subsequent rows (events).
@@ -108,7 +110,7 @@ das_process <- function(x, ...) UseMethod("das_process")
 #' @name das_process
 #' @export
 das_process.character <- function(x, ...) {
-  das_process(das_read(x), ...)
+  das_process(das_read(x, ...), ...)
 }
 
 

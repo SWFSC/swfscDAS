@@ -93,7 +93,7 @@ test_that("das_sight output has expected column names and classes", {
   )
 
   exp.name.multi <- c(
-    "Species", "GsSpecies", "ResightCourse",
+    "Sp", "GsSp", "ResightCourse",
     "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
     "BoatType", "BoatNum"
   )
@@ -126,7 +126,7 @@ test_that("das_sight output has expected column names and classes with extra col
   )
 
   exp.name.multi <- c(
-    "Species", "GsSpecies", "ResightCourse",
+    "Sp", "GsSp", "ResightCourse",
     "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
     "BoatType", "BoatNum"
   )

@@ -5,13 +5,14 @@
 #' @param x \code{das_df} object; output from \code{\link{das_process}},
 #'  or a data frame that can be coerced to a \code{das_df} object
 #' @param method character; method to use to chop DAS data into effort segments
-#'   Can be "equallength" or "condition" (case-sensitive)
+#'   Can be "equallength" or "condition" (case-sensitive) to use
+#'   \code{\link{das_chop_equal}} or \code{\link{das_chop_condition}}, respectively
 #' @param sp.codes character; species code(s) to include in segdata
 #' @param dist.method character;
 #'   method to use to calculate distance between lat/lon coordinates.
 #'   Can be "greatcircle" to use the great circle distance method (TODO - add ref),
 #'   or one of "lawofcosines", "haversine", or "vincenty" to use
-#'   \code{\link[swfscMisc]{distance}}. Default is "vincenty"
+#'   \code{\link[swfscMisc]{distance}}. Default is "greatcircle"
 #' @param ... arguments passed to the chopping function specified using \code{method}
 #'
 #' @details This is the top-level function for chopping processed DAS data
@@ -27,6 +28,8 @@
 #'
 #'   The distance between the lat/lon points of subsequent events
 #'   is calculated using the method specified in \code{dist.method}
+#'
+#'   See \code{\link{das_sight}} for methods for calculating group sizes
 #'
 #'   All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
 #'   must not have \code{NA} Lat or Lon values.
@@ -75,7 +78,8 @@ das_effort.data.frame <- function(x, ...) {
 
 #' @name das_effort
 #' @export
-das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...) {
+das_effort.das_df <- function(x, method, sp.codes, dist.method = "greatcircle",
+                              ...) {
   #----------------------------------------------------------------------------
   # Input checks
   methods.acc <- c("equallength", "condition")
@@ -172,10 +176,10 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "vincenty", ...
   segdata.col1 <- select(segdata, .data$seg_idx)
   siteinfo.forsegdata.list <- lapply(sp.codes, function(i, siteinfo, d1) {
     d0 <- siteinfo %>%
-      filter(.data$included, .data$Species == i) %>%
+      filter(.data$included, .data$Sp == i) %>%
       group_by(.data$seg_idx) %>%
-      summarise(nSI = length(.data$Species),
-                ANI = sum(.data$GsSpecies))
+      summarise(nSI = length(.data$Sp),
+                ANI = sum(.data$GsSp))
 
     names(d0) <- c("seg_idx", paste0(i, "_", names(d0)[-1]))
 

@@ -5,13 +5,13 @@
 #' @param file filename(s) of one or more DAS files
 #' @param skip integer: see \code{\link[readr]{read_fwf}}. Default is 0
 #' @param tz character; see \link[base]{strptime}. Default is UTC
+#' @param ... ignored
 #'
 #' @details Reads/parses DAS data into columns of a data frame.
 #'   If \code{file} contains multiple filenames, then the individual
 #'   data frames will be concatenated.
 #'
-#'   The provided DAS file must adhere to the following column number and format specifications;
-#'   note that 'Data#' columns may be referred to as 'Field#' columns in other documentation:
+#'   The provided DAS file must adhere to the following column number and format specifications:
 #'   \tabular{lrr}{
 #'     \emph{Item}  \tab \emph{Columns} \tab \emph{Format}\cr
 #'     Event number \tab 1-3\cr
@@ -32,7 +32,8 @@
 #'     Data9        \tab 80+\cr
 #'   }
 #'
-#'   See \code{\link{das_format_pdf}} for more information about DAS format requirements.
+#'   See \code{\link{das_format_pdf}} for more information about DAS format requirements, and
+#'   note that 'Data#' columns may be referred to as 'Field#' columns in other documentation
 #'   This function was inspired by \code{\link[swfscMisc]{das.read}}
 #'
 #' @return A \code{das_dfr} object, which is also a data frame, with DAS data read into columns.
@@ -44,9 +45,9 @@
 #'     DateTime  \tab POSIXct   \tab combination of 'Date' and 'Time' columns with time zone \code{tz}\cr
 #'     Lat       \tab numeric   \tab 'Latitude' column converted to decimal degrees in range [-90, 90]\cr
 #'     Lon       \tab numeric   \tab 'Longitude' column converted to decimal degrees in range [-180, 180]\cr
-#'     Data#     \tab character \tab leading/trailing whitespace trimmed for non-comment events (i.e. rows where 'Event' is not "C" or "c")\cr
-#'     EventNum  \tab character \tab leading/trailing whitespace trimmed; left as character for some special, project-specific codes\cr
-#'     file_das  \tab character \tab filename, extracted from the \code{file} argument using \code{\link[base]{basename}}\cr
+#'     Data#     \tab character \tab leading/trailing whitespace trimmed for non-comment events (i.e. where 'Event' is not "C")\cr
+#'     EventNum  \tab character \tab leading/trailing whitespace trimmed; left as character for some project-specific codes\cr
+#'     file_das  \tab character \tab base filename, extracted from the \code{file} argument\cr
 #'     line_num  \tab integer   \tab line number of each data row\cr
 #'   }
 #'
@@ -63,7 +64,7 @@
 #' das_read(y)
 #'
 #' @export
-das_read <- function(file, skip = 0, tz = "UTC") {
+das_read <- function(file, skip = 0, tz = "UTC", ...) {
   stopifnot(inherits(file, "character"))
 
   if (length(file) < 1)

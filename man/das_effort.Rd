@@ -10,7 +10,7 @@ das_effort(x, ...)
 
 \method{das_effort}{data.frame}(x, ...)
 
-\method{das_effort}{das_df}(x, method, sp.codes, dist.method = "vincenty", ...)
+\method{das_effort}{das_df}(x, method, sp.codes, dist.method = "greatcircle", ...)
 }
 \arguments{
 \item{x}{\code{das_df} object; output from \code{\link{das_process}},
@@ -19,7 +19,8 @@ or a data frame that can be coerced to a \code{das_df} object}
 \item{...}{arguments passed to the chopping function specified using \code{method}}
 
 \item{method}{character; method to use to chop DAS data into effort segments
-Can be "equallength" or "condition" (case-sensitive)}
+Can be "equallength" or "condition" (case-sensitive) to use
+\code{\link{das_chop_equal}} or \code{\link{das_chop_condition}}, respectively}
 
 \item{sp.codes}{character; species code(s) to include in segdata}
 
@@ -27,7 +28,7 @@ Can be "equallength" or "condition" (case-sensitive)}
 method to use to calculate distance between lat/lon coordinates.
 Can be "greatcircle" to use the great circle distance method (TODO - add ref),
 or one of "lawofcosines", "haversine", or "vincenty" to use
-\code{\link[swfscMisc]{distance}}. Default is "vincenty"}
+\code{\link[swfscMisc]{distance}}. Default is "greatcircle"}
 }
 \value{
 List of three data frames:
@@ -60,6 +61,8 @@ This is the top-level function for chopping processed DAS data
 
   The distance between the lat/lon points of subsequent events
   is calculated using the method specified in \code{dist.method}
+
+  See \code{\link{das_sight}} for methods for calculating group sizes
 
   All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
   must not have \code{NA} Lat or Lon values.
