@@ -24,6 +24,8 @@ written to a text file
 Check that DAS file has accepted values
 }
 \details{
+TODO: Add species code and observer length checks for sightings, as in swfscAirDAS
+
 Precursor to DASCHECK. Checks that the following is true:
 \itemize{
   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,

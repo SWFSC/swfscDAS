@@ -301,6 +301,3 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "greatcircle",
 
   dist
 }
-
-
-

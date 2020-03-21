@@ -191,16 +191,25 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
            dist = round(.data$dist, 4)) %>%
     select(.data$segnum, .data$seg_idx, everything())
 
-  ###
+  ### Segment lengths
   x.len <- lapply(eff.list, function(i) i[["seg.lengths"]])
 
-  ### Each das data point, along with segnum
+  ### Each DAS data point, along with segnum
   x.eff <- data.frame(
     do.call(rbind, lapply(eff.list, function(i) i[["das.df"]])),
     stringsAsFactors = FALSE
   ) %>%
     left_join(segdata[, c("seg_idx", "segnum")], by = "seg_idx") %>%
     select(-.data$dist_to_next)
+
+  ### Message about segments that were combined
+  ###   Must be outside b/c no messages come out of parallel
+  segs.message <- na.omit(vapply(eff.list, function(i) i[["segs.combine"]], 1))
+  if (length(segs.message) > 0)
+    message("Since seg.km.min > 0, ",
+            "segments with different conditions were combined ",
+            "in the following continuous effort section(s): ",
+            paste(segs.message, collapse = ", "))
 
 
   #----------------------------------------------------------------------------
@@ -224,7 +233,7 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
   # i: Index of current continuous effort section
   # call.x: das data frame
   # call.cond.names: Names of condition columns to use to chop;
-  #   i.e., if there's a change inone of these columns, create new segment
+  #   i.e., if there's a change in one of these columns, create new segment
   # call.seg.km.min: seg.km.min argument from das_chop_condition()
   # call.func1: _segdata_ function - needs to be passed in since
   #   this function is used by swfscAirDAS as well
@@ -269,11 +278,11 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
   seg.len1 <- d.pre$idx_end[.less(d.pre$dist_length, call.seg.km.min)] + 1
 
   seg.diff <- setdiff(seg.len1, seg.len0)
-  if (length(seg.diff) > 0 & all(seg.diff <= nrow(das.df)))
-    warning("Because of combining based on seg.km.min, ",
-            "not all conditions are the same ",
-            "for each segment in continuous effort section ", i,
-            immediate. = TRUE)
+  segs.combine <- if (length(seg.diff) > 0 & all(seg.diff <= nrow(das.df))) {
+    i
+  } else {
+    NA
+  }
 
   idx.torm <- sort(unique(c(seg.len0, seg.len1)))
 
@@ -305,6 +314,7 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 
   list(
     das.df = das.df, seg.lengths = seg.lengths,
-    das.df.segdata = das.df.segdata
+    das.df.segdata = das.df.segdata,
+    segs.combine = segs.combine
   )
 }

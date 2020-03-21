@@ -247,6 +247,14 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
   ) %>%
     left_join(segdata[, c("seg_idx", "segnum")], by = "seg_idx")
 
+  ### Message about segments with length 0
+  ###   Must be outside b/c no messages come out of parallel
+  segs.message <- na.omit(vapply(eff.list, function(i) i[["seg.0"]], 1))
+  if (length(segs.message) > 0)
+    warning("The following continuous effort section(s) had a length of zero ",
+            "and events between the start and end points: ",
+            paste(segs.message, collapse = ", "))
+
 
   #----------------------------------------------------------------------------
   # Return
@@ -289,13 +297,12 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
   seg.dist <- sum(das.df$dist_from_prev)
   seg.dist.mod <- seg.dist %% call.seg.km
 
+  seg.0 <- NA
+
   # Determine segment lengths
   if (.equal(seg.dist, 0)) {
     # If current segment length is 0 and there are other events, throw warning
-    if (nrow(das.df) > 2)
-      warning("The length of continuous effort section ", i, " was zero, ",
-              "and there were events between start and end points",
-              immediate. = TRUE)
+    if (nrow(das.df) > 2) seg.0 <- i
 
     # EAB makes a 0.1km segment if it includes a sighting - ?
     seg.lengths <- 0
@@ -356,6 +363,7 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
 
   list(
     das.df = das.df, seg.lengths = seg.lengths, pos = pos,
-    das.df.segdata = das.df.segdata
+    das.df.segdata = das.df.segdata,
+    seg.0 = seg.0
   )
 }
