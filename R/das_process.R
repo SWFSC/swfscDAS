@@ -326,3 +326,43 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     select(data.frame(das.df, tmp, stringsAsFactors = FALSE), !!cols.tokeep)
   )
 }
+
+
+
+
+#' Internal functions for swfscAirDAS
+#'
+#' These functions are exported only to be used internally by swfscAirDAS.
+#' They implement functionality that is used when processing both
+#' DAS and AirDAS data
+#'
+#' @name swfscAirDAS-internals
+#' @param init.val ignore
+#' @param das.df ignore
+#' @param col.name ignore
+#' @param event.curr ignore
+#' @param event.na ignore
+#' @export
+.process_num <- function(init.val, das.df, col.name, event.curr, event.na) {
+  # Helper function for _process function - extract numeric values
+  toreturn <- init.val
+  toreturn[event.curr] <- ifelse(
+    is.na(as.numeric(das.df[event.curr, col.name])),
+    event.na, as.numeric(das.df[event.curr, col.name])
+  )
+
+  toreturn
+}
+
+#' @name swfscAirDAS-internals
+#' @export
+.process_chr <- function(init.val, das.df, col.name, event.curr, event.na) {
+  # Helper function for _process function - extract character values
+  toreturn <- init.val
+  toreturn[event.curr] <- ifelse(
+    is.na(das.df[event.curr, col.name]),
+    event.na, das.df[event.curr, col.name]
+  )
+
+  toreturn
+}
