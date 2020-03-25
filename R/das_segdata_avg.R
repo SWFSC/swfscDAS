@@ -141,7 +141,7 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
       #   1) the percentage of the segment between j-1 and j, and
       #   2) the condition and sight info
       seg.percentage <- das.df$dist_from_prev[j] / seg.lengths[subseg.curr]
-      conditions.list <- fn_aggr_conditions(
+      conditions.list <- .fn_aggr_conditions(
         conditions.list, das.df, j-1, seg.percentage
       )
       rm(seg.percentage)
@@ -185,7 +185,7 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
         d.tmp <- max(dist.pt.prev, dist.subseg.prev)
         d.rat <- (dist.subseg.curr - d.tmp) / seg.lengths[subseg.curr]
         # if (is.nan(d.rat)) d.rat <- NA
-        conditions.list <- fn_aggr_conditions(conditions.list, das.df, j-1, d.rat)
+        conditions.list <- .fn_aggr_conditions(conditions.list, das.df, j-1, d.rat)
         rm(d, d.tmp, d.rat)
 
         ## If next point is at the same location, don't end the segment yet
@@ -277,7 +277,7 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
           conditions.list <- conditions.list.init
 
           if (.less(tmp1, tmp2)) {
-            conditions.list <- fn_aggr_conditions(
+            conditions.list <- .fn_aggr_conditions(
               conditions.list.init, das.df, j-1, tmp1 / tmp2
             )
           }

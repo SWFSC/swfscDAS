@@ -99,13 +99,13 @@
 
 ### Extract unique (and sorted) characters from a string
 # stackoverflow.com/questions/31814548
-fn_uniqchars <- function(x) sort(unique(strsplit(x, "")[[1]]))
+.fn_uniqchars <- function(x) sort(unique(strsplit(x, "")[[1]]))
 
 
 ### Keep running sum of data (conditions) multiplied by distance ratio
 # Requires that names of cond.list elements are the same as
 #   the column names in curr.df
-fn_aggr_conditions <- function(data.list, curr.df, idx, dist.perc) {
+.fn_aggr_conditions <- function(data.list, curr.df, idx, dist.perc) {
   stopifnot(
     all(names(data.list) %in% names(curr.df)),
     idx <= nrow(curr.df)#,
@@ -121,7 +121,7 @@ fn_aggr_conditions <- function(data.list, curr.df, idx, dist.perc) {
       if (inherits(z, c("numeric", "integer"))) {
         z + (dist.perc * curr.df[[k]][idx])
       } else if (inherits(z, "character")) {
-        paste(fn_uniqchars(paste0(z, curr.df[[k]][idx])), collapse = "")
+        paste(.fn_uniqchars(paste0(z, curr.df[[k]][idx])), collapse = "")
       } else if (inherits(z, "logical")) {
         browser()
       } else {
