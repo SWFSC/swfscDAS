@@ -10,7 +10,7 @@
 #' @param seg.km.min numeric; minimum allowable segment length (in kilometers).
 #'   Default is 0.1. See the Details section below for more information
 #' @param conditions character; the conditions that trigger a new segment.
-#'   See \code{\link{das_effort}}; passed to \code{\link{das_segdata_avg}}
+#'   See \code{\link{das_effort}}; passed to \code{\link{das_segdata}}
 #' @param dist.method character; see \code{\link{das_effort}}.
 #'   Default is \code{NULL} since these distances should have already been
 #'   calculated in \code{\link{das_effort}}
@@ -27,7 +27,7 @@
 #'   in \code{x} into modeling segments (henceforth 'segments') by
 #'   creating a new segment every time a condition changes.
 #'   Each effort section runs from a B/R event to its corresponding E event.
-#'   After chopping, \code{\link{das_segdata_avg}} is called to get relevant
+#'   After chopping, \code{\link{das_segdata}} is called to get relevant
 #'   segdata information for each segment.
 #'
 #'   TODO update:
@@ -140,7 +140,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
   call.x <- x
   call.conditions <- conditions
   call.seg.km.min <- seg.km.min
-  call.func1 <- das_segdata_avg
+  call.func1 <- das_segdata
 
   # Setup number of cores
   if(is.null(num.cores)) num.cores <- parallel::detectCores() - 1
@@ -302,10 +302,10 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
   #------------------------------------------------------
   ### Get segdata and return
   # TODO: develop non-avg function
-  # das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
+  # das.df.segdata <- das_segdata(as_das_df(das.df), seg.lengths, i)
   das.df.segdata <- call.func1(
-    x = das.df, conditions = call.conditions, seg.lengths = seg.lengths,
-    section.id = i
+    x = das.df, conditions = call.conditions, segdata.method = "max",
+    seg.lengths = seg.lengths, section.id = i
   )
 
   list(

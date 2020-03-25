@@ -28,7 +28,7 @@ see the Details section below}
 \item{...}{ignored}
 
 \item{conditions}{character; the conditions that trigger a new segment.
-See \code{\link{das_effort}}; passed to \code{\link{das_segdata_avg}}}
+See \code{\link{das_effort}}; passed to \code{\link{das_segdata}}}
 
 \item{seg.km.min}{numeric; minimum allowable segment length (in kilometers).
 Default is 0.1. See the Details section below for more information}
@@ -62,7 +62,7 @@ This function is intended to only be called by \code{\link{das_effort}}
   in \code{x} into modeling segments (henceforth 'segments') by
   creating a new segment every time a condition changes.
   Each effort section runs from a B/R event to its corresponding E event.
-  After chopping, \code{\link{das_segdata_avg}} is called to get relevant
+  After chopping, \code{\link{das_segdata}} is called to get relevant
   segdata information for each segment.
 
   TODO update:

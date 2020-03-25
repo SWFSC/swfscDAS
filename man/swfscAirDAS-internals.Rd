@@ -28,7 +28,14 @@
 
 .fn.grcirclkm(lat1, lon1, lat2, lon2)
 
-.segdata_proc(das.df, conditions, seg.lengths, section.id, df.out1)
+.segdata_proc(
+  das.df,
+  conditions,
+  segdata.method,
+  seg.lengths,
+  section.id,
+  df.out1
+)
 
 .process_num(init.val, das.df, col.name, event.curr, event.na)
 
@@ -66,6 +73,8 @@
 \item{das.df}{ignore}
 
 \item{conditions}{ignore}
+
+\item{segdata.method}{ignore}
 
 \item{seg.lengths}{ignore}
 

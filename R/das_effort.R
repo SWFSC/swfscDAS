@@ -112,8 +112,8 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
 
   } else {
     if (!all(conditions %in% conditions.acc))
-      stop("Please ensure all components of the conditions argument are",
-           " one of the following accepted values:\n",
+      stop("Please ensure all components of the conditions argument are ",
+           "one of the following accepted values:\n",
            paste(conditions.acc, collapse  = ", "))
   }
 

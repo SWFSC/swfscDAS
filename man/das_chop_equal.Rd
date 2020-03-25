@@ -28,7 +28,7 @@ see the Details section below}
 
 \item{...}{ignored}
 
-\item{conditions}{see \code{\link{das_effort}}; passed to \code{\link{das_segdata_avg}}}
+\item{conditions}{see \code{\link{das_effort}}; passed to \code{\link{das_segdata}}}
 
 \item{seg.km}{numeric; target segment length in kilometers}
 
@@ -67,7 +67,7 @@ This function is intended to only be called by \code{\link{das_effort}}
   This function chops each continuous effort section (henceforth 'effort sections')
   in \code{x} into modeling segments (henceforth 'segments') of equal length.
   Each effort section runs from a "B"/"R" event to its corresponding "E" event.
-  After chopping, \code{\link{das_segdata_avg}} is called to get relevant
+  After chopping, \code{\link{das_segdata}} is called to get relevant
   segdata information for each segment.
 
   When chopping the effort sections in segments of length \code{seg.km},

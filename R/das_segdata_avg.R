@@ -8,6 +8,10 @@
 #'   see the Details section below
 #' @param conditions see \code{\link{das_effort}}, or
 #'   see Details section for more information
+#' @param segdata.method character; either \code{"avg"} or \code{"max"}.
+#'   \code{"avg"} means the condition values will be
+#'   calculated as a weighted average by distance, while
+#'   \code{max} means the condition values will be the values that were...
 #' @param seg.lengths numeric; length of the modeling segments
 #'   into which \code{x} will be chopped
 #' @param section.id numeric; the ID of \code{x} (the current continuous effort section)
@@ -48,22 +52,38 @@
 #' @keywords internal
 #'
 #' @export
-das_segdata_avg <- function(x, ...) UseMethod("das_segdata_avg")
+das_segdata <- function(x, ...) UseMethod("das_segdata")
 
 
-#' @name das_segdata_avg
+#' @name das_segdata
 #' @export
-das_segdata_avg.data.frame <- function(x, ...) {
-  das_segdata_avg(as_das_df(x), ...)
+das_segdata.data.frame <- function(x, ...) {
+  das_segdata(as_das_df(x), ...)
 }
 
 
-#' @name das_segdata_avg
+#' @name das_segdata
 #' @export
-das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
-                                   ...) {
+das_segdata.das_df <- function(x, conditions, segdata.method,
+                                   seg.lengths, section.id, ...) {
   #----------------------------------------------------------------------------
   # Input checks
+  conditions.acc <- c(
+    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis"
+  )
+  if (!all(conditions %in% conditions.acc))
+    stop("Was this function called by a _chop_ function? ",
+         "Please ensure all components of the conditions argument are ",
+         "one of the following accepted values:\n",
+         paste(conditions.acc, collapse  = ", "))
+
+
+  segdata.method.acc <- c("avg", "max")
+  if (!(segdata.method %in% segdata.method.acc))
+    stop("Was this function called by a _chop_ function? ",
+         "segdata.method must be one of the following:\n",
+         paste(segdata.method.acc, collapse = ", "))
+
   if (!("dist_from_prev" %in% names(x)))
     stop("x must contain a 'dist_from_prev' column; ",
          "was this function called by a _chop_ function?")
@@ -77,6 +97,8 @@ das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
     stop("The sum of the seg.lengths values does not equal the sum of the ",
          "x$dist_from_prev' values; ",
          "was this function called by a _chop_ function?")
+
+  rm(conditions.acc, segdata.method.acc)
 
 
   #----------------------------------------------------------------------------
@@ -106,8 +128,8 @@ das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
 
   #----------------------------------------------------------------------------
   segdata.all <- .segdata_proc(
-    das.df = das.df, conditions = conditions, seg.lengths = seg.lengths,
-    section.id = section.id, df.out1 = df.out1
+    das.df = das.df, conditions = conditions, segdata.method = segdata.method,
+    seg.lengths = seg.lengths, section.id = section.id, df.out1 = df.out1
   )
 
   #----------------------------------------------------------------------------
@@ -126,18 +148,29 @@ das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
 #' @name swfscAirDAS-internals
 #' @param das.df ignore
 #' @param conditions ignore
+#' @param segdata.method ignore
 #' @param seg.lengths ignore
 #' @param section.id ignore
 #' @param df.out1 ignore
 #' @export
-.segdata_proc <- function(das.df, conditions, seg.lengths, section.id, df.out1) {
+.segdata_proc <- function(das.df, conditions, segdata.method,
+                          seg.lengths, section.id, df.out1) {
   #----------------------------------------------------------------------------
-  # Prep - conditions list
+  ### Prep
+  # Conditions list and aggregate function
   conditions.list.init <- as.list(rep(0, length(conditions)))
   names(conditions.list.init) <- conditions
 
+  fn.aggr <- if (identical(segdata.method, "avg")) {
+    .fn_aggr_conditions
+  } else if (identical(segdata.method, "max")) {
+    stop("todo")
+  } else {
+    stop("Error in segdata aggr function; please report this as an issue")
+  }
 
-  # Prep - objects for for loop
+
+  # Calculate objects for for loop
   n.subseg <- length(seg.lengths)
   subseg.cumsum <- cumsum(seg.lengths)
   subseg.mid.cumsum <- (c(0, head(subseg.cumsum, -1)) + subseg.cumsum) / 2
@@ -157,7 +190,7 @@ das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
   conditions.list <- conditions.list.init
 
   if (!(nrow(das.df) >= 2))
-    stop("Error in das_segdata_avg(): x must have at least 2 rows. ",
+    stop("Error in das_segdata(): x must have at least 2 rows. ",
          "Please report this as an issue")
 
   #----------------------------------------------------------------------------
@@ -175,7 +208,7 @@ das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
       #   1) the percentage of the segment between j-1 and j, and
       #   2) the condition and sight info
       seg.percentage <- das.df$dist_from_prev[j] / seg.lengths[subseg.curr]
-      conditions.list <- .fn_aggr_conditions(
+      conditions.list <- fn.aggr(
         conditions.list, das.df, j-1, seg.percentage
       )
       rm(seg.percentage)
@@ -219,7 +252,7 @@ das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
         d.tmp <- max(dist.pt.prev, dist.subseg.prev)
         d.rat <- (dist.subseg.curr - d.tmp) / seg.lengths[subseg.curr]
         # if (is.nan(d.rat)) d.rat <- NA
-        conditions.list <- .fn_aggr_conditions(conditions.list, das.df, j-1, d.rat)
+        conditions.list <- fn.aggr(conditions.list, das.df, j-1, d.rat)
         rm(d, d.tmp, d.rat)
 
         ## If next point is at the same location, don't end the segment yet
@@ -311,7 +344,7 @@ das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
           conditions.list <- conditions.list.init
 
           if (.less(tmp1, tmp2)) {
-            conditions.list <- .fn_aggr_conditions(
+            conditions.list <- fn.aggr(
               conditions.list.init, das.df, j-1, tmp1 / tmp2
             )
           }

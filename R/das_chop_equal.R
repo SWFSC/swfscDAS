@@ -7,7 +7,7 @@
 #'   This data must be filtered for 'OnEffort' events;
 #'   see the Details section below
 #' @param ... ignored
-#' @param conditions see \code{\link{das_effort}}; passed to \code{\link{das_segdata_avg}}
+#' @param conditions see \code{\link{das_effort}}; passed to \code{\link{das_segdata}}
 #' @param seg.km numeric; target segment length in kilometers
 #' @param randpicks.load character or \code{NULL}; if character,
 #'   filename of past randpicks output to load and use
@@ -28,7 +28,7 @@
 #'   This function chops each continuous effort section (henceforth 'effort sections')
 #'   in \code{x} into modeling segments (henceforth 'segments') of equal length.
 #'   Each effort section runs from a "B"/"R" event to its corresponding "E" event.
-#'   After chopping, \code{\link{das_segdata_avg}} is called to get relevant
+#'   After chopping, \code{\link{das_segdata}} is called to get relevant
 #'   segdata information for each segment.
 #'
 #'   When chopping the effort sections in segments of length \code{seg.km},
@@ -185,7 +185,7 @@ das_chop_equal.das_df <- function(x, conditions, seg.km, randpicks.load = NULL,
   call.conditions <- conditions
   call.seg.km <- seg.km
   call.r.pos <- r.pos
-  call.func1 <- das_segdata_avg
+  call.func1 <- das_segdata
 
   # Setup number of cores
   if(is.null(num.cores)) num.cores <- parallel::detectCores() - 1
@@ -357,10 +357,10 @@ das_chop_equal.das_df <- function(x, conditions, seg.km, randpicks.load = NULL,
 
   #------------------------------------------------------
   ### Get segdata, and return
-  # das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
+  # das.df.segdata <- das_segdata(as_das_df(das.df), seg.lengths, i)
   das.df.segdata <- call.func1(
-    x = das.df, conditions = call.conditions, seg.lengths = seg.lengths,
-    section.id = i
+    x = das.df, conditions = call.conditions, segdata.method = "avg",
+    seg.lengths = seg.lengths, section.id = i
   )
 
   list(
