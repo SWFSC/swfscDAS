@@ -8,6 +8,12 @@
 #'   Can be "equallength" or "condition" (case-sensitive) to use
 #'   \code{\link{das_chop_equal}} or \code{\link{das_chop_condition}}, respectively
 #' @param sp.codes character; species code(s) to include in segdata
+#' @param conditions character vector of names of conditions to include in segdata output.
+#'   These values must be column names from the output of \code{\link{das_process}},
+#'   e.g. 'Bft', SwellHght', etc.
+#'   If \code{method == "condition"}, then these also are the conditions which
+#'   trigger segment chopping when they change.
+#'   TODO - what conditions are always included (/should any)?
 #' @param dist.method character;
 #'   method to use to calculate distance between lat/lon coordinates.
 #'   Can be "greatcircle" to use the great circle distance method (TODO - add ref),
@@ -37,6 +43,8 @@
 #'
 #'   TODO
 #'   included: On effort and Beaufort less than or equal to 5
+#'
+#'   TODO: Add num.cores to parmeters here?
 #'
 #' @return List of three data frames:
 #'   \itemize{
@@ -78,8 +86,8 @@ das_effort.data.frame <- function(x, ...) {
 
 #' @name das_effort
 #' @export
-das_effort.das_df <- function(x, method, sp.codes, dist.method = "greatcircle",
-                              ...) {
+das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
+                              dist.method = "greatcircle", ...) {
   #----------------------------------------------------------------------------
   # Input checks
   methods.acc <- c("equallength", "condition")
@@ -88,6 +96,26 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "greatcircle",
          paste0("\"", paste(methods.acc, collapse = "\", \""), "\""))
 
   #Check for dist.method happens in .dist_from_prev()
+
+  # Conditions
+  conditions.acc <- c(
+    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis"
+  )
+
+  if (is.null(conditions)) {
+    conditions <- if (method == "condition") {
+      c("Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis")
+    } else {
+      c("Bft", "SwellHght", "HorizSun", "VertSun", "Glare", "Vis")
+      #TODO: RainFog?
+    }
+
+  } else {
+    if (!all(conditions %in% conditions.acc))
+      stop("Please ensure all components of the conditions argument are",
+           " one of the following accepted values:\n",
+           paste(conditions.acc, collapse  = ", "))
+  }
 
 
   #----------------------------------------------------------------------------
@@ -121,9 +149,9 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "greatcircle",
   #----------------------------------------------------------------------------
   # Chop and summarize effort using specified method
   eff.list <- if (method == "equallength") {
-    das_chop_equal(as_das_df(x.oneff), ...)
+    das_chop_equal(as_das_df(x.oneff), conditions = conditions, ...)
   } else if (method == "condition") {
-    das_chop_condition(as_das_df(x.oneff), ...)
+    das_chop_condition(as_das_df(x.oneff), conditions = conditions, ...)
   } else {
     stop("Error in effort chopping - ",
          "are you passing an accepted argument to method?")
@@ -136,8 +164,8 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "greatcircle",
   # Check that things are as expected
   x.eff.names <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
-    "HorizSun", "VertSun", "Glare", "Vis", "Data1", "Data2",
+    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght",
+    "RainFog", "HorizSun", "VertSun", "Glare", "Vis", "Data1", "Data2",
     "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
     "EffortDot", "EventNum", "file_das", "line_num", "idx_eff", "dist_from_prev",
     "cont_eff_section", "effort_seg", "seg_idx", "segnum"

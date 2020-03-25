@@ -12,6 +12,7 @@ das_chop_condition(x, ...)
 
 \method{das_chop_condition}{das_df}(
   x,
+  conditions,
   seg.km.min = 0.1,
   dist.method = NULL,
   num.cores = NULL,
@@ -26,14 +27,13 @@ see the Details section below}
 
 \item{...}{ignored}
 
+\item{conditions}{character; the conditions that trigger a new segment.
+See \code{\link{das_effort}}; passed to \code{\link{das_segdata_avg}}}
+
 \item{seg.km.min}{numeric; minimum allowable segment length (in kilometers).
 Default is 0.1. See the Details section below for more information}
 
-\item{dist.method}{character;
-method to use to calculate distance between lat/lon coordinates.
-Can be "greatcircle" to use the great circle distance method,
-or one of "lawofcosines", "haversine", or "vincenty" to use
-\code{\link[swfscMisc]{distance}}.
+\item{dist.method}{character; see \code{\link{das_effort}}.
 Default is \code{NULL} since these distances should have already been
 calculated in \code{\link{das_effort}}}
 
@@ -50,7 +50,7 @@ List of two data frames:
 }
 }
 \description{
-Chop DAS data into a new effort segment every time a condition changes
+Chop DAS data into a new effort segment every time a specified condition changes
 }
 \details{
 This function is intended to only be called by \code{\link{das_effort}}
@@ -65,6 +65,7 @@ This function is intended to only be called by \code{\link{das_effort}}
   After chopping, \code{\link{das_segdata_avg}} is called to get relevant
   segdata information for each segment.
 
+  TODO update:
   Changes in the following conditions trigger a new segment:
   Beaufort, swell height, rain/fog/haze code, horizontal sun, vertical sun,
   and visibility (no glare because glare is dependent on sun positions).

@@ -4,41 +4,43 @@
 #'
 #' @param x \code{das_df} object,
 #'   or a data frame that can be coerced to a \code{das_df} object.
-#'   Must must be filtered for 'OnEffort' events and
-#'   contain a single continuous effort section of DAS data;
+#'   Must contain a single continuous effort section of DAS data;
 #'   see the Details section below
+#' @param conditions see \code{\link{das_effort}}, or
+#'   see Details section for more information
 #' @param seg.lengths numeric; length of the modeling segments
 #'   into which \code{x} will be chopped
-#' @param eff.id numeric; the ID of \code{x} (the current continuous effort section)
+#' @param section.id numeric; the ID of \code{x} (the current continuous effort section)
 #' @param ... ignored
 #'
 #' @details This function should be called by \code{\link{das_chop_equal}};
-#'   users should (nearly always) not call it themselves.
-#'   It loops through the events in \code{x}, calculating and storing relevant
-#'   information for each modeling segment as it goes.
-#'   Because \code{x} is a continuous effort section, it must begin with
-#'   a "B" or "R" event and end with the corresponding "E"event.
+#'   users should avoid calling it themselves.
+#'   It loops through the events in \code{x}, chooping \code{x} into modeling segments
+#'   and calculating and storing relevant information for each segment as it goes.
+#'   Because \code{x} is a continuous effort section, \code{x} must begin with
+#'   a "B" or "R" event and end with the corresponding "E"event
 #'
 #'   For each segment, this function reports the
 #'   segment ID, transect code, the start/end/midpoints (lat/lon), segment length,
 #'   year, month, day, time, observers, and average conditions.
-#'
 #'   The segment ID is designated as \code{eff_id} _ index of the modeling segment.
-#'   Thus, if \code{eff.id} is \code{1}, then the segment ID for
+#'   Thus, if \code{section.id} is \code{1}, then the segment ID for
 #'   the second segment from \code{x} is \code{"1_2"}.
 #'
 #'   The average condition values are calculated as a weighted average by distance,
-#'   and reported for the following:
-#'   Beaufort, swell height, horizontal sun, vertical sun, glare, and visibility.
-#'   For logical columns such as Glare, the reported value is the percentage
+#'   and reported for the conditions specified by the \code{conditions} argument.
+#'   For logical columns (e.g. Glare), the reported value is the percentage
 #'   (in decimals) of the segment in which that condition was \code{TRUE}.
-#'   Cruise number, mode, effort type, sides searched, and file name
-#'   are also also incldued in the segdata output;
-#'   these values are (should be) all consistent across the whole effort section,
-#'   and thus across all segments in \code{x}.
+#'
+#'   Cruise number, mode, effort type, sides searched, and file name are
+#'   also included in the segdata output.
+#'   These values should all be consistent across the entire effort section,
+#'   and thus across all segments in \code{x};
+#'   a warning is printed if there are any inconsistencies
 #'
 #'   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
 #'   are used to calculate the segment start, mid, and end points.
+#'   TODO: option to pass distance method to swfscMisc functions
 #'
 #' @return Data frame with the segdata information described above
 #'   and in \code{\link{das_effort}}
@@ -58,22 +60,23 @@ das_segdata_avg.data.frame <- function(x, ...) {
 
 #' @name das_segdata_avg
 #' @export
-das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
+das_segdata_avg.das_df <- function(x, conditions, seg.lengths, section.id,
+                                   ...) {
   #----------------------------------------------------------------------------
   # Input checks
   if (!("dist_from_prev" %in% names(x)))
     stop("x must contain a 'dist_from_prev' column; ",
-         "was this function called by das_chop_equal()?")
+         "was this function called by a _chop_ function?")
 
   stopifnot(
     inherits(seg.lengths, c("numeric", "integer")),
-    inherits(eff.id, c("numeric", "integer"))
+    inherits(section.id, c("numeric", "integer"))
   )
 
   if (!.equal(sum(seg.lengths), sum(x$dist_from_prev)))
     stop("The sum of the seg.lengths values does not equal the sum of the ",
          "x$dist_from_prev' values; ",
-         "was this function called by das_chop_equal()?")
+         "was this function called by a _chop_ function?")
 
 
   #----------------------------------------------------------------------------
@@ -89,16 +92,52 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
     length(unique(na.omit(das.df[[i]]))) <= 1
   }, as.logical(1))
   if (!all(df.out1.check))
-    warning("Not all of the following data were consistent across ",
-            "continuous effort section ", eff.id, ":\n",
+    warning("Is there an error in the data? ",
+            "Not all of the following data were consistent across ",
+            "continuous effort section ", section.id, ":\n",
             paste(df.out1.cols, collapse  = ", "))
 
   df.out1 <- das.df %>%
     select(!!df.out1.cols) %>%
     select(file = .data$file_das, everything()) %>%
-    slice(n())
+    slice(n()) #use n() instead of 1 b/c some vars may be NA in first line
 
-  ### Prep - objects for for loop
+
+
+  #----------------------------------------------------------------------------
+  segdata.all <- .segdata_proc(
+    das.df = das.df, conditions = conditions, seg.lengths = seg.lengths,
+    section.id = section.id, df.out1 = df.out1
+  )
+
+  #----------------------------------------------------------------------------
+  segdata.all %>%
+    select(.data$seg_idx, .data$Cruise, .data$file, .data$stlin, .data$endlin,
+           .data$lat1, .data$lon1, .data$lat2, .data$lon2,
+           .data$mlat, .data$mlon, .data$dist,
+           .data$mDateTime, .data$year, .data$month, .data$day, .data$mtime,
+           everything())
+}
+
+
+
+
+
+#' @name swfscAirDAS-internals
+#' @param das.df ignore
+#' @param conditions ignore
+#' @param seg.lengths ignore
+#' @param section.id ignore
+#' @param df.out1 ignore
+#' @export
+.segdata_proc <- function(das.df, conditions, seg.lengths, section.id, df.out1) {
+  #----------------------------------------------------------------------------
+  # Prep - conditions list
+  conditions.list.init <- as.list(rep(0, length(conditions)))
+  names(conditions.list.init) <- conditions
+
+
+  # Prep - objects for for loop
   n.subseg <- length(seg.lengths)
   subseg.cumsum <- cumsum(seg.lengths)
   subseg.mid.cumsum <- (c(0, head(subseg.cumsum, -1)) + subseg.cumsum) / 2
@@ -107,11 +146,6 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
     das.df$dist_from_prev_cumsum <- cumsum(das.df$dist_from_prev)
 
 
-  # Store condition data in list for organization and readability
-  conditions.list.init <- list(
-    Bft = 0, SwellHght = 0, #RainFog = 0,
-    HorizSun = 0, VertSun = 0, Glare = 0, Vis = 0
-  )
 
   # 'Initialize' necessary objects
   subseg.curr <- 1
@@ -230,7 +264,7 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
 
         # Add segdata to .all data frame
         segdata <- data.frame(
-          seg_idx = paste0(eff.id, "_", subseg.curr),
+          seg_idx = paste0(section.id, "_", subseg.curr),
           stlin = stlin.curr, endlin = das.df$line_num[j],
           lat1 = startpt.curr[1], lon1 = startpt.curr[2],
           lat2 = endpt.curr[1], lon2 = endpt.curr[2],
@@ -288,11 +322,6 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
   }
 
 
-  #----------------------------------------------------------------------------
-  segdata.all %>%
-    select(.data$seg_idx, .data$Cruise, .data$file, .data$stlin, .data$endlin,
-           .data$lat1, .data$lon1, .data$lat2, .data$lon2,
-           .data$mlat, .data$mlon, .data$dist,
-           .data$mDateTime, .data$year, .data$month, .data$day, .data$mtime,
-           everything())
+  # Return something
+  segdata.all
 }

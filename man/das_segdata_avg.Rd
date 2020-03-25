@@ -10,21 +10,23 @@ das_segdata_avg(x, ...)
 
 \method{das_segdata_avg}{data.frame}(x, ...)
 
-\method{das_segdata_avg}{das_df}(x, seg.lengths, eff.id, ...)
+\method{das_segdata_avg}{das_df}(x, conditions, seg.lengths, section.id, ...)
 }
 \arguments{
 \item{x}{\code{das_df} object,
 or a data frame that can be coerced to a \code{das_df} object.
-Must must be filtered for 'OnEffort' events and
-contain a single continuous effort section of DAS data;
+Must contain a single continuous effort section of DAS data;
 see the Details section below}
 
 \item{...}{ignored}
 
+\item{conditions}{see \code{\link{das_effort}}, or
+see Details section for more information}
+
 \item{seg.lengths}{numeric; length of the modeling segments
 into which \code{x} will be chopped}
 
-\item{eff.id}{numeric; the ID of \code{x} (the current continuous effort section)}
+\item{section.id}{numeric; the ID of \code{x} (the current continuous effort section)}
 }
 \value{
 Data frame with the segdata information described above
@@ -35,31 +37,32 @@ Summarize DAS effort data by effort segment, while averaging conditions
 }
 \details{
 This function should be called by \code{\link{das_chop_equal}};
-  users should (nearly always) not call it themselves.
-  It loops through the events in \code{x}, calculating and storing relevant
-  information for each modeling segment as it goes.
-  Because \code{x} is a continuous effort section, it must begin with
-  a "B" or "R" event and end with the corresponding "E"event.
+  users should avoid calling it themselves.
+  It loops through the events in \code{x}, chooping \code{x} into modeling segments
+  and calculating and storing relevant information for each segment as it goes.
+  Because \code{x} is a continuous effort section, \code{x} must begin with
+  a "B" or "R" event and end with the corresponding "E"event
 
   For each segment, this function reports the
   segment ID, transect code, the start/end/midpoints (lat/lon), segment length,
   year, month, day, time, observers, and average conditions.
-
   The segment ID is designated as \code{eff_id} _ index of the modeling segment.
-  Thus, if \code{eff.id} is \code{1}, then the segment ID for
+  Thus, if \code{section.id} is \code{1}, then the segment ID for
   the second segment from \code{x} is \code{"1_2"}.
 
   The average condition values are calculated as a weighted average by distance,
-  and reported for the following:
-  Beaufort, swell height, horizontal sun, vertical sun, glare, and visibility.
-  For logical columns such as Glare, the reported value is the percentage
+  and reported for the conditions specified by the \code{conditions} argument.
+  For logical columns (e.g. Glare), the reported value is the percentage
   (in decimals) of the segment in which that condition was \code{TRUE}.
-  Cruise number, mode, effort type, sides searched, and file name
-  are also also incldued in the segdata output;
-  these values are (should be) all consistent across the whole effort section,
-  and thus across all segments in \code{x}.
+
+  Cruise number, mode, effort type, sides searched, and file name are
+  also included in the segdata output.
+  These values should all be consistent across the entire effort section,
+  and thus across all segments in \code{x};
+  a warning is printed if there are any inconsistencies
 
   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
   are used to calculate the segment start, mid, and end points.
+  TODO: option to pass distance method to swfscMisc functions
 }
 \keyword{internal}

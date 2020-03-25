@@ -10,7 +10,14 @@ das_effort(x, ...)
 
 \method{das_effort}{data.frame}(x, ...)
 
-\method{das_effort}{das_df}(x, method, sp.codes, dist.method = "greatcircle", ...)
+\method{das_effort}{das_df}(
+  x,
+  method,
+  sp.codes,
+  conditions = NULL,
+  dist.method = "greatcircle",
+  ...
+)
 }
 \arguments{
 \item{x}{\code{das_df} object; output from \code{\link{das_process}},
@@ -23,6 +30,13 @@ Can be "equallength" or "condition" (case-sensitive) to use
 \code{\link{das_chop_equal}} or \code{\link{das_chop_condition}}, respectively}
 
 \item{sp.codes}{character; species code(s) to include in segdata}
+
+\item{conditions}{character vector of names of conditions to include in segdata output.
+These values must be column names from the output of \code{\link{das_process}},
+e.g. 'Bft', SwellHght', etc.
+If \code{method == "condition"}, then these also are the conditions which
+trigger segment chopping when they change.
+TODO - what conditions are always included (/should any)?}
 
 \item{dist.method}{character;
 method to use to calculate distance between lat/lon coordinates.
@@ -70,6 +84,8 @@ This is the top-level function for chopping processed DAS data
 
   TODO
   included: On effort and Beaufort less than or equal to 5
+
+  TODO: Add num.cores to parmeters here?
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")

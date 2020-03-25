@@ -12,6 +12,7 @@ das_chop_equal(x, ...)
 
 \method{das_chop_equal}{das_df}(
   x,
+  conditions,
   seg.km,
   randpicks.load = NULL,
   dist.method = NULL,
@@ -27,6 +28,8 @@ see the Details section below}
 
 \item{...}{ignored}
 
+\item{conditions}{see \code{\link{das_effort}}; passed to \code{\link{das_segdata_avg}}}
+
 \item{seg.km}{numeric; target segment length in kilometers}
 
 \item{randpicks.load}{character or \code{NULL}; if character,
@@ -34,11 +37,7 @@ filename of past randpicks output to load and use
 (passed to \code{file} argument of \code{\link[utils:read.table]{read.csv}}).
 \code{NULL} if new randpicks values should be generated}
 
-\item{dist.method}{character;
-method to use to calculate distance between lat/lon coordinates.
-Can be "greatcircle" to use the great circle distance method,
-or one of "lawofcosines", "haversine", or "vincenty" to use
-\code{\link[swfscMisc]{distance}}.
+\item{dist.method}{character; see \code{\link{das_effort}}.
 Default is \code{NULL} since these distances should have already been
 calculated in \code{\link{das_effort}}}
 

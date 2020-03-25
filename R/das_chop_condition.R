@@ -1,21 +1,19 @@
 #' Chop DAS data - condition
 #'
-#' Chop DAS data into a new effort segment every time a condition changes
+#' Chop DAS data into a new effort segment every time a specified condition changes
 #'
 #' @param x \code{das_df} object,
 #'   or a data frame that can be coerced to a \code{das_df} object.
 #'   This data must be filtered for 'OnEffort' events;
 #'   see the Details section below
 #' @param ... ignored
-#' @param dist.method character;
-#'   method to use to calculate distance between lat/lon coordinates.
-#'   Can be "greatcircle" to use the great circle distance method,
-#'   or one of "lawofcosines", "haversine", or "vincenty" to use
-#'   \code{\link[swfscMisc]{distance}}.
-#'   Default is \code{NULL} since these distances should have already been
-#'   calculated in \code{\link{das_effort}}
 #' @param seg.km.min numeric; minimum allowable segment length (in kilometers).
 #'   Default is 0.1. See the Details section below for more information
+#' @param conditions character; the conditions that trigger a new segment.
+#'   See \code{\link{das_effort}}; passed to \code{\link{das_segdata_avg}}
+#' @param dist.method character; see \code{\link{das_effort}}.
+#'   Default is \code{NULL} since these distances should have already been
+#'   calculated in \code{\link{das_effort}}
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL} which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}
@@ -32,6 +30,7 @@
 #'   After chopping, \code{\link{das_segdata_avg}} is called to get relevant
 #'   segdata information for each segment.
 #'
+#'   TODO update:
 #'   Changes in the following conditions trigger a new segment:
 #'   Beaufort, swell height, rain/fog/haze code, horizontal sun, vertical sun,
 #'   and visibility (no glare because glare is dependent on sun positions).
@@ -84,8 +83,9 @@ das_chop_condition.data.frame <- function(x, ...) {
 
 #' @name das_chop_condition
 #' @export
-das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
-                                      num.cores = NULL, ...) {
+das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
+                                      dist.method = NULL, num.cores = NULL,
+                                      ...) {
   #----------------------------------------------------------------------------
   # Input checks
   if (!all(x$OnEffort | x$Event == "E"))
@@ -116,6 +116,7 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
   # Get distance to next point
   x$dist_to_next <- c(x$dist_from_prev[-1], NA)
 
+
   #----------------------------------------------------------------------------
   # ID continuous effort sections, then for each modeling segment:
   #   1) chop by condition change
@@ -135,13 +136,9 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
   eff.uniq <- unique(x$cont_eff_section)
   stopifnot(length(eff.uniq) == sum(x$Event == "R"))
 
-  cond.names <- c(
-    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Vis"
-  )
-
   # Prep for parallel
   call.x <- x
-  call.cond.names <- cond.names
+  call.conditions <- conditions
   call.seg.km.min <- seg.km.min
   call.func1 <- das_segdata_avg
 
@@ -158,20 +155,20 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
     if(is.null(cl)) { # Don't parallelize if num.cores == 1
       lapply(
         eff.uniq, .chop_condition_eff, call.x = call.x,
-        call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min,
+        call.conditions = call.conditions, call.seg.km.min = call.seg.km.min,
         call.func1 = call.func1
       )
 
     } else { # Run lapply using parLapplyLB
       parallel::clusterExport(
         cl = cl,
-        varlist = c("call.x", "call.cond.names", "call.seg.km.min",
+        varlist = c("call.x", "call.conditions", "call.seg.km.min",
                     "call.func1"),
         envir = environment()
       )
       parallel::parLapplyLB(
         cl, eff.uniq, .chop_condition_eff, call.x = call.x,
-        call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min,
+        call.conditions = call.conditions, call.seg.km.min = call.seg.km.min,
         call.func1 = call.func1
       )
     }
@@ -221,18 +218,17 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 #' @name swfscAirDAS-internals
 #' @param i ignore
 #' @param call.x ignore
-#' @param call.cond.names ignore
+#' @param call.conditions ignore
 #' @param call.seg.km.min ignore
 #' @param call.func1 ignore
 #' @export
-.chop_condition_eff <- function(i, call.x, call.cond.names, call.seg.km.min,
+.chop_condition_eff <- function(i, call.x, call.conditions, call.seg.km.min,
                                 call.func1) {
-  ### Inputs
+  ### Inputs; mostly same as das_chop_equal but with "call" prefix
   # i: Index of current continuous effort section
-  # call.x: das data frame
-  # call.cond.names: Names of condition columns to use to chop;
-  #   i.e., if there's a change in one of these columns, create new segment
-  # call.seg.km.min: seg.km.min argument from das_chop_condition()
+  # call.x: x argument from das_chop_condition(), with a few additional columns
+  # call.conditions: conditions argument from das_chop_equal()
+  # call.seg.km.min: call.seg.km.min argument from das_chop_condition()
   # call.func1: _segdata_ function - needs to be passed in since
   #   this function is used by swfscAirDAS as well
 
@@ -252,7 +248,7 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 
   #------------------------------------------------------
   ### Determine indices of condition changes, and combine as needed
-  cond.list <- lapply(call.cond.names, function(j) {
+  cond.list <- lapply(call.conditions, function(j) {
     which(c(NA, head(das.df[[j]], -1) != das.df[[j]][-1]))
   })
   cond.idx.pre <- sort(unique(c(1, unlist(cond.list))))
@@ -297,17 +293,20 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 
   #------------------------------------------------------
   ### Calculate lengths of effort segments
-  d <- das.df %>%
+  das.df.dist.summ <- das.df %>%
     group_by(.data$effort_seg) %>%
     summarise(sum_dist = sum(.data$dist_to_next))
 
-  seg.lengths <- d$sum_dist
+  seg.lengths <- das.df.dist.summ$sum_dist
 
   #------------------------------------------------------
   ### Get segdata and return
   # TODO: develop non-avg function
   # das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
-  das.df.segdata <- call.func1(das.df, seg.lengths, i)
+  das.df.segdata <- call.func1(
+    x = das.df, conditions = call.conditions, seg.lengths = seg.lengths,
+    section.id = i
+  )
 
   list(
     das.df = das.df, seg.lengths = seg.lengths,
