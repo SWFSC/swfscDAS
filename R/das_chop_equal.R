@@ -263,7 +263,7 @@ das_chop_equal.das_df <- function(x, seg.km, randpicks.load = NULL,
 
 
 
-#' @name swfscAirDAS-funcs
+#' @name swfscAirDAS-internals
 #' @param i ignore
 #' @param call.x ignore
 #' @param call.seg.km ignore

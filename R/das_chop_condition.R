@@ -218,7 +218,7 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 
 
 
-#' @name swfscAirDAS-funcs
+#' @name swfscAirDAS-internals
 #' @param i ignore
 #' @param call.x ignore
 #' @param call.cond.names ignore

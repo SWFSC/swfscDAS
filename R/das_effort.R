@@ -209,8 +209,7 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "greatcircle",
 
 
 
-#' Functions exported only to be used internally by swfscAirDAS
-#' @name swfscAirDAS-funcs
+#' @name swfscAirDAS-internals
 #' @param z ignore
 #' @param z.dist.method ignore
 #' @export
@@ -263,7 +262,7 @@ das_effort.das_df <- function(x, method, sp.codes, dist.method = "greatcircle",
 
 
 
-#' @name swfscAirDAS-funcs
+#' @name swfscAirDAS-internals
 #' @param lat1 ignore
 #' @param lon1 ignore
 #' @param lat2 ignore

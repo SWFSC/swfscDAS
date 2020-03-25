@@ -123,7 +123,7 @@ das_segdata_avg.das_df <- function(x, seg.lengths, eff.id, ...) {
   conditions.list <- conditions.list.init
 
   if (!(nrow(das.df) >= 2))
-    stop("Error in airdas_segdata_avg(): x must have at least 2 rows. ",
+    stop("Error in das_segdata_avg(): x must have at least 2 rows. ",
          "Please report this as an issue")
 
   #----------------------------------------------------------------------------
