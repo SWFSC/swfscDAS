@@ -9,14 +9,7 @@
 \alias{.fn.grcirclkm}
 \title{Functions exported only to be used internally by swfscAirDAS}
 \usage{
-.chop_condition_eff(
-  i,
-  call.x,
-  call.cond.names,
-  call.seg.km.min,
-  call.func1,
-  call.func2
-)
+.chop_condition_eff(i, call.x, call.cond.names, call.seg.km.min, call.func1)
 
 .chop_equal_eff(i, call.x, call.seg.km, call.r.pos, call.func1, call.func2)
 
@@ -35,11 +28,11 @@
 
 \item{call.func1}{ignore}
 
-\item{call.func2}{ignore}
-
 \item{call.seg.km}{ignore}
 
 \item{call.r.pos}{ignore}
+
+\item{call.func2}{ignore}
 
 \item{z}{ignore}
 

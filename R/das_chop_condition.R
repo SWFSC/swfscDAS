@@ -144,7 +144,6 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
   call.cond.names <- cond.names
   call.seg.km.min <- seg.km.min
   call.func1 <- das_segdata_avg
-  call.func2 <- as_das_df
 
   # Setup number of cores
   if(is.null(num.cores)) num.cores <- parallel::detectCores() - 1
@@ -160,20 +159,20 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
       lapply(
         eff.uniq, .chop_condition_eff, call.x = call.x,
         call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min,
-        call.func1 = call.func1, call.func2 = call.func2
+        call.func1 = call.func1
       )
 
     } else { # Run lapply using parLapplyLB
       parallel::clusterExport(
         cl = cl,
         varlist = c("call.x", "call.cond.names", "call.seg.km.min",
-                    "call.func1", "call.func2"),
+                    "call.func1"),
         envir = environment()
       )
       parallel::parLapplyLB(
         cl, eff.uniq, .chop_condition_eff, call.x = call.x,
         call.cond.names = call.cond.names, call.seg.km.min = call.seg.km.min,
-        call.func1 = call.func1, call.func2 = call.func2
+        call.func1 = call.func1
       )
     }
   }, finally = if(!is.null(cl)) parallel::stopCluster(cl) else NULL)
@@ -225,10 +224,9 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
 #' @param call.cond.names ignore
 #' @param call.seg.km.min ignore
 #' @param call.func1 ignore
-#' @param call.func2 ignore
 #' @export
 .chop_condition_eff <- function(i, call.x, call.cond.names, call.seg.km.min,
-                                call.func1, call.func2) {
+                                call.func1) {
   ### Inputs
   # i: Index of current continuous effort section
   # call.x: das data frame
@@ -237,7 +235,6 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
   # call.seg.km.min: seg.km.min argument from das_chop_condition()
   # call.func1: _segdata_ function - needs to be passed in since
   #   this function is used by swfscAirDAS as well
-  # call.func2: as_..._df function
 
   ### Output
   # List with, for this continuous effort section:
@@ -310,7 +307,7 @@ das_chop_condition.das_df <- function(x, seg.km.min = 0.1, dist.method = NULL,
   ### Get segdata and return
   # TODO: develop non-avg function
   # das.df.segdata <- das_segdata_avg(as_das_df(das.df), seg.lengths, i)
-  das.df.segdata <- call.func1(call.func2(das.df), seg.lengths, i)
+  das.df.segdata <- call.func1(das.df, seg.lengths, i)
 
   list(
     das.df = das.df, seg.lengths = seg.lengths,
