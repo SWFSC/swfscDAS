@@ -90,7 +90,8 @@ das_effort.data.frame <- function(x, ...) {
 #' @name das_effort
 #' @export
 das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
-                              dist.method = "greatcircle", num.cores, ...) {
+                              dist.method = "greatcircle", num.cores = NULL,
+                              ...) {
   #----------------------------------------------------------------------------
   # Input checks
   methods.acc <- c("equallength", "condition")

@@ -16,7 +16,7 @@ das_effort(x, ...)
   sp.codes,
   conditions = NULL,
   dist.method = "greatcircle",
-  num.cores,
+  num.cores = NULL,
   ...
 )
 }

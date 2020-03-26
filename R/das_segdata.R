@@ -128,7 +128,6 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     slice(n()) #use n() instead of 1 b/c some vars may be NA in first line
 
 
-
   #----------------------------------------------------------------------------
   segdata.all <- .segdata_proc(
     das.df = das.df, conditions = conditions, segdata.method = segdata.method,
@@ -404,9 +403,9 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     idx <= nrow(curr.df)
   )
 
-  # Extract and sort unique characters from a string;
-  #   stackoverflow.com/questions/31814548
-  .fn_uniqchars <- function(x) sort(unique(strsplit(x, "")[[1]]))
+  # # Extract and sort unique characters from a string;
+  # #   stackoverflow.com/questions/31814548
+  # .fn_uniqchars <- function(x) sort(unique(strsplit(x, "")[[1]]))
 
 
   if (is.na(dist.perc)) {
@@ -417,14 +416,12 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
   } else {
     tmp <- lapply(names(data.list), function(k) {
-      z <- data.list[[k]]
-      if (inherits(z, c("numeric", "integer"))) {
-        z + (dist.perc * curr.df[[k]][idx])
-      } else if (inherits(z, "character")) {
-        paste(.fn_uniqchars(paste0(z, curr.df[[k]][idx])), collapse = "")
-      } else if (inherits(z, "logical")) {
-        stop(".segdata_aggr_avg error - cannot average logical data. ",
-             "Please report this as an issue")
+      data.curr <- data.list[[k]]
+      if (inherits(data.curr, c("numeric", "integer"))) {
+        data.curr + (dist.perc * curr.df[[k]][idx])
+      } else if (inherits(data.curr, "character")) {
+        paste(unique(c(data.curr, curr.df[[k]][idx])), collapse = "; ")
+        # paste(.fn_uniqchars(paste0(data.curr, curr.df[[k]][idx])), collapse = "")
       } else {
         stop(".segdata_aggr_avg error - unrecognized data class. ",
              "Please report this as an issue")
@@ -451,8 +448,6 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     idx <= nrow(curr.df)
   )
 
-
-
   if (is.na(dist.perc)) {
     warning("dist.perc is NA, ignoring")
     data.list    #lapply(data.list, function(i) NA)
@@ -462,8 +457,6 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
   } else {
     tmp <- lapply(names(data.list), function(k) {
-      # val.curr <- curr.df[[k]][idx]
-      # if (is.na(val.curr)) val.curr <- -99
       rbind(data.list[[k]], c(curr.df[[k]][idx], dist.perc))
     })
     names(tmp) <- names(data.list)
