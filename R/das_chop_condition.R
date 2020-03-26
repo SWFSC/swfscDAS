@@ -9,8 +9,8 @@
 #' @param ... ignored
 #' @param seg.min.km numeric; minimum allowable segment length (in kilometers).
 #'   Default is 0.1. See the Details section below for more information
-#' @param conditions see \code{\link{das_effort}}; passed to \code{\link{das_segdata}}.
-#'   Also the conditions that trigger a new segment
+#' @param conditions see \code{\link{das_effort}};
+#'   the conditions that trigger a new segment
 #' @param dist.method character; see \code{\link{das_effort}}.
 #'   Default is \code{NULL} since these distances should have already been
 #'   calculated in \code{\link{das_effort}}

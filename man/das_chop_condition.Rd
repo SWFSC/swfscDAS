@@ -27,8 +27,8 @@ see the Details section below}
 
 \item{...}{ignored}
 
-\item{conditions}{see \code{\link{das_effort}}; passed to \code{\link{das_segdata}}.
-Also the conditions that trigger a new segment}
+\item{conditions}{see \code{\link{das_effort}};
+the conditions that trigger a new segment}
 
 \item{seg.min.km}{numeric; minimum allowable segment length (in kilometers).
 Default is 0.1. See the Details section below for more information}

@@ -28,7 +28,7 @@ see the Details section below}
 
 \item{...}{ignored}
 
-\item{conditions}{see \code{\link{das_effort}}; passed to \code{\link{das_segdata}}}
+\item{conditions}{see \code{\link{das_effort}}}
 
 \item{seg.km}{numeric; target segment length in kilometers}
 

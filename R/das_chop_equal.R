@@ -7,7 +7,7 @@
 #'   This data must be filtered for 'OnEffort' events;
 #'   see the Details section below
 #' @param ... ignored
-#' @param conditions see \code{\link{das_effort}}; passed to \code{\link{das_segdata}}
+#' @param conditions see \code{\link{das_effort}}
 #' @param seg.km numeric; target segment length in kilometers
 #' @param randpicks.load character or \code{NULL}; if character,
 #'   filename of past randpicks output to load and use

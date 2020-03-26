@@ -59,9 +59,9 @@ List of three data frames:
       indicated in \code{sp.codes}.
     \item siteinfo: details for all sightings in \code{x}, including:
       the unique segment number it is associated with, segment mid points (lat/lon),
-      and whether the sighting was included in the segdata counts (column name 'included'),
-      in addition to the other output information described in \code{\link{das_sight}}.
-    \item randpicks: see \code{\link{das_chop_equal}}.
+      whether the sighting was included in the segdata counts (column name 'included'),
+      and the output information described in \code{\link{das_sight}}.
+    \item randpicks: see \code{\link{das_chop_equal}};
       \code{NULL} if using "condition" method.
   }
 }
@@ -88,6 +88,8 @@ This is the top-level function for chopping processed DAS data
 
   Sightings are only included in the segdata counts/summaries if they were made
   while on effort and in a Beafort sea state less than or equal to five.
+  Included sightings are those with a \code{TRUE} value in the 'included'
+  column in siteinfo.
   TODO: Allow user to specify this.
 }
 \examples{

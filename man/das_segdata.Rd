@@ -70,6 +70,7 @@ This function was designed to be called by \code{\link{das_chop_equal}};
 
   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
   are used to calculate the segment start, mid, and end points.
-  TODO: option to pass distance method to swfscMisc functions
+  TODO: option to pass distance method to swfscMisc functions?
+  How does EAB/Eiren do these calculations?
 }
 \keyword{internal}
