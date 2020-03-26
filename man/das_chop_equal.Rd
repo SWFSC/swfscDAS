@@ -41,9 +41,7 @@ filename of past randpicks output to load and use
 Default is \code{NULL} since these distances should have already been
 calculated in \code{\link{das_effort}}}
 
-\item{num.cores}{Number of CPUs to over which to distribute computations.
-Defaults to \code{NULL} which uses one fewer than the number of cores
-reported by \code{\link[parallel]{detectCores}}}
+\item{num.cores}{see \code{\link{das_effort}}}
 }
 \value{
 List of three data frames:
@@ -56,7 +54,7 @@ List of three data frames:
 }
 }
 \description{
-Chop DAS data into equal-length effort segments, averaging conditions by segment
+Chop DAS data into approximately equal-length effort segments, averaging conditions by segment
 }
 \details{
 This function is intended to only be called by \code{\link{das_effort}}

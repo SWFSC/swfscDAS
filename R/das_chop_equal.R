@@ -1,6 +1,6 @@
 #' Chop DAS data - equal length
 #'
-#' Chop DAS data into equal-length effort segments, averaging conditions by segment
+#' Chop DAS data into approximately equal-length effort segments, averaging conditions by segment
 #'
 #' @param x \code{das_df} object,
 #'   or a data frame that can be coerced to a \code{das_df} object.
@@ -16,9 +16,7 @@
 #' @param dist.method character; see \code{\link{das_effort}}.
 #'   Default is \code{NULL} since these distances should have already been
 #'   calculated in \code{\link{das_effort}}
-#' @param num.cores Number of CPUs to over which to distribute computations.
-#'   Defaults to \code{NULL} which uses one fewer than the number of cores
-#'   reported by \code{\link[parallel]{detectCores}}
+#' @param num.cores see \code{\link{das_effort}}
 #'
 #' @details This function is intended to only be called by \code{\link{das_effort}}
 #'   when the "equallength" method is specified.

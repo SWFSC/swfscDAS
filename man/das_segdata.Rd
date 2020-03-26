@@ -42,16 +42,17 @@ Data frame with the segdata information described above
 Summarize DAS effort data by effort segment, while averaging conditions
 }
 \details{
-This function should be called by \code{\link{das_chop_equal}};
+This function was designed to be called by \code{\link{das_chop_equal}};
   users should avoid calling it themselves.
-  It loops through the events in \code{x}, chooping \code{x} into modeling segments
-  and calculating and storing relevant information for each segment as it goes.
+  It loops through the events in \code{x}, chopping \code{x} into modeling segments
+  while calculating and storing relevant information for each segment.
   Because \code{x} is a continuous effort section, \code{x} must begin with
-  a "B" or "R" event and end with the corresponding "E"event
+  a "B" or "R" event and end with the corresponding "E" event.
 
-  For each segment, this function reports the
-  segment ID, transect code, the start/end/midpoints (lat/lon), segment length,
-  year, month, day, time, observers, and average conditions.
+  For each segment, this function reports the segment number,
+  segment ID, cruise number, the start/end/midpoints (lat/lon), segment length,
+  year, month, day, time, mode, effort type,
+  effective strip width sides (number of sides searched), and average conditions.
   The segment ID is designated as \code{eff_id} _ index of the modeling segment.
   Thus, if \code{section.id} is \code{1}, then the segment ID for
   the second segment from \code{x} is \code{"1_2"}.

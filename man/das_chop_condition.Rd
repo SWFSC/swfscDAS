@@ -13,7 +13,7 @@ das_chop_condition(x, ...)
 \method{das_chop_condition}{das_df}(
   x,
   conditions,
-  seg.km.min = 0.1,
+  seg.min.km = 0.1,
   dist.method = NULL,
   num.cores = NULL,
   ...
@@ -27,19 +27,17 @@ see the Details section below}
 
 \item{...}{ignored}
 
-\item{conditions}{character; the conditions that trigger a new segment.
-See \code{\link{das_effort}}; passed to \code{\link{das_segdata}}}
+\item{conditions}{see \code{\link{das_effort}}; passed to \code{\link{das_segdata}}.
+Also the conditions that trigger a new segment}
 
-\item{seg.km.min}{numeric; minimum allowable segment length (in kilometers).
+\item{seg.min.km}{numeric; minimum allowable segment length (in kilometers).
 Default is 0.1. See the Details section below for more information}
 
 \item{dist.method}{character; see \code{\link{das_effort}}.
 Default is \code{NULL} since these distances should have already been
 calculated in \code{\link{das_effort}}}
 
-\item{num.cores}{Number of CPUs to over which to distribute computations.
-Defaults to \code{NULL} which uses one fewer than the number of cores
-reported by \code{\link[parallel]{detectCores}}}
+\item{num.cores}{see \code{\link{das_effort}}}
 }
 \value{
 List of two data frames:
@@ -75,11 +73,11 @@ This function is intended to only be called by \code{\link{das_effort}}
   (i.e. all of the events in the event series) that happened during
   the series of events (i.e. at the same location).
   Note that this combining of events at the same Lat/Lon happens
-  even if \code{seg.km.min = 0}.
+  even if \code{seg.min.km = 0}.
 
-  In addition, (almost) all segments whose length is less than \code{seg.km.min}
+  In addition, (almost) all segments whose length is less than \code{seg.min.km}
   are combined with the segment immediately following them to ensure that the length
-  of (almost) all segments is at least \code{seg.km.min}.
+  of (almost) all segments is at least \code{seg.min.km}.
   This allows users to account for situations where multiple conditions,
   such as Beaufort and the visibility, change in rapid succession, say <0.1 km apart.
   When segments are combined, a message is printed, and the condition that was

@@ -16,6 +16,7 @@ das_effort(x, ...)
   sp.codes,
   conditions = NULL,
   dist.method = "greatcircle",
+  num.cores,
   ...
 )
 }
@@ -23,26 +24,31 @@ das_effort(x, ...)
 \item{x}{\code{das_df} object; output from \code{\link{das_process}},
 or a data frame that can be coerced to a \code{das_df} object}
 
-\item{...}{arguments passed to the chopping function specified using \code{method}}
+\item{...}{arguments passed to the chopping function specified using \code{method},
+such as \code{seg.km} or \code{seg.min.km}}
 
 \item{method}{character; method to use to chop DAS data into effort segments
-Can be "equallength" or "condition" (case-sensitive) to use
+Can be \code{"equallength"} or \code{"condition"} (case-sensitive) to use
 \code{\link{das_chop_equal}} or \code{\link{das_chop_condition}}, respectively}
 
-\item{sp.codes}{character; species code(s) to include in segdata}
+\item{sp.codes}{character; species code(s) to include in segdata output}
 
 \item{conditions}{character vector of names of conditions to include in segdata output.
 These values must be column names from the output of \code{\link{das_process}},
 e.g. 'Bft', SwellHght', etc.
 If \code{method == "condition"}, then these also are the conditions which
-trigger segment chopping when they change.
-TODO - what conditions are always included (/should any)?}
+trigger segment chopping when they change.}
 
 \item{dist.method}{character;
 method to use to calculate distance between lat/lon coordinates.
 Can be "greatcircle" to use the great circle distance method (TODO - add ref),
 or one of "lawofcosines", "haversine", or "vincenty" to use
 \code{\link[swfscMisc]{distance}}. Default is "greatcircle"}
+
+\item{num.cores}{Number of CPUs to over which to distribute computations.
+Defaults to \code{NULL} which uses one fewer than the number of cores
+reported by \code{\link[parallel]{detectCores}}.
+Using 1 core will be faster for smaller datasets.}
 }
 \value{
 List of three data frames:
@@ -53,9 +59,10 @@ List of three data frames:
       indicated in \code{sp.codes}.
     \item siteinfo: details for all sightings in \code{x}, including:
       the unique segment number it is associated with, segment mid points (lat/lon),
-      and whether the sighting was included in the segdata counts (column \code{included}),
+      and whether the sighting was included in the segdata counts (column name 'included'),
       in addition to the other output information described in \code{\link{das_sight}}.
-    \item randpicks: see \code{\link{das_chop_equal}}
+    \item randpicks: see \code{\link{das_chop_equal}}.
+      \code{NULL} if using "condition" method.
   }
 }
 \description{
@@ -72,20 +79,16 @@ This is the top-level function for chopping processed DAS data
   In other words, the data is filtered for continuous effort sections (henceforth 'effort sections'),
   where effort sections run from "B"/"R" to "E" events (inclusive),
   and then passed to the chopping function specified using \code{method}.
+  All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
+  must have non-\code{NA} Lat and Lon values
 
   The distance between the lat/lon points of subsequent events
-  is calculated using the method specified in \code{dist.method}
+  is calculated using the method specified in \code{dist.method}.
+  See \code{\link{das_sight}} for how the sightings are processed.
 
-  See \code{\link{das_sight}} for methods for calculating group sizes
-
-  All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
-  must not have \code{NA} Lat or Lon values.
-  TODO: Should this function verbosely remove these events?
-
-  TODO
-  included: On effort and Beaufort less than or equal to 5
-
-  TODO: Add num.cores to parmeters here?
+  Sightings are only included in the segdata counts/summaries if they were made
+  while on effort and in a Beafort sea state less than or equal to five.
+  TODO: Allow user to specify this.
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
@@ -98,7 +101,7 @@ das_effort(
 
 das_effort(
   y.proc, method = "condition", sp.codes = c("016", "018"),
-  seg.km.min = 0.05, num.cores = 1
+  seg.min.km = 0.05, num.cores = 1
 )
 
 }

@@ -7,16 +7,14 @@
 #'   This data must be filtered for 'OnEffort' events;
 #'   see the Details section below
 #' @param ... ignored
-#' @param seg.km.min numeric; minimum allowable segment length (in kilometers).
+#' @param seg.min.km numeric; minimum allowable segment length (in kilometers).
 #'   Default is 0.1. See the Details section below for more information
-#' @param conditions character; the conditions that trigger a new segment.
-#'   See \code{\link{das_effort}}; passed to \code{\link{das_segdata}}
+#' @param conditions see \code{\link{das_effort}}; passed to \code{\link{das_segdata}}.
+#'   Also the conditions that trigger a new segment
 #' @param dist.method character; see \code{\link{das_effort}}.
 #'   Default is \code{NULL} since these distances should have already been
 #'   calculated in \code{\link{das_effort}}
-#' @param num.cores Number of CPUs to over which to distribute computations.
-#'   Defaults to \code{NULL} which uses one fewer than the number of cores
-#'   reported by \code{\link[parallel]{detectCores}}
+#' @param num.cores see \code{\link{das_effort}}
 #'
 #' @details This function is intended to only be called by \code{\link{das_effort}}
 #'   when the "condition" method is specified.
@@ -40,11 +38,11 @@
 #'   (i.e. all of the events in the event series) that happened during
 #'   the series of events (i.e. at the same location).
 #'   Note that this combining of events at the same Lat/Lon happens
-#'   even if \code{seg.km.min = 0}.
+#'   even if \code{seg.min.km = 0}.
 #'
-#'   In addition, (almost) all segments whose length is less than \code{seg.km.min}
+#'   In addition, (almost) all segments whose length is less than \code{seg.min.km}
 #'   are combined with the segment immediately following them to ensure that the length
-#'   of (almost) all segments is at least \code{seg.km.min}.
+#'   of (almost) all segments is at least \code{seg.min.km}.
 #'   This allows users to account for situations where multiple conditions,
 #'   such as Beaufort and the visibility, change in rapid succession, say <0.1 km apart.
 #'   When segments are combined, a message is printed, and the condition that was
@@ -80,7 +78,7 @@ das_chop_condition.data.frame <- function(x, ...) {
 
 #' @name das_chop_condition
 #' @export
-das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
+das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
                                       dist.method = NULL, num.cores = NULL,
                                       ...) {
   #----------------------------------------------------------------------------
@@ -88,12 +86,12 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
   if (!all(x$OnEffort | x$Event == "E"))
     stop("x must be filtered for on effort events; see `?das_chop_condition")
 
-  if (!inherits(seg.km.min, c("integer", "numeric")))
-    stop("When using the \"condition\" method, seg.km.min must be a numeric. ",
+  if (!inherits(seg.min.km, c("integer", "numeric")))
+    stop("When using the \"condition\" method, seg.min.km must be a numeric. ",
          "See `?das_chop_condition` for more details")
 
-  if (!.greater_equal(seg.km.min, 0))
-    stop("seg.km.min must be greater than or equal to 0; ",
+  if (!.greater_equal(seg.min.km, 0))
+    stop("seg.min.km must be greater than or equal to 0; ",
          "see `?das_chop_condition")
 
   #Check for dist.method happens in .dist_from_prev()
@@ -136,7 +134,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
   # Prep for parallel
   call.x <- x
   call.conditions <- conditions
-  call.seg.km.min <- seg.km.min
+  call.seg.min.km <- seg.min.km
   call.func1 <- das_segdata
 
   # Setup number of cores
@@ -152,20 +150,20 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
     if(is.null(cl)) { # Don't parallelize if num.cores == 1
       lapply(
         eff.uniq, .chop_condition_eff, call.x = call.x,
-        call.conditions = call.conditions, call.seg.km.min = call.seg.km.min,
+        call.conditions = call.conditions, call.seg.min.km = call.seg.min.km,
         call.func1 = call.func1
       )
 
     } else { # Run lapply using parLapplyLB
       parallel::clusterExport(
         cl = cl,
-        varlist = c("call.x", "call.conditions", "call.seg.km.min",
+        varlist = c("call.x", "call.conditions", "call.seg.min.km",
                     "call.func1"),
         envir = environment()
       )
       parallel::parLapplyLB(
         cl, eff.uniq, .chop_condition_eff, call.x = call.x,
-        call.conditions = call.conditions, call.seg.km.min = call.seg.km.min,
+        call.conditions = call.conditions, call.seg.min.km = call.seg.min.km,
         call.func1 = call.func1
       )
     }
@@ -199,7 +197,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
   ###   Must be outside b/c no messages come out of parallel
   segs.message <- na.omit(vapply(eff.list, function(i) i[["segs.combine"]], 1))
   if (length(segs.message) > 0)
-    message("Since seg.km.min > 0, ",
+    message("Since seg.min.km > 0, ",
             "segments with different conditions were combined ",
             "in the following continuous effort section(s): ",
             paste(segs.message, collapse = ", "))
@@ -216,16 +214,16 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
 #' @param i ignore
 #' @param call.x ignore
 #' @param call.conditions ignore
-#' @param call.seg.km.min ignore
+#' @param call.seg.min.km ignore
 #' @param call.func1 ignore
 #' @export
-.chop_condition_eff <- function(i, call.x, call.conditions, call.seg.km.min,
+.chop_condition_eff <- function(i, call.x, call.conditions, call.seg.min.km,
                                 call.func1) {
   ### Inputs; mostly same as das_chop_equal but with "call" prefix
   # i: Index of current continuous effort section
   # call.x: x argument from das_chop_condition(), with a few additional columns
   # call.conditions: conditions argument from das_chop_equal()
-  # call.seg.km.min: call.seg.km.min argument from das_chop_condition()
+  # call.seg.min.km: call.seg.min.km argument from das_chop_condition()
   # call.func1: _segdata_ function - needs to be passed in since
   #   this function is used by swfscAirDAS as well
 
@@ -258,7 +256,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
 
   # Get distances of current effort sections
   # Remove last row - there is no next segment to join it with,
-  #   even if the last segment is < seg.km.min.
+  #   even if the last segment is < seg.min.km.
   #   Becuase of indexing method, the last break point will still be
   #   removed to join the final two segments if necessary
   d.pre <- das.df %>%
@@ -268,9 +266,9 @@ das_chop_condition.das_df <- function(x, conditions, seg.km.min = 0.1,
               dist_length = sum(.data$dist_to_next)) %>%
     slice(-n())
 
-  # == 0 check is here in case seg.km.min is 0
+  # == 0 check is here in case seg.min.km is 0
   seg.len0 <- d.pre$idx_end[.equal(d.pre$dist_length, 0)] + 1
-  seg.len1 <- d.pre$idx_end[.less(d.pre$dist_length, call.seg.km.min)] + 1
+  seg.len1 <- d.pre$idx_end[.less(d.pre$dist_length, call.seg.min.km)] + 1
 
   seg.diff <- setdiff(seg.len1, seg.len0)
   segs.combine <- if (length(seg.diff) > 0) i else NA

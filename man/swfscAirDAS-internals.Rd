@@ -14,7 +14,7 @@
 \alias{.segdata_aggr_maxdist}
 \title{Internal functions for swfscAirDAS}
 \usage{
-.chop_condition_eff(i, call.x, call.conditions, call.seg.km.min, call.func1)
+.chop_condition_eff(i, call.x, call.conditions, call.seg.min.km, call.func1)
 
 .chop_equal_eff(
   i,
@@ -53,7 +53,7 @@
 
 \item{call.conditions}{ignore}
 
-\item{call.seg.km.min}{ignore}
+\item{call.seg.min.km}{ignore}
 
 \item{call.func1}{ignore}
 
