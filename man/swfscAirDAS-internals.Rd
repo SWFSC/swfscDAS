@@ -10,8 +10,7 @@
 \alias{.process_num}
 \alias{.process_chr}
 \alias{.segdata_proc}
-\alias{.segdata_aggr_avg}
-\alias{.segdata_aggr_maxdist}
+\alias{.segdata_aggr}
 \title{Internal functions for swfscAirDAS}
 \usage{
 .chop_condition_eff(i, call.x, call.conditions, call.seg.min.km, call.func1)
@@ -42,9 +41,7 @@
   df.out1
 )
 
-.segdata_aggr_avg(data.list, curr.df, idx, dist.perc)
-
-.segdata_aggr_maxdist(data.list, curr.df, idx, dist.perc)
+.segdata_aggr(data.list, curr.df, idx, dist.perc)
 }
 \arguments{
 \item{i}{ignore}

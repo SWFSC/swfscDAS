@@ -159,20 +159,10 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
                           seg.lengths, section.id, df.out1) {
   #----------------------------------------------------------------------------
   ### Prep
-  # Conditions list and aggregate function
-  if (identical(segdata.method, "avg")) {
-    fn.aggr <- .segdata_aggr_avg
-    conditions.list.init <- as.list(rep(0, length(conditions)))
-
-  } else if (identical(segdata.method, "maxdist")) {
-    fn.aggr <- .segdata_aggr_maxdist
-    conditions.list.init <- lapply(seq_along(conditions), function(i) {
-      data.frame(val = as.numeric(NA), dist = 0, stringsAsFactors = FALSE)
-    })
-
-  } else {
-    stop("Error1 in segdata aggr function; please report this as an issue")
-  }
+  # Conditions list
+  conditions.list.init <- lapply(seq_along(conditions), function(i) {
+    data.frame(val = NA, dist = 0, stringsAsFactors = FALSE)
+  })
   names(conditions.list.init) <- conditions
 
 
@@ -214,7 +204,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
       #   1) the percentage of the segment between j-1 and j, and
       #   2) the condition and sight info
       seg.perc <- das.df$dist_from_prev[j] / seg.lengths[subseg.curr]
-      conditions.list <- fn.aggr(conditions.list, das.df, j-1, seg.perc)
+      conditions.list <- .segdata_aggr(conditions.list, das.df, j-1, seg.perc)
       rm(seg.perc)
     }
 
@@ -256,7 +246,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
         d.tmp <- max(dist.pt.prev, dist.subseg.prev)
         d.rat <- (dist.subseg.curr - d.tmp) / seg.lengths[subseg.curr]
         # if (is.nan(d.rat)) d.rat <- NA
-        conditions.list <- fn.aggr(conditions.list, das.df, j-1, d.rat)
+        conditions.list <- .segdata_aggr(conditions.list, das.df, j-1, d.rat)
         rm(d, d.tmp, d.rat)
 
         ## If next point is at the same location, don't end the segment yet
@@ -276,7 +266,21 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
         # Get condition information
         if (segdata.method == "avg") {
           conditions.list.df <- data.frame(
-            lapply(conditions.list, round, 2), stringsAsFactors = FALSE
+            lapply(names(conditions.list), function(k, k.list) {
+              if (inherits(k.list[[k]], "character")) {
+                paste(unique(na.omit(k.list[[k]]$val)), collapse = ";")
+
+              } else {
+                # This must be a numeric because .segdata_aggr()
+                #   throws an error if not
+                tmp <- k.list[[k]] %>%
+                  filter(!is.na(.data$val)) %>%
+                  mutate(val_frac = .data$val * .data$dist)
+
+                if (nrow(tmp) == 0) NA else round(sum(tmp$val_frac) / sum(tmp$dist), 2)
+              }
+            }, k.list = conditions.list),
+            stringsAsFactors = FALSE
           )
 
         } else if (segdata.method == "maxdist") {
@@ -294,7 +298,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
           )
 
         } else {
-          stop("Error2 in segdata aggr function; please report this as an issue")
+          stop("Unrecognized segdata.method; please report this as an issue")
         }
 
         names(conditions.list.df) <- paste0(
@@ -305,23 +309,6 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
         # Get start line
         j.stlin.curr <- which(das.df$line_num == stlin.curr)
 
-        # # Get observer information
-        # #   If beginning is TVPAW, then ignore Observers pre-P event
-        # if (nrow(das.df) > 5) {
-        #   if (identical(das.df$Event[1:5], c("T", "V", "P", "A", "W"))) {
-        #     das.df$ObsL[1:2] <- NA
-        #     das.df$ObsB[1:2] <- NA
-        #     das.df$ObsR[1:2] <- NA
-        #     das.df$Rec[1:2] <- NA
-        #   }
-        # }
-        # obs.vals <- vapply(c("ObsL", "ObsB", "ObsR", "Rec"), function(k) {
-        #   k.uniq <- unique(das.df[[k]][j.stlin.curr:j])
-        #   if (length(na.omit(k.uniq)) >= 1) k.uniq <- na.omit(k.uniq)
-        #   paste(k.uniq, collapse = ",")
-        # }, as.character(1), USE.NAMES = TRUE)
-        # obs.vals[obs.vals == "NA"] <- NA
-
         # Add segdata to .all data frame
         segdata <- data.frame(
           seg_idx = paste0(section.id, "_", subseg.curr),
@@ -331,8 +318,6 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
           mlat = midpt.curr[1], mlon = midpt.curr[2],
           mDateTime = mean(c(das.df$DateTime[j.stlin.curr], das.df$DateTime[j])),
           dist = seg.lengths[subseg.curr],
-          # ObsL = obs.vals["ObsL"], ObsB = obs.vals["ObsB"],
-          # ObsR = obs.vals["ObsR"], Rec = obs.vals["Rec"],
           stringsAsFactors = FALSE
         ) %>%
           mutate(mtime = strftime(.data$mDateTime, format = "%H:%M:%S",
@@ -371,7 +356,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
           conditions.list <- conditions.list.init
 
           if (.less(tmp1, tmp2)) {
-            conditions.list <- fn.aggr(
+            conditions.list <- .segdata_aggr(
               conditions.list.init, das.df, j-1, tmp1 / tmp2
             )
           }
@@ -394,55 +379,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 #' @param idx ignore
 #' @param dist.perc ignore
 #' @export
-.segdata_aggr_avg <- function(data.list, curr.df, idx, dist.perc) {
-  # Keep running sum of data (conditions) multiplied by distance ratio
-  #   Names of data.list elements must all be columns in curr.df
-
-  stopifnot(
-    all(names(data.list) %in% names(curr.df)),
-    idx <= nrow(curr.df)
-  )
-
-  # # Extract and sort unique characters from a string;
-  # #   stackoverflow.com/questions/31814548
-  # .fn_uniqchars <- function(x) sort(unique(strsplit(x, "")[[1]]))
-
-
-  if (is.na(dist.perc)) {
-    lapply(data.list, function(i) NA)
-
-  } else if (dist.perc == 0) {
-    data.list
-
-  } else {
-    tmp <- lapply(names(data.list), function(k) {
-      data.curr <- data.list[[k]]
-      if (inherits(data.curr, c("numeric", "integer"))) {
-        data.curr + (dist.perc * curr.df[[k]][idx])
-      } else if (inherits(data.curr, "character")) {
-        paste(unique(c(data.curr, curr.df[[k]][idx])), collapse = "; ")
-        # paste(.fn_uniqchars(paste0(data.curr, curr.df[[k]][idx])), collapse = "")
-      } else {
-        stop(".segdata_aggr_avg error - unrecognized data class. ",
-             "Please report this as an issue")
-      }
-    })
-
-    names(tmp) <- names(data.list)
-    tmp
-  }
-}
-
-
-
-
-#' @name swfscAirDAS-internals
-#' @param data.list ignore
-#' @param curr.df ignore
-#' @param idx ignore
-#' @param dist.perc ignore
-#' @export
-.segdata_aggr_maxdist <- function(data.list, curr.df, idx, dist.perc) {
+.segdata_aggr <- function(data.list, curr.df, idx, dist.perc) {
   stopifnot(
     all(names(data.list) %in% names(curr.df)),
     idx <= nrow(curr.df)
@@ -463,4 +400,3 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     tmp
   }
 }
-
