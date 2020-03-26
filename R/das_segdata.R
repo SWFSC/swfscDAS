@@ -8,25 +8,27 @@
 #'   see the Details section below
 #' @param conditions see \code{\link{das_effort}}, or
 #'   see Details section for more information
-#' @param segdata.method character; either \code{"avg"} or \code{"max"}.
+#' @param segdata.method character; either \code{"avg"} or \code{"maxdist"}.
 #'   \code{"avg"} means the condition values will be
 #'   calculated as a weighted average by distance, while
-#'   \code{max} means the condition values will be the values that were...
+#'   \code{"maxdist"} means the condition values will be those recorded
+#'   for the longest distance during that segment
 #' @param seg.lengths numeric; length of the modeling segments
 #'   into which \code{x} will be chopped
 #' @param section.id numeric; the ID of \code{x} (the current continuous effort section)
 #' @param ... ignored
 #'
-#' @details This function should be called by \code{\link{das_chop_equal}};
+#' @details This function was designed to be called by \code{\link{das_chop_equal}};
 #'   users should avoid calling it themselves.
-#'   It loops through the events in \code{x}, chooping \code{x} into modeling segments
-#'   and calculating and storing relevant information for each segment as it goes.
+#'   It loops through the events in \code{x}, chopping \code{x} into modeling segments
+#'   while calculating and storing relevant information for each segment.
 #'   Because \code{x} is a continuous effort section, \code{x} must begin with
-#'   a "B" or "R" event and end with the corresponding "E"event
+#'   a "B" or "R" event and end with the corresponding "E" event.
 #'
-#'   For each segment, this function reports the
-#'   segment ID, transect code, the start/end/midpoints (lat/lon), segment length,
-#'   year, month, day, time, observers, and average conditions.
+#'   For each segment, this function reports the segment number,
+#'   segment ID, cruise number, the start/end/midpoints (lat/lon), segment length,
+#'   year, month, day, time, mode, effort type,
+#'   effective strip width sides (number of sides searched), and average conditions.
 #'   The segment ID is designated as \code{eff_id} _ index of the modeling segment.
 #'   Thus, if \code{section.id} is \code{1}, then the segment ID for
 #'   the second segment from \code{x} is \code{"1_2"}.
@@ -65,7 +67,7 @@ das_segdata.data.frame <- function(x, ...) {
 #' @name das_segdata
 #' @export
 das_segdata.das_df <- function(x, conditions, segdata.method,
-                                   seg.lengths, section.id, ...) {
+                               seg.lengths, section.id, ...) {
   #----------------------------------------------------------------------------
   # Input checks
   conditions.acc <- c(
@@ -78,7 +80,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
          paste(conditions.acc, collapse  = ", "))
 
 
-  segdata.method.acc <- c("avg", "max")
+  segdata.method.acc <- c("avg", "maxdist")
   if (!(segdata.method %in% segdata.method.acc))
     stop("Was this function called by a _chop_ function? ",
          "segdata.method must be one of the following:\n",
@@ -158,16 +160,20 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
   #----------------------------------------------------------------------------
   ### Prep
   # Conditions list and aggregate function
-  conditions.list.init <- as.list(rep(0, length(conditions)))
-  names(conditions.list.init) <- conditions
+  if (identical(segdata.method, "avg")) {
+    fn.aggr <- .segdata_aggr_avg
+    conditions.list.init <- as.list(rep(0, length(conditions)))
 
-  fn.aggr <- if (identical(segdata.method, "avg")) {
-    .segdata_aggr_avg
-  } else if (identical(segdata.method, "max")) {
-    stop("todo")
+  } else if (identical(segdata.method, "maxdist")) {
+    fn.aggr <- .segdata_aggr_maxdist
+    conditions.list.init <- lapply(seq_along(conditions), function(i) {
+      data.frame(val = as.numeric(NA), dist = 0, stringsAsFactors = FALSE)
+    })
+
   } else {
-    stop("Error in segdata aggr function; please report this as an issue")
+    stop("Error1 in segdata aggr function; please report this as an issue")
   }
+  names(conditions.list.init) <- conditions
 
 
   # Calculate objects for for loop
@@ -190,8 +196,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
   conditions.list <- conditions.list.init
 
   if (!(nrow(das.df) >= 2))
-    stop("Error in das_segdata(): x must have at least 2 rows. ",
-         "Please report this as an issue")
+    stop("x must have at least 2 rows; please report this as an issue")
+
 
   #----------------------------------------------------------------------------
   ### Step through each point in effort length,
@@ -207,11 +213,9 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
       # If we didn't cross a segment endpoint, get
       #   1) the percentage of the segment between j-1 and j, and
       #   2) the condition and sight info
-      seg.percentage <- das.df$dist_from_prev[j] / seg.lengths[subseg.curr]
-      conditions.list <- fn.aggr(
-        conditions.list, das.df, j-1, seg.percentage
-      )
-      rm(seg.percentage)
+      seg.perc <- das.df$dist_from_prev[j] / seg.lengths[subseg.curr]
+      conditions.list <- fn.aggr(conditions.list, das.df, j-1, seg.perc)
+      rm(seg.perc)
     }
 
     # While the current subsegment midpoint or endpoint
@@ -269,11 +273,34 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
         }
 
         ### Store data from this segment
-        # Get average condition information
-        conditions.list.df <- data.frame(
-          lapply(conditions.list, round, 2), stringsAsFactors = FALSE
+        # Get condition information
+        if (segdata.method == "avg") {
+          conditions.list.df <- data.frame(
+            lapply(conditions.list, round, 2), stringsAsFactors = FALSE
+          )
+
+        } else if (segdata.method == "maxdist") {
+          conditions.list.df <- data.frame(
+            lapply(names(conditions.list), function(k, k.list) {
+              tmp <- k.list[[k]] %>%
+                filter(!is.na(.data$val)) %>%
+                group_by(.data$val) %>%
+                summarise(dist_sum = sum(.data$dist)) %>%
+                arrange(desc(.data$dist_sum), .data$val)
+
+              if (nrow(tmp) == 0) NA else tmp$val[1]
+            }, k.list = conditions.list),
+            stringsAsFactors = FALSE
+          )
+
+        } else {
+          stop("Error2 in segdata aggr function; please report this as an issue")
+        }
+
+        names(conditions.list.df) <- paste0(
+          # switch(segdata.method, avg = "ave", maxdist = "maxdist"),
+          segdata.method, names(conditions.list)
         )
-        names(conditions.list.df) <- paste0("ave", names(conditions.list.df))
 
         # Get start line
         j.stlin.curr <- which(das.df$line_num == stlin.curr)
@@ -354,7 +381,6 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     }
   }
 
-
   # Return something
   segdata.all
 }
@@ -369,10 +395,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 #' @param dist.perc ignore
 #' @export
 .segdata_aggr_avg <- function(data.list, curr.df, idx, dist.perc) {
-  # Helper functions for _segdata function
-  #   Keep running sum of data (conditions) multiplied by distance ratio
-  #   Requires that names of cond.list elements are the same as
-  #   the column names in curr.df
+  # Keep running sum of data (conditions) multiplied by distance ratio
+  #   Names of data.list elements must all be columns in curr.df
 
   stopifnot(
     all(names(data.list) %in% names(curr.df)),
@@ -387,8 +411,11 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
   if (is.na(dist.perc)) {
     lapply(data.list, function(i) NA)
 
-  } else if (dist.perc != 0) {
-    tmp <- lapply(names(data.list), function(k, dist.perc) {
+  } else if (dist.perc == 0) {
+    data.list
+
+  } else {
+    tmp <- lapply(names(data.list), function(k) {
       z <- data.list[[k]]
       if (inherits(z, c("numeric", "integer"))) {
         z + (dist.perc * curr.df[[k]][idx])
@@ -401,13 +428,45 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
         stop(".segdata_aggr_avg error - unrecognized data class. ",
              "Please report this as an issue")
       }
-    }, dist.perc = dist.perc)
+    })
 
     names(tmp) <- names(data.list)
     tmp
+  }
+}
+
+
+
+
+#' @name swfscAirDAS-internals
+#' @param data.list ignore
+#' @param curr.df ignore
+#' @param idx ignore
+#' @param dist.perc ignore
+#' @export
+.segdata_aggr_maxdist <- function(data.list, curr.df, idx, dist.perc) {
+  stopifnot(
+    all(names(data.list) %in% names(curr.df)),
+    idx <= nrow(curr.df)
+  )
+
+
+
+  if (is.na(dist.perc)) {
+    warning("dist.perc is NA, ignoring")
+    data.list    #lapply(data.list, function(i) NA)
+
+  } else if (dist.perc == 0) {
+    data.list
 
   } else {
-    data.list
+    tmp <- lapply(names(data.list), function(k) {
+      # val.curr <- curr.df[[k]][idx]
+      # if (is.na(val.curr)) val.curr <- -99
+      rbind(data.list[[k]], c(curr.df[[k]][idx], dist.perc))
+    })
+    names(tmp) <- names(data.list)
+    tmp
   }
 }
 

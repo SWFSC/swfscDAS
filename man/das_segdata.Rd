@@ -23,10 +23,11 @@ see the Details section below}
 \item{conditions}{see \code{\link{das_effort}}, or
 see Details section for more information}
 
-\item{segdata.method}{character; either \code{"avg"} or \code{"max"}.
+\item{segdata.method}{character; either \code{"avg"} or \code{"maxdist"}.
 \code{"avg"} means the condition values will be
 calculated as a weighted average by distance, while
-\code{max} means the condition values will be the values that were...}
+\code{"maxdist"} means the condition values will be those recorded
+for the longest distance during that segment}
 
 \item{seg.lengths}{numeric; length of the modeling segments
 into which \code{x} will be chopped}

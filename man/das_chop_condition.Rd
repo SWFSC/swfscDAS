@@ -60,40 +60,37 @@ This function is intended to only be called by \code{\link{das_effort}}
   see \code{\link{das_effort}} for more details.
   This function chops each continuous effort section (henceforth 'effort sections')
   in \code{x} into modeling segments (henceforth 'segments') by
-  creating a new segment every time a condition changes.
+  creating a new segment every time a specified condition changes.
   Each effort section runs from a B/R event to its corresponding E event.
-  After chopping, \code{\link{das_segdata}} is called to get relevant
-  segdata information for each segment.
+  After chopping, \code{\link{das_segdata}} is called
+  (with \code{segdata.method = "maxdist"})
+  to get relevant segdata information for each segment.
 
-  TODO update:
-  Changes in the following conditions trigger a new segment:
-  Beaufort, swell height, rain/fog/haze code, horizontal sun, vertical sun,
-  and visibility (no glare because glare is dependent on sun positions).
-  The main exception is when multiple condition changes happen at
+  Changes in the one of the conditions specified in the \code{conditions}
+  argument triggers a new segment.
+  An exception is when multiple condition changes happen at
   the same location, such as a 'BRPVNW' series of events.
   When this happens, no segments of length zero are created;
   rather, a single segment is created that includes all of the condition changes
   (i.e. all of the events in the event series) that happened during
   the series of events (i.e. at the same location).
+  Note that this combining of events at the same Lat/Lon happens
+  even if \code{seg.km.min = 0}.
 
   In addition, (almost) all segments whose length is less than \code{seg.km.min}
   are combined with the segment immediately following them to ensure that the length
   of (almost) all segments is at least \code{seg.km.min}.
   This allows users to account for situations where multiple conditions,
-  such as Beaufort and the visibility, change in rapid succession, say 0.05 km apart.
-  When segments are combined, a warning is thrown and the conditions are averaged together
-  across the now-larger segment (question - is this right? See below).
+  such as Beaufort and the visibility, change in rapid succession, say <0.1 km apart.
+  When segments are combined, a message is printed, and the condition that was
+  recorded for the maximum distance within the new segment is reported.
+  See \code{\link{das_segdata}}, \code{segdata.method = "maxdist"}, for more details.
   The only exception to this rule is if the short segment ends in an "E" event,
   meaning it is the last segment of the effort section.
-  Since in this case there is no 'next' segment, this segment is left as-is.
-
-  Note that the above rule for 'combining' condition changes that have the same location
-  into a single segment (such as a 'BRPVNW' series of events)
-  is followed even if \code{seg.km.min = 0}.
+  Since in this case there is no 'next' segment,
+  this short segment is left as-is.
 
   If the column \code{dist_from_prev} does not exist, the distance between
   subsequent events is calculated as described in \code{\link{das_effort}}
-
-  TODO: Make das_segdata_max function so that conditions from tiny segments aren't averaged in
 }
 \keyword{internal}
