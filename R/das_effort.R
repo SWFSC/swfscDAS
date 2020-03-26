@@ -10,7 +10,7 @@
 #' @param sp.codes character; species code(s) to include in segdata output
 #' @param conditions character vector of names of conditions to include in segdata output.
 #'   These values must be column names from the output of \code{\link{das_process}},
-#'   e.g. 'Bft', SwellHght', etc.
+#'   e.g. 'Bft', 'SwellHght', etc.
 #'   If \code{method == "condition"}, then these also are the conditions which
 #'   trigger segment chopping when they change.
 #' @param dist.method character;
@@ -19,9 +19,9 @@
 #'   or one of "lawofcosines", "haversine", or "vincenty" to use
 #'   \code{\link[swfscMisc]{distance}}. Default is "greatcircle"
 #' @param num.cores Number of CPUs to over which to distribute computations.
-#'   Defaults to \code{NULL} which uses one fewer than the number of cores
+#'   Defaults to \code{NULL}, which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}.
-#'   Using 1 core will be faster for smaller datasets.
+#'   Using 1 core likely will be faster for smaller datasets
 #' @param ... arguments passed to the chopping function specified using \code{method},
 #'   such as \code{seg.km} or \code{seg.min.km}
 #'
