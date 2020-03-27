@@ -44,7 +44,7 @@
 #'   \code{"condition"} and \code{"equallength"}.
 #'   When using the \code{"condition"} method, effort sections are chopped
 #'   into segments every time a condition changes,
-#'   therby ensuring that the conditions are consistent across the entire segment.
+#'   thereby ensuring that the conditions are consistent across the entire segment.
 #'   See \code{\link{das_chop_condition}} for more details about this method,
 #'   including arguments that must be passed to it via \code{...}.
 #'
@@ -55,7 +55,7 @@
 #'   including arguments that must be passed to it via \code{...}.
 #'
 #'   The sightings included in the segdata counts sightings that were made when
-#'   on effort and in a Beafort sea state less than or equal to five.
+#'   on effort and in a Beaufort sea state less than or equal to five.
 #'   Included sightings are those with a \code{TRUE} value in the 'included'
 #'   column in siteinfo (described below).
 #'   TODO: Allow user to specify this.

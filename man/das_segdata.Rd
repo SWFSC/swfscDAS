@@ -56,7 +56,7 @@ This function was designed to be called by one of the das_chop_ functions,
   year, month, day, time, mode, effort type,
   effective strip width sides (number of sides searched),
   and average conditions (which are specified by \code{conditions}).
-  The segment ID is designated as \code{eff_id} _ index of the modeling segment.
+  The segment ID is designated as \code{section.id} _ index of the modeling segment.
   Thus, if \code{section.id} is \code{1}, then the segment ID for
   the second segment from \code{x} is \code{"1_2"}.
 
