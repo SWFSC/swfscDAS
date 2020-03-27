@@ -267,7 +267,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
         if (segdata.method == "avg") {
           conditions.list.df <- data.frame(
             lapply(names(conditions.list), function(k, k.list) {
-              if (inherits(k.list[[k]], "character")) {
+              if (inherits(k.list[[k]]$val, "character")) {
                 paste(unique(na.omit(k.list[[k]]$val)), collapse = ";")
 
               } else {
