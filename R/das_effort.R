@@ -19,7 +19,7 @@
 #'   Can be \code{"greatcircle"} to use the great circle distance method (TODO - add ref),
 #'   or one of \code{"lawofcosines"}, \code{"haversine"},
 #'   or \code{"vincenty"} to use
-#'   \code{\link[swfscMisc]{distance}}. Default is \code{"greatcircle"}
+#'   \code{\link[swfscMisc]{distance}}. Default is \code{"vincenty"}
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL}, which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}.
@@ -109,7 +109,7 @@ das_effort.data.frame <- function(x, ...) {
 #' @name das_effort
 #' @export
 das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
-                              dist.method = "greatcircle", num.cores = NULL,
+                              dist.method = "vincenty", num.cores = NULL,
                               ...) {
   #----------------------------------------------------------------------------
   # Input checks

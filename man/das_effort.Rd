@@ -15,7 +15,7 @@ das_effort(x, ...)
   method,
   sp.codes,
   conditions = NULL,
-  dist.method = "greatcircle",
+  dist.method = "vincenty",
   num.cores = NULL,
   ...
 )
@@ -45,7 +45,7 @@ method to use to calculate distance between lat/lon coordinates.
 Can be \code{"greatcircle"} to use the great circle distance method (TODO - add ref),
 or one of \code{"lawofcosines"}, \code{"haversine"},
 or \code{"vincenty"} to use
-\code{\link[swfscMisc]{distance}}. Default is \code{"greatcircle"}}
+\code{\link[swfscMisc]{distance}}. Default is \code{"vincenty"}}
 
 \item{num.cores}{Number of CPUs to over which to distribute computations.
 Defaults to \code{NULL}, which uses one fewer than the number of cores
