@@ -9,7 +9,7 @@
 #' @param ... ignored
 #' @param conditions see \code{\link{das_effort}}
 #' @param seg.km numeric; target segment length in kilometers
-#' @param randpicks.load character or \code{NULL}.
+#' @param randpicks.load character, data frame, or \code{NULL}.
 #'   If character, must be filename of past randpicks output to load and use
 #'   (passed to \code{file} argument of \code{\link[utils:read.table]{read.csv}}).
 #'   If data frame, randpicks values will be extracted from the data frame.
@@ -134,14 +134,21 @@ das_chop_equal.das_df <- function(x, conditions, seg.km, randpicks.load = NULL,
             "randpicks values will be generated")
 
   } else {
-    randpicks.df <- read.csv(randpicks.load)
+    randpicks.df <- if (inherits(randpicks.load, "data.frame")) {
+      randpicks.load
+    } else if (inherits(randpicks.load, "character")){
+      read.csv(randpicks.load)
+    } else {
+      stop("randpicks.load must either be a data frame or ",
+           "file path (character)")
+    }
 
     if (all(c("effort_section", "randpicks") %in% names(randpicks.df))) {
       r.eff.sect <- randpicks.df$effort_section
       r.pos <- randpicks.df$randpicks
 
     } else {
-      warning("For the provided randpicks CSV file, it is assumed that ",
+      warning("For the provided randpicks, it is assumed that ",
               "the first column is the continuous effort section numbers, ",
               "and the second column is the randpick values for that ",
               "continuous effort section",

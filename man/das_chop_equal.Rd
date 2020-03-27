@@ -32,7 +32,7 @@ see the Details section below}
 
 \item{seg.km}{numeric; target segment length in kilometers}
 
-\item{randpicks.load}{character or \code{NULL}.
+\item{randpicks.load}{character, data frame, or \code{NULL}.
 If character, must be filename of past randpicks output to load and use
 (passed to \code{file} argument of \code{\link[utils:read.table]{read.csv}}).
 If data frame, randpicks values will be extracted from the data frame.
