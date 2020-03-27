@@ -24,6 +24,7 @@ see the Details section below}
 see Details section for more information}
 
 \item{segdata.method}{character; either \code{"avg"} or \code{"maxdist"}.
+see Details section for more information
 \code{"avg"} means the condition values will be
 calculated as a weighted average by distance, while
 \code{"maxdist"} means the condition values will be those recorded
@@ -35,41 +36,50 @@ into which \code{x} will be chopped}
 \item{section.id}{numeric; the ID of \code{x} (the current continuous effort section)}
 }
 \value{
-Data frame with the segdata information described above
+Data frame with the segdata information described in Details
   and in \code{\link{das_effort}}
 }
 \description{
 Summarize DAS effort data by effort segment, while averaging conditions
 }
 \details{
-This function was designed to be called by \code{\link{das_chop_equal}};
+This function was designed to be called by one of the das_chop_ functions,
+  e.g. \code{\link{das_chop_equal}}, and thus
   users should avoid calling it themselves.
   It loops through the events in \code{x}, chopping \code{x} into modeling segments
   while calculating and storing relevant information for each segment.
-  Because \code{x} is a continuous effort section, \code{x} must begin with
+  Because \code{x} is a continuous effort section, it must begin with
   a "B" or "R" event and end with the corresponding "E" event.
 
   For each segment, this function reports the segment number,
   segment ID, cruise number, the start/end/midpoints (lat/lon), segment length,
   year, month, day, time, mode, effort type,
-  effective strip width sides (number of sides searched), and average conditions.
+  effective strip width sides (number of sides searched),
+  and average conditions (which are specified by \code{conditions}).
   The segment ID is designated as \code{eff_id} _ index of the modeling segment.
   Thus, if \code{section.id} is \code{1}, then the segment ID for
   the second segment from \code{x} is \code{"1_2"}.
 
-  The average condition values are calculated as a weighted average by distance,
-  and reported for the conditions specified by the \code{conditions} argument.
-  For logical columns (e.g. Glare), the reported value is the percentage
+  When \code{segdata.method} is \code{"avg"}, the condition values are
+  calculated as a weighted average by distance.
+  The reported value for logical columns (e.g. Glare) is the percentage
   (in decimals) of the segment in which that condition was \code{TRUE}.
+  For character columns, the reported value for each segment is
+  the unique value(s) present in the segment, with \code{NA}s omitted,
+  pasted together via \code{paste(..., collapse = "; ")}.
+  When \code{segdata.method} is \code{"maxdist"}, the reported values
+  are, for each condition, the value recorded for the longest distance
+  during that segment (with \code{NA}s omitted).
 
   Cruise number, mode, effort type, sides searched, and file name are
   also included in the segdata output.
-  These values should all be consistent across the entire effort section,
-  and thus across all segments in \code{x};
+  These values (excluding \code{NA}s) must be consistent across the
+  entire effort section, and thus across all segments in \code{x};
   a warning is printed if there are any inconsistencies
 
   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
-  are used to calculate the segment start, mid, and end points.
+  are used to calculate the segment start, mid, and end points,
+  with \code{method = "vincenty"}.
   TODO: option to pass distance method to swfscMisc functions?
   How does EAB/Eiren do these calculations?
 }

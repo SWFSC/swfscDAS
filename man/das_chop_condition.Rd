@@ -27,8 +27,8 @@ see the Details section below}
 
 \item{...}{ignored}
 
-\item{conditions}{see \code{\link{das_effort}};
-the conditions that trigger a new segment}
+\item{conditions}{the conditions that trigger a new segment;
+see \code{\link{das_effort}}}
 
 \item{seg.min.km}{numeric; minimum allowable segment length (in kilometers).
 Default is 0.1. See the Details section below for more information}
@@ -82,7 +82,8 @@ This function is intended to only be called by \code{\link{das_effort}}
   such as Beaufort and the visibility, change in rapid succession, say <0.1 km apart.
   When segments are combined, a message is printed, and the condition that was
   recorded for the maximum distance within the new segment is reported.
-  See \code{\link{das_segdata}}, \code{segdata.method = "maxdist"}, for more details.
+  See \code{\link{das_segdata}}, \code{segdata.method = "maxdist"}, for more details
+  about how the segdata information is determined.
   The only exception to this rule is if the short segment ends in an "E" event,
   meaning it is the last segment of the effort section.
   Since in this case there is no 'next' segment,

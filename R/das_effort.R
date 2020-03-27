@@ -5,8 +5,9 @@
 #' @param x \code{das_df} object; output from \code{\link{das_process}},
 #'  or a data frame that can be coerced to a \code{das_df} object
 #' @param method character; method to use to chop DAS data into effort segments
-#'   Can be \code{"equallength"} or \code{"condition"} (case-sensitive) to use
-#'   \code{\link{das_chop_equal}} or \code{\link{das_chop_condition}}, respectively
+#'   Can be \code{"condition"} or \code{"equallength"} (case-sensitive)
+#'   to usex \code{\link{das_chop_condition}} or \code{\link{das_chop_condition}},
+#'   respectively
 #' @param sp.codes character; species code(s) to include in segdata output
 #' @param conditions character vector of names of conditions to include in segdata output.
 #'   These values must be column names from the output of \code{\link{das_process}},
@@ -15,9 +16,10 @@
 #'   trigger segment chopping when they change.
 #' @param dist.method character;
 #'   method to use to calculate distance between lat/lon coordinates.
-#'   Can be "greatcircle" to use the great circle distance method (TODO - add ref),
-#'   or one of "lawofcosines", "haversine", or "vincenty" to use
-#'   \code{\link[swfscMisc]{distance}}. Default is "greatcircle"
+#'   Can be \code{"greatcircle"} to use the great circle distance method (TODO - add ref),
+#'   or one of \code{"lawofcosines"}, \code{"haversine"},
+#'   or \code{"vincenty"} to use
+#'   \code{\link[swfscMisc]{distance}}. Default is \code{"greatcircle"}
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL}, which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}.
@@ -36,17 +38,31 @@
 #'   where effort sections run from "B"/"R" to "E" events (inclusive),
 #'   and then passed to the chopping function specified using \code{method}.
 #'   All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
-#'   must have non-\code{NA} Lat and Lon values
+#'   must have non-\code{NA} Lat and Lon values.
+#'
+#'   The following chopping methods are currently available:
+#'   \code{"condition"} and \code{"equallength"}.
+#'   When using the \code{"condition"} method, effort sections are chopped
+#'   into segments every time a condition changes,
+#'   therby ensuring that the conditions are consistent across the entire segment.
+#'   See \code{\link{das_chop_condition}} for more details about this method,
+#'   including arguments that must be passed to it via \code{...}.
+#'
+#'   The \code{"equallength"} method consists of
+#'   chopping effort sections into equal-length segments of length \code{seg.km},
+#'   and doing a weighted average of the conditions for the length of that segment.
+#'   See \code{\link{das_chop_equal}} for more details about this method,
+#'   including arguments that must be passed to it via \code{...}.
+#'
+#'   The sightings included in the segdata counts sightings that were made when
+#'   on effort and in a Beafort sea state less than or equal to five.
+#'   Included sightings are those with a \code{TRUE} value in the 'included'
+#'   column in siteinfo (described below).
+#'   TODO: Allow user to specify this.
 #'
 #'   The distance between the lat/lon points of subsequent events
 #'   is calculated using the method specified in \code{dist.method}.
 #'   See \code{\link{das_sight}} for how the sightings are processed.
-#'
-#'   Sightings are only included in the segdata counts/summaries if they were made
-#'   while on effort and in a Beafort sea state less than or equal to five.
-#'   Included sightings are those with a \code{TRUE} value in the 'included'
-#'   column in siteinfo.
-#'   TODO: Allow user to specify this.
 #'
 #' @return List of three data frames:
 #'   \itemize{
@@ -58,7 +74,7 @@
 #'       the unique segment number it is associated with, segment mid points (lat/lon),
 #'       whether the sighting was included in the segdata counts (column name 'included'),
 #'       and the output information described in \code{\link{das_sight}}.
-#'     \item randpicks: see \code{\link{das_chop_equal}};
+#'     \item randpicks: see \code{\link{das_chop_equal}}.
 #'       \code{NULL} if using "condition" method.
 #'   }
 #'
@@ -66,14 +82,17 @@
 #' y <- system.file("das_sample.das", package = "swfscDAS")
 #' y.proc <- das_process(y)
 #'
-#' das_effort(
-#'   y.proc, method = "equallength", sp.codes = c("016", "018"),
-#'   seg.km = 10, num.cores = 1
-#' )
-#'
+#' # Using "condition" method
 #' das_effort(
 #'   y.proc, method = "condition", sp.codes = c("016", "018"),
 #'   seg.min.km = 0.05, num.cores = 1
+#' )
+#'
+#' # Using "equallength" method
+#' y.rand <- system.file("das_sample_randpicks.csv", package = "swfscDAS")
+#' das_effort(
+#'   y.proc, method = "equallength", sp.codes = c("016", "018"),
+#'   seg.km = 10, randpicks.load = y.rand, num.cores = 1
 #' )
 #'
 #' @export
@@ -159,8 +178,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     das_chop_condition(as_das_df(x.oneff), conditions = conditions,
                        num.cores = num.cores, ...)
   } else {
-    stop("Error in effort chopping - ",
-         "the method argument is not an accepted argument")
+    stop("method is not an accepted value")
   }
 
   x.eff <- eff.list[[1]]

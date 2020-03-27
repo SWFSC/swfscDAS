@@ -7,10 +7,10 @@
 #'   This data must be filtered for 'OnEffort' events;
 #'   see the Details section below
 #' @param ... ignored
+#' @param conditions the conditions that trigger a new segment;
+#' see \code{\link{das_effort}}
 #' @param seg.min.km numeric; minimum allowable segment length (in kilometers).
 #'   Default is 0.1. See the Details section below for more information
-#' @param conditions see \code{\link{das_effort}};
-#'   the conditions that trigger a new segment
 #' @param dist.method character; see \code{\link{das_effort}}.
 #'   Default is \code{NULL} since these distances should have already been
 #'   calculated in \code{\link{das_effort}}
@@ -47,7 +47,8 @@
 #'   such as Beaufort and the visibility, change in rapid succession, say <0.1 km apart.
 #'   When segments are combined, a message is printed, and the condition that was
 #'   recorded for the maximum distance within the new segment is reported.
-#'   See \code{\link{das_segdata}}, \code{segdata.method = "maxdist"}, for more details.
+#'   See \code{\link{das_segdata}}, \code{segdata.method = "maxdist"}, for more details
+#'   about how the segdata information is determined.
 #'   The only exception to this rule is if the short segment ends in an "E" event,
 #'   meaning it is the last segment of the effort section.
 #'   Since in this case there is no 'next' segment,
@@ -86,6 +87,10 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   if (!all(x$OnEffort | x$Event == "E"))
     stop("x must be filtered for on effort events; see `?das_chop_condition")
 
+  if (missing(seg.min.km))
+    stop("You must specify a 'seg.min.km' argument when using the \"equallength\" ",
+         "method. See `?das_chop_condition` for more details")
+
   if (!inherits(seg.min.km, c("integer", "numeric")))
     stop("When using the \"condition\" method, seg.min.km must be a numeric. ",
          "See `?das_chop_condition` for more details")
@@ -115,8 +120,8 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   #----------------------------------------------------------------------------
   # ID continuous effort sections, then for each modeling segment:
   #   1) chop by condition change
-  #   2) aggregate 0-length segments (e.g. tvpaw),
-  #   3) aggregate small segments as specified by user
+  #   2) aggregate 0-length segments (e.g. brpvnw),
+  #   3) aggregate small segments as specified by user via seg.min.km
   # x$cont_eff_section <- cumsum(x$Event %in% c("T", "R"))
   x$cont_eff_section <- cumsum(x$Event %in% "R")
   event.B <- x$Event == "B"
@@ -143,10 +148,9 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   num.cores <- max(1, num.cores)
   num.cores <- min(parallel::detectCores() - 1, num.cores)
 
-
   # Use parallel to lapply through - modeled after rfPermute
   cl <- swfscMisc::setupClusters(num.cores)
-  eff.list <- tryCatch({
+  eff.chop.list <- tryCatch({
     if(is.null(cl)) { # Don't parallelize if num.cores == 1
       lapply(
         eff.uniq, .chop_condition_eff, call.x = call.x,
@@ -171,11 +175,11 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
 
 
   #----------------------------------------------------------------------------
-  # Extract information from eff.list, and return
+  # Extract information from eff.chop.list, and return
 
   ### Segdata
   segdata <- data.frame(
-    do.call(rbind, lapply(eff.list, function(i) i[["das.df.segdata"]])),
+    do.call(rbind, lapply(eff.chop.list, function(i) i[["das.df.segdata"]])),
     stringsAsFactors = FALSE
   ) %>%
     mutate(segnum = seq_along(.data$seg_idx),
@@ -183,11 +187,11 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
     select(.data$segnum, .data$seg_idx, everything())
 
   ### Segment lengths
-  x.len <- lapply(eff.list, function(i) i[["seg.lengths"]])
+  x.len <- lapply(eff.chop.list, function(i) i[["seg.lengths"]])
 
   ### Each DAS data point, along with segnum
   x.eff <- data.frame(
-    do.call(rbind, lapply(eff.list, function(i) i[["das.df"]])),
+    do.call(rbind, lapply(eff.chop.list, function(i) i[["das.df"]])),
     stringsAsFactors = FALSE
   ) %>%
     left_join(segdata[, c("seg_idx", "segnum")], by = "seg_idx") %>%
@@ -195,7 +199,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
 
   ### Message about segments that were combined
   ###   Must be outside b/c no messages come out of parallel
-  segs.message <- na.omit(vapply(eff.list, function(i) i[["segs.combine"]], 1))
+  segs.message <- na.omit(vapply(eff.chop.list, function(i) i[["segs.combine"]], 1))
   if (length(segs.message) > 0)
     message("Since seg.min.km > 0, ",
             "segments with different conditions were combined ",

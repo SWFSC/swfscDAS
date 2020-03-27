@@ -9,6 +9,7 @@
 #' @param conditions see \code{\link{das_effort}}, or
 #'   see Details section for more information
 #' @param segdata.method character; either \code{"avg"} or \code{"maxdist"}.
+#'   see Details section for more information
 #'   \code{"avg"} means the condition values will be
 #'   calculated as a weighted average by distance, while
 #'   \code{"maxdist"} means the condition values will be those recorded
@@ -18,38 +19,47 @@
 #' @param section.id numeric; the ID of \code{x} (the current continuous effort section)
 #' @param ... ignored
 #'
-#' @details This function was designed to be called by \code{\link{das_chop_equal}};
+#' @details This function was designed to be called by one of the das_chop_ functions,
+#'   e.g. \code{\link{das_chop_equal}}, and thus
 #'   users should avoid calling it themselves.
 #'   It loops through the events in \code{x}, chopping \code{x} into modeling segments
 #'   while calculating and storing relevant information for each segment.
-#'   Because \code{x} is a continuous effort section, \code{x} must begin with
+#'   Because \code{x} is a continuous effort section, it must begin with
 #'   a "B" or "R" event and end with the corresponding "E" event.
 #'
 #'   For each segment, this function reports the segment number,
 #'   segment ID, cruise number, the start/end/midpoints (lat/lon), segment length,
 #'   year, month, day, time, mode, effort type,
-#'   effective strip width sides (number of sides searched), and average conditions.
+#'   effective strip width sides (number of sides searched),
+#'   and average conditions (which are specified by \code{conditions}).
 #'   The segment ID is designated as \code{eff_id} _ index of the modeling segment.
 #'   Thus, if \code{section.id} is \code{1}, then the segment ID for
 #'   the second segment from \code{x} is \code{"1_2"}.
 #'
-#'   The average condition values are calculated as a weighted average by distance,
-#'   and reported for the conditions specified by the \code{conditions} argument.
-#'   For logical columns (e.g. Glare), the reported value is the percentage
+#'   When \code{segdata.method} is \code{"avg"}, the condition values are
+#'   calculated as a weighted average by distance.
+#'   The reported value for logical columns (e.g. Glare) is the percentage
 #'   (in decimals) of the segment in which that condition was \code{TRUE}.
+#'   For character columns, the reported value for each segment is
+#'   the unique value(s) present in the segment, with \code{NA}s omitted,
+#'   pasted together via \code{paste(..., collapse = "; ")}.
+#'   When \code{segdata.method} is \code{"maxdist"}, the reported values
+#'   are, for each condition, the value recorded for the longest distance
+#'   during that segment (with \code{NA}s omitted).
 #'
 #'   Cruise number, mode, effort type, sides searched, and file name are
 #'   also included in the segdata output.
-#'   These values should all be consistent across the entire effort section,
-#'   and thus across all segments in \code{x};
+#'   These values (excluding \code{NA}s) must be consistent across the
+#'   entire effort section, and thus across all segments in \code{x};
 #'   a warning is printed if there are any inconsistencies
 #'
 #'   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
-#'   are used to calculate the segment start, mid, and end points.
+#'   are used to calculate the segment start, mid, and end points,
+#'   with \code{method = "vincenty"}.
 #'   TODO: option to pass distance method to swfscMisc functions?
 #'   How does EAB/Eiren do these calculations?
 #'
-#' @return Data frame with the segdata information described above
+#' @return Data frame with the segdata information described in Details
 #'   and in \code{\link{das_effort}}
 #'
 #' @keywords internal
@@ -75,7 +85,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis"
   )
   if (!all(conditions %in% conditions.acc))
-    stop("Was this function called by a _chop_ function? ",
+    stop("Was this function called by one of the das_chop_ functions? ",
          "Please ensure all components of the conditions argument are ",
          "one of the following accepted values:\n",
          paste(conditions.acc, collapse  = ", "))
@@ -105,16 +115,13 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
 
   #----------------------------------------------------------------------------
-  # Prep stuff
-  das.df <- x
-
-  ### Prep - get the info that is consistent for the entire effort length
+  # Prep stuff - get the info that is consistent for the entire effort length
   # ymd determined below to be safe
   df.out1.cols <- c("file_das", "Cruise", "Mode", "EffType", "ESWsides")
 
   # <=1 accounts for when all
   df.out1.check <- vapply(df.out1.cols, function(i) {
-    length(unique(na.omit(das.df[[i]]))) <= 1
+    length(unique(na.omit(x[[i]]))) <= 1
   }, as.logical(1))
   if (!all(df.out1.check))
     warning("Is there an error in the data? ",
@@ -122,7 +129,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
             "continuous effort section ", section.id, ":\n",
             paste(df.out1.cols, collapse  = ", "))
 
-  df.out1 <- das.df %>%
+  df.out1 <- x %>%
     select(!!df.out1.cols) %>%
     select(file = .data$file_das, everything()) %>%
     slice(n()) #use n() instead of 1 b/c some vars may be NA in first line
@@ -130,7 +137,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
   #----------------------------------------------------------------------------
   segdata.all <- .segdata_proc(
-    das.df = das.df, conditions = conditions, segdata.method = segdata.method,
+    das.df = x, conditions = conditions, segdata.method = segdata.method,
     seg.lengths = seg.lengths, section.id = section.id, df.out1 = df.out1
   )
 
@@ -173,7 +180,6 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
   if (!("dist_from_prev_cumsum" %in% names(das.df)))
     das.df$dist_from_prev_cumsum <- cumsum(das.df$dist_from_prev)
-
 
 
   # 'Initialize' necessary objects
@@ -271,8 +277,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
                 paste(unique(na.omit(k.list[[k]]$val)), collapse = ";")
 
               } else {
-                # This must be a numeric because .segdata_aggr()
-                #   throws an error if not
+                #.segdata_aggr() throws an error if not character or numeric
                 tmp <- k.list[[k]] %>%
                   filter(!is.na(.data$val)) %>%
                   mutate(val_frac = .data$val * .data$dist)
@@ -289,7 +294,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
               tmp <- k.list[[k]] %>%
                 filter(!is.na(.data$val)) %>%
                 group_by(.data$val) %>%
-                summarise(dist_sum = sum(.data$dist)) %>%
+                summarise(dist_sum = sum(as.numeric(.data$dist))) %>%
                 arrange(desc(.data$dist_sum), .data$val)
 
               if (nrow(tmp) == 0) NA else tmp$val[1]
