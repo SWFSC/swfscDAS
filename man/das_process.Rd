@@ -69,6 +69,10 @@ A \code{das_df} object, which is also a data frame.
     Vertical sun (clock system)   \tab VertSun   \tab Event: W; Column: Data3\cr
     Glare                         \tab Glare     \tab HorizSun and VertSun\cr
     Visibility (nm)               \tab Vis       \tab Event: W; Column: Data5\cr
+    Left observer                 \tab ObsL      \tab Event: P; Column: Data1\cr
+    Data recorder                 \tab Rec       \tab Event: P; Column: Data2\cr
+    Right observer                \tab ObsR      \tab Event: P; Column: Data3\cr
+    Independent observer          \tab ObsInd    \tab Event: P; Column: Data4\cr
   }
 
   Warnings are printed with row numbers of unexpected event codes,

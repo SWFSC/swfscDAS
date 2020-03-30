@@ -216,7 +216,8 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
               by = "segnum") %>%
     das_sight(mixed.multi = TRUE) %>%
     filter(.data$Event == "S") %>%
-    mutate(included = (.data$Bft <= 5 & .data$OnEffort),
+    mutate(perp_dist = (abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852),
+           included = (.data$Bft <= 5 & .data$OnEffort),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-.data$dist_from_prev, -.data$cont_eff_section, -.data$effort_seg)
 

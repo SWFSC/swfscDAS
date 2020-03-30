@@ -87,6 +87,10 @@
 #'     Vertical sun (clock system)   \tab VertSun   \tab Event: W; Column: Data3\cr
 #'     Glare                         \tab Glare     \tab HorizSun and VertSun\cr
 #'     Visibility (nm)               \tab Vis       \tab Event: W; Column: Data5\cr
+#'     Left observer                 \tab ObsL      \tab Event: P; Column: Data1\cr
+#'     Data recorder                 \tab Rec       \tab Event: P; Column: Data2\cr
+#'     Right observer                \tab ObsR      \tab Event: P; Column: Data3\cr
+#'     Independent observer          \tab ObsInd    \tab Event: P; Column: Data4\cr
 #'   }
 #'
 #'   Warnings are printed with row numbers of unexpected event codes,
@@ -201,6 +205,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   event.E <- das.df$Event == "E"
   event.V <- das.df$Event == "V"
   event.W <- das.df$Event == "W"
+  event.P <- das.df$Event == "P"
 
   event.B.preR <- (das.df$Event == "B") & (c(das.df$Event[-1], NA) == "R")
 
@@ -211,6 +216,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   Mode      <- .process_chr(init.val, das.df, "Data2", event.B, "C")
   EffType   <- .process_chr(init.val, das.df, "Data1", event.R, "S")
   ESWsides  <- .process_chr(init.val, das.df, "Data2", event.R, "F")
+
   Bft       <- .process_num(init.val, das.df, "Data1", event.V, event.na)
   SwellHght <- .process_num(init.val, das.df, "Data2", event.V, event.na)
   Course    <- .process_num(init.val, das.df, "Data1", event.N, event.na)
@@ -218,6 +224,11 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   HorizSun  <- .process_num(init.val, das.df, "Data2", event.W, event.na)
   VertSun   <- .process_num(init.val, das.df, "Data3", event.W, event.na)
   Vis       <- .process_num(init.val, das.df, "Data5", event.W, event.na)
+
+  ObsL <- .process_chr(init.val, das.df, "Data1", event.P, event.na)
+  Rec  <- .process_chr(init.val, das.df, "Data2", event.P, event.na)
+  ObsR <- .process_chr(init.val, das.df, "Data3", event.P, event.na)
+  ObsInd <-  .process_chr(init.val, das.df, "Data4", event.P, event.na)
 
   Eff <- as.logical(init.val)
   Eff[sort(unique(c(idx.new.cruise, idx.new.day)))] <- FALSE
@@ -238,19 +249,22 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     if (i %in% idx.new.cruise) {
       LastEff <- LastEMode <- LastEType <- LastESW <- LastBft <- LastSwH <-
         LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <-
+        LastObsL <- LastRec <- LastObsR <- LastObsInd <-
         LastCruise <- NA
     }
 
     # Reset applicable info (aka all but 'LastCruise') when starting a new day
     if ((i %in% idx.new.day) & reset.day) {
       LastEff <- LastEMode <- LastEType <- LastESW <- LastBft <- LastSwH <-
-        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <- NA
+        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <-
+        LastObsL <- LastRec <- LastObsR <- LastObsInd <- NA
     }
 
     # Reset applicable info (all RPVNW-related) when starting BR/R event sequence
     if ((i %in% idx.eff) & reset.effort) {
       LastEType <- LastESW <- LastBft <- LastSwH <-
-        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <- NA
+        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <-
+        LastObsL <- LastRec <- LastObsR <- LastObsInd <- NA
     }
 
     # Set/pass along 'carry-over info'
@@ -265,6 +279,10 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     if (is.na(HorizSun[i]))  HorizSun[i] <- LastHS   else LastHS <- HorizSun[i]   #Horizontal sun
     if (is.na(VertSun[i]))   VertSun[i] <- LastVS    else LastVS <- VertSun[i]    #Vertical sun
     if (is.na(Vis[i]))       Vis[i] <- LastVis       else LastVis <- Vis[i]       #Visibility
+    if (is.na(ObsL[i]))      ObsL[i] <- LastObsL     else LastObsL <- ObsL[i]     #Left obs
+    if (is.na(Rec[i]))       Rec[i] <- LastRec       else LastRec <- Rec[i]       #Recorder
+    if (is.na(ObsR[i]))      ObsR[i] <- LastObsR     else LastObsR <- ObsR[i]     #Right obs
+    if (is.na(ObsInd[i]))    ObsInd[i] <- LastObsInd else LastObsInd <- ObsInd[i] #Independent obs
     if (is.na(Eff[i]))       Eff[i] <- LastEff       else LastEff <- Eff[i]       #Effort
   }
 
@@ -274,7 +292,8 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   tmp <- list(
     Cruise = Cruise, Mode = Mode, Course = Course, EffType = EffType,
     ESWsides = ESWsides, Bft = Bft, SwellHght = SwellHght, RainFog = RainFog,
-    HorizSun = HorizSun, VertSun = VertSun, Vis = Vis, OnEffort = Eff
+    HorizSun = HorizSun, VertSun = VertSun, Vis = Vis, OnEffort = Eff,
+    ObsL = ObsL, Rec = Rec, ObsR = ObsR, ObsInd = ObsInd
   )
 
   # Replace event.reset values with NAs
@@ -296,6 +315,12 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   tmp$EffType <- as.character(tmp$EffType)
   tmp$ESWsides <- case_when(tmp$ESWsides == "F" ~ 2, tmp$ESWsides == "H" ~ 1)
   # tmp$RainFog <- as.logical(ifelse(is.na(tmp$RainFog), NA, tmp$RainFog %in% c(2:4)))
+
+  # In case any are all NAs
+  tmp$ObsL <- as.character(tmp$ObsL)
+  tmp$Rec <- as.character(tmp$Rec)
+  tmp$ObsR <- as.character(tmp$ObsR)
+  tmp$ObsInd <- as.character(tmp$ObsInd)
 
 
   #----------------------------------------------------------------------------
@@ -319,6 +344,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
+    "ObsL", "Rec", "ObsR", "ObsInd",
     paste0("Data", 1:9), "EffortDot", "EventNum", "file_das", "line_num"
   )
 

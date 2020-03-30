@@ -51,6 +51,10 @@ test_that("das_process output has expected column names and classes", {
     VertSun = "numeric",
     Glare = "logical",
     Vis = "numeric",
+    ObsL = "character",
+    Rec = "character",
+    ObsR = "character",
+    ObsInd = "character",
     Data1 = "character",
     Data2 = "character",
     Data3 = "character",
@@ -80,6 +84,7 @@ test_that("das_sight output has expected column names and classes", {
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
     "HorizSun", "VertSun", "Glare", "Vis",
+    "ObsL", "Rec", "ObsR", "ObsInd",
     "EffortDot", "EventNum", "file_das", "line_num",
     "SightNo", "Obs", "Bearing", "Reticle", "DistNm",
     "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
@@ -113,6 +118,7 @@ test_that("das_sight output has expected column names and classes with extra col
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
     "HorizSun", "VertSun", "Glare", "Vis",
+    "ObsL", "Rec", "ObsR", "ObsInd",
     "EffortDot", "EventNum", "file_das", "line_num", "testrr",
     "SightNo", "Obs", "Bearing", "Reticle", "DistNm",
     "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"

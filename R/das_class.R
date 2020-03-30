@@ -66,10 +66,10 @@ NULL
 #'   In addition, they must have the following column names and classes:
 #'   \tabular{ll}{
 #'     \emph{Column name} \tab \emph{Column class}\cr
-#'     Event     \tab "character"\cr
-#'     DateTime  \tab c("POSIXct", "POSIXt")\cr
-#'     Lat       \tab "numeric"\cr
-#'     Lon       \tab "numeric"\cr
+#'     Event    \tab "character"\cr
+#'     DateTime \tab c("POSIXct", "POSIXt")\cr
+#'     Lat      \tab "numeric"\cr
+#'     Lon      \tab "numeric"\cr
 #'     OnEffort  \tab "logical"\cr
 #'     Cruise    \tab "numeric"\cr
 #'     Mode      \tab "character"\cr
@@ -82,6 +82,10 @@ NULL
 #'     VertSun   \tab "numeric"\cr
 #'     Glare     \tab "logical"\cr
 #'     Vis       \tab "numeric"\cr
+#'     ObsL      \tab "character"\cr
+#'     Rec       \tab "character"\cr
+#'     ObsR      \tab "character"\cr
+#'     ObsInd    \tab "character"\cr
 #'     Data1 \tab "character"\cr
 #'     Data2 \tab "character"\cr
 #'     Data3 \tab "character"\cr
