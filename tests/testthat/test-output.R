@@ -86,7 +86,7 @@ test_that("das_sight output has expected column names and classes", {
     "HorizSun", "VertSun", "Glare", "Vis",
     "ObsL", "Rec", "ObsR", "ObsInd",
     "EffortDot", "EventNum", "file_das", "line_num",
-    "SightNo", "Obs", "Bearing", "Reticle", "DistNm",
+    "SightNo", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
     "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
   )
 
@@ -120,7 +120,7 @@ test_that("das_sight output has expected column names and classes with extra col
     "HorizSun", "VertSun", "Glare", "Vis",
     "ObsL", "Rec", "ObsR", "ObsInd",
     "EffortDot", "EventNum", "file_das", "line_num", "testrr",
-    "SightNo", "Obs", "Bearing", "Reticle", "DistNm",
+    "SightNo", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
     "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
   )
 

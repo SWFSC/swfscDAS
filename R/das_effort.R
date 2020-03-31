@@ -55,7 +55,8 @@
 #'   including arguments that must be passed to it via \code{...}.
 #'
 #'   The sightings included in the segdata counts sightings that were made when
-#'   on effort and in a Beaufort sea state less than or equal to five.
+#'   on effort, by a standard observer,
+#'   and in a Beaufort sea state less than or equal to five.
 #'   Included sightings are those with a \code{TRUE} value in the 'included'
 #'   column in siteinfo (described below).
 #'   TODO: Allow user to specify this.
@@ -189,7 +190,8 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
   x.eff.names <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
     "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght",
-    "RainFog", "HorizSun", "VertSun", "Glare", "Vis", "Data1", "Data2",
+    "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
+    "ObsL", "Rec", "ObsR", "ObsInd", "Data1", "Data2",
     "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
     "EffortDot", "EventNum", "file_das", "line_num", "idx_eff", "dist_from_prev",
     "cont_eff_section", "effort_seg", "seg_idx", "segnum"
@@ -217,7 +219,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     das_sight(mixed.multi = TRUE) %>%
     filter(.data$Event == "S") %>%
     mutate(perp_dist = (abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852),
-           included = (.data$Bft <= 5 & .data$OnEffort),
+           included = (.data$Bft <= 5 & .data$OnEffort & .data$Obs_std),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-.data$dist_from_prev, -.data$cont_eff_section, -.data$effort_seg)
 

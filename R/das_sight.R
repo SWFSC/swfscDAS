@@ -62,6 +62,7 @@
 #'     \emph{Sighting information}     \tab \emph{Column name} \tab \emph{Notes}\cr
 #'     Sighting number                 \tab SightNo\cr
 #'     Observer that made the sighting \tab Obs\cr
+#'     Obs is one of ObsL, Rec or ObsR \tab Obs_std\cr
 #'     Bearing to the sighting         \tab Bearing \tab Degrees, range 0 to 360\cr
 #'     Number of reticle marks         \tab Reticle\cr
 #'     Distance (nautical miles)       \tab DistNm\cr
@@ -89,7 +90,7 @@
 #'     Course of resight group    \tab ResightCourse \tab \code{NA} for non-"s" events\cr
 #'     Turtle species             \tab TurtleSp   \tab \code{NA} for non-"t" events\cr
 #'     Number of turtles          \tab TurtleNum  \tab \code{NA} for non-"t" events\cr
-#'     Presence of associated JFR \tab Turtle JFR \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
+#'     Presence of associated JFR \tab TurtleJFR  \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
 #'     Estimated turtle maturity  \tab TurtleAge  \tab \code{NA} for non-"t" events\cr
 #'     Was turtle captured?       \tab TurtleCapt \tab \code{NA} for non-"t" events\cr
 #'     Boat or gear type          \tab BoatType   \tab \code{NA} for non-"F" events\cr
@@ -161,6 +162,10 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
            Obs = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data2,
                            .data$Event == "t" ~ .data$Data1,
                            .data$Event == "F" ~ .data$Data1),
+           Obs_std = pmap_lgl(list(.data$Obs, .data$ObsL, .data$Rec, .data$ObsR),
+                              function(obs, o1, o2, o3) {
+                                ifelse(is.na(obs), NA, obs %in% c(o1, o2, o3))
+                              }),
            Bearing = as.numeric(
              case_when(
                .data$Event %in% c("S", "K", "M") ~ .data$Data5,
@@ -180,7 +185,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
                .data$Event == "t" ~ .data$Data4,
                .data$Event == "F" ~ .data$Data3))) %>%
     select(.data$sight_cumsum, .data$SightNo,
-           .data$Obs, .data$Bearing, .data$Reticle, .data$DistNm)
+           .data$Obs, .data$Obs_std, .data$Bearing, .data$Reticle, .data$DistNm)
 
 
   #--------------------------------------------------------

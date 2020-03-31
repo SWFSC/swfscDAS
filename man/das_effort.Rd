@@ -99,7 +99,8 @@ This is the top-level function for chopping processed DAS data
   including arguments that must be passed to it via \code{...}.
 
   The sightings included in the segdata counts sightings that were made when
-  on effort and in a Beaufort sea state less than or equal to five.
+  on effort, by a standard observer,
+  and in a Beaufort sea state less than or equal to five.
   Included sightings are those with a \code{TRUE} value in the 'included'
   column in siteinfo (described below).
   TODO: Allow user to specify this.

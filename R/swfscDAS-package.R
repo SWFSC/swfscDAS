@@ -19,7 +19,7 @@
 #' @importFrom parallel clusterExport detectCores parLapplyLB stopCluster
 #' @importFrom readr cols col_character fwf_positions read_fwf
 #' @importFrom rlang !! .data
-#' @importFrom purrr map_chr pmap
+#' @importFrom purrr map_chr pmap pmap_lgl
 #' @importFrom stats na.omit runif
 #' @importFrom swfscMisc bearing destination distance setupClusters
 #' @importFrom tidyr gather
