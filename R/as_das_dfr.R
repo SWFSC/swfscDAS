@@ -1,13 +1,13 @@
 #' Coerce object to a das_dfr object
 #'
-#' Check if an object is of class \code{\link{das_dfr}}, or coerce it if possible.
+#' Check if an object is of class \code{das_dfr}, or coerce it if possible.
 #'
 #' @param x An object to be coerced to class \code{das_dfr}
 #'
-#' @details Currently only data frames can be coerced to an object of class \code{\link{das_dfr}}.
-#'   If \code{x} does not have column names and classes as specified in \code{\link{das_dfr}},
+#' @details Currently only data frames can be coerced to an object of class \code{das_dfr}.
+#'   If \code{x} does not have column names and classes as specified in \code{\link{das_dfr-class}},
 #'   then the function returns an error message detailing the first column that does not
-#'   meet the \code{\link{das_dfr}} requirements.
+#'   meet the requirements of a \code{das_dfr} object.
 #'
 #' @return An object of class `das_dfr`
 #'
