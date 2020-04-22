@@ -27,6 +27,12 @@ randpicks_convert <- function(x.randpicks, x.segdata, seg.km) {
     group_by(.data$cont_eff_sect) %>%
     summarise(count = n(),
               dist_sum = sum(.data$dist))
+  x.summ.check <- x.segdata.summ %>%
+    mutate(dist_max = .data$count * seg.km + 0.5 * seg.km,
+           dist_check = .data$dist_max >= .data$dist_sum)
+
+  if (!all(x.summ.check$dist_check))
+    warning("Error in segdata distances - please report this as an issue")
 
   # Check that number of randpicks equals the number of
   #   continuous effort sections >= seg.km
@@ -36,11 +42,16 @@ randpicks_convert <- function(x.randpicks, x.segdata, seg.km) {
   if (!check1 | !check2)
     stop("Error - the provided randpicks and segdata files are not compatible")
 
-  x.randpicks %>%
-    bind_cols(filter(x.segdata.summ, .data$dist_sum > seg.km)) %>%
-    mutate(pos_value = ceiling(.data$RandPick * .data$count)) %>%
-    select(effort_section = .data$cont_eff_sect, .data$pos_value) %>%
-    right_join(data.frame(effort_section = seq_len(nrow(x.segdata.summ))),
-               by = "effort_section") %>%
+
+  # Prep segdata summary info for joining with randpicks
+  rand.out <- x.segdata.summ %>%
+    filter(.data$dist_sum > seg.km) %>%
+    bind_cols(x.randpicks) %>%
+    mutate(pos_value = ceiling(.data$RandPick * .data$count))
+
+  # 'Expand' randpicks data to include all continuous effort sections
+  x.segdata.summ %>%
+    select(effort_section = .data$cont_eff_sect) %>%
+    left_join(rand.out, by = c("effort_section" = "cont_eff_sect")) %>%
     select(.data$effort_section, randpicks = .data$pos_value)
 }

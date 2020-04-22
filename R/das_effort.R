@@ -20,11 +20,16 @@
 #'   or one of \code{"lawofcosines"}, \code{"haversine"},
 #'   or \code{"vincenty"} to use
 #'   \code{\link[swfscMisc]{distance}}. Default is \code{"vincenty"}
+#' @param seg0.drop logical; flag indicating whether or not to drop segments
+#'   of length 0 that contain no "S" events. Default is \code{FALSE}
+#' @param comment.drop logical; flag indicating if comments ("C" events)
+#'   should be ignored (i.e. position information should not be used)
+#'   when segment chopping. Default is \code{FALSE}
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL}, which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}.
 #'   Using 1 core likely will be faster for smaller datasets
-#' @param ... arguments passed to the chopping function specified using \code{method},
+#' @param ... arguments passed to the specified chopping function,
 #'   such as \code{seg.km} or \code{seg.min.km}
 #'
 #' @details This is the top-level function for chopping processed DAS data
@@ -110,8 +115,9 @@ das_effort.data.frame <- function(x, ...) {
 #' @name das_effort
 #' @export
 das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
-                              dist.method = "vincenty", num.cores = NULL,
-                              ...) {
+                              dist.method = "vincenty",
+                              seg0.drop = FALSE, comment.drop = FALSE,
+                              num.cores = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
   methods.acc <- c("equallength", "condition")
@@ -131,7 +137,6 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
       c("Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis")
     } else {
       c("Bft", "SwellHght", "HorizSun", "VertSun", "Glare", "Vis")
-      #TODO: RainFog?
     }
 
   } else {
@@ -143,7 +148,11 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
 
 
   #----------------------------------------------------------------------------
-  # Prep
+  # Prep for chop functions
+
+  # Remove comments if specified
+  if (comment.drop) x <- x %>% filter(.data$Event != "C")
+
   # Add index column for adding back in ? and 1:8 events, and extract those events
   x$idx_eff <- seq_len(nrow(x))
   event.tmp <- c("?", 1:8)
@@ -155,10 +164,11 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
 
   x.oneff.all <- x[x.oneff.which, ]
 
-  x.oneff <- x.oneff.all %>% filter(!(.data$Event %in% event.tmp))
+  x.oneff <- x.oneff.all %>%
+    filter(!(.data$Event %in% event.tmp) )
   x.oneff.tmp <- x.oneff.all %>%
     filter(.data$Event %in% event.tmp) %>%
-    mutate(dist_from_prev = NA, cont_eff_section = NA,
+    mutate(cont_eff_section = NA, dist_from_prev = NA,
            effort_seg = NA, seg_idx = NA, segnum = NA)
 
   rownames(x.oneff) <- rownames(x.oneff.tmp) <- NULL
@@ -167,8 +177,64 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     sum(c(nrow(x.oneff), nrow(x.oneff.tmp))) == nrow(x.oneff.all)
   )
 
+  # Verbosely remove remaining data without Lat/Lon/DateTime info
+  if (any(is.na(x.oneff$Lat) | is.na(x.oneff$Lon) | is.na(x.oneff$DateTime))) {
+    x.nacheck <- x.oneff %>%
+      mutate(ll_dt_na = is.na(.data$Lat) | is.na(.data$Lon) | is.na(.data$DateTime),
+             sight_na = .data$ll_dt_na & (.data$Event %in% c("S", "K", "M")))
+
+    # Check that no sightings have NA lat/lon/dt info
+    if (any(x.nacheck$sight_na))
+      stop("One or more sightings at the following line number(s) ",
+           "have NA Lat/Lon/DateTime values; ",
+           "please fix or remove before processing:\n",
+           paste(x.oneff$line_num[x.nacheck$sight_na], collapse = ", "))
+
+    # Remove events with NA lat/lon/dt info
+    x.oneff <- x.oneff %>%
+      filter(!is.na(.data$Lat) & !is.na(.data$Lon) & !is.na(.data$DateTime))
+    message(paste0("There were ", sum(x.nacheck$ll_dt_na), " on effort ",
+                  ifelse(comment.drop, "(non-C) ", ""), "events ",
+                  "with NA Lat/Lon/DateTime values that will ignored ",
+                  "during segment chopping"))
+
+    rm(x.nacheck)
+  }
+
   # For each event, calculate distance to previous event
   x.oneff$dist_from_prev <- .dist_from_prev(x.oneff, dist.method)
+
+  # Determine continuous effort sections
+  x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
+  event.B.preR <- (x.oneff$Event == "B") & (c(x.oneff$Event[-1], NA) == "R")
+  x.oneff$cont_eff_section[event.B.preR] <- x.oneff$cont_eff_section[event.B.preR] + 1
+
+  # If specified, verbosely remove cont eff sections with length 0 and no "S" events
+  if (seg0.drop) {
+    x.ces.summ <- x.oneff %>%
+      group_by(.data$cont_eff_section) %>%
+      summarise(dist_sum = sum(.data$dist_from_prev[-1]),
+                has_sight = "S" %in% .data$Event,
+                line_min = min(.data$line_num))
+    ces.keep <- filter(x.ces.summ, .data$has_sight | .data$dist_sum > 0)[["cont_eff_section"]]
+
+    x.oneff <- x.oneff %>% filter(.data$cont_eff_section %in% ces.keep)
+
+    x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
+    event.B.preR <- (x.oneff$Event == "B") & (c(x.oneff$Event[-1], NA) == "R")
+    x.oneff$cont_eff_section[event.B.preR] <- x.oneff$cont_eff_section[event.B.preR] + 1
+
+    message(paste("There were", nrow(x.ces.summ) - length(ces.keep),
+                  "continuos effort sections removed because they have a ",
+                  "length of 0 and contain no S events"))
+    rm(x.ces.summ, ces.keep)
+  }
+
+  if (length(unique(x.oneff$cont_eff_section)) != sum(x.oneff$Event == "R") |
+      max(x.oneff$cont_eff_section) != sum(x.oneff$Event == "R"))
+    stop("Error in processing continuous effort sections - ",
+         "please report this as an issue")
+
 
   #----------------------------------------------------------------------------
   # Chop and summarize effort using specified method
@@ -193,8 +259,8 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
     "ObsL", "Rec", "ObsR", "ObsInd", "Data1", "Data2",
     "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
-    "EffortDot", "EventNum", "file_das", "line_num", "idx_eff", "dist_from_prev",
-    "cont_eff_section", "effort_seg", "seg_idx", "segnum"
+    "EffortDot", "EventNum", "file_das", "line_num", "idx_eff",
+    "dist_from_prev", "cont_eff_section", "effort_seg", "seg_idx", "segnum"
   )
   if (!identical(names(x.eff), x.eff.names))
     stop("Error in das_effort: names of x.eff. ",
@@ -248,8 +314,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     bind_cols(siteinfo.forsegdata.list)
 
   # Format outputs as desired
-  segdata <- segdata %>%
-    left_join(siteinfo.forsegdata.df, by = "seg_idx")
+  segdata <- left_join(segdata, siteinfo.forsegdata.df, by = "seg_idx")
 
   siteinfo <- siteinfo %>%
     select(-.data$seg_idx) %>%

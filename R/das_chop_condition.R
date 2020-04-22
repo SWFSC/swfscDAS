@@ -103,7 +103,17 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
 
 
   #----------------------------------------------------------------------------
-  # Calculate distance between points if necessary
+  # Add columns if necessary
+
+  # Determine continuous effort sections
+  if (!("cont_eff_section" %in% names(x))) {
+    x$cont_eff_section <- cumsum(x$Event %in% "R")
+
+    event.B.preR <- (x$Event == "B") & (c(x$Event[-1], NA) == "R")
+    x$cont_eff_section[event.B.preR] <- x$cont_eff_section[event.B.preR] + 1
+  }
+
+  # Calculate distance between points; checks happen in .dist_from_prev()
   if (!("dist_from_prev" %in% names(x))) {
     if (is.null(dist.method))
       stop("If the distance between consectutive points (events) ",
@@ -113,26 +123,17 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
     x$dist_from_prev <- .dist_from_prev(x, dist.method)
   }
 
+
   # Get distance to next point
   x$dist_to_next <- c(x$dist_from_prev[-1], NA)
 
 
   #----------------------------------------------------------------------------
-  # ID continuous effort sections, then for each modeling segment:
+  # For each modeling segment:
   #   1) chop by condition change
   #   2) aggregate 0-length segments (e.g. brpvnw),
   #   3) aggregate small segments as specified by user via seg.min.km
-  # x$cont_eff_section <- cumsum(x$Event %in% c("T", "R"))
-  x$cont_eff_section <- cumsum(x$Event %in% "R")
-  event.B <- x$Event == "B"
 
-  if (all(x$Event[which(event.B) + 1] == "R")) {
-    x$cont_eff_section[event.B] <- x$cont_eff_section[event.B] + 1
-  } else {
-    warning("das_chop_effort event B inconsistency. ",
-            "Please report this as an issue",
-            immediate. = TRUE)
-  }
   eff.uniq <- unique(x$cont_eff_section)
   stopifnot(length(eff.uniq) == sum(x$Event == "R"))
 
@@ -301,7 +302,6 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
 
   #------------------------------------------------------
   ### Get segdata and return
-  # TODO: develop non-avg function
   # das.df.segdata <- das_segdata(as_das_df(das.df), seg.lengths, i)
   das.df.segdata <- call.func1(
     x = das.df, conditions = call.conditions, segdata.method = "maxdist",

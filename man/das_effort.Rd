@@ -16,6 +16,8 @@ das_effort(x, ...)
   sp.codes,
   conditions = NULL,
   dist.method = "vincenty",
+  seg0.drop = FALSE,
+  comment.drop = FALSE,
   num.cores = NULL,
   ...
 )
@@ -24,7 +26,7 @@ das_effort(x, ...)
 \item{x}{\code{das_df} object; output from \code{\link{das_process}},
 or a data frame that can be coerced to a \code{das_df} object}
 
-\item{...}{arguments passed to the chopping function specified using \code{method},
+\item{...}{arguments passed to the specified chopping function,
 such as \code{seg.km} or \code{seg.min.km}}
 
 \item{method}{character; method to use to chop DAS data into effort segments
@@ -46,6 +48,13 @@ Can be \code{"greatcircle"} to use the great circle distance method (TODO - add 
 or one of \code{"lawofcosines"}, \code{"haversine"},
 or \code{"vincenty"} to use
 \code{\link[swfscMisc]{distance}}. Default is \code{"vincenty"}}
+
+\item{seg0.drop}{logical; flag indicating whether or not to drop segments
+of length 0 that contain no "S" events. Default is \code{FALSE}}
+
+\item{comment.drop}{logical; flag indicating if comments ("C" events)
+should be ignored (i.e. position information should not be used)
+when segment chopping. Default is \code{FALSE}}
 
 \item{num.cores}{Number of CPUs to over which to distribute computations.
 Defaults to \code{NULL}, which uses one fewer than the number of cores
