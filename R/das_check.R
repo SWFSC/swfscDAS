@@ -3,8 +3,16 @@
 #' Check that DAS file has accepted values
 #'
 #' @param file filename(s) of one or more DAS files
+#' @param skip integer: see \code{\link[readr]{read_fwf}}. Default is 0
 #' @param file.out filename to which to write the error log;
 #'   default is \code{NULL}
+#' @param sp.codes character; filename of .dat file from which to read
+#'   accepted species codes.
+#'   If \code{NULL}, the species codes will not be checked
+#'   Default is \code{NULL}
+#' @param print.cruise.nums logical; indicates if a table with all the
+#'   cruise numbers in the \code{x} should be printed using
+#'   \code{\link[base]{table}}. Default is \code{TRUE}
 #'
 #' @details
 #' Precursor to DASCHECK. Checks that the following is true:
@@ -12,43 +20,56 @@
 #'   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
 #'     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
 #'   \item The effort dot matches effort determined using B, R, and E events
-#'   \item And event/column pairs meet the following requirements:
+#'   \item There are an equal number of R and E events, and they alternate occurrences
+#'   \item A BR event series or R event does not occur while already on effort
+#'   \item An E event does not occur while already off effort
+#'   \item All Data# columns for non-C events are right-justified
+#'   \item Only C, S, K, and M events have data past the 84th column in the DAS file
+#'   \item The following events have NA (blank) Data# columns: *
+#'   \item All of  *, B, R, E, V, W, N, P, and Q events have NA Data# columns
+#'     where specified (see format pdf for more details)
+#'   \item Event/column pairs meet the following requirements:
 #' }
 #'
 #' \tabular{llll}{
 #'   \emph{Item} \tab \emph{Event} \tab \emph{Column} \tab \emph{Requirement}\cr
 #'   Cruise number  \tab B \tab Data1 \tab Can be converted to a numeric value\cr
 #'   Mode           \tab B \tab Data2 \tab Must be one of C, P, c, p, or NA (blank)\cr
+#'   Echo sounder   \tab B \tab Data4 \tab Must be one of Y, N, y, n, or NA (blank)\cr
 #'   Effort type    \tab R \tab Data1 \tab Must be one of F, N, S, or NA (blank)\cr
 #'   Effective strip width sides \tab R \tab Data2 \tab Must be one of F, H, or NA (blank)\cr
 #'   Course         \tab N \tab Data1 \tab Can be converted to a numeric value\cr
-#'   Beaufort       \tab V \tab Data1 \tab Can be converted to a numeric value\cr
+#'   Beaufort       \tab V \tab Data1 \tab Must be a whole number between 0 and 9\cr
 #'   Swell height   \tab V \tab Data2 \tab Can be converted to a numeric value\cr
-#'   Rain or fog    \tab W \tab Data1 \tab Can be converted to a numeric value\cr
-#'   Horizontal sun \tab W \tab Data2 \tab Can be converted to a numeric value\cr
-#'   Vertical sun   \tab W \tab Data3 \tab Can be converted to a numeric value\cr
+#'   Rain or fog    \tab W \tab Data1 \tab Must be between 0 and 5 and be either a whole number or have a decimal value of 0.5\cr
+#'   Horizontal sun \tab W \tab Data2 \tab Must be a whole number between 0 and 12\cr
+#'   Vertical sun   \tab W \tab Data3 \tab Must be a whole number between 0 and 12\cr
 #'   Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
-#'   Sighting (mammal) \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value\cr
-#'   Photos \tab A \tab Data3 \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   Birds  \tab A \tab Data4 \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   Resighting      \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
+#'   Sighting (mammal)        \tab S, K, M \tab Data3-7 \tab Can be converted to a numeric value\cr
+#'   Sighting cue (mammal)    \tab S, K, M \tab Data3   \tab Must be a whole number between 1 and 6\cr
+#'   Sighting method (mammal) \tab S, K, M \tab Data4   \tab Must be a whole number between 1 and 7\cr
+#'   Bearing (mammal)         \tab S, K, M \tab Data5   \tab Must be a whole number between 0 and 360\cr
+#'   Photos         \tab A \tab Data3   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   Birds          \tab A \tab Data4   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   Species codes  \tab A \tab Data5-8 \tab If a species codes file is provided, must be one of the provided codes\cr
+#'   Resight         \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
+#'   Turtle species  \tab t       \tab Data2      \tab If a species codes file is provided, must be one of the provided codes\cr
 #'   Turtle sighting \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value\cr
-#'   JFR             \tab t \tab Data6 \tab Must be one of F, J, N, R, or NA (blank)\cr
+#'   Turtle JFR      \tab t       \tab Data6      \tab Must be one of F, J, N, R, or NA (blank)\cr
 #'   Fishing vessel  \tab F       \tab Data2-4    \tab Can be converted to a numeric value\cr
-#'   Sighting info \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value\cr
-#'   Sighting info \tab 1-8 \tab Data9 \tab The Data9 column must be NA (blank) for events 1-8\cr
+#'   Sighting info \tab 1-8 \tab Data2-8 \tab Can be converted to a numeric value\cr
+#'   Sighting info \tab 1-8 \tab Data9   \tab The Data9 column must be NA (blank) for events 1-8\cr
 #' }
 #'
 #' Outstanding questions:
 #' \itemize{
+#'   \item There are ~3000 V events from 2018 with non-NA Data6 columns.
+#'   \item There are ~3500 S/K/M events with data past the Data9 columns.
 #'   \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
-#'   \item What to add?
-#'   \item How to check that everything is right-justified?
 #' }
 #'
 #' @return
-#' A data frame with five columns: the file name, line number,
-#' index (row number) from the \code{das_read(file)} data frame,
+#' A data frame with columns: the file name, line number, cruise number,
 #' 'ID' (columns 4-39 from the DAS file), and description of the issue
 #'
 #' If \code{file.out} is not \code{NULL}, then the error log is also
@@ -59,20 +80,57 @@
 #' das_check(y)
 #'
 #' @export
-das_check <- function(file, file.out = NULL) {
+das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
+                      print.cruise.nums = TRUE) {
   error.out <- data.frame(
-    File = NA, LineNum = NA, Idx = NA, ID = NA, Description = NA,
+    File = NA, LineNum = NA, CruiseNum = NA, ID = NA, Description = NA,
     stringsAsFactors = FALSE
   )
-  x <- das_read(file)
-  x.lines <- substr(readLines(file), 4, 39)
+
+  message("Reading DAS file")
+  x <- suppressWarnings(das_read(file, skip = skip))
+  x$idx <- seq_along(x$Event)
+  x <- as_das_dfr(x)
+
+  x.lines.all <- readLines(file)
+  x.lines <- substr(x.lines.all, 4, 39)
+  if (skip > 0) x.lines <- x.lines[-c(1:skip)]
+
   stopifnot(nrow(x) == length(x.lines))
+
+  message("Processing DAS file")
+  x.proc <- suppressWarnings(das_process(x)) %>%
+    left_join(select(x, .data$line_num, .data$idx), by = "line_num")
+  x.proc <- as_das_df(x.proc)
 
 
   #----------------------------------------------------------------------------
+  ### Process sp.codes file
+  if (!is.null(sp.codes)) {
+    message("Reading and processing SpCodes file")
+    sp.acc.df <- read_fwf(
+      sp.codes,
+      col_positions = fwf_positions(start = c(1, 6, 18, 58), end = c(4, 15, 57, NA)),
+      col_types = cols(.default = col_character()),
+      trim_ws = TRUE, skip = 0, skip_empty_rows = FALSE
+    )
+
+    sp.acc <- sp.acc.df[[1]]
+    sp.acc.all <- c(sp.acc, tolower(sp.acc))
+
+    if (!all(nchar(sp.acc) %in% 2:3))
+      warning("Some species codes from sp.codes are not two or three charcters. ",
+              "Did you load the correct species code .dat file?",
+              immediate. = TRUE)
+  }
+
+
+  #----------------------------------------------------------------------------
+  message("Checking DAS file")
+
   ### Check event codes
-  event.acc <- c("#", "*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "N",
-                 "P", "Q", "R", "s", "S", "t", "V", "W",
+  event.acc <- c("#", "*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "M",
+                 "N", "P", "Q", "R", "s", "S", "t", "V", "W",
                  "G", "g", "p", "X", "Y", "Z")
   ev.which <- which(!(x$Event %in% event.acc))
   error.out <- rbind(
@@ -85,45 +143,159 @@ das_check <- function(file, file.out = NULL) {
 
   #----------------------------------------------------------------------------
   ### Check that effort dot matches effort determined by B/R to E events
+  x.proc.no1 <- x.proc[!(x.proc$Event %in% c("?", 1:8, "#", "C")), ]
+  edot.which <- x.proc.no1$idx[(x.proc.no1$OnEffort != x.proc.no1$EffortDot)]
+
+  error.out <- rbind(
+    error.out,
+    .check_list(x.proc, x.lines, edot.which,
+                "Effort dot does not match B/R to E effort (for non-C events)")
+  )
+  rm(x.proc.no1)
+
+
+  #----------------------------------------------------------------------------
+  ### Check:
   ndx.B <- which(x$Event == "B")
   ndx.R <- which(x$Event == "R")
   ndx.E <- which(x$Event == "E")
 
+  # 1) That there are equal number of R and E events, and they are alternating
   if (length(ndx.E) != length(ndx.R)) {
     error.out <- rbind(
       error.out,
       list(NA, NA, NA, NA,
            paste("Error: There are not an equal number of 'R' and 'E'",
-                 "events in the provided DAS file"))
+                 "events in the provided DAS file - check this line"))
     )
 
   } else if (!all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])) {
-    e.which <- which(
+    er.which <- which(
       !all(ndx.E - ndx.R > 0) | !all(head(ndx.E, -1) < ndx.R[-1])
     )
-    error.out <- rbind(
-      error.out,
-      list(x$file_das[e.which], x$line_num[e.which], e.which, x.lines[e.which],
-           "Error: Not all 'R' events are followed by 'E' events")
-    )
-
-  } else {
-    x.eff.idx <- unlist(mapply(function(i, j) {
-      i:(j-1)
-    }, ndx.R, ndx.E, SIMPLIFY = FALSE))
-    ndx.B.preR <- ndx.B[(ndx.B + 1) %in% ndx.R]
-    x.eff <- seq_len(nrow(x)) %in% c(x.eff.idx, ndx.B.preR)
-
-    e.which <- which(
-      (x.eff != x$EffortDot) & !(x$Event %in% c("?", 1:8, "#"))
-    )
 
     error.out <- rbind(
       error.out,
-      list(x$file_das[e.which], x$line_num[e.which], e.which, x.lines[e.which],
-           rep("Effort dot does not match B/R to E effort", length(e.which)))
+      .check_list(x.proc, x.lines, er.which,
+                  paste("Error: There are an equal number of R and E events,",
+                        "but not all 'R' events are followed by 'E' events"))
     )
+
   }
+
+  # 2) All R events occur while off effort, or after a B event that occurs while off effort
+  idx.proc.r <- which(x.proc$Event == "R")
+  x.proc.preR <- x.proc[idx.proc.r - 1, ]
+  r.which <- x.proc.preR$idx[x.proc.preR$OnEffort & x.proc.preR$Event != "B"] + 1
+
+  idx.proc.b.preR <- x.proc.preR$idx[x.proc.preR$Event == "B"]
+  x.proc.preBR <- x[idx.proc.b.preR - 1, ]
+  br.which <- x.proc.preBR$idx[x.proc.preBR$OnEffort] + 1
+
+  # 3) All E events occur while on effort
+  idx.proc.e <- which(x.proc$Event =="E")
+  x.proc.preE <- x.proc[idx.proc.e - 1, ]
+  e.which <- x.proc.preE$idx[!x.proc.preE$OnEffort] + 1
+
+  error.out <- rbind(
+    error.out,
+    .check_list(x.proc, x.lines, sort(unique(c(r.which, br.which))),
+                "There is an R event (or BR event series) while already on effort"),
+    .check_list(x.proc, x.lines, e.which,
+                "There is an E event while already off effort")
+  )
+  rm(x.proc.preE, x.proc.preR, x.proc.preBR)
+
+
+  #----------------------------------------------------------------------------
+  ### Check that Data# columns are right-justifed for selected events,
+  ###   and that there is no extra data in these rows
+  # * events should have no data - this is checked later
+  x.tmp.filt <- data.frame(
+    Event = substr(x.lines.all, 4, 4),
+    Data1 = substr(x.lines.all, 40, 44),
+    Data2 = substr(x.lines.all, 45, 49),
+    Data3 = substr(x.lines.all, 50, 54),
+    Data4 = substr(x.lines.all, 55, 59),
+    Data5 = substr(x.lines.all, 60, 64),
+    Data6 = substr(x.lines.all, 65, 69),
+    Data7 = substr(x.lines.all, 70, 74),
+    Data8 = substr(x.lines.all, 75, 79),
+    Data9 = substr(x.lines.all, 80, 84),
+    Extra_data = substr(x.lines.all, 85, max(nchar(x.lines.all))),
+    idx = x$idx,
+    stringsAsFactors = FALSE
+  ) %>%
+    filter(!(.data$Event %in% c("C", "*", "#"))) %>%
+    mutate(Extra_data = trimws(.data$Extra_data, which = "both"))
+
+  x.tmp.filt.data <- x.tmp.filt %>% select(starts_with("Data"))
+  x.tmp.filt.noSKM <- x.tmp.filt %>% filter(!(.data$Event %in% c("S", "K", "M")))
+
+  x.tmp.which <- lapply(1:ncol(x.tmp.filt.data), function(i) {
+    x1 <- trimws(x.tmp.filt.data[[i]], which = "left")
+    x2 <- trimws(x.tmp.filt.data[[i]], which = "both")
+    which(x1 != x2 )
+  })
+
+  rj.which <- x.tmp.filt$idx[sort(unique(unlist(x.tmp.which)))]
+  rj.extra.which <- x.tmp.filt.noSKM$idx[x.tmp.filt.noSKM$Extra_data != ""]
+
+
+  error.out <- rbind(
+    error.out,
+    .check_list(x.proc, x.lines, rj.which, "Data column(s) are not right-justified"),
+    .check_list(x.proc, x.lines, rj.extra.which, "Row contains information past the 84th column")
+  )
+
+  rm(x.tmp.filt, x.tmp.filt.data, x.tmp.filt.noSKM, x.tmp.which)
+
+
+  #----------------------------------------------------------------------------
+  ### Print cruise numbers
+  if (print.cruise.nums) {
+    cat("Cruise numbers:", collapse = "")
+    print(table(x$Data1[x$Event == "B"], useNA = "always"))
+  }
+
+
+  #----------------------------------------------------------------------------
+  ### Check that (non-sighting) Data# columns that should be blank are blank
+
+  # "*" events
+  idx.star.na <- .check_isna(x, c("*"), paste0("Data", 1:9))
+  txt.star.na <- "* events should have no data in the Data# columns"
+
+  # E events
+  idx.e.na <- .check_isna(x, c("E"), paste0("Data", 2:9))
+  txt.e.na <- "E events should only have data in the Data1 column"
+
+  # R events
+  idx.r.na <- .check_isna(x, c("R"), paste0("Data", 3:9))
+  txt.r.na <- "R events should only have data in the Data1-2 columns"
+
+  # N events
+  idx.n.na <- .check_isna(x, c("N"), paste0("Data", 4:9))
+  txt.n.na <- "N events should only have data in the Data1-3 columns"
+
+  # B, P, and Q events
+  idx.bpq.na <- .check_isna(x, c("B", "P", "Q"), paste0("Data", 5:9))
+  txt.bpq.na <- "B, P, and Q events should only have data in the Data1-4 columns"
+
+  # V and W events
+  idx.vw.na <- .check_isna(x, c("V", "W"), paste0("Data", 6:9))
+  txt.vw.na <- "V and W events should only have data in the Data1-5 columns"
+
+
+  error.out <- rbind(
+    error.out,
+    .check_list(x.proc, x.lines, idx.star.na, txt.star.na),
+    .check_list(x.proc, x.lines, idx.e.na, txt.e.na),
+    .check_list(x.proc, x.lines, idx.r.na, txt.r.na),
+    .check_list(x.proc, x.lines, idx.n.na, txt.n.na),
+    .check_list(x.proc, x.lines, idx.bpq.na, txt.bpq.na),
+    .check_list(x.proc, x.lines, idx.vw.na, txt.vw.na)
+  )
 
 
   #----------------------------------------------------------------------------
@@ -142,6 +314,10 @@ das_check <- function(file, file.out = NULL) {
   idx.b.2 <- .check_character(x, "B", "Data2", c("C", "P", "c", "p", NA))
   txt.b.2 <- "Effort type (Data2 of B events) is not one of C, P, c, p, or NA"
 
+  # Echo sounder
+  idx.b.4 <- .check_character(x, "B", "Data4", c("Y", "y", "N", "n", NA))
+  txt.b.4 <- "Echo sounder (Data4 of B events) is not one of Y, y, N, n, or NA"
+
   # Effort type
   idx.r.1 <- .check_character(x, "R", "Data1", c("F", "N", "S", NA))
   txt.r.1 <- "Effort type (Data1 of R events) is not one of F, N, S, or NA"
@@ -155,24 +331,27 @@ das_check <- function(file, file.out = NULL) {
   txt.n.1 <- "Course (Data1 of N events) cannot be converted to a numeric"
 
   # Beaufort
-  idx.v.1 <- .check_numeric(x, "V", "Data1")
-  txt.v.1 <- "Beaufort (Data1 of V events) cannot be converted to a numeric"
+  bft.acc <- c(0:9, sprintf("%02d", 0:9), NA)
+  idx.v.1 <- .check_character(x, "V", "Data1", bft.acc)
+  txt.v.1 <- "Beaufort (Data1 of V events) must be a whole number between 0 and 9"
 
   # Swell Height
   idx.v.2 <- .check_numeric(x, "V", "Data2")
   txt.v.2 <- "Swell height (Data2 of V events) cannot be converted to a numeric"
 
   # RainFog
-  idx.w.1 <- .check_numeric(x, "W", "Data1")
-  txt.w.1 <- "Rain/fog (Data1 of W events) cannot be converted to a numeric"
+  rf.acc <- c(seq(0, 5, by = 0.5), sprintf("%02d", 1:5), NA)
+  idx.w.1 <- .check_character(x, "W", "Data1", rf.acc)
+  txt.w.1 <- "Rain/fog (Data1 of W events) is not a whole number between 0 and 5, or a '#.5'"
 
   # Horizontal sun
-  idx.w.2 <- .check_numeric(x, "W", "Data2")
-  txt.w.2 <- "Horizontal sun (Data2 of W events) cannot be converted to a numeric"
+  acc.sun <- c(0:12, sprintf("%02d", 0:9), NA)
+  idx.w.2 <- .check_character(x, "W", "Data2", acc.sun)
+  txt.w.2 <- "Horizontal sun (Data2 of W events) is not a whole number between 0 and 12"
 
   # Vertical sun
-  idx.w.3 <- .check_numeric(x, "W", "Data3")
-  txt.w.3 <- "Vertical sun (Data3 of W events) cannot be converted to a numeric"
+  idx.w.3 <- .check_character(x, "W", "Data3", acc.sun)
+  txt.w.3 <- "Vertical sun (Data3 of W events) is not a whole number between 0 and 12"
 
   # Visibility
   idx.w.5 <- .check_numeric(x, "W", "Data5")
@@ -182,17 +361,18 @@ das_check <- function(file, file.out = NULL) {
   # Add text to error.out as needed and return
   error.out <- rbind(
     error.out,
-    .check_list(x, x.lines, idx.b.1, txt.b.1),
-    .check_list(x, x.lines, idx.b.2, txt.b.2),
-    .check_list(x, x.lines, idx.r.1, txt.r.1),
-    .check_list(x, x.lines, idx.r.2, txt.r.2),
-    .check_list(x, x.lines, idx.n.1, txt.n.1),
-    .check_list(x, x.lines, idx.v.1, txt.v.1),
-    .check_list(x, x.lines, idx.v.2, txt.v.2),
-    .check_list(x, x.lines, idx.w.1, txt.w.1),
-    .check_list(x, x.lines, idx.w.2, txt.w.2),
-    .check_list(x, x.lines, idx.w.3, txt.w.3),
-    .check_list(x, x.lines, idx.w.5, txt.w.5)
+    .check_list(x.proc, x.lines, idx.b.1, txt.b.1),
+    .check_list(x.proc, x.lines, idx.b.2, txt.b.2),
+    .check_list(x.proc, x.lines, idx.b.4, txt.b.4),
+    .check_list(x.proc, x.lines, idx.r.1, txt.r.1),
+    .check_list(x.proc, x.lines, idx.r.2, txt.r.2),
+    .check_list(x.proc, x.lines, idx.n.1, txt.n.1),
+    .check_list(x.proc, x.lines, idx.v.1, txt.v.1),
+    .check_list(x.proc, x.lines, idx.v.2, txt.v.2),
+    .check_list(x.proc, x.lines, idx.w.1, txt.w.1),
+    .check_list(x.proc, x.lines, idx.w.2, txt.w.2),
+    .check_list(x.proc, x.lines, idx.w.3, txt.w.3),
+    .check_list(x.proc, x.lines, idx.w.5, txt.w.5)
   )
 
 
@@ -205,12 +385,30 @@ das_check <- function(file, file.out = NULL) {
     "cannot be converted to a numeric"
   )
 
+  idx.skm.3 <- .check_character(x, c("S", "K", "M"), "Data3", c(1:6, NA))
+  txt.skm.3 <- "Sighting cue must be a whole number between 1 and 6"
+
+  idx.skm.4 <- .check_character(x, c("S", "K", "M"), "Data4", c(1:7, NA))
+  txt.skm.4 <- "Sighting method must be a whole number between 1 and 7"
+
+  bearing.acc <- c(0:360, sprintf("%02d", 0:360), sprintf("%03d", 0:360))
+  idx.skm.b <- .check_character(x, c("S", "K", "M"), "Data5", c(bearing.acc, NA))
+  txt.skm.b <- "Bearing (Data5 of S/K/M events) is not a whole number between 0 and 360, or NA"
+
+
   # Auxillary info (A)
   idx.a.3 <- .check_character(x, "A", "Data3", c("N", "Y", "n", "y", NA))
   txt.a.3 <- "Photos (Data3 of A events) is not one of N, Y, n, y, or NA"
 
   idx.a.4 <- .check_character(x, "A", "Data4", c("N", "Y", "n", "y", NA))
   txt.a.4 <- "Birds (Data4 of A events) is not one of N, Y, n, y, or NA"
+
+  txt.a.spcode <- "Species code(s) were not one of the accepted codes provided via sp.codes"
+  idx.a.spcode <- if (is.null(sp.codes)) {
+    integer(0)
+  } else {
+    .check_character(x, "A", paste0("Data", 5:8), c(sp.acc.all, NA))
+  }
 
   # Resights (s and k)
   idx.res.num <- .check_numeric(x, c("s", "k"), paste0("Data", 2:5))
@@ -220,6 +418,13 @@ das_check <- function(file, file.out = NULL) {
   )
 
   # Turtle
+  txt.t.spcode <- "Turtle species code was not one of the accepted codes provided via sp.codes"
+  idx.t.spcode <- if (is.null(sp.codes)) {
+    integer(0)
+  } else {
+    .check_character(x, "t", paste0("Data", 2), c(sp.acc.all, NA))
+  }
+
   idx.t.num <- .check_numeric(x, "t", paste0("Data", c(3:5, 7)))
   txt.t.num <- paste(
     "At least one of the Data3-5/Data7 columns for t events",
@@ -227,7 +432,7 @@ das_check <- function(file, file.out = NULL) {
   )
 
   idx.t.6 <- .check_character(x, "t", "Data6", c("F", "J", "N", "R", NA))
-  txt.t.6 <- "Assocaited JFR (Data6 of t events) is not one of F, J, N, R, or NA"
+  txt.t.6 <- "Associated JFR (Data6 of t events) must be one of F, J, N, R, or NA"
 
   # Fishing boat
   idx.f.num <- .check_numeric(x, "F", paste0("Data", 2:4))
@@ -250,15 +455,20 @@ das_check <- function(file, file.out = NULL) {
   # Add to error.out
   error.out <- rbind(
     error.out,
-    .check_list(x, x.lines, idx.skm.num, txt.skm.num),
-    .check_list(x, x.lines, idx.res.num, txt.res.num),
-    .check_list(x, x.lines, idx.t.num, txt.t.num),
-    .check_list(x, x.lines, idx.f.num, txt.f.num),
-    .check_list(x, x.lines, idx.num.num, txt.num.num),
-    .check_list(x, x.lines, idx.a.3, txt.a.3),
-    .check_list(x, x.lines, idx.a.4, txt.a.4),
-    .check_list(x, x.lines, idx.t.6, txt.t.6),
-    .check_list(x, x.lines, idx.num.9, txt.num.9)
+    .check_list(x.proc, x.lines, idx.skm.num, txt.skm.num),
+    .check_list(x.proc, x.lines, idx.skm.3, txt.skm.3),
+    .check_list(x.proc, x.lines, idx.skm.4, txt.skm.4),
+    .check_list(x.proc, x.lines, idx.skm.b, txt.skm.b),
+    .check_list(x.proc, x.lines, idx.res.num, txt.res.num),
+    .check_list(x.proc, x.lines, idx.f.num, txt.f.num),
+    .check_list(x.proc, x.lines, idx.num.num, txt.num.num),
+    .check_list(x.proc, x.lines, idx.a.3, txt.a.3),
+    .check_list(x.proc, x.lines, idx.a.4, txt.a.4),
+    .check_list(x.proc, x.lines, idx.a.spcode, txt.a.spcode),
+    .check_list(x.proc, x.lines, idx.t.spcode, txt.t.spcode),
+    .check_list(x.proc, x.lines, idx.t.num, txt.t.num),
+    .check_list(x.proc, x.lines, idx.t.6, txt.t.6),
+    .check_list(x.proc, x.lines, idx.num.9, txt.num.9)
   )
 
 
@@ -266,16 +476,20 @@ das_check <- function(file, file.out = NULL) {
   # Remove first line and return
   if (nrow(error.out) == 1) {
     to.return <- data.frame(
-      File = NA, LineNum = NA, Idx = NA, ID = NA,
+      File = NA, LineNum = NA, CruiseNum = NA, ID = NA,
       Description = "No errors found",
       stringsAsFactors = FALSE
     )
   } else {
     to.return <- error.out[-1, ]
   }
-  row.names(to.return) <- seq_len(nrow(to.return))
+  row.names(to.return) <- NULL
 
-  if (!is.null(file.out)) write.csv(to.return, file = file.out)
+  if (!is.null(file.out)) {
+    csv.try <- try(write.csv(to.return, file = file.out), silent = TRUE)
+    if (inherits(csv.try, "try-error"))
+      warning("The DAS check file was not written to the output file")
+  }
 
   to.return
 }

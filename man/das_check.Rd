@@ -4,17 +4,33 @@
 \alias{das_check}
 \title{Check DAS file}
 \usage{
-das_check(file, file.out = NULL)
+das_check(
+  file,
+  skip = 0,
+  file.out = NULL,
+  sp.codes = NULL,
+  print.cruise.nums = TRUE
+)
 }
 \arguments{
 \item{file}{filename(s) of one or more DAS files}
 
+\item{skip}{integer: see \code{\link[readr]{read_fwf}}. Default is 0}
+
 \item{file.out}{filename to which to write the error log;
 default is \code{NULL}}
+
+\item{sp.codes}{character; filename of .dat file from which to read
+accepted species codes.
+If \code{NULL}, the species codes will not be checked
+Default is \code{NULL}}
+
+\item{print.cruise.nums}{logical; indicates if a table with all the
+cruise numbers in the \code{x} should be printed using
+\code{\link[base]{table}}. Default is \code{TRUE}}
 }
 \value{
-A data frame with five columns: the file name, line number,
-index (row number) from the \code{das_read(file)} data frame,
+A data frame with columns: the file name, line number, cruise number,
 'ID' (columns 4-39 from the DAS file), and description of the issue
 
 If \code{file.out} is not \code{NULL}, then the error log is also
@@ -29,38 +45,52 @@ Precursor to DASCHECK. Checks that the following is true:
   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
   \item The effort dot matches effort determined using B, R, and E events
-  \item And event/column pairs meet the following requirements:
+  \item There are an equal number of R and E events, and they alternate occurrences
+  \item A BR event series or R event does not occur while already on effort
+  \item An E event does not occur while already off effort
+  \item All Data# columns for non-C events are right-justified
+  \item Only C, S, K, and M events have data past the 84th column in the DAS file
+  \item The following events have NA (blank) Data# columns: *
+  \item All of  *, B, R, E, V, W, N, P, and Q events have NA Data# columns
+    where specified (see format pdf for more details)
+  \item Event/column pairs meet the following requirements:
 }
 
 \tabular{llll}{
   \emph{Item} \tab \emph{Event} \tab \emph{Column} \tab \emph{Requirement}\cr
   Cruise number  \tab B \tab Data1 \tab Can be converted to a numeric value\cr
   Mode           \tab B \tab Data2 \tab Must be one of C, P, c, p, or NA (blank)\cr
+  Echo sounder   \tab B \tab Data4 \tab Must be one of Y, N, y, n, or NA (blank)\cr
   Effort type    \tab R \tab Data1 \tab Must be one of F, N, S, or NA (blank)\cr
   Effective strip width sides \tab R \tab Data2 \tab Must be one of F, H, or NA (blank)\cr
   Course         \tab N \tab Data1 \tab Can be converted to a numeric value\cr
-  Beaufort       \tab V \tab Data1 \tab Can be converted to a numeric value\cr
+  Beaufort       \tab V \tab Data1 \tab Must be a whole number between 0 and 9\cr
   Swell height   \tab V \tab Data2 \tab Can be converted to a numeric value\cr
-  Rain or fog    \tab W \tab Data1 \tab Can be converted to a numeric value\cr
-  Horizontal sun \tab W \tab Data2 \tab Can be converted to a numeric value\cr
-  Vertical sun   \tab W \tab Data3 \tab Can be converted to a numeric value\cr
+  Rain or fog    \tab W \tab Data1 \tab Must be between 0 and 5 and be either a whole number or have a decimal value of 0.5\cr
+  Horizontal sun \tab W \tab Data2 \tab Must be a whole number between 0 and 12\cr
+  Vertical sun   \tab W \tab Data3 \tab Must be a whole number between 0 and 12\cr
   Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
-  Sighting (mammal) \tab S, K, M \tab Data3-7    \tab Can be converted to a numeric value\cr
-  Photos \tab A \tab Data3 \tab Must be one of N, Y, n, y, or NA (blank)\cr
-  Birds  \tab A \tab Data4 \tab Must be one of N, Y, n, y, or NA (blank)\cr
-  Resighting      \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
+  Sighting (mammal)        \tab S, K, M \tab Data3-7 \tab Can be converted to a numeric value\cr
+  Sighting cue (mammal)    \tab S, K, M \tab Data3   \tab Must be a whole number between 1 and 6\cr
+  Sighting method (mammal) \tab S, K, M \tab Data4   \tab Must be a whole number between 1 and 7\cr
+  Bearing (mammal)         \tab S, K, M \tab Data5   \tab Must be a whole number between 0 and 360\cr
+  Photos         \tab A \tab Data3   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  Birds          \tab A \tab Data4   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  Species codes  \tab A \tab Data5-8 \tab If a species codes file is provided, must be one of the provided codes\cr
+  Resight         \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
+  Turtle species  \tab t       \tab Data2      \tab If a species codes file is provided, must be one of the provided codes\cr
   Turtle sighting \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value\cr
-  JFR             \tab t \tab Data6 \tab Must be one of F, J, N, R, or NA (blank)\cr
+  Turtle JFR      \tab t       \tab Data6      \tab Must be one of F, J, N, R, or NA (blank)\cr
   Fishing vessel  \tab F       \tab Data2-4    \tab Can be converted to a numeric value\cr
-  Sighting info \tab 1-8     \tab Data2-8    \tab Can be converted to a numeric value\cr
-  Sighting info \tab 1-8 \tab Data9 \tab The Data9 column must be NA (blank) for events 1-8\cr
+  Sighting info \tab 1-8 \tab Data2-8 \tab Can be converted to a numeric value\cr
+  Sighting info \tab 1-8 \tab Data9   \tab The Data9 column must be NA (blank) for events 1-8\cr
 }
 
 Outstanding questions:
 \itemize{
+  \item There are ~3000 V events from 2018 with non-NA Data6 columns.
+  \item There are ~3500 S/K/M events with data past the Data9 columns.
   \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
-  \item What to add?
-  \item How to check that everything is right-justified?
 }
 }
 \examples{

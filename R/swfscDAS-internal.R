@@ -6,6 +6,8 @@
 
 ###############################################################################
 # Helper functions for das_check
+
+# Check that specified values are numeric
 .check_numeric <- function(z, event.code, z.col) {
   # z: das_dfr object
   # event.code: character; event code(s) by which to filter z
@@ -37,6 +39,7 @@
 }
 
 
+# Check that specified values are a certain character
 .check_character <- function(z, event.code, z.col, vals.accepted) {
   # z: das_dfr object
   # event.code: character; event code(s) by which to filter z
@@ -53,25 +56,57 @@
   z.out <- c()
 
   for (i in event.code) {
-    z.curr <- z[z$Event == i, ]
-    z.vec <- z.curr[[z.col]]
+    for (j in z.col) {
+      z.curr <- z[z$Event == i, ]
+      z.vec <- z.curr[[j]]
 
-    z.out <- c(z.out, z.curr$idx[!(z.vec %in% vals.accepted)])
+      z.out <- c(z.out, z.curr$idx[!(z.vec %in% vals.accepted)])
+    }
   }
 
   sort(unique(z.out))
 }
 
 
+# Check that specified values are NA
+.check_isna <- function(z, event.code, z.col) {
+  # z: airdas_dfr or airdas_df object
+  # event.code: character; event code by which to filter z
+  # z.col: Column which to check; must be one of the Data# columns
+  ### Output: indices of z that is NA
+
+  stopifnot(
+    inherits(z, "das_df") | inherits(z, "das_dfr"),
+    z.col %in% paste0("Data", 1:9), # | (identical(event.code, "1") & z.col %in% c("DateTime", "Lat", "Lon")),
+    "idx" %in% names(z)
+  )
+
+  z.out <- c()
+  for (i in event.code) {
+    for (j in z.col) {
+      z.curr <- z[z$Event == i, ]
+      z.vec <- z.curr[[j]]
+
+      z.out <- c(z.out, z.curr$idx[!is.na(z.vec)])
+    }
+  }
+
+  sort(unique(z.out))
+}
+
+
+# Format info for output
 .check_list <- function(z1, z2, z3, z4) {
-  # z1: x
+  # z1: x.proc
   # z2: x.lines
   # z3: idx.
   # z4: txt.
   ### Output: list formatted to be added to error.out
 
-  stopifnot(inherits(z1, "das_dfr"))
-  list(z1$file_das[z3], z1$line_num[z3], z3, z2[z3], rep(z4, length(z3)))
+  stopifnot(inherits(z1, "das_df"))
+  z1.rows <- which(z1$idx %in% z3)
+  list(z1$file_das[z1.rows], z1$line_num[z1.rows], z1$Cruise[z1.rows],
+       z2[z3], rep(z4, length(z3)))
 }
 
 
