@@ -282,9 +282,13 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   idx.bpq.na <- .check_isna(x, c("B", "P", "Q"), paste0("Data", 5:9))
   txt.bpq.na <- "B, P, and Q events should only have data in the Data1-4 columns"
 
-  # V and W events
-  idx.vw.na <- .check_isna(x, c("V", "W"), paste0("Data", 6:9))
-  txt.vw.na <- "V and W events should only have data in the Data1-5 columns"
+  # W events
+  idx.w.na <- .check_isna(x, c("W"), paste0("Data", 6:9))
+  txt.w.na <- "W events should only have data in the Data1-5 columns"
+
+  # V events
+  idx.v.na <- .check_isna(x, c("V"), paste0("Data", 7:9))
+  txt.v.na <- "V events should only have data in the Data1-6 columns"
 
 
   error.out <- rbind(
@@ -294,7 +298,8 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
     .check_list(x.proc, x.lines, idx.r.na, txt.r.na),
     .check_list(x.proc, x.lines, idx.n.na, txt.n.na),
     .check_list(x.proc, x.lines, idx.bpq.na, txt.bpq.na),
-    .check_list(x.proc, x.lines, idx.vw.na, txt.vw.na)
+    .check_list(x.proc, x.lines, idx.w.na, txt.w.na),
+    .check_list(x.proc, x.lines, idx.v.na, txt.v.na)
   )
 
 
