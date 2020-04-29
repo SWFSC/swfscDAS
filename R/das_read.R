@@ -102,7 +102,7 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   )
 
   # Check for if lines should be skipped
-  if (sum(is.na(c(x$Event, x$Time[1], x$Date[1],
+  if (sum(is.na(c(x$Event[1], x$Time[1], x$Date[1],
                   x$Lon1[1], x$Lon2[1], x$Lon3[1],
                   x$Lat1[1], x$Lat2[1], x$Lat3[1]))) > 7)
     warning("There are a lot of blank columns in row 1; should you use ",
