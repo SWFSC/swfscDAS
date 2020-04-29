@@ -146,6 +146,15 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     inherits(reset.day, "logical")
   )
 
+  # Check that there are no Event columns with NA
+  #   This is here rather than as_das_dfr b/c users should still be
+  #   able to get the das_read output
+  if (any(is.na(x$Event)))
+    stop("To be processed, the Event column must not contain any NAs. ",
+         "Should you use the 'skip' argument in das_read? ",
+         "The following line(s) contain NA Event entries:\n",
+         paste(x$line_num[is.na(x$Event)], collapse = ", "))
+
 
   #----------------------------------------------------------------------------
   # Prep

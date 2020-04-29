@@ -101,6 +101,14 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
     "Data1", "Data2", "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9"
   )
 
+  # Check for if lines should be skipped
+  if (sum(is.na(c(x$Event, x$Time[1], x$Date[1],
+                  x$Lon1[1], x$Lon2[1], x$Lon3[1],
+                  x$Lat1[1], x$Lat2[1], x$Lat3[1]))) > 7)
+    warning("There are a lot of blank columns in row 1; should you use ",
+            "the skip argument? See `?das_read`",
+            immediate. = TRUE)
+
   # Process some data, and add file and line number columns
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
   EventNum <- trimws(x$EventNum)
@@ -117,9 +125,10 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
       .numeric_na(x$Lon2), .numeric_na(x$Lon3))
   )
   if (length(ll.num.na) > 0)
-    warning("The following rows have values in the Latitude and/or Longitude ",
+    warning("The following lines (not row numbers) have values in the ",
+            "Latitude and/or Longitude ",
             "columns that could not be converted to a numeric value:\n",
-            paste(ll.num.na, collapse = ", "))
+            paste(line_num[ll.num.na], collapse = ", "))
   rm(ll.num.na)
 
 
@@ -130,8 +139,8 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   if (length(ll.na.which) > 0) {
     warning("There are unexpected (i.e. for events other than ",
             paste(ll.na.event, collapse = ", "),
-            ") Lat and/or Lon NAs in row(s):\n",
-            paste(ll.na.which, collapse = ", "))
+            ") Lat and/or Lon NAs in line(s):\n",
+            paste(line_num[ll.na.which], collapse = ", "))
   }
   rm(ll.na, ll.na.event, ll.na.which)
 
@@ -147,8 +156,8 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   if (length(dt.na.which) > 0) {
     warning("There are unexpected (i.e. for events other than ",
             paste(dt.na.event, collapse = ", "),
-            ") DateTime NAs in row(s):\n",
-            paste(dt.na.which, collapse = ", "))
+            ") DateTime NAs in line(s):\n",
+            paste(line_num[dt.na.which], collapse = ", "))
   }
   rm(dt.na, dt.na.event, dt.na.which)
 
