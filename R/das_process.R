@@ -160,15 +160,15 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   # Prep
 
   ### Remove '#' events
-  das.df <- x[x$Event != "#", ]
-  rownames(das.df) <- NULL # for debugging purposes
+  x <- x[x$Event != "#", ]
+  rownames(x) <- NULL # for debugging purposes
 
   ### Determine effort using B/R and E events
-  nDAS <- nrow(das.df)
+  nDAS <- nrow(x)
 
-  idx.B <- which(das.df$Event == "B")
-  idx.R <- which(das.df$Event == "R")
-  idx.E <- which(das.df$Event == "E")
+  idx.B <- which(x$Event == "B")
+  idx.R <- which(x$Event == "R")
+  idx.E <- which(x$Event == "E")
 
   if (length(idx.E) != length(idx.R)) {
     warning("There are not an equal number of 'R' and 'E' events in the ",
@@ -182,18 +182,18 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   #----------------------------------------------------------------------------
   # Determine 'reset' rows, i.e. rows that mark a new cruise in concatenated
   #   DAS file, or a new day for conditions
-  dt.na <- is.na(das.df$DateTime)
+  dt.na <- is.na(x$DateTime)
 
   ### Determine indices where time-date change is by more than 'day.gap' days
   ###   Used to recognize data from new cruise in concatenated DAS files
   time_diff <- rep(NA, nDAS)
-  time_diff[!dt.na] <- c(NA, abs(diff(das.df$DateTime[!dt.na]))) / (60*60*24)
+  time_diff[!dt.na] <- c(NA, abs(diff(x$DateTime[!dt.na]))) / (60*60*24)
 
   idx.new.cruise <- c(1, which(time_diff > days.gap))
 
-  ### Determine row numbers of new days in das.df;
+  ### Determine row numbers of new days in x;
   ###   these will include idxs of new cruises. Used when reset.day is TRUE
-  idx.nona.new <- which(diff(day(das.df$DateTime)[!dt.na]) != 0) + 1
+  idx.nona.new <- which(diff(day(x$DateTime)[!dt.na]) != 0) + 1
   idx.new.day <- c(1, seq_len(nDAS)[!dt.na][idx.nona.new])
 
   if (!all(idx.new.cruise %in% idx.new.day))
@@ -208,36 +208,36 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
 
   #--------------------------------------------------------
   ### Create vectors with data where values change/are reset
-  event.B <- das.df$Event == "B"
-  event.N <- das.df$Event == "N"
-  event.R <- das.df$Event == "R"
-  event.E <- das.df$Event == "E"
-  event.V <- das.df$Event == "V"
-  event.W <- das.df$Event == "W"
-  event.P <- das.df$Event == "P"
+  event.B <- x$Event == "B"
+  event.N <- x$Event == "N"
+  event.R <- x$Event == "R"
+  event.E <- x$Event == "E"
+  event.V <- x$Event == "V"
+  event.W <- x$Event == "W"
+  event.P <- x$Event == "P"
 
-  event.B.preR <- (das.df$Event == "B") & (c(das.df$Event[-1], NA) == "R")
+  event.B.preR <- (x$Event == "B") & (c(x$Event[-1], NA) == "R")
 
   init.val <- as.numeric(rep(NA, nDAS))
   event.na <- ifelse(reset.event, -9999, NA)
 
-  Cruise    <- .process_num(init.val, das.df, "Data1", event.B, event.na)
-  Mode      <- .process_chr(init.val, das.df, "Data2", event.B, "C")
-  EffType   <- .process_chr(init.val, das.df, "Data1", event.R, "S")
-  ESWsides  <- .process_chr(init.val, das.df, "Data2", event.R, "F")
+  Cruise    <- .process_num(init.val, x, "Data1", event.B, event.na)
+  Mode      <- .process_chr(init.val, x, "Data2", event.B, "C")
+  EffType   <- .process_chr(init.val, x, "Data1", event.R, "S")
+  ESWsides  <- .process_chr(init.val, x, "Data2", event.R, "F")
 
-  Bft       <- .process_num(init.val, das.df, "Data1", event.V, event.na)
-  SwellHght <- .process_num(init.val, das.df, "Data2", event.V, event.na)
-  Course    <- .process_num(init.val, das.df, "Data1", event.N, event.na)
-  RainFog   <- .process_num(init.val, das.df, "Data1", event.W, event.na)
-  HorizSun  <- .process_num(init.val, das.df, "Data2", event.W, event.na)
-  VertSun   <- .process_num(init.val, das.df, "Data3", event.W, event.na)
-  Vis       <- .process_num(init.val, das.df, "Data5", event.W, event.na)
+  Bft       <- .process_num(init.val, x, "Data1", event.V, event.na)
+  SwellHght <- .process_num(init.val, x, "Data2", event.V, event.na)
+  Course    <- .process_num(init.val, x, "Data1", event.N, event.na)
+  RainFog   <- .process_num(init.val, x, "Data1", event.W, event.na)
+  HorizSun  <- .process_num(init.val, x, "Data2", event.W, event.na)
+  VertSun   <- .process_num(init.val, x, "Data3", event.W, event.na)
+  Vis       <- .process_num(init.val, x, "Data5", event.W, event.na)
 
-  ObsL <- .process_chr(init.val, das.df, "Data1", event.P, event.na)
-  Rec  <- .process_chr(init.val, das.df, "Data2", event.P, event.na)
-  ObsR <- .process_chr(init.val, das.df, "Data3", event.P, event.na)
-  ObsInd <-  .process_chr(init.val, das.df, "Data4", event.P, event.na)
+  ObsL <- .process_chr(init.val, x, "Data1", event.P, event.na)
+  Rec  <- .process_chr(init.val, x, "Data2", event.P, event.na)
+  ObsR <- .process_chr(init.val, x, "Data3", event.P, event.na)
+  ObsInd <-  .process_chr(init.val, x, "Data4", event.P, event.na)
 
   Eff <- as.logical(init.val)
   Eff[sort(unique(c(idx.new.cruise, idx.new.day)))] <- FALSE
@@ -337,13 +337,13 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "M", "N",
                  "P", "Q", "R", "s", "S", "t", "V", "W",
                  "G", "g", "p", "X", "Y", "Z")
-  if (!all(das.df$Event %in% event.acc))
+  if (!all(x$Event %in% event.acc))
     warning(paste0("Expected event codes (case sensitive): ",
                    paste(event.acc, collapse = ", "), "\n"),
-            "The following lines of the input file ",
+            "The following line(s) of the input file ",
             "(NOT necessarily the row numbers of output) ",
             "contain unexpected event codes:\n",
-            paste(das.df$line_num[!(das.df$Event %in% event.acc)],
+            paste(x$line_num[!(x$Event %in% event.acc)],
                   collapse = ", "))
 
 
@@ -358,7 +358,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   )
 
   as_das_df(
-    select(data.frame(das.df, tmp, stringsAsFactors = FALSE), !!cols.tokeep)
+    select(data.frame(x, tmp, stringsAsFactors = FALSE), !!cols.tokeep)
   )
 }
 
