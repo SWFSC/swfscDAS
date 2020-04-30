@@ -41,7 +41,7 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Birds present with school?      \tab Birds\cr
     Probable sighting               \tab Prob  \tab Logical\cr
     Mixed species sighting          \tab Mixed \tab Logical\cr
-    Total group size                \tab GsTotal \tab Only differnt from GsSp if mixed species sighting\cr
+    Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
     Species  code                 \tab Sp      \tab Only present when \code{mixed.multi = TRUE}\cr
     Species-specific group size   \tab GsSp    \tab Only present when \code{mixed.multi = TRUE}\cr
     Species 1 code                \tab Sp1     \tab Only present when \code{mixed.multi = FALSE}\cr
