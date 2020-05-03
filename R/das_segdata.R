@@ -142,7 +142,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
   #----------------------------------------------------------------------------
   segdata.all %>%
-    select(.data$seg_idx, .data$Cruise, .data$file, .data$stlin, .data$endlin,
+    select(.data$seg_idx, .data$section_id, .data$section_sub_id,
+           .data$file, .data$stlin, .data$endlin,
            .data$lat1, .data$lon1, .data$lat2, .data$lon2,
            .data$mlat, .data$mlon, .data$dist,
            .data$mDateTime, .data$year, .data$month, .data$day, .data$mtime,
@@ -315,7 +316,9 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
         # Add segdata to .all data frame
         segdata <- data.frame(
-          seg_idx = paste0(section.id, "_", subseg.curr),
+          seg_idx = paste(section.id, subseg.curr, sep = "_"),
+          section_id = section.id,
+          section_sub_id = subseg.curr,
           stlin = stlin.curr, endlin = das.df$line_num[j],
           lat1 = startpt.curr[1], lon1 = startpt.curr[2],
           lat2 = endpt.curr[1], lon2 = endpt.curr[2],

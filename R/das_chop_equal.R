@@ -249,9 +249,9 @@ das_chop_equal.das_df <- function(x, conditions, seg.km, randpicks.load = NULL,
     do.call(rbind, lapply(eff.chop.list, function(i) i[["das.df.segdata"]])),
     stringsAsFactors = FALSE
   ) %>%
-    mutate(segnum = seq_along(.data$seg_idx),
+    mutate(segnum = seq_along(.data$file),
            dist = round(.data$dist, 4)) %>%
-    select(.data$segnum, .data$seg_idx, everything())
+    select(.data$segnum, everything())
 
   ### Each das data point, along with segnum
   x.eff <- data.frame(
@@ -371,11 +371,11 @@ das_chop_equal.das_df <- function(x, conditions, seg.km, randpicks.load = NULL,
   subseg.cumsum <- cumsum(seg.lengths)
   das.cumsum <- cumsum(das.df$dist_from_prev)
 
-  das.df$effort_seg <- findInterval(
+  effort_subseg <- findInterval(
     round(das.cumsum, 4), round(c(-1, subseg.cumsum), 4),
     left.open = TRUE, rightmost.closed = TRUE
   )
-  das.df$seg_idx <- paste0(i, "_", das.df$effort_seg)
+  das.df$seg_idx <- paste0(i, "_", effort_subseg)
 
 
   #------------------------------------------------------

@@ -168,8 +168,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     filter(!(.data$Event %in% event.tmp) )
   x.oneff.tmp <- x.oneff.all %>%
     filter(.data$Event %in% event.tmp) %>%
-    mutate(cont_eff_section = NA, dist_from_prev = NA,
-           effort_seg = NA, seg_idx = NA, segnum = NA)
+    mutate(cont_eff_section = NA, dist_from_prev = NA, seg_idx = NA, segnum = NA)
 
   rownames(x.oneff) <- rownames(x.oneff.tmp) <- NULL
   stopifnot(
@@ -260,7 +259,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     "ObsL", "Rec", "ObsR", "ObsInd", "Data1", "Data2",
     "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
     "EffortDot", "EventNum", "file_das", "line_num", "idx_eff",
-    "dist_from_prev", "cont_eff_section", "effort_seg", "seg_idx", "segnum"
+    "dist_from_prev", "cont_eff_section", "seg_idx", "segnum"
   )
   if (!identical(names(x.eff), x.eff.names))
     stop("Error in das_effort: names of x.eff. ",
@@ -287,7 +286,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     mutate(perp_dist = (abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852),
            included = (.data$Bft <= 5 & .data$OnEffort & .data$Obs_std),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
-    select(-.data$dist_from_prev, -.data$cont_eff_section, -.data$effort_seg)
+    select(-.data$dist_from_prev, -.data$cont_eff_section)
 
 
   # Make data frame with nSI and ANI columns, and join it with segdata
@@ -313,16 +312,17 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
   siteinfo.forsegdata.df <- segdata.col1 %>%
     bind_cols(siteinfo.forsegdata.list)
 
-  # Format outputs as desired
-  segdata <- left_join(segdata, siteinfo.forsegdata.df, by = "seg_idx")
+
+  #----------------------------------------------------------------------------
+  # Format and return
+  segdata <- segdata %>%
+    left_join(siteinfo.forsegdata.df, by = "seg_idx") %>%
+    select(-.data$seg_idx)
 
   siteinfo <- siteinfo %>%
     select(-.data$seg_idx) %>%
     select(.data$segnum, .data$mlat, .data$mlon, everything())
 
-
-  #----------------------------------------------------------------------------
-  # Return list
   list(segdata = segdata, siteinfo = siteinfo, randpicks = randpicks)
 }
 

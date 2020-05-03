@@ -288,14 +288,13 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
 
   das.df <- das.df %>%
     select(-.data$effort_seg_pre, -.data$idx) %>%
-    mutate(effort_seg = cumsum(effort.seg),
-           seg_idx = paste(i, .data$effort_seg, sep = "_"))
+    mutate(seg_idx = paste(i, cumsum(effort.seg), sep = "_"))
 
 
   #------------------------------------------------------
   ### Calculate lengths of effort segments
   das.df.dist.summ <- das.df %>%
-    group_by(.data$effort_seg) %>%
+    group_by(.data$seg_idx) %>%
     summarise(sum_dist = sum(.data$dist_to_next))
 
   seg.lengths <- das.df.dist.summ$sum_dist
