@@ -66,6 +66,10 @@
 #'   \item There are ~3000 V events from 2018 with non-NA Data6 columns.
 #'   \item There are ~3500 S/K/M events with data past the Data9 columns.
 #'   \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
+#'   \item TODO: Add check for sequential date/time
+#'   \item Check that A events only come immediately after a G/S/K/M event,
+#'     and all G/S/K/M events have an A after them.
+#'     Also check about these related to ?/1:8 events?
 #' }
 #'
 #' @return

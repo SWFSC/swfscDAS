@@ -1,5 +1,35 @@
+y.read <- das_read(system.file("das_sample.das", package = "swfscDAS"))
+y.proc <- das_process(y.read)
+
+
+exp.proc.name <- c(
+  "Event", "DateTime", "Lat", "Lon", "OnEffort",
+  "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
+  "HorizSun", "VertSun", "Glare", "Vis",
+  "ObsL", "Rec", "ObsR", "ObsInd",
+  "EffortDot", "EventNum", "file_das", "line_num"
+)
+
+exp.sight.name <- c(
+  "SightNo", "Subgroup", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
+  "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
+)
+
+exp.sight.name.nomulti <- c(
+  "Sp1", "Sp2","Sp3", "Sp4", "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
+  "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
+  "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
+  "BoatType", "BoatNum"
+)
+
+exp.sight.name.multi <- c(
+  "Sp", "GsSp", "ResightCourse",
+  "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
+  "BoatType", "BoatNum"
+)
+
+
 test_that("das_read output has expected column names and classes", {
-  y.read <- das_read(system.file("das_sample.das", package = "swfscDAS"))
   y.read2 <- as_das_dfr(data.frame(y.read))
 
   # Same as in as_das_dfr()
@@ -29,7 +59,6 @@ test_that("das_read output has expected column names and classes", {
 
 
 test_that("das_process output has expected column names and classes", {
-  y.proc <- das_process(system.file("das_sample.das", package = "swfscDAS"))
   y.proc2 <- as_das_df(data.frame(y.proc))
 
   # Same as in as_das_df()
@@ -76,67 +105,23 @@ test_that("das_process output has expected column names and classes", {
 
 
 test_that("das_sight output has expected column names and classes", {
-  y.proc <- das_process(system.file("das_sample.das", package = "swfscDAS"))
   y.sight <- das_sight(y.proc)
   y.sight.multi <- das_sight(y.proc, mixed.multi = TRUE)
 
-  exp.name <- c(
-    "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
-    "HorizSun", "VertSun", "Glare", "Vis",
-    "ObsL", "Rec", "ObsR", "ObsInd",
-    "EffortDot", "EventNum", "file_das", "line_num",
-    "SightNo", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
-    "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
-  )
-
-  exp.name.nomulti <- c(
-    "Sp1", "Sp2","Sp3", "Sp4", "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
-    "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
-    "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-    "BoatType", "BoatNum"
-  )
-
-  exp.name.multi <- c(
-    "Sp", "GsSp", "ResightCourse",
-    "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-    "BoatType", "BoatNum"
-  )
-
-  expect_identical(c(exp.name, exp.name.nomulti), names(y.sight))
-  expect_identical(c(exp.name, exp.name.multi), names(y.sight.multi))
+  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.nomulti),
+                   names(y.sight))
+  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.multi),
+                   names(y.sight.multi))
 })
 
 
 test_that("das_sight output has expected column names and classes with extra column", {
-  y.proc <- das_process(system.file("das_sample.das", package = "swfscDAS"))
   y.proc$testrr <- 4
   y.sight <- das_sight(y.proc)
   y.sight.multi <- das_sight(y.proc, mixed.multi = TRUE)
 
-  exp.name <- c(
-    "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght", "RainFog",
-    "HorizSun", "VertSun", "Glare", "Vis",
-    "ObsL", "Rec", "ObsR", "ObsInd",
-    "EffortDot", "EventNum", "file_das", "line_num", "testrr",
-    "SightNo", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
-    "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
-  )
-
-  exp.name.nomulti <- c(
-    "Sp1", "Sp2","Sp3", "Sp4", "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
-    "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
-    "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-    "BoatType", "BoatNum"
-  )
-
-  exp.name.multi <- c(
-    "Sp", "GsSp", "ResightCourse",
-    "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-    "BoatType", "BoatNum"
-  )
-
-  expect_identical(c(exp.name, exp.name.nomulti), names(y.sight))
-  expect_identical(c(exp.name, exp.name.multi), names(y.sight.multi))
+  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.nomulti),
+                   names(y.sight))
+  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.multi),
+                   names(y.sight.multi))
 })

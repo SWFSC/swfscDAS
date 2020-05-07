@@ -30,6 +30,7 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
   \tabular{lll}{
     \emph{Sighting information}     \tab \emph{Column name} \tab \emph{Notes}\cr
     Sighting number                 \tab SightNo\cr
+    Subgroup code                   \tab Subgroup\cr
     Observer that made the sighting \tab Obs\cr
     Obs is one of ObsL, Rec or ObsR \tab Obs_std\cr
     Bearing to the sighting         \tab Bearing \tab Degrees, range 0 to 360\cr
@@ -56,7 +57,7 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Species 2 group size          \tab GsSp2   \tab Only present when \code{mixed.multi = FALSE}\cr
     Species 3 group size          \tab GsSp3   \tab Only present when \code{mixed.multi = FALSE}\cr
     Species 4 group size          \tab GsSp4   \tab Only present when \code{mixed.multi = FALSE}\cr
-    Course of resight group    \tab ResightCourse \tab \code{NA} for non-"s" events\cr
+    Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
     Turtle species             \tab TurtleSp   \tab \code{NA} for non-"t" events\cr
     Number of turtles          \tab TurtleNum  \tab \code{NA} for non-"t" events\cr
     Presence of associated JFR \tab TurtleJFR  \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
@@ -77,7 +78,10 @@ DAS events contain specific information in the 'Data#' columns,
   This function recognizes the following types of sightings:
   marine mammal sightings (event codes "S", "K", or "M"),
   marine mammal resights (codes "s" or "k"),
-  turtle sightings (code "t"), and fishing vessel sightings (code "F").
+  marine mammal subgroup sightings (code "G"),
+  marine mammal subgroup resights (code "g"),
+  turtle sightings (code "t"),
+  and fishing vessel sightings (code "F").
   See \code{\link{das_format_pdf}} for more information about events and event formats.
 
   Abbreviations used in column names: Gs = group size, Sp = species,
@@ -85,8 +89,11 @@ DAS events contain specific information in the 'Data#' columns,
 
   This function makes the following assumptions, and alterations to the raw data:
   \itemize{
-    \item "S", "K", and "M" events, and only these events,
-    are immediately followed by an "A" event
+    \item "G", "S", "K", and "M" events, and only these events,
+      are immediately followed by an "A" event.
+    \item "A" events following an S/K/M event have the same Data1 (sighting number)
+      as the S/K/M event.
+      "A" events following a "G" event have a character (e.g. "A" or "B")
     \item The 'Mixed' column is \code{TRUE} if two or more of the
       'Data5', 'Data6', 'Data7', and 'Data8' values
       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
@@ -111,7 +118,7 @@ DAS events contain specific information in the 'Data#' columns,
     \item Should any columns be converted to logicals, e.g. 'Birds', 'Photos', and 'TurtleCapt'?
     \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc.,
       be changed from \code{NA} to \code{0}?
-    \item Add flag for option to have comprehensive output of group size estimations
+    \item TODO: Add flag for option to have comprehensive output of group size estimations
   }
 }
 \examples{

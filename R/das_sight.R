@@ -14,7 +14,10 @@
 #'   This function recognizes the following types of sightings:
 #'   marine mammal sightings (event codes "S", "K", or "M"),
 #'   marine mammal resights (codes "s" or "k"),
-#'   turtle sightings (code "t"), and fishing vessel sightings (code "F").
+#'   marine mammal subgroup sightings (code "G"),
+#'   marine mammal subgroup resights (code "g"),
+#'   turtle sightings (code "t"),
+#'   and fishing vessel sightings (code "F").
 #'   See \code{\link{das_format_pdf}} for more information about events and event formats.
 #'
 #'   Abbreviations used in column names: Gs = group size, Sp = species,
@@ -22,8 +25,11 @@
 #'
 #'   This function makes the following assumptions, and alterations to the raw data:
 #'   \itemize{
-#'     \item "S", "K", and "M" events, and only these events,
-#'     are immediately followed by an "A" event
+#'     \item "G", "S", "K", and "M" events, and only these events,
+#'       are immediately followed by an "A" event.
+#'     \item "A" events following an S/K/M event have the same Data1 (sighting number)
+#'       as the S/K/M event.
+#'       "A" events following a "G" event have a character (e.g. "A" or "B")
 #'     \item The 'Mixed' column is \code{TRUE} if two or more of the
 #'       'Data5', 'Data6', 'Data7', and 'Data8' values
 #'       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
@@ -48,7 +54,7 @@
 #'     \item Should any columns be converted to logicals, e.g. 'Birds', 'Photos', and 'TurtleCapt'?
 #'     \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc.,
 #'       be changed from \code{NA} to \code{0}?
-#'     \item Add flag for option to have comprehensive output of group size estimations
+#'     \item TODO: Add flag for option to have comprehensive output of group size estimations
 #'   }
 #'
 #' @return Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
@@ -61,6 +67,7 @@
 #'   \tabular{lll}{
 #'     \emph{Sighting information}     \tab \emph{Column name} \tab \emph{Notes}\cr
 #'     Sighting number                 \tab SightNo\cr
+#'     Subgroup code                   \tab Subgroup\cr
 #'     Observer that made the sighting \tab Obs\cr
 #'     Obs is one of ObsL, Rec or ObsR \tab Obs_std\cr
 #'     Bearing to the sighting         \tab Bearing \tab Degrees, range 0 to 360\cr
@@ -87,7 +94,7 @@
 #'     Species 2 group size          \tab GsSp2   \tab Only present when \code{mixed.multi = FALSE}\cr
 #'     Species 3 group size          \tab GsSp3   \tab Only present when \code{mixed.multi = FALSE}\cr
 #'     Species 4 group size          \tab GsSp4   \tab Only present when \code{mixed.multi = FALSE}\cr
-#'     Course of resight group    \tab ResightCourse \tab \code{NA} for non-"s" events\cr
+#'     Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
 #'     Turtle species             \tab TurtleSp   \tab \code{NA} for non-"t" events\cr
 #'     Number of turtles          \tab TurtleNum  \tab \code{NA} for non-"t" events\cr
 #'     Presence of associated JFR \tab TurtleJFR  \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
@@ -120,31 +127,29 @@ das_sight.data.frame <- function(x, mixed.multi = FALSE) {
 das_sight.das_df <- function(x, mixed.multi = FALSE) {
   #----------------------------------------------------------------------------
   # Filter for sighting-related events
-  event.sight <- c("S", "K", "M", "s", "k", "t", "F")
-  # Add G events???
+  event.sight <- c("S", "K", "M", "G", "s", "k", "g", "t", "F")
   event.sight.info <- c("A", "?", 1:8)
 
   sight.df <- x %>%
     filter(.data$Event %in% c(event.sight, event.sight.info)) %>%
     mutate(sight_cumsum = cumsum(.data$Event %in% event.sight))
 
-  # Check that all SKM events are followed by an A event
+  # Check that all GSKM events are followed by an A event
   idx.skm <- which(x$Event %in% c("S", "K", "M"))
-  skma.check1 <- all(x$Event[idx.skm + 1] == "A")
-  skma.check2 <- identical(x$Data1[idx.skm], x$Data1[idx.skm + 1])
+  idx.g <- which(x$Event %in% c("G"))
+  skmga.check1a <- all(x$Event[c(idx.skm, idx.g) + 1] == "A")
+  skmga.check1b <- isTRUE(all.equal(sort(c(idx.skm, idx.g)) + 1, which(x$Event == "A")))
+  skmga.check2 <- identical(x$Data1[idx.skm], x$Data1[idx.skm + 1])
+  # skmga.check3 <- identical(x$Data2[idx.g], x$Data1[idx.g + 1])
 
-  if (!skma.check1) {
-    stop("All 'S', 'K', and 'M' events (and only these events) ",
+  if (!(skmga.check1a & skmga.check1b)) {
+    stop("All 'G', 'S', 'K', and 'M' events (and only these events) ",
          "must be immediately followed by an 'A' event")
-  } else if (!skma.check2) {
+  } else if (!skmga.check2) {
     stop("The sighting number in some 'S', 'K', and 'M' events do not match ",
          "the sighting numbers of their corresponding 'A' events")
   }
-  rm(skma.check1, skma.check2)
-
-  if (!isTRUE(all.equal(which(x$Event == "A"), idx.skm + 1)))
-    warning("Not all 'A' events immediately follow an 'S', 'K', or 'M' event; ",
-            "these 'A' events will be ignored")
+  rm(skmga.check1a, skmga.check1b, skmga.check2) #skmga.check3
 
 
   #----------------------------------------------------------------------------
@@ -158,8 +163,12 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
   sight.info.all <- sight.df %>%
     filter(.data$Event %in% event.sight) %>%
     mutate(SightNo = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data1,
+                               .data$Event =="G" ~ .data$Data1,
                                .data$Event %in% c("s", "k") ~ .data$Data1),
+           Subgroup = case_when(.data$Event == "G" ~ .data$Data2,
+                                .data$Event == "g" ~ .data$Data1),
            Obs = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data2,
+                           .data$Event =="G" ~ .data$Data3,
                            .data$Event == "t" ~ .data$Data1,
                            .data$Event == "F" ~ .data$Data1),
            Obs_std = pmap_lgl(list(.data$Obs, .data$ObsL, .data$Rec, .data$ObsR),
@@ -168,54 +177,56 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
                               }),
            Bearing = as.numeric(
              case_when(
-               .data$Event %in% c("S", "K", "M") ~ .data$Data5,
-               .data$Event %in% c("s", "k") ~ .data$Data2,
+               .data$Event %in% c("S", "K", "M", "G") ~ .data$Data5,
+               .data$Event %in% c("s", "k", "g") ~ .data$Data2,
                .data$Event == "t" ~ .data$Data3,
                .data$Event == "F" ~ .data$Data2)),
            Reticle = as.numeric(
              case_when(
-               .data$Event %in% c("S", "K", "M") ~ .data$Data6,
-               .data$Event %in% c("s", "k") ~ .data$Data3,
+               .data$Event %in% c("S", "K", "M", "G") ~ .data$Data6,
+               .data$Event %in% c("s", "k", "g") ~ .data$Data3,
                .data$Event == "t" ~ .data$Data7,
                .data$Event == "F" ~ .data$Data4)),
            DistNm = as.numeric(
              case_when(
-               .data$Event %in% c("S", "K", "M") ~ .data$Data7,
-               .data$Event %in% c("s", "k") ~ .data$Data4,
+               .data$Event %in% c("S", "K", "M", "G") ~ .data$Data7,
+               .data$Event %in% c("s", "k", "g") ~ .data$Data4,
                .data$Event == "t" ~ .data$Data4,
                .data$Event == "F" ~ .data$Data3))) %>%
-    select(.data$sight_cumsum, .data$SightNo,
+    select(.data$sight_cumsum, .data$SightNo, .data$Subgroup,
            .data$Obs, .data$Obs_std, .data$Bearing, .data$Reticle, .data$DistNm)
 
 
   #--------------------------------------------------------
-  ### Marine mammal initial sightings; Events S, K, M
-  # SightNo, Obs, Bearing, Reticle, and DistNm are extracted in sight.info.all
-  sight.info.skm1 <- sight.df %>%
-    filter(.data$Event %in% c("S", "K", "M")) %>%
-    mutate(Cue = as.numeric(.data$Data3), Method = as.numeric(.data$Data4)) %>%
+  ### Marine mammal (+subgroup) sightings; Events S, K, M
+  # Other data are extracted in sight.info.all
+  sight.info.skmg1 <- sight.df %>%
+    filter(.data$Event %in% c("S", "K", "M", "G")) %>%
+    mutate(Cue = ifelse(.data$Event == "G", NA, as.numeric(.data$Data3)),
+           Method = as.numeric(.data$Data4)) %>%
     select(.data$sight_cumsum, .data$Cue, .data$Method)
 
   # Data from A row
-  sight.info.skm2 <- sight.df %>%
+  sight.info.skmg2 <- sight.df %>%
     filter(.data$Event =="A") %>%
-    mutate(Birds = toupper(.data$Data4),
+    mutate(Photos = toupper(.data$Data3),
+           Birds = toupper(.data$Data4),
            Mixed = unlist(
              pmap(list(.data$Data5, .data$Data6, .data$Data7, .data$Data8),
                   function(d5, d6, d7, d8) {
                     sum(!is.na(c(d5, d6, d7, d8))) > 1
-                  })),
-           Photos = toupper(.data$Data3)) %>%
+                  }))) %>%
     select(.data$sight_cumsum, .data$Photos, .data$Birds, .data$Mixed,
            Sp1 = .data$Data5, Sp2 = .data$Data6, Sp3 = .data$Data7,
            Sp4 = .data$Data8)
 
   # Data from grouped
-  sight.info.skm3 <- sight.df %>%
+  sight.info.skmg3 <- sight.df %>%
+    filter(.data$Event %in% c("S", "K", "M", "G")) %>%
     group_by(.data$sight_cumsum) %>%
     summarise(Prob = any("?" %in% .data$Event))
 
-  sight.info.skm4 <- sight.df %>%
+  sight.info.skmg4 <- sight.df %>%
     filter(.data$Event %in% as.character(1:8)) %>%
     group_by(.data$sight_cumsum) %>%
     summarise(GsTotal = mean(as.numeric(.data$Data2), na.rm = TRUE),
@@ -230,20 +241,30 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
   # replace_na(list(Sp2Perc = 0, Sp3Perc = 0, Sp4Perc = 0))
   # @importFrom tidyr replace_na
 
-  sight.info.skm <- sight.info.skm1 %>%
-    left_join(sight.info.skm2, by = "sight_cumsum") %>%
-    left_join(sight.info.skm3, by = "sight_cumsum") %>%
-    left_join(sight.info.skm4, by = "sight_cumsum") %>%
+  num.vec <- c(nrow(sight.info.skmg1), nrow(sight.info.skmg2),
+               nrow(sight.info.skmg3), nrow(sight.info.skmg4))
+  if (!isTRUE(all.equal(nrow(sight.info.skmg1), nrow(sight.info.skmg2))))
+    stop("Unequal number of S/K/M/G and A events. ",
+         "This should have been caught earlier?")
+  if (!isTRUE(all.equal(nrow(sight.info.skmg1), nrow(sight.info.skmg4))))
+    warning("Not all S/K/M/G events have corresponding numeric (1:8) events; ",
+            "please quality check the data using `das_check`")
+
+
+  sight.info.skmg <- sight.info.skmg1 %>%
+    left_join(sight.info.skmg2, by = "sight_cumsum") %>%
+    left_join(sight.info.skmg3, by = "sight_cumsum") %>%
+    left_join(sight.info.skmg4, by = "sight_cumsum") %>%
     select(.data$sight_cumsum, .data$Cue, .data$Method,
            .data$Photos, .data$Birds,
            .data$Prob, .data$Mixed, .data$GsTotal, everything())
-  rm(sight.info.skm1, sight.info.skm2, sight.info.skm3, sight.info.skm4)
+  rm(sight.info.skmg1, sight.info.skmg2, sight.info.skmg3, sight.info.skmg4)
 
 
   #--------------------------------------------------------
-  ### Marine mammal resights; Events s, k, m
+  ### Marine mammal (+subgroup) resights; Events s, k, m, g
   sight.info.resight <- sight.df %>%
-    filter(.data$Event %in% c("s", "k", "m")) %>%
+    filter(.data$Event %in% c("s", "k", "m", "g")) %>%
     mutate(ResightCourse = as.numeric(.data$Data5)) %>%
     select(.data$sight_cumsum, .data$ResightCourse)
 
@@ -277,7 +298,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
            -.data$Data4, -.data$Data5, -.data$Data6,
            -.data$Data7, -.data$Data8, -.data$Data9) %>%
     left_join(sight.info.all, by = "sight_cumsum") %>%
-    left_join(sight.info.skm, by = "sight_cumsum") %>%
+    left_join(sight.info.skmg, by = "sight_cumsum") %>%
     left_join(sight.info.resight, by = "sight_cumsum") %>%
     left_join(sight.info.t, by = "sight_cumsum") %>%
     left_join(sight.info.f, by = "sight_cumsum") %>%
@@ -288,7 +309,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     to.return$idx <- seq_len(nrow(to.return))
 
     to.return.multi <- to.return %>%
-      filter(.data$Event %in% c("S", "K", "M")) %>%
+      filter(.data$Event %in% c("S", "K", "M", "G")) %>%
       group_by(.data$idx) %>%
       summarise(Sp1_list = list(c(.data$Sp1, .data$GsSp1)),
                 Sp2_list = list(c(.data$Sp2, .data$GsSp2)),
@@ -303,7 +324,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
       arrange(.data$idx)
 
     # Names and order of columns to reurn
-    names1 <- c(names(sight.df), names(sight.info.all), names(sight.info.skm))
+    names1 <- c(names(sight.df), names(sight.info.all), names(sight.info.skmg))
     names1 <- names1[!(names1 %in% c("sight_cumsum", paste0("Data", 1:9)))]
     names1 <- names1[!grepl("Sp", names1)]
 
@@ -314,7 +335,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
 
     sight.names <- c(names1, "Sp", "GsSp", names2)
 
-    # Prepmixed.multi return data frame
+    # Finalize mixed.multi return data frame
     to.return <- to.return %>%
       select(-.data$Sp1, -.data$Sp2, -.data$Sp3, -.data$Sp4,
              -.data$Sp1Perc, -.data$Sp2Perc, -.data$Sp3Perc, -.data$Sp4Perc,
