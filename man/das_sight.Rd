@@ -32,7 +32,7 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Sighting number                 \tab SightNo\cr
     Subgroup code                   \tab Subgroup\cr
     Observer that made the sighting \tab Obs\cr
-    Obs is one of ObsL, Rec or ObsR \tab Obs_std\cr
+    Obs is one of ObsL, Rec or ObsR \tab Obs_std \tab Logical; \code{FALSE} if Obs is \code{NA}\cr
     Bearing to the sighting         \tab Bearing \tab Degrees, range 0 to 360\cr
     Number of reticle marks         \tab Reticle\cr
     Distance (nautical miles)       \tab DistNm\cr
@@ -41,7 +41,8 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Photos of school?               \tab Photos\cr
     Birds present with school?      \tab Birds\cr
     Probable sighting               \tab Prob  \tab Logical\cr
-    Mixed species sighting          \tab Mixed \tab Logical\cr
+    Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
+    Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
     Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
     Species  code                 \tab Sp      \tab Only present when \code{mixed.multi = TRUE}\cr
     Species-specific group size   \tab GsSp    \tab Only present when \code{mixed.multi = TRUE}\cr
@@ -94,7 +95,7 @@ DAS events contain specific information in the 'Data#' columns,
     \item "A" events following an S/K/M event have the same Data1 (sighting number)
       as the S/K/M event.
       "A" events following a "G" event have a character (e.g. "A" or "B")
-    \item The 'Mixed' column is \code{TRUE} if two or more of the
+    \item The 'nSp' column is equivalent to the number of non-\code{NA}
       'Data5', 'Data6', 'Data7', and 'Data8' values
       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
       This column has a non-\code{NA} value for only "S", "K", and "M" events

@@ -12,7 +12,7 @@ exp.proc.name <- c(
 
 exp.sight.name <- c(
   "SightNo", "Subgroup", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
-  "Cue", "Method", "Photos", "Birds", "Prob", "Mixed", "GsTotal"
+  "Cue", "Method", "Photos", "Birds", "Prob", "nSp", "Mixed", "GsTotal"
 )
 
 exp.sight.name.nomulti <- c(

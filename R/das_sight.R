@@ -30,7 +30,7 @@
 #'     \item "A" events following an S/K/M event have the same Data1 (sighting number)
 #'       as the S/K/M event.
 #'       "A" events following a "G" event have a character (e.g. "A" or "B")
-#'     \item The 'Mixed' column is \code{TRUE} if two or more of the
+#'     \item The 'nSp' column is equivalent to the number of non-\code{NA}
 #'       'Data5', 'Data6', 'Data7', and 'Data8' values
 #'       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
 #'       This column has a non-\code{NA} value for only "S", "K", and "M" events
@@ -69,7 +69,7 @@
 #'     Sighting number                 \tab SightNo\cr
 #'     Subgroup code                   \tab Subgroup\cr
 #'     Observer that made the sighting \tab Obs\cr
-#'     Obs is one of ObsL, Rec or ObsR \tab Obs_std\cr
+#'     Obs is one of ObsL, Rec or ObsR \tab Obs_std \tab Logical; \code{FALSE} if Obs is \code{NA}\cr
 #'     Bearing to the sighting         \tab Bearing \tab Degrees, range 0 to 360\cr
 #'     Number of reticle marks         \tab Reticle\cr
 #'     Distance (nautical miles)       \tab DistNm\cr
@@ -78,7 +78,8 @@
 #'     Photos of school?               \tab Photos\cr
 #'     Birds present with school?      \tab Birds\cr
 #'     Probable sighting               \tab Prob  \tab Logical\cr
-#'     Mixed species sighting          \tab Mixed \tab Logical\cr
+#'     Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
+#'     Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
 #'     Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
 #'     Species  code                 \tab Sp      \tab Only present when \code{mixed.multi = TRUE}\cr
 #'     Species-specific group size   \tab GsSp    \tab Only present when \code{mixed.multi = TRUE}\cr
@@ -173,7 +174,8 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
                            .data$Event == "F" ~ .data$Data1),
            Obs_std = pmap_lgl(list(.data$Obs, .data$ObsL, .data$Rec, .data$ObsR),
                               function(obs, o1, o2, o3) {
-                                ifelse(is.na(obs), NA, obs %in% c(o1, o2, o3))
+                                obs %in% c(o1, o2, o3)
+                                # ifelse(is.na(obs), NA, obs %in% c(o1, o2, o3))
                               }),
            Bearing = as.numeric(
              case_when(
@@ -211,14 +213,15 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     filter(.data$Event =="A") %>%
     mutate(Photos = toupper(.data$Data3),
            Birds = toupper(.data$Data4),
-           Mixed = unlist(
+           nSp = unlist(
              pmap(list(.data$Data5, .data$Data6, .data$Data7, .data$Data8),
                   function(d5, d6, d7, d8) {
-                    sum(!is.na(c(d5, d6, d7, d8))) > 1
-                  }))) %>%
-    select(.data$sight_cumsum, .data$Photos, .data$Birds, .data$Mixed,
-           Sp1 = .data$Data5, Sp2 = .data$Data6, Sp3 = .data$Data7,
-           Sp4 = .data$Data8)
+                    sum(!is.na(c(d5, d6, d7, d8)))
+                  })),
+           Mixed = .data$nSp > 1) %>%
+    select(.data$sight_cumsum, .data$Photos, .data$Birds, .data$nSp,
+           .data$Mixed, Sp1 = .data$Data5, Sp2 = .data$Data6,
+           Sp3 = .data$Data7, Sp4 = .data$Data8)
 
   # Data from grouped
   sight.info.skmg3 <- sight.df %>%
@@ -257,7 +260,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     left_join(sight.info.skmg4, by = "sight_cumsum") %>%
     select(.data$sight_cumsum, .data$Cue, .data$Method,
            .data$Photos, .data$Birds,
-           .data$Prob, .data$Mixed, .data$GsTotal, everything())
+           .data$Prob, .data$nSp, .data$Mixed, .data$GsTotal, everything())
   rm(sight.info.skmg1, sight.info.skmg2, sight.info.skmg3, sight.info.skmg4)
 
 
@@ -302,6 +305,8 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     left_join(sight.info.resight, by = "sight_cumsum") %>%
     left_join(sight.info.t, by = "sight_cumsum") %>%
     left_join(sight.info.f, by = "sight_cumsum") %>%
+    # mutate(nSp = ifelse(is.na(.data$nSp), 0, .data$nSp),
+    #        Mixed = .data$nSp > 1) %>%
     select(-.data$sight_cumsum)
 
   # Split multi-species sightings into multiple rows, if necessary
@@ -326,7 +331,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     # Names and order of columns to reurn
     names1 <- c(names(sight.df), names(sight.info.all), names(sight.info.skmg))
     names1 <- names1[!(names1 %in% c("sight_cumsum", paste0("Data", 1:9)))]
-    names1 <- names1[!grepl("Sp", names1)]
+    names1 <- names1[!grepl("Sp", names1) | names1 == "nSp"]
 
     names2 <- c(
       names(sight.info.resight), names(sight.info.t), names(sight.info.f)
