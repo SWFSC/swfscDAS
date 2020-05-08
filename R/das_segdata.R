@@ -282,7 +282,9 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
                   filter(!is.na(.data$val)) %>%
                   mutate(val_frac = .data$val * .data$dist)
 
-                if (nrow(tmp) == 0) NA else round(sum(tmp$val_frac) / sum(tmp$dist), 2)
+                if (nrow(tmp) == 0) NA else sum(tmp$val_frac) / sum(tmp$dist)
+                # Currently no rounding for comaprison with EAB
+                #round(sum(tmp$val_frac) / sum(tmp$dist), 2)
               }
             }, k.list = conditions.list),
             stringsAsFactors = FALSE
@@ -373,8 +375,14 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     }
   }
 
-  # Return something
-  segdata.all
+  # Ensure longitudes are between -180 and 180, and return something
+  segdata.all %>%
+    mutate(lon1 = ifelse(.greater(.data$lon1, 180), .data$lon1 - 360, .data$lon1),
+           lon1 = ifelse(.less(.data$lon1, -180), .data$lon1 + 360, .data$lon1),
+           lon2 = ifelse(.greater(.data$lon2, 180), .data$lon2 - 360, .data$lon2),
+           lon2 = ifelse(.less(.data$lon2, -180), .data$lon2 + 360, .data$lon2),
+           mlon = ifelse(.greater(.data$mlon, 180), .data$mlon - 360, .data$mlon),
+           mlon = ifelse(.less(.data$mlon, -180), .data$mlon + 360, .data$mlon))
 }
 
 

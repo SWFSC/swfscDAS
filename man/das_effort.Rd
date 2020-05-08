@@ -18,6 +18,7 @@ das_effort(x, ...)
   dist.method = "vincenty",
   seg0.drop = FALSE,
   comment.drop = FALSE,
+  event.touse = NULL,
   num.cores = NULL,
   ...
 )
@@ -56,6 +57,11 @@ of length 0 that contain no "S" events. Default is \code{FALSE}}
 should be ignored (i.e. position information should not be used)
 when segment chopping. Default is \code{FALSE}}
 
+\item{event.touse}{character vector of events to use to determine
+segment lengths; overrides \code{comment.drop}.
+If \code{NULL} (the default), then all on effort events are used.
+If used, this argument must include R, E, S, and A events}
+
 \item{num.cores}{Number of CPUs to over which to distribute computations.
 Defaults to \code{NULL}, which uses one fewer than the number of cores
 reported by \code{\link[parallel]{detectCores}}.
@@ -88,10 +94,12 @@ This is the top-level function for chopping processed DAS data
   Before chopping, the DAS data is filtered for events (rows) where either
   the 'OnEffort' column is \code{TRUE} or the 'Event' column "E".
   In other words, the data is filtered for continuous effort sections (henceforth 'effort sections'),
-  where effort sections run from "B"/"R" to "E" events (inclusive),
+  where effort sections run from "R" to "E" events (inclusive),
   and then passed to the chopping function specified using \code{method}.
-  All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
-  must have non-\code{NA} Lat and Lon values.
+  Note that while B events immediately preceding an R are on effort,
+  they are ignored during effort chopping.
+  In addition, all on effort events (other than ? and numeric events)
+  with \code{NA} DateTime, Lat, or Lon values are verbosely removed.
 
   The following chopping methods are currently available:
   \code{"condition"} and \code{"equallength"}.

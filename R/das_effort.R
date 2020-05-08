@@ -25,6 +25,10 @@
 #' @param comment.drop logical; flag indicating if comments ("C" events)
 #'   should be ignored (i.e. position information should not be used)
 #'   when segment chopping. Default is \code{FALSE}
+#' @param event.touse character vector of events to use to determine
+#'   segment lengths; overrides \code{comment.drop}.
+#'   If \code{NULL} (the default), then all on effort events are used.
+#'   If used, this argument must include R, E, S, and A events
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL}, which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}.
@@ -40,10 +44,12 @@
 #'   Before chopping, the DAS data is filtered for events (rows) where either
 #'   the 'OnEffort' column is \code{TRUE} or the 'Event' column "E".
 #'   In other words, the data is filtered for continuous effort sections (henceforth 'effort sections'),
-#'   where effort sections run from "B"/"R" to "E" events (inclusive),
+#'   where effort sections run from "R" to "E" events (inclusive),
 #'   and then passed to the chopping function specified using \code{method}.
-#'   All on effort events that are not one of ?, 1, 2, 3, 4, 5, 6, 7, or 8
-#'   must have non-\code{NA} Lat and Lon values.
+#'   Note that while B events immediately preceding an R are on effort,
+#'   they are ignored during effort chopping.
+#'   In addition, all on effort events (other than ? and numeric events)
+#'   with \code{NA} DateTime, Lat, or Lon values are verbosely removed.
 #'
 #'   The following chopping methods are currently available:
 #'   \code{"condition"} and \code{"equallength"}.
@@ -117,9 +123,15 @@ das_effort.data.frame <- function(x, ...) {
 das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
                               dist.method = "vincenty",
                               seg0.drop = FALSE, comment.drop = FALSE,
+                              event.touse = NULL,
                               num.cores = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
+  stopifnot(
+    "seg0.drop must be a logical" = inherits(seg0.drop, "logical"),
+    "comment.drop must be a logical" = inherits(comment.drop, "logical")
+  )
+
   methods.acc <- c("equallength", "condition")
   if (!(length(method) == 1 & (method %in% methods.acc)))
     stop("method must be a string of length one, and must be one of: ",
@@ -146,12 +158,21 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
            paste(conditions.acc, collapse  = ", "))
   }
 
+  if (!is.null(event.touse)) {
+    if (comment.drop)
+      warning("comment.drop is ignored because event.touse is not NULL")
+
+    if (!all(c("R", "E", "S", "A") %in% event.touse))
+      stop("event.use must include the following events: ",
+           paste(c("R", "E", "S", "A"), collapse = ", "))
+  }
+
 
   #----------------------------------------------------------------------------
   # Prep for chop functions
 
   # Remove comments if specified
-  if (comment.drop) x <- x %>% filter(.data$Event != "C")
+  if (is.null(event.touse) & comment.drop) x <- x %>% filter(.data$Event != "C")
 
   # Add index column for adding back in ? and 1:8 events, and extract those events
   x$idx_eff <- seq_len(nrow(x))
@@ -159,13 +180,19 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
 
   # Filter for continuous effort sections; extract ? and 1:8 events
   #   'on effort + 1' is to capture O/E event.
-  x.oneff.which <- sort(unique(c(which(x$OnEffort), which(x$OnEffort) + 1)))
+  x.B.preEff <- which(x$Event == "B")
+  x.B.preEff <- x.B.preEff[(x.B.preEff %in% c(1, which(!x$OnEffort) + 1))]
+
+  x.oneff.which <- sort(which(x$OnEffort | x$Event == "E"))
+  x.oneff.which <- x.oneff.which[!(x.oneff.which %in% x.B.preEff)]
+  rm(x.B.preEff)
+  # x.oneff.which2 <- sort(unique(c(which(x$OnEffort), which(x$OnEffort) + 1)))
+  # d <- x.oneff.which2[!(x.oneff.which2 %in% x.oneff.which)]
   stopifnot(all(between(x.oneff.which, 1, nrow(x))))
 
   x.oneff.all <- x[x.oneff.which, ]
 
-  x.oneff <- x.oneff.all %>%
-    filter(!(.data$Event %in% event.tmp) )
+  x.oneff <- x.oneff.all %>% filter(!(.data$Event %in% event.tmp) )
   x.oneff.tmp <- x.oneff.all %>%
     filter(.data$Event %in% event.tmp) %>%
     mutate(cont_eff_section = NA, dist_from_prev = NA, seg_idx = NA, segnum = NA)
@@ -193,20 +220,23 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     x.oneff <- x.oneff %>%
       filter(!is.na(.data$Lat) & !is.na(.data$Lon) & !is.na(.data$DateTime))
     message(paste0("There were ", sum(x.nacheck$ll_dt_na), " on effort ",
-                  ifelse(comment.drop, "(non-C) ", ""), "events ",
-                  "with NA Lat/Lon/DateTime values that will ignored ",
-                  "during segment chopping"))
+                   ifelse(comment.drop, "(non-C) ", ""), "events ",
+                   "with NA Lat/Lon/DateTime values that will ignored ",
+                   "during segment chopping"))
 
     rm(x.nacheck)
   }
 
   # For each event, calculate distance to previous event
+  if (!is.null(event.touse))
+    x.oneff <- x.oneff %>% filter(.data$Event %in% event.touse)
+
   x.oneff$dist_from_prev <- .dist_from_prev(x.oneff, dist.method)
 
   # Determine continuous effort sections
   x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
-  event.B.preR <- (x.oneff$Event == "B") & (c(x.oneff$Event[-1], NA) == "R")
-  x.oneff$cont_eff_section[event.B.preR] <- x.oneff$cont_eff_section[event.B.preR] + 1
+  # event.B.preR <- (x.oneff$Event == "B") & (c(x.oneff$Event[-1], NA) == "R")
+  # x.oneff$cont_eff_section[event.B.preR] <- x.oneff$cont_eff_section[event.B.preR] + 1
 
   # If specified, verbosely remove cont eff sections with length 0 and no "S" events
   if (seg0.drop) {
@@ -220,11 +250,11 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     x.oneff <- x.oneff %>% filter(.data$cont_eff_section %in% ces.keep)
 
     x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
-    event.B.preR <- (x.oneff$Event == "B") & (c(x.oneff$Event[-1], NA) == "R")
-    x.oneff$cont_eff_section[event.B.preR] <- x.oneff$cont_eff_section[event.B.preR] + 1
+    # event.B.preR <- (x.oneff$Event == "B") & (c(x.oneff$Event[-1], NA) == "R")
+    # x.oneff$cont_eff_section[event.B.preR] <- x.oneff$cont_eff_section[event.B.preR] + 1
 
     message(paste("There were", nrow(x.ces.summ) - length(ces.keep),
-                  "continuos effort sections removed because they have a ",
+                  "continuous effort sections removed because they have a",
                   "length of 0 and contain no S events"))
     rm(x.ces.summ, ces.keep)
   }
@@ -294,6 +324,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
   sp.codes <- sort(sp.codes)
 
   segdata.col1 <- select(segdata, .data$seg_idx)
+
   siteinfo.forsegdata.list <- lapply(sp.codes, function(i, siteinfo, d1) {
     d0 <- siteinfo %>%
       filter(.data$included, .data$Sp == i) %>%
@@ -301,7 +332,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
       summarise(nSI = length(.data$Sp),
                 ANI = sum(.data$GsSp))
 
-    names(d0) <- c("seg_idx", paste0(i, "_", names(d0)[-1]))
+    names(d0) <- c("seg_idx", paste(names(d0)[-1], i, sep = "_"))
 
     z <- full_join(d1, d0, by = "seg_idx") %>% select(-.data$seg_idx)
     z[is.na(z)] <- 0
@@ -309,8 +340,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     z
   }, siteinfo = siteinfo, d1 = segdata.col1)
 
-  siteinfo.forsegdata.df <- segdata.col1 %>%
-    bind_cols(siteinfo.forsegdata.list)
+  siteinfo.forsegdata.df <- bind_cols(segdata.col1, siteinfo.forsegdata.list)
 
 
   #----------------------------------------------------------------------------
@@ -319,9 +349,14 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     left_join(siteinfo.forsegdata.df, by = "seg_idx") %>%
     select(-.data$seg_idx)
 
-  siteinfo <- siteinfo %>%
-    select(-.data$seg_idx) %>%
-    select(.data$segnum, .data$mlat, .data$mlon, everything())
+ siteinfo <- siteinfo %>%
+    mutate(year = year(.data$DateTime)) %>%
+    select(-.data$seg_idx, -.data$Subgroup, -.data$ResightCourse,
+           -.data$TurtleSp, -.data$TurtleNum, -.data$TurtleJFR,
+           -.data$TurtleAge, -.data$TurtleCapt,
+           -.data$BoatType, -.data$BoatNum) %>%
+    select(.data$segnum, .data$mlat, .data$mlon, .data$Event,
+           .data$DateTime, .data$year, everything())
 
   list(segdata = segdata, siteinfo = siteinfo, randpicks = randpicks)
 }
@@ -356,7 +391,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
          "These events are in the following lines of the original file:\n",
          paste(z$line_num[z.llna], collapse = ", "))
 
-  # Calcualte distances
+  # Calculate distances
   if (identical(z.dist.method, "greatcircle")) {
     dist.from.prev <- mapply(function(x1, y1, x2, y2) {
       .fn.grcirclkm(y1, x1, y2, x2)

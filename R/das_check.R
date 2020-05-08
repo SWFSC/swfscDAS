@@ -67,9 +67,11 @@
 #'   \item There are ~3500 S/K/M events with data past the Data9 columns.
 #'   \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
 #'   \item TODO: Add check for sequential date/time
+#'   \item TODO: Add column with cruise number to output
 #'   \item Check that A events only come immediately after a G/S/K/M event,
 #'     and all G/S/K/M events have an A after them.
 #'     Also check about these related to ?/1:8 events?
+#'   \item Check that lat/lon values are within [-90, 90] and [-180, 180]
 #' }
 #'
 #' @return
