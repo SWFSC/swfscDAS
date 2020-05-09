@@ -38,7 +38,7 @@
 #'   The following assumptions/decisions are made during processing:
 #'   \itemize{
 #'     \item Event codes are expected to be one of the following:
-#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
+#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z.
 #'       The codes G, g (subgroup of a current sighting, and resight of subgroup, respectively),
 #'       p (pinniped sighting), X (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
 #'       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
@@ -93,12 +93,10 @@
 #'     Independent observer          \tab ObsInd    \tab Event: P; Column: Data4\cr
 #'   }
 #'
-#'   Warnings are printed with row numbers of unexpected event codes,
+#'   Warnings are printed with row numbers of the input file
+#'   (NOT of the output data frame) of unexpected event codes and r events,
 #'   as well as if there is are potential issues with the number and/or order
 #'   of R and E events
-#'
-#' @seealso For more details about WinCruz, see
-#'   \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
 #'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
@@ -106,6 +104,7 @@
 #'
 #' y.read <- das_read(y)
 #' das_process(y.read)
+#' das_process(y.read, reset.effort = FALSE)
 #'
 #' @export
 das_process <- function(x, ...) UseMethod("das_process")
@@ -138,6 +137,12 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
                                 reset.effort = TRUE, reset.day = TRUE, ...)
 {
   #----------------------------------------------------------------------------
+  # Prep 1
+  x <- x[x$Event != "#", ]
+  rownames(x) <- NULL # for debugging purposes
+
+
+  #----------------------------------------------------------------------------
   ### Input checks
   stopifnot(
     inherits(days.gap, c("integer", "numeric")),
@@ -156,12 +161,36 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
          paste(x$line_num[is.na(x$Event)], collapse = ", "))
 
 
+  # Check event codes
+  event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "M", "N",
+                 "P", "Q", "r", "R", "s", "S", "t", "V", "W",
+                 "G", "g", "p", "X", "Y", "Z")
+  if (!all(x$Event %in% event.acc))
+    warning("This DAS data contains unexpected event codes, ",
+            "which could break other package functions. ",
+            "Please address this issue before continuing.\n",
+            paste0("Expected event codes (case sensitive): ",
+                   paste(event.acc, collapse = ", "), "\n"),
+            "The following line number(s) of the input file contain unexpected event codes:\n",
+            paste(x$line_num[!(x$Event %in% event.acc)], collapse = ", "),
+            immediate. = TRUE)
+
+
   #----------------------------------------------------------------------------
   # Prep
+  ### 'Convert' r events to R events
+  if (any(x$Event == "r")) {
+    x.r.which <- which(x$Event == "r")
+    warning("The provided file contains 'r' events. Is this on purpose? ",
+            "These events will be CONVERTED to R events with non-standard effort, ",
+            "i.e. with . an \"N\" value in the Data1 column, in the output.\n",
+            paste("There are", length(x.r.which), "r events, including at the following line numbers: "),
+            paste(head(x$line_num[x$Event == "r"]), collapse = ", "),
+            immediate. = TRUE)
 
-  ### Remove '#' events
-  x <- x[x$Event != "#", ]
-  rownames(x) <- NULL # for debugging purposes
+    x$Data1[x.r.which] <- "N"
+    x$Event[x.r.which] <- "R"
+  }
 
   ### Determine effort using B/R and E events
   nDAS <- nrow(x)
@@ -330,21 +359,6 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
   tmp$Rec <- as.character(tmp$Rec)
   tmp$ObsR <- as.character(tmp$ObsR)
   tmp$ObsInd <- as.character(tmp$ObsInd)
-
-
-  #----------------------------------------------------------------------------
-  # A couple of warning checks
-  event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "M", "N",
-                 "P", "Q", "R", "s", "S", "t", "V", "W",
-                 "G", "g", "p", "X", "Y", "Z")
-  if (!all(x$Event %in% event.acc))
-    warning(paste0("Expected event codes (case sensitive): ",
-                   paste(event.acc, collapse = ", "), "\n"),
-            "The following line(s) of the input file ",
-            "(NOT necessarily the row numbers of output) ",
-            "contain unexpected event codes:\n",
-            paste(x$line_num[!(x$Event %in% event.acc)],
-                  collapse = ", "))
 
 
   #----------------------------------------------------------------------------

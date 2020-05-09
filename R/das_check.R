@@ -18,7 +18,7 @@
 #' Precursor to DASCHECK. Checks that the following is true:
 #' \itemize{
 #'   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
-#'     A, B, C, E, F, k, K, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
+#'     A, B, C, E, F, k, K, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z.
 #'   \item The effort dot matches effort determined using B, R, and E events
 #'   \item There are an equal number of R and E events, and they alternate occurrences
 #'   \item A BR event series or R event does not occur while already on effort
@@ -81,6 +81,8 @@
 #' If \code{file.out} is not \code{NULL}, then the error log is also
 #' written to a text file
 #'
+#' A warning is printed if any events are r events
+#'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
 #' das_check(y)
@@ -136,7 +138,7 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
 
   ### Check event codes
   event.acc <- c("#", "*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "M",
-                 "N", "P", "Q", "R", "s", "S", "t", "V", "W",
+                 "N", "P", "Q","r", "R", "s", "S", "t", "V", "W",
                  "G", "g", "p", "X", "Y", "Z")
   ev.which <- which(!(x$Event %in% event.acc))
   error.out <- rbind(
@@ -145,6 +147,10 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
          x.lines[ev.which],
          rep("The event code is not recognized", length(ev.which)))
   )
+
+  if (any(x$Event == "r"))
+    warning("The provided file contains 'r' events. Is this on purpose?",
+            immediate. = TRUE)
 
 
   #----------------------------------------------------------------------------

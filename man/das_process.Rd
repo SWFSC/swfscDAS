@@ -75,7 +75,8 @@ A \code{das_df} object, which is also a data frame.
     Independent observer          \tab ObsInd    \tab Event: P; Column: Data4\cr
   }
 
-  Warnings are printed with row numbers of unexpected event codes,
+  Warnings are printed with row numbers of the input file
+  (NOT of the output data frame) of unexpected event codes and r events,
   as well as if there is are potential issues with the number and/or order
   of R and E events
 }
@@ -100,7 +101,7 @@ If \code{x} is a character, it is assumed to be a filepath and first passed to \
   The following assumptions/decisions are made during processing:
   \itemize{
     \item Event codes are expected to be one of the following:
-      #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, R, s, S, t, V, W, G, g, p, X, Y, Z.
+      #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z.
       The codes G, g (subgroup of a current sighting, and resight of subgroup, respectively),
       p (pinniped sighting), X (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
@@ -137,9 +138,6 @@ das_process(y)
 
 y.read <- das_read(y)
 das_process(y.read)
+das_process(y.read, reset.effort = FALSE)
 
-}
-\seealso{
-For more details about WinCruz, see
-  \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
 }

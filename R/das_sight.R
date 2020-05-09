@@ -251,7 +251,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
          "This should have been caught earlier?")
   if (!isTRUE(all.equal(nrow(sight.info.skmg1), nrow(sight.info.skmg4))))
     warning("Not all S/K/M/G events have corresponding numeric (1:8) events; ",
-            "please quality check the data using `das_check`")
+            "please check the data using `das_check`")
 
 
   sight.info.skmg <- sight.info.skmg1 %>%
