@@ -77,6 +77,12 @@ as_das_df.data.frame <- function(x) {
     }
   }
 
+  # Check that no events are NA
+  if (any(is.na(x$Event)))
+    stop("The provided data cannot be coerced to an object of class das_df ",
+         "because the following line(s) have NA Event value(s):\n",
+         paste(x$line_num[is.na(x$Event)], collapse = ", "))
+
   class(x) <- c("das_df", setdiff(class(x), "das_df"))
 
   x

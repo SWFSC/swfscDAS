@@ -15,6 +15,8 @@
 #'
 #' @section Properties of \code{das_dfr}:
 #'
+#'   All values in the Event column must not be \code{NA}.
+#'
 #'   Objects of class \code{das_dfr} have a class attribute of \code{c("das_dfr", "data.frame")}.
 #'   In addition, they must have the following column names and classes:
 #'   \tabular{ll}{
@@ -61,6 +63,8 @@ NULL
 #'   will try to coerce the object to a \code{das_df} object.
 #'
 #' @section Properties of \code{das_df}:
+#'
+#'   All values in the Event column must not be \code{NA}.
 #'
 #'   Objects of class \code{das_df} have a class attribute of \code{c("das_df", "data.frame")}.
 #'   In addition, they must have the following column names and classes:

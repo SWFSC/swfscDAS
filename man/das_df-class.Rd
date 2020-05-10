@@ -21,6 +21,8 @@ The \code{das_df} class is a subclass of \code{\link[base]{data.frame}},
 \section{Properties of \code{das_df}}{
 
 
+  All values in the Event column must not be \code{NA}.
+
   Objects of class \code{das_df} have a class attribute of \code{c("das_df", "data.frame")}.
   In addition, they must have the following column names and classes:
   \tabular{ll}{

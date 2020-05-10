@@ -60,6 +60,12 @@ as_das_dfr.data.frame <- function(x) {
     }
   }
 
+  # Check that no events are NA
+  if (any(is.na(x$Event)))
+    stop("The provided data cannot be coerced to an object of class das_dfr ",
+         "because the following line(s) have NA Event value(s):\n",
+         paste(x$line_num[is.na(x$Event)], collapse = ", "))
+
   class(x) <- c("das_dfr", setdiff(class(x), "das_dfr"))
 
   x
