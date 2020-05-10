@@ -8,7 +8,6 @@
 #'   Can be \code{"condition"} or \code{"equallength"} (case-sensitive)
 #'   to usex \code{\link{das_chop_condition}} or \code{\link{das_chop_condition}},
 #'   respectively
-#' @param sp.codes character; species code(s) to include in segdata output
 #' @param conditions character vector of names of conditions to include in segdata output.
 #'   These values must be column names from the output of \code{\link{das_process}},
 #'   e.g. 'Bft', 'SwellHght', etc.
@@ -57,37 +56,44 @@
 #'   into segments every time a condition changes,
 #'   thereby ensuring that the conditions are consistent across the entire segment.
 #'   See \code{\link{das_chop_condition}} for more details about this method,
-#'   including arguments that must be passed to it via \code{...}.
+#'   including arguments that must be passed to it via the argument \code{...}
 #'
 #'   The \code{"equallength"} method consists of
 #'   chopping effort sections into equal-length segments of length \code{seg.km},
 #'   and doing a weighted average of the conditions for the length of that segment.
 #'   See \code{\link{das_chop_equal}} for more details about this method,
-#'   including arguments that must be passed to it via \code{...}.
-#'
-#'   The sightings included in the segdata counts sightings that were made when
-#'   on effort, by a standard observer,
-#'   and in a Beaufort sea state less than or equal to five.
-#'   Included sightings are those with a \code{TRUE} value in the 'included'
-#'   column in siteinfo (described below).
-#'   TODO: Allow user to specify this.
+#'   including arguments that must be passed to it via the argument \code{...}
 #'
 #'   The distance between the lat/lon points of subsequent events
 #'   is calculated using the method specified in \code{dist.method}.
 #'   See \code{\link{das_sight}} for how the sightings are processed.
 #'
+#'   The siteinfo data frame includes the column 'included',
+#'   which is used in \code{\link{das_effort_sight}} when summarizing
+#'   the number of sightings and animals for selected species.
+#'   \code{\link{das_effort_sight}} is a separate function to allow users to
+#'   personalize the included values as desired for their analysis.
+#'   By default, i.e. in the output of this function, 'included' is \code{TRUE} if:
+#'   the sighting was made when on effort,
+#'   by a standard observer (see \code{\link{das_sight}}),
+#'   and in a Beaufort sea state less than or equal to five.
+#'
+#'   In addition, the siteinfo data frame includes the column 'perp_dist'
+#'   (short for perpendicular distance). This value is calculated as:
+#'   \code{(abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852)},
+#'   with \code{.data$Bearing} and \code{.data$DistNm} coming from the
+#'   output of \code{\link{das_sight}}
+#'
 #' @return List of three data frames:
 #'   \itemize{
 #'     \item segdata: one row for every segment, and columns for information including
-#'       unique segment number, start/end/midpoint coordinates, conditions (e.g. Beaufort),
-#'       and number of sightings and number of animals on that segment for every species
-#'       indicated in \code{sp.codes}.
+#'       unique segment number, start/end/midpoint coordinates, and conditions (e.g. Beaufort)
 #'     \item siteinfo: details for all sightings in \code{x}, including:
 #'       the unique segment number it is associated with, segment mid points (lat/lon),
-#'       whether the sighting was included in the segdata counts (column name 'included'),
-#'       and the output information described in \code{\link{das_sight}}.
-#'     \item randpicks: see \code{\link{das_chop_equal}}.
-#'       \code{NULL} if using "condition" method.
+#'       the 'included' and 'perp_dist' columns described in the 'Details section,
+#'       and the output information described in \code{\link{das_sight}}
+#'     \item randpicks: see \code{\link{das_chop_equal}};
+#'       \code{NULL} if using "condition" method
 #'   }
 #'
 #' @examples
@@ -96,15 +102,14 @@
 #'
 #' # Using "condition" method
 #' das_effort(
-#'   y.proc, method = "condition", sp.codes = c("016", "018"),
-#'   seg.min.km = 0.05, num.cores = 1
+#'   y.proc, method = "condition", seg.min.km = 0.05, num.cores = 1
 #' )
 #'
 #' # Using "equallength" method
 #' y.rand <- system.file("das_sample_randpicks.csv", package = "swfscDAS")
 #' das_effort(
-#'   y.proc, method = "equallength", sp.codes = c("016", "018"),
-#'   seg.km = 10, randpicks.load = y.rand, num.cores = 1
+#'   y.proc, method = "equallength", seg.km = 10, randpicks.load = y.rand,
+#'   num.cores = 1
 #' )
 #'
 #' @export
@@ -120,10 +125,8 @@ das_effort.data.frame <- function(x, ...) {
 
 #' @name das_effort
 #' @export
-das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
-                              dist.method = "vincenty",
-                              seg0.drop = FALSE, comment.drop = FALSE,
-                              event.touse = NULL,
+das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vincenty",
+                              seg0.drop = FALSE, comment.drop = FALSE, event.touse = NULL,
                               num.cores = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
@@ -156,6 +159,9 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
       stop("Please ensure all components of the conditions argument are ",
            "one of the following accepted values:\n",
            paste(conditions.acc, collapse  = ", "))
+
+    if (!("Bft" %in% conditions))
+      stop("The conditions argument must include 'Bft'")
   }
 
   if (!is.null(event.touse)) {
@@ -185,10 +191,8 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
 
   x.oneff.which <- sort(which(x$OnEffort | x$Event == "E"))
   x.oneff.which <- x.oneff.which[!(x.oneff.which %in% x.B.preEff)]
-  rm(x.B.preEff)
-  # x.oneff.which2 <- sort(unique(c(which(x$OnEffort), which(x$OnEffort) + 1)))
-  # d <- x.oneff.which2[!(x.oneff.which2 %in% x.oneff.which)]
   stopifnot(all(between(x.oneff.which, 1, nrow(x))))
+  rm(x.B.preEff)
 
   x.oneff.all <- x[x.oneff.which, ]
 
@@ -235,8 +239,6 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
 
   # Determine continuous effort sections
   x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
-  # event.B.preR <- (x.oneff$Event == "B") & (c(x.oneff$Event[-1], NA) == "R")
-  # x.oneff$cont_eff_section[event.B.preR] <- x.oneff$cont_eff_section[event.B.preR] + 1
 
   # If specified, verbosely remove cont eff sections with length 0 and no "S" events
   if (seg0.drop) {
@@ -250,8 +252,6 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
     x.oneff <- x.oneff %>% filter(.data$cont_eff_section %in% ces.keep)
 
     x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
-    # event.B.preR <- (x.oneff$Event == "B") & (c(x.oneff$Event[-1], NA) == "R")
-    # x.oneff$cont_eff_section[event.B.preR] <- x.oneff$cont_eff_section[event.B.preR] + 1
 
     message(paste("There were", nrow(x.ces.summ) - length(ces.keep),
                   "continuous effort sections removed because they have a",
@@ -307,7 +307,7 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
 
 
   #----------------------------------------------------------------------------
-  # Summarize sightings (based on siteinfo) and add applicable data to segdata
+  # Summarize sightings (based on siteinfo)
   siteinfo <- x.eff.all %>%
     left_join(select(segdata, .data$segnum, .data$mlat, .data$mlon),
               by = "segnum") %>%
@@ -318,38 +318,10 @@ das_effort.das_df <- function(x, method, sp.codes, conditions = NULL,
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-.data$dist_from_prev, -.data$cont_eff_section)
 
+  # Clean and return
+  segdata <- segdata %>% select(-.data$seg_idx)
 
-  # Make data frame with nSI and ANI columns, and join it with segdata
-  # TODO: Throw warning if element(s) of sp.codes are not in data?
-  sp.codes <- sort(sp.codes)
-
-  segdata.col1 <- select(segdata, .data$seg_idx)
-
-  siteinfo.forsegdata.list <- lapply(sp.codes, function(i, siteinfo, d1) {
-    d0 <- siteinfo %>%
-      filter(.data$included, .data$Sp == i) %>%
-      group_by(.data$seg_idx) %>%
-      summarise(nSI = length(.data$Sp),
-                ANI = sum(.data$GsSp))
-
-    names(d0) <- c("seg_idx", paste(names(d0)[-1], i, sep = "_"))
-
-    z <- full_join(d1, d0, by = "seg_idx") %>% select(-.data$seg_idx)
-    z[is.na(z)] <- 0
-
-    z
-  }, siteinfo = siteinfo, d1 = segdata.col1)
-
-  siteinfo.forsegdata.df <- bind_cols(segdata.col1, siteinfo.forsegdata.list)
-
-
-  #----------------------------------------------------------------------------
-  # Format and return
-  segdata <- segdata %>%
-    left_join(siteinfo.forsegdata.df, by = "seg_idx") %>%
-    select(-.data$seg_idx)
-
- siteinfo <- siteinfo %>%
+  siteinfo <- siteinfo %>%
     mutate(year = year(.data$DateTime)) %>%
     select(-.data$seg_idx, -.data$Subgroup, -.data$ResightCourse,
            -.data$TurtleSp, -.data$TurtleNum, -.data$TurtleJFR,

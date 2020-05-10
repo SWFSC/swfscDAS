@@ -69,7 +69,8 @@
 #'     Sighting number                 \tab SightNo\cr
 #'     Subgroup code                   \tab Subgroup\cr
 #'     Observer that made the sighting \tab Obs\cr
-#'     Obs is one of ObsL, Rec or ObsR \tab Obs_std \tab Logical; \code{FALSE} if Obs is \code{NA}\cr
+#'     Standard observer               \tab Obs_std \tab Logical; \code{TRUE} if Obs is one of ObsL, Rec or ObsR,
+#'       and \code{FALSE} if Obs is \code{NA}\cr
 #'     Bearing to the sighting         \tab Bearing \tab Degrees, range 0 to 360\cr
 #'     Number of reticle marks         \tab Reticle\cr
 #'     Distance (nautical miles)       \tab DistNm\cr
