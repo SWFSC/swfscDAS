@@ -1,5 +1,5 @@
 Package: swfscDAS
-Title: Southwest Fisheries Science Center DAS Processing
+Title: Southwest Fisheries Science Center Shipboard DAS Data Processing
 Version: 0.0.0.9000
 Authors@R: 
     person("Sam", "Woodman", email = "sam.woodman@noaa.gov", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6071-8186"))

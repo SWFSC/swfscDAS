@@ -189,7 +189,8 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
   x.B.preEff <- which(x$Event == "B")
   x.B.preEff <- x.B.preEff[(x.B.preEff %in% c(1, which(!x$OnEffort) + 1))]
 
-  x.oneff.which <- sort(which(x$OnEffort | x$Event == "E"))
+  # Don't use Event == "E" in case there are rogue E events
+  x.oneff.which <- sort(unique(c(which(x$OnEffort), which(x$OnEffort) + 1)))
   x.oneff.which <- x.oneff.which[!(x.oneff.which %in% x.B.preEff)]
   stopifnot(all(between(x.oneff.which, 1, nrow(x))))
   rm(x.B.preEff)

@@ -171,6 +171,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     data.frame(val = NA, dist = 0, stringsAsFactors = FALSE)
   })
   names(conditions.list.init) <- conditions
+  conditions.names <- paste0(segdata.method, conditions)
+  # switch(segdata.method, avg = "ave", maxdist = "maxdist"),
 
 
   # Calculate objects for for loop
@@ -185,7 +187,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
   # 'Initialize' necessary objects
   subseg.curr <- 1
   stlin.curr <- das.df$line_num[1]
-  startpt.curr <- c(das.df$Lat[1], das.df$Lon[2])
+  startpt.curr <- c(das.df$Lat[1], das.df$Lon[1])
   midpt.curr <- NULL
   segdata.all <- NULL
 
@@ -196,186 +198,226 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
 
   #----------------------------------------------------------------------------
-  ### Step through each point in effort length,
-  #     calculating segment midpoints, endpoints, and avg conditions as you go
-  for (j in 2:nrow(das.df)) {
-    # t1 and t2: Is point j past the segment midpt or endpt, respectively,
-    #   i.e. do we need to calculate the midpt or endpt?
-    dist.pt.curr <- das.df$dist_from_prev_cumsum[j]
-    t1 <- .greater_equal(dist.pt.curr, subseg.mid.cumsum[subseg.curr])
-    t2 <- .greater_equal(dist.pt.curr, subseg.cumsum[subseg.curr])
+  ### If length of continuous effort section is 0, do the basics
+  if (isTRUE(all.equal(sum(das.df$dist_from_prev), 0))) {
+    if (n.subseg == 1  & isTRUE(all.equal(subseg.cumsum, 0))) {
+      conditions.list.df <- data.frame(
+        lapply(names(conditions.list), function(k, das.df) {
+          val.out <- unique(na.omit(das.df[[k]]))
+          if (length(val.out) > 1)
+            warning("The continuous effort section with section_id ",
+                    section.id, " has a distance of 0, ",
+                    "and multiple values for condition ", k,
+                    ". Only the first element will be output")
+          if (length(val.out) == 0) NA else val.out
+        }, das.df = das.df)
+      )
+      names(conditions.list.df) <- conditions.names
 
-    if (!t2) {
-      # If we didn't cross a segment endpoint, get
-      #   1) the percentage of the segment between j-1 and j, and
-      #   2) the condition and sight info
-      seg.perc <- das.df$dist_from_prev[j] / seg.lengths[subseg.curr]
-      conditions.list <- .segdata_aggr(conditions.list, das.df, j-1, seg.perc)
-      rm(seg.perc)
+      segdata.all <- data.frame(
+        seg_idx = paste(section.id, 1, sep = "_"),
+        section_id = section.id,
+        section_sub_id = 1,
+        stlin = min(das.df$line_num), endlin = max(das.df$line_num),
+        lat1 = startpt.curr[1], lon1 = startpt.curr[2],
+        lat2 = startpt.curr[1], lon2 = startpt.curr[2],
+        mlat = startpt.curr[1], mlon = startpt.curr[2],
+        mDateTime = das.df$DateTime[1],
+        dist = 0,
+        stringsAsFactors = FALSE
+      ) %>%
+        mutate(mtime = strftime(.data$mDateTime, format = "%H:%M:%S",
+                                tz = tz(.data$mDateTime)),
+               year = year(.data$mDateTime), month = month(.data$mDateTime),
+               day = day(.data$mDateTime)) %>%
+        bind_cols(df.out1, conditions.list.df)
+
+    } else {
+      stop("segdata inconsistency - please report this as an issue")
     }
 
-    # While the current subsegment midpoint or endpoint
-    #   comes before the next event (which is indexed by j)
-    while((t1 & is.null(midpt.curr)) | t2) {
-      ### Make objects for values used multiple times (pt2)
-      # Needs to be here for when there are multiple trips through while loop
-      dist.subseg.curr <- subseg.cumsum[subseg.curr]
-      dist.subseg.prev <- subseg.cumsum[subseg.curr - 1]
-      dist.pt.curr     <- das.df$dist_from_prev_cumsum[j]
-      dist.pt.prev     <- das.df$dist_from_prev_cumsum[j-1]
+    #--------------------------------------------------------------------------
+  } else {
+    ### If the distance is > 0, step through each point in effort length,
+    ###   calculating segment points, avg conditions, etc. as you go
+    for (j in 2:nrow(das.df)) {
+      # t1 and t2: Is point j past the segment midpt or endpt, respectively,
+      #   i.e. do we need to calculate the midpt or endpt?
+      dist.pt.curr <- das.df$dist_from_prev_cumsum[j]
+      t1 <- .greater_equal(dist.pt.curr, subseg.mid.cumsum[subseg.curr])
+      t2 <- .greater_equal(dist.pt.curr, subseg.cumsum[subseg.curr])
 
-      ### Get data
-      # Calculate midpoint (if not already done for this segment)
-      if (t1 & is.null(midpt.curr)) {
-        midpt.curr <- destination(
-          das.df$Lat[j-1], das.df$Lon[j-1],
-          bearing(das.df$Lat[j-1], das.df$Lon[j-1], das.df$Lat[j], das.df$Lon[j])[1],
-          units = "km",
-          distance = subseg.mid.cumsum[subseg.curr] - dist.pt.prev
-        )
+      if (!t2) {
+        # If we didn't cross a segment endpoint, get
+        #   1) the percentage of the segment between j-1 and j, and
+        #   2) the condition and sight info
+        seg.perc <- das.df$dist_from_prev[j] / seg.lengths[subseg.curr]
+        conditions.list <- .segdata_aggr(conditions.list, das.df, j-1, seg.perc)
+        rm(seg.perc)
       }
 
-      # Calculate endpoint
-      if (t2) {
-        ### Destination calculated from das.df[j-1, ], so d calc is ok
-        ###   (destination calculates the endpoint, not the seg length)
-        d <- dist.subseg.curr - dist.pt.prev
-        endpt.curr <- destination(
-          das.df$Lat[j-1], das.df$Lon[j-1],
-          bearing(das.df$Lat[j-1], das.df$Lon[j-1], das.df$Lat[j], das.df$Lon[j])[1],
-          units = "km", type = "vincenty", distance = d
-        )
+      # While the current subsegment midpoint or endpoint
+      #   comes before the next event (which is indexed by j)
+      while((t1 & is.null(midpt.curr)) | t2) {
+        ### Make objects for values used multiple times (pt2)
+        # Needs to be here for when there are multiple trips through while loop
+        dist.subseg.curr <- subseg.cumsum[subseg.curr]
+        dist.subseg.prev <- subseg.cumsum[subseg.curr - 1]
+        dist.pt.curr     <- das.df$dist_from_prev_cumsum[j]
+        dist.pt.prev     <- das.df$dist_from_prev_cumsum[j-1]
 
-        ### Conditions and sightings
-        #     d.tmp handles multiple segments between pts, aka when current
-        #     segment start point is closer than [j-1]
-        d.tmp <- max(dist.pt.prev, dist.subseg.prev)
-        d.rat <- (dist.subseg.curr - d.tmp) / seg.lengths[subseg.curr]
-        # if (is.nan(d.rat)) d.rat <- NA
-        conditions.list <- .segdata_aggr(conditions.list, das.df, j-1, d.rat)
-        rm(d, d.tmp, d.rat)
-
-        ## If next point is at the same location, don't end the segment yet
-        if (j < nrow(das.df)) {
-          if (das.df$dist_from_prev[j+1] == 0) {
-            # tmp1 is dist from current point to end of last segment
-            tmp1a <- ifelse(subseg.curr > 1, subseg.cumsum[subseg.curr-1], 0)
-            tmp1 <- dist.pt.curr - tmp1a
-            tmp2 <- seg.lengths[subseg.curr]
-
-            if (.less_equal(tmp1, tmp2)) {break}
-            rm(tmp1a, tmp1, tmp2)
-          }
+        ### Get data
+        # Calculate midpoint (if not already done for this segment)
+        if (t1 & is.null(midpt.curr)) {
+          midpt.curr <- destination(
+            das.df$Lat[j-1], das.df$Lon[j-1],
+            bearing(das.df$Lat[j-1], das.df$Lon[j-1], das.df$Lat[j], das.df$Lon[j])[1],
+            units = "km",
+            distance = subseg.mid.cumsum[subseg.curr] - dist.pt.prev
+          )
         }
 
-        ### Store data from this segment
-        # Get condition information
-        if (segdata.method == "avg") {
-          conditions.list.df <- data.frame(
-            lapply(names(conditions.list), function(k, k.list) {
-              if (inherits(k.list[[k]]$val, "character")) {
-                paste(unique(na.omit(k.list[[k]]$val)), collapse = ";")
+        # Calculate endpoint
+        if (t2) {
+          ### Destination calculated from das.df[j-1, ], so d calc is ok
+          ###   (destination calculates the endpoint, not the seg length)
+          d <- dist.subseg.curr - dist.pt.prev
+          endpt.curr <- destination(
+            das.df$Lat[j-1], das.df$Lon[j-1],
+            bearing(das.df$Lat[j-1], das.df$Lon[j-1], das.df$Lat[j], das.df$Lon[j])[1],
+            units = "km", type = "vincenty", distance = d
+          )
 
-              } else {
-                #.segdata_aggr() throws an error if not character or numeric
+          ### Conditions and sightings
+          #     d.tmp handles multiple segments between pts, aka when current
+          #     segment start point is closer than [j-1]
+          d.tmp <- max(dist.pt.prev, dist.subseg.prev)
+          d.rat <- (dist.subseg.curr - d.tmp) / seg.lengths[subseg.curr]
+          # if (is.nan(d.rat)) d.rat <- NA
+          conditions.list <- .segdata_aggr(conditions.list, das.df, j-1, d.rat)
+          rm(d, d.tmp, d.rat)
+
+          ## If next point is at the same location, don't end the segment yet
+          if (j < nrow(das.df)) {
+            if (das.df$dist_from_prev[j+1] == 0) {
+              # tmp1 is dist from current point to end of last segment
+              tmp1a <- ifelse(subseg.curr > 1, subseg.cumsum[subseg.curr-1], 0)
+              tmp1 <- dist.pt.curr - tmp1a
+              tmp2 <- seg.lengths[subseg.curr]
+
+              if (.less_equal(tmp1, tmp2)) {break}
+              rm(tmp1a, tmp1, tmp2)
+            }
+          }
+
+          ### Store data from this segment
+          # Get condition information
+          if (segdata.method == "avg") {
+            conditions.list.df <- data.frame(
+              lapply(names(conditions.list), function(k, k.list) {
+                if (inherits(k.list[[k]]$val, "character")) {
+                  paste(unique(na.omit(k.list[[k]]$val)), collapse = ";")
+
+                } else {
+                  #.segdata_aggr() throws an error if not character or numeric
+                  tmp <- k.list[[k]] %>%
+                    filter(!is.na(.data$val)) %>%
+                    mutate(val_frac = .data$val * .data$dist)
+
+                  if (nrow(tmp) == 0) NA else sum(tmp$val_frac) / sum(tmp$dist)
+                  # Currently no rounding for comaprison with EAB
+                  #round(sum(tmp$val_frac) / sum(tmp$dist), 2)
+                }
+              }, k.list = conditions.list),
+              stringsAsFactors = FALSE
+            )
+
+          } else if (segdata.method == "maxdist") {
+            conditions.list.df <- data.frame(
+              lapply(names(conditions.list), function(k, k.list) {
                 tmp <- k.list[[k]] %>%
                   filter(!is.na(.data$val)) %>%
-                  mutate(val_frac = .data$val * .data$dist)
+                  group_by(.data$val) %>%
+                  summarise(dist_sum = sum(as.numeric(.data$dist))) %>%
+                  arrange(desc(.data$dist_sum), .data$val)
 
-                if (nrow(tmp) == 0) NA else sum(tmp$val_frac) / sum(tmp$dist)
-                # Currently no rounding for comaprison with EAB
-                #round(sum(tmp$val_frac) / sum(tmp$dist), 2)
-              }
-            }, k.list = conditions.list),
-            stringsAsFactors = FALSE
-          )
-
-        } else if (segdata.method == "maxdist") {
-          conditions.list.df <- data.frame(
-            lapply(names(conditions.list), function(k, k.list) {
-              tmp <- k.list[[k]] %>%
-                filter(!is.na(.data$val)) %>%
-                group_by(.data$val) %>%
-                summarise(dist_sum = sum(as.numeric(.data$dist))) %>%
-                arrange(desc(.data$dist_sum), .data$val)
-
-              if (nrow(tmp) == 0) NA else tmp$val[1]
-            }, k.list = conditions.list),
-            stringsAsFactors = FALSE
-          )
-
-        } else {
-          stop("Unrecognized segdata.method; please report this as an issue")
-        }
-
-        names(conditions.list.df) <- paste0(
-          # switch(segdata.method, avg = "ave", maxdist = "maxdist"),
-          segdata.method, names(conditions.list)
-        )
-
-        # Get start line
-        j.stlin.curr <- which(das.df$line_num == stlin.curr)
-
-        # Add segdata to .all data frame
-        segdata <- data.frame(
-          seg_idx = paste(section.id, subseg.curr, sep = "_"),
-          section_id = section.id,
-          section_sub_id = subseg.curr,
-          stlin = stlin.curr, endlin = das.df$line_num[j],
-          lat1 = startpt.curr[1], lon1 = startpt.curr[2],
-          lat2 = endpt.curr[1], lon2 = endpt.curr[2],
-          mlat = midpt.curr[1], mlon = midpt.curr[2],
-          mDateTime = mean(c(das.df$DateTime[j.stlin.curr], das.df$DateTime[j])),
-          dist = seg.lengths[subseg.curr],
-          stringsAsFactors = FALSE
-        ) %>%
-          mutate(mtime = strftime(.data$mDateTime, format = "%H:%M:%S",
-                                  tz = tz(.data$mDateTime)),
-                 year = year(.data$mDateTime), month = month(.data$mDateTime),
-                 day = day(.data$mDateTime)) %>%
-          bind_cols(df.out1, conditions.list.df)
-
-        segdata.all <- rbind(segdata.all, segdata)
-        rm(conditions.list.df, j.stlin.curr, segdata) #obs.vals
-
-
-        ### Prep for next segment
-        if (j == nrow(das.df) & subseg.curr == n.subseg) {
-          # If at the end of das.df and all segs have been processed, break
-          break
-
-        } else {
-          # Else, prep for next segment:
-          # Increment
-          subseg.curr <- subseg.curr + 1
-
-          # Reset/set points as appropriate
-          startpt.curr <- endpt.curr
-          midpt.curr <- NULL
-          endpt.curr <- NULL
-          stlin.curr <- das.df$line_num[j]
-
-          t1 <- .greater_equal(dist.pt.curr, subseg.mid.cumsum[subseg.curr])
-          t2 <- .greater_equal(dist.pt.curr, subseg.cumsum[subseg.curr])
-
-          # If pt j is before the next seg endpoint, get data from endpt to j
-          #   Else, this info is calculated in t2 section above
-          tmp1 <- das.df$dist_from_prev_cumsum[j] - subseg.cumsum[subseg.curr - 1]
-          tmp2 <- seg.lengths[subseg.curr]
-          conditions.list <- conditions.list.init
-
-          if (.less(tmp1, tmp2)) {
-            conditions.list <- .segdata_aggr(
-              conditions.list.init, das.df, j-1, tmp1 / tmp2
+                if (nrow(tmp) == 0) NA else tmp$val[1]
+              }, k.list = conditions.list),
+              stringsAsFactors = FALSE
             )
+
+          } else {
+            stop("Unrecognized segdata.method; please report this as an issue")
           }
-          rm(tmp1, tmp2)
+
+          names(conditions.list.df) <- conditions.names
+
+          # Get start line
+          j.stlin.curr <- which(das.df$line_num == stlin.curr)
+
+          # Add segdata to .all data frame
+          segdata <- data.frame(
+            seg_idx = paste(section.id, subseg.curr, sep = "_"),
+            section_id = section.id,
+            section_sub_id = subseg.curr,
+            stlin = stlin.curr, endlin = das.df$line_num[j],
+            lat1 = startpt.curr[1], lon1 = startpt.curr[2],
+            lat2 = endpt.curr[1], lon2 = endpt.curr[2],
+            mlat = midpt.curr[1], mlon = midpt.curr[2],
+            mDateTime = mean(c(das.df$DateTime[j.stlin.curr], das.df$DateTime[j])),
+            dist = seg.lengths[subseg.curr],
+            stringsAsFactors = FALSE
+          ) %>%
+            mutate(mtime = strftime(.data$mDateTime, format = "%H:%M:%S",
+                                    tz = tz(.data$mDateTime)),
+                   year = year(.data$mDateTime), month = month(.data$mDateTime),
+                   day = day(.data$mDateTime)) %>%
+            bind_cols(df.out1, conditions.list.df)
+
+          segdata.all <- rbind(segdata.all, segdata)
+          rm(conditions.list.df, j.stlin.curr, segdata) #obs.vals
+
+
+          ### Prep for next segment
+          if (j == nrow(das.df) & subseg.curr == n.subseg) {
+            # If at the end of das.df and all segs have been processed, break
+            break
+
+          } else {
+            # Else, prep for next segment:
+            # Increment
+            subseg.curr <- subseg.curr + 1
+
+            # Reset/set points as appropriate
+            startpt.curr <- endpt.curr
+            midpt.curr <- NULL
+            endpt.curr <- NULL
+            stlin.curr <- das.df$line_num[j]
+
+            t1 <- .greater_equal(dist.pt.curr, subseg.mid.cumsum[subseg.curr])
+            t2 <- .greater_equal(dist.pt.curr, subseg.cumsum[subseg.curr])
+
+            # If pt j is before the next seg endpoint, get data from endpt to j
+            #   Else, this info is calculated in t2 section above
+            tmp1 <- das.df$dist_from_prev_cumsum[j] - subseg.cumsum[subseg.curr - 1]
+            tmp2 <- seg.lengths[subseg.curr]
+            conditions.list <- conditions.list.init
+
+            if (.less(tmp1, tmp2)) {
+              conditions.list <- .segdata_aggr(
+                conditions.list.init, das.df, j-1, tmp1 / tmp2
+              )
+            }
+            rm(tmp1, tmp2)
+          }
         }
       }
     }
   }
 
-  # Ensure longitudes are between -180 and 180, and return something
+
+  #--------------------------------------------------------------------------
+  # Ensure longitudes are between -180 and 180, and return
   segdata.all %>%
     mutate(lon1 = ifelse(.greater(.data$lon1, 180), .data$lon1 - 360, .data$lon1),
            lon1 = ifelse(.less(.data$lon1, -180), .data$lon1 + 360, .data$lon1),
@@ -401,7 +443,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
   )
 
   if (is.na(dist.perc)) {
-    warning("dist.perc is NA, ignoring")
+    warning("dist.perc is NA, ignoring. Report this as an issue",
+            immediate. = TRUE)
     data.list    #lapply(data.list, function(i) NA)
 
   } else if (dist.perc == 0) {

@@ -183,7 +183,7 @@ das_process.das_dfr <- function(x, days.gap = 10, reset.event = TRUE,
     x.r.which <- which(x$Event == "r")
     warning("The provided file contains 'r' events. Is this on purpose? ",
             "These events will be CONVERTED to R events with non-standard effort, ",
-            "i.e. with . an \"N\" value in the Data1 column, in the output.\n",
+            "i.e. with an \"N\" value in the Data1 column, in the output.\n",
             paste("There are", length(x.r.which), "r events, including at the following line numbers: "),
             paste(head(x$line_num[x$Event == "r"]), collapse = ", "),
             immediate. = TRUE)
