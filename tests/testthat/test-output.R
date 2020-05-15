@@ -19,13 +19,13 @@ exp.sight.name.nomulti <- c(
   "Sp1", "Sp2","Sp3", "Sp4", "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
   "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
   "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-  "BoatType", "BoatNum"
+  "BoatType", "BoatNum", "PerpDistKm"
 )
 
 exp.sight.name.multi <- c(
   "Sp", "GsSp", "ResightCourse",
   "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-  "BoatType", "BoatNum"
+  "BoatType", "BoatNum", "PerpDistKm"
 )
 
 

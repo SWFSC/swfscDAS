@@ -78,19 +78,13 @@
 #'   by a standard observer (see \code{\link{das_sight}}),
 #'   and in a Beaufort sea state less than or equal to five.
 #'
-#'   In addition, the siteinfo data frame includes the column 'perp_dist'
-#'   (short for perpendicular distance). This value is calculated as:
-#'   \code{(abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852)},
-#'   with \code{.data$Bearing} and \code{.data$DistNm} coming from the
-#'   output of \code{\link{das_sight}}
-#'
 #' @return List of three data frames:
 #'   \itemize{
 #'     \item segdata: one row for every segment, and columns for information including
 #'       unique segment number, start/end/midpoint coordinates, and conditions (e.g. Beaufort)
 #'     \item siteinfo: details for all sightings in \code{x}, including:
 #'       the unique segment number it is associated with, segment mid points (lat/lon),
-#'       the 'included' and 'perp_dist' columns described in the 'Details section,
+#'       the 'included' column described in the 'Details' section,
 #'       and the output information described in \code{\link{das_sight}}
 #'     \item randpicks: see \code{\link{das_chop_equal}};
 #'       \code{NULL} if using "condition" method
@@ -314,8 +308,7 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
               by = "segnum") %>%
     das_sight(mixed.multi = TRUE) %>%
     filter(.data$Event == "S") %>%
-    mutate(perp_dist = (abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852),
-           included = (.data$Bft <= 5 & .data$OnEffort & .data$Obs_std),
+    mutate(included = (.data$Bft <= 5 & .data$OnEffort & .data$Obs_std),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-.data$dist_from_prev, -.data$cont_eff_section)
 

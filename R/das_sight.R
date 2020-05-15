@@ -104,7 +104,11 @@
 #'     Was turtle captured?       \tab TurtleCapt \tab \code{NA} for non-"t" events\cr
 #'     Boat or gear type          \tab BoatType   \tab \code{NA} for non-"F" events\cr
 #'     Number of boats            \tab BoatNum    \tab \code{NA} for non-"F" events\cr
+#'     Perpendicular distance (km) \tab PerpDistKm \tab Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}\cr
 #'   }
+#'
+#'   To convert the perpendicular distance back to nautical miles,
+#'   one would divide perp_dist_km by 1.852.
 #'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
@@ -350,5 +354,6 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
       select(!!sight.names)
   }
 
-  to.return
+  to.return %>%
+    mutate(PerpDistKm = abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852)
 }

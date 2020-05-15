@@ -67,7 +67,11 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Was turtle captured?       \tab TurtleCapt \tab \code{NA} for non-"t" events\cr
     Boat or gear type          \tab BoatType   \tab \code{NA} for non-"F" events\cr
     Number of boats            \tab BoatNum    \tab \code{NA} for non-"F" events\cr
+    Perpendicular distance (km) \tab PerpDistKm \tab Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}\cr
   }
+
+  To convert the perpendicular distance back to nautical miles,
+  one would divide perp_dist_km by 1.852.
 }
 \description{
 Extract sightings and associated information from processed DAS data

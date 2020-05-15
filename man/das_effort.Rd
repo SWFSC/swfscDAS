@@ -71,7 +71,7 @@ List of three data frames:
       unique segment number, start/end/midpoint coordinates, and conditions (e.g. Beaufort)
     \item siteinfo: details for all sightings in \code{x}, including:
       the unique segment number it is associated with, segment mid points (lat/lon),
-      the 'included' and 'perp_dist' columns described in the 'Details section,
+      the 'included' column described in the 'Details' section,
       and the output information described in \code{\link{das_sight}}
     \item randpicks: see \code{\link{das_chop_equal}};
       \code{NULL} if using "condition" method
@@ -123,12 +123,6 @@ This is the top-level function for chopping processed DAS data
   the sighting was made when on effort,
   by a standard observer (see \code{\link{das_sight}}),
   and in a Beaufort sea state less than or equal to five.
-
-  In addition, the siteinfo data frame includes the column 'perp_dist'
-  (short for perpendicular distance). This value is calculated as:
-  \code{(abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852)},
-  with \code{.data$Bearing} and \code{.data$DistNm} coming from the
-  output of \code{\link{das_sight}}
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
