@@ -49,14 +49,14 @@
 #'   with \code{NA} DateTime, Lat, or Lon values are verbosely removed.
 #'
 #'   The following chopping methods are currently available:
-#'   \code{"condition"} and \code{"equallength"}.
+#'   "condition" and "equallength".
 #'   When using the \code{"condition"} method, effort sections are chopped
 #'   into segments every time a condition changes,
 #'   thereby ensuring that the conditions are consistent across the entire segment.
 #'   See \code{\link{das_chop_condition}} for more details about this method,
 #'   including arguments that must be passed to it via the argument \code{...}
 #'
-#'   The \code{"equallength"} method consists of
+#'   The "equallength" method consists of
 #'   chopping effort sections into equal-length segments of length \code{seg.km},
 #'   and doing a weighted average of the conditions for the length of that segment.
 #'   See \code{\link{das_chop_equal}} for more details about this method,
@@ -64,7 +64,7 @@
 #'
 #'   The distance between the lat/lon points of subsequent events
 #'   is calculated using the method specified in \code{dist.method}.
-#'   If "greatcircle", the great circle distance method is used (TODO - add ref),
+#'   If "greatcircle", \code{\link{dist_greatcircle}} is used,
 #'   while \code{\link[swfscMisc]{distance}} is used otherwise.
 #'   See \code{\link{das_sight}} for how the sightings are processed.
 #'
@@ -354,7 +354,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
   # Calculate distances
   if (identical(z.dist.method, "greatcircle")) {
     dist.from.prev <- mapply(function(x1, y1, x2, y2) {
-      .fn.grcirclkm(y1, x1, y2, x2)
+      dist_greatcircle(y1, x1, y2, x2)
     },
     y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
     SIMPLIFY = TRUE)
@@ -373,45 +373,4 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
 
   # Return distances, with inital NA since this are distances from previous point
   c(NA, dist.from.prev)
-}
-
-
-
-#' @name swfscAirDAS-internals
-#' @param lat1 ignore
-#' @param lon1 ignore
-#' @param lat2 ignore
-#' @param lon2 ignore
-#' @export
-.fn.grcirclkm <- function(lat1, lon1, lat2, lon2) {
-  # FUNCTION to calculate the great circle distance (in km) between two lat/lons
-  # From EAB and KAF
-
-  R <- pi/180      #angle in radians = angle in degrees * R
-  D <- 180/pi      #angle in degrees = angle in radains * D
-  dist <- 0
-
-  NAcheck <- sum(is.na(c(lat1, lon1, lat2, lon2)))
-  if (NAcheck == 0) {             #only continue if no NA positions
-    if ((lat1 != lat2) | (lon1 != lon2))  {
-      dlat1 <- lat1 * R              # convert to radian values:
-      dlng1 <- lon1 * R
-      dlat2 <- lat2 * R
-      dlng2 <- lon2 * R
-      las <- sin(dlat1) * sin(dlat2);   # compute distance
-      lac <- cos(dlat1) * cos(dlat2) * cos(dlng1 - dlng2)
-      laf <- las + lac
-      if (laf < -1) {
-        laf <- -1
-        dacos <- (pi/2) - atan(laf/sqrt(1-(laf*laf)))
-      } else if (laf < 1) {
-        dacos <- (pi/2) - atan(laf/sqrt(1-(laf*laf)));
-      } else {
-        stop('laf value out of bounds')
-      }
-      dist <- (dacos * D * 60) * 1.852           #calculate distance in km
-    }
-  }
-
-  dist
 }

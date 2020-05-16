@@ -34,8 +34,7 @@ see \code{\link{das_effort}}}
 Default is 0.1. See the Details section below for more information}
 
 \item{dist.method}{character; see \code{\link{das_effort}}.
-Default is \code{NULL} since these distances should have already been
-calculated in \code{\link{das_effort}}}
+Default is \code{NULL} since these distances should have already been calculated}
 
 \item{num.cores}{see \code{\link{das_effort}}}
 }

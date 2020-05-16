@@ -32,14 +32,14 @@
 #'   Thus, if \code{section.id} is \code{1}, then the segment ID for
 #'   the second segment from \code{x} is \code{"1_2"}.
 #'
-#'   When \code{segdata.method} is \code{"avg"}, the condition values are
+#'   When \code{segdata.method} is "avg", the condition values are
 #'   calculated as a weighted average by distance.
 #'   The reported value for logical columns (e.g. Glare) is the percentage
 #'   (in decimals) of the segment in which that condition was \code{TRUE}.
 #'   For character columns, the reported value for each segment is
 #'   the unique value(s) present in the segment, with \code{NA}s omitted,
 #'   pasted together via \code{paste(..., collapse = "; ")}.
-#'   When \code{segdata.method} is \code{"maxdist"}, the reported values
+#'   When \code{segdata.method} is "maxdist", the reported values
 #'   are, for each condition, the value recorded for the longest distance
 #'   during that segment (with \code{NA}s omitted).
 #'
@@ -88,7 +88,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
 
   segdata.method.acc <- c("avg", "maxdist")
   if (!(segdata.method %in% segdata.method.acc))
-    stop("Was this function called by a _chop_ function? ",
+    stop("It is strongly recommended to not call this method directly, ",
+         "but rather to use one of the das_chop_ functions.",
          "segdata.method must be one of the following:\n",
          paste(segdata.method.acc, collapse = ", "))
 

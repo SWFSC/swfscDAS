@@ -6,7 +6,6 @@
 \alias{.chop_condition_eff}
 \alias{.chop_equal_eff}
 \alias{.dist_from_prev}
-\alias{.fn.grcirclkm}
 \alias{.process_num}
 \alias{.process_chr}
 \alias{.segdata_proc}
@@ -28,8 +27,6 @@
   z,
   z.dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")
 )
-
-.fn.grcirclkm(lat1, lon1, lat2, lon2)
 
 .process_num(init.val, das.df, col.name, event.curr, event.na)
 
@@ -64,14 +61,6 @@
 \item{z}{ignore}
 
 \item{z.dist.method}{ignore}
-
-\item{lat1}{ignore}
-
-\item{lon1}{ignore}
-
-\item{lat2}{ignore}
-
-\item{lon2}{ignore}
 
 \item{init.val}{ignore}
 

@@ -95,14 +95,14 @@ This is the top-level function for chopping processed DAS data
   with \code{NA} DateTime, Lat, or Lon values are verbosely removed.
 
   The following chopping methods are currently available:
-  \code{"condition"} and \code{"equallength"}.
+  "condition" and "equallength".
   When using the \code{"condition"} method, effort sections are chopped
   into segments every time a condition changes,
   thereby ensuring that the conditions are consistent across the entire segment.
   See \code{\link{das_chop_condition}} for more details about this method,
   including arguments that must be passed to it via the argument \code{...}
 
-  The \code{"equallength"} method consists of
+  The "equallength" method consists of
   chopping effort sections into equal-length segments of length \code{seg.km},
   and doing a weighted average of the conditions for the length of that segment.
   See \code{\link{das_chop_equal}} for more details about this method,
@@ -110,7 +110,7 @@ This is the top-level function for chopping processed DAS data
 
   The distance between the lat/lon points of subsequent events
   is calculated using the method specified in \code{dist.method}.
-  If "greatcircle", the great circle distance method is used (TODO - add ref),
+  If "greatcircle", \code{\link{dist_greatcircle}} is used,
   while \code{\link[swfscMisc]{distance}} is used otherwise.
   See \code{\link{das_sight}} for how the sightings are processed.
 
