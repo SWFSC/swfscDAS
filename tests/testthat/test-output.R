@@ -15,15 +15,15 @@ exp.sight.name <- c(
   "Cue", "Method", "Photos", "Birds", "Prob", "nSp", "Mixed", "GsTotal"
 )
 
-exp.sight.name.nomulti <- c(
-  "Sp1", "Sp2","Sp3", "Sp4", "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
-  "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
-  "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-  "BoatType", "BoatNum", "PerpDistKm"
+exp.sight.name.default <- c(
+  "Sp", "ProbSp", "GsSp", "ResightCourse",
+  "TurtleJFR", "TurtleAge", "TurtleCapt", "PerpDistKm"
 )
 
-exp.sight.name.multi <- c(
-  "Sp", "GsSp", "ResightCourse",
+exp.sight.name.long <- c(
+  "Sp1", "Sp2","Sp3", "Sp4", "ProbSp1", "ProbSp2", "ProbSp3", "ProbSp4",
+  "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
+  "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
   "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
   "BoatType", "BoatNum", "PerpDistKm"
 )
@@ -106,22 +106,22 @@ test_that("das_process output has expected column names and classes", {
 
 test_that("das_sight output has expected column names and classes", {
   y.sight <- das_sight(y.proc)
-  y.sight.multi <- das_sight(y.proc, mixed.multi = TRUE)
+  y.sight.long <- das_sight(y.proc, returnformat = "long")
 
-  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.nomulti),
+  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.default),
                    names(y.sight))
-  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.multi),
-                   names(y.sight.multi))
+  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.long),
+                   names(y.sight.long))
 })
 
 
 test_that("das_sight output has expected column names and classes with extra column", {
   y.proc$testrr <- 4
   y.sight <- das_sight(y.proc)
-  y.sight.multi <- das_sight(y.proc, mixed.multi = TRUE)
+  y.sight.long <- das_sight(y.proc, returnformat = "long")
 
-  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.nomulti),
+  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.default),
                    names(y.sight))
-  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.multi),
-                   names(y.sight.multi))
+  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.long),
+                   names(y.sight.long))
 })

@@ -39,6 +39,9 @@ y.cond <- das_effort(
   conditions = "Bft", seg.min.km = 0.05, num.cores = 1
 )
 
-das_effort_sight(y.cond, sp.codes = c("013", "076"))
+y.cond$siteinfo <- y.cond$siteinfo[y.cond$siteinfo$Event \%in\% c("S", "t"), ]
+y.cond$siteinfo$included <- TRUE
+
+das_effort_sight(y.cond, sp.codes = c("013", "076", "DC"))
 
 }

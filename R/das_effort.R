@@ -96,7 +96,8 @@
 #'
 #' # Using "condition" method
 #' das_effort(
-#'   y.proc, method = "condition", seg.min.km = 0.05, num.cores = 1
+#'   y.proc, method = "condition", conditions = c("Bft", "SwellHght", "Vis"),
+#'   seg.min.km = 0.05, num.cores = 1
 #' )
 #'
 #' # Using "equallength" method
@@ -278,21 +279,14 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
 
   # Check that things are as expected
   x.eff.names <- c(
-    "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght",
-    "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
-    "ObsL", "Rec", "ObsR", "ObsInd", "Data1", "Data2",
-    "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9",
-    "EffortDot", "EventNum", "file_das", "line_num", "idx_eff",
-    "dist_from_prev", "cont_eff_section", "seg_idx", "segnum"
+    names(x), "dist_from_prev", "cont_eff_section", "seg_idx", "segnum"
   )
   if (!identical(names(x.eff), x.eff.names))
-    stop("Error in das_effort: names of x.eff. ",
-         "Please report this as an issue")
+    stop("Error in das_effort: names of x.eff. Please report this as an issue")
 
   if (!all(x.eff$segnum %in% segdata$segnum))
-    stop("Error in das_effort(): Error creating and processing ",
-         "segement numbers. Please report this as an issue")
+    stop("Error in das_effort(): creating and processing segement numbers. ",
+         "Please report this as an issue")
 
   # Add back in ? and 1:8 (events.tmp) events
   # Only for siteinfo groupsizes, and thus no segdata info doesn't matter
@@ -302,12 +296,11 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
 
 
   #----------------------------------------------------------------------------
-  # Summarize sightings (based on siteinfo)
+  # Summarize sightings
   siteinfo <- x.eff.all %>%
     left_join(select(segdata, .data$segnum, .data$mlat, .data$mlon),
               by = "segnum") %>%
-    das_sight(mixed.multi = TRUE) %>%
-    filter(.data$Event == "S") %>%
+    das_sight(returnformat = "default") %>%
     mutate(included = (.data$Bft <= 5 & .data$OnEffort & .data$Obs_std),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-.data$dist_from_prev, -.data$cont_eff_section)
@@ -317,10 +310,7 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
 
   siteinfo <- siteinfo %>%
     mutate(year = year(.data$DateTime)) %>%
-    select(-.data$seg_idx, -.data$Subgroup, -.data$ResightCourse,
-           -.data$TurtleSp, -.data$TurtleNum, -.data$TurtleJFR,
-           -.data$TurtleAge, -.data$TurtleCapt,
-           -.data$BoatType, -.data$BoatNum) %>%
+    select(-.data$seg_idx) %>%
     select(.data$segnum, .data$mlat, .data$mlon, .data$Event,
            .data$DateTime, .data$year, everything())
 

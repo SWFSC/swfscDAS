@@ -6,18 +6,19 @@
 \alias{das_sight.das_df}
 \title{DAS sightings}
 \usage{
-das_sight(x, mixed.multi)
+das_sight(x, ...)
 
-\method{das_sight}{data.frame}(x, mixed.multi = FALSE)
+\method{das_sight}{data.frame}(x, ...)
 
-\method{das_sight}{das_df}(x, mixed.multi = FALSE)
+\method{das_sight}{das_df}(x, returnformat = c("default", "long", "comprehensive"), ...)
 }
 \arguments{
 \item{x}{\code{das_df} object; output from \code{\link{das_process}},
 or a data frame that can be coerced to a \code{das_df} object}
 
-\item{mixed.multi}{logical; indicates if mixed-species sightings
-should be output in multiple rows}
+\item{...}{ignored}
+
+\item{returnformat}{character; one of "default", "long", or "comprehensive"}
 }
 \value{
 Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
@@ -59,6 +60,10 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Species 2 group size          \tab GsSp2   \tab Only present when \code{mixed.multi = FALSE}\cr
     Species 3 group size          \tab GsSp3   \tab Only present when \code{mixed.multi = FALSE}\cr
     Species 4 group size          \tab GsSp4   \tab Only present when \code{mixed.multi = FALSE}\cr
+    Species 1 probable code       \tab ProbSp1 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
+    Species 2 probable code       \tab ProbSp2 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
+    Species 3 probable code       \tab ProbSp3 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
+    Species 4 probable code       \tab ProbSp4 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
     Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
     Turtle species             \tab TurtleSp   \tab \code{NA} for non-"t" events\cr
     Number of turtles          \tab TurtleNum  \tab \code{NA} for non-"t" events\cr
@@ -71,7 +76,7 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
   }
 
   To convert the perpendicular distance back to nautical miles,
-  one would divide perp_dist_km by 1.852.
+  one would divide PerpDistKm by 1.852.
 }
 \description{
 Extract sightings and associated information from processed DAS data
@@ -90,8 +95,14 @@ DAS events contain specific information in the 'Data#' columns,
   and fishing vessel sightings (code "F").
   See \code{\link{das_format_pdf}} for more information about events and event formats.
 
+  \code{returnformat} "default": One row per species; multi-species sighitngs are split into multiple lines.
+    Turtle num/sp and Boat num combined into Sp and Gs columns
+  \code{returnformat} "wide": One column for everything, one row for each sighting event. Values averaged for different observers
+  \code{returnformat} "comprehensive": TODO
+
+
   Abbreviations used in column names: Gs = group size, Sp = species,
-  Nm = nautical mile, Perc = percentage
+  Nm = nautical mile, Perc = percentage, Prob = probable
 
   This function makes the following assumptions, and alterations to the raw data:
   \itemize{
@@ -132,6 +143,6 @@ y <- system.file("das_sample.das", package = "swfscDAS")
 y.proc <- das_process(y)
 
 das_sight(y.proc)
-das_sight(y.proc, mixed.multi = TRUE)
+das_sight(y.proc, returnformat = "long")
 
 }

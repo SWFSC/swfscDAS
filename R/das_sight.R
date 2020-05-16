@@ -4,8 +4,8 @@
 #'
 #' @param x \code{das_df} object; output from \code{\link{das_process}},
 #'   or a data frame that can be coerced to a \code{das_df} object
-#' @param mixed.multi logical; indicates if mixed-species sightings
-#'   should be output in multiple rows
+#' @param ... ignored
+#' @param returnformat character; one of "default", "long", or "comprehensive"
 #'
 #' @details DAS events contain specific information in the 'Data#' columns,
 #'   with the information depending on the event code for that row.
@@ -20,8 +20,14 @@
 #'   and fishing vessel sightings (code "F").
 #'   See \code{\link{das_format_pdf}} for more information about events and event formats.
 #'
+#'   \code{returnformat} "default": One row per species; multi-species sighitngs are split into multiple lines.
+#'     Turtle num/sp and Boat num combined into Sp and Gs columns
+#'   \code{returnformat} "wide": One column for everything, one row for each sighting event. Values averaged for different observers
+#'   \code{returnformat} "comprehensive": TODO
+#'
+#'
 #'   Abbreviations used in column names: Gs = group size, Sp = species,
-#'   Nm = nautical mile, Perc = percentage
+#'   Nm = nautical mile, Perc = percentage, Prob = probable
 #'
 #'   This function makes the following assumptions, and alterations to the raw data:
 #'   \itemize{
@@ -96,6 +102,10 @@
 #'     Species 2 group size          \tab GsSp2   \tab Only present when \code{mixed.multi = FALSE}\cr
 #'     Species 3 group size          \tab GsSp3   \tab Only present when \code{mixed.multi = FALSE}\cr
 #'     Species 4 group size          \tab GsSp4   \tab Only present when \code{mixed.multi = FALSE}\cr
+#'     Species 1 probable code       \tab ProbSp1 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
+#'     Species 2 probable code       \tab ProbSp2 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
+#'     Species 3 probable code       \tab ProbSp3 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
+#'     Species 4 probable code       \tab ProbSp4 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
 #'     Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
 #'     Turtle species             \tab TurtleSp   \tab \code{NA} for non-"t" events\cr
 #'     Number of turtles          \tab TurtleNum  \tab \code{NA} for non-"t" events\cr
@@ -108,29 +118,33 @@
 #'   }
 #'
 #'   To convert the perpendicular distance back to nautical miles,
-#'   one would divide perp_dist_km by 1.852.
+#'   one would divide PerpDistKm by 1.852.
 #'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
 #' y.proc <- das_process(y)
 #'
 #' das_sight(y.proc)
-#' das_sight(y.proc, mixed.multi = TRUE)
+#' das_sight(y.proc, returnformat = "long")
 #'
 #' @export
-das_sight <- function(x, mixed.multi) UseMethod("das_sight")
+das_sight <- function(x, ...) UseMethod("das_sight")
 
 
 #' @name das_sight
 #' @export
-das_sight.data.frame <- function(x, mixed.multi = FALSE) {
-  das_sight(as_das_df(x), mixed.multi)
+das_sight.data.frame <- function(x, ...) {
+  das_sight(as_das_df(x), ...)
 }
 
 
 #' @name das_sight
 #' @export
-das_sight.das_df <- function(x, mixed.multi = FALSE) {
+das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensive"), ...) {
+  #----------------------------------------------------------------------------
+  returnformat <- match.arg(returnformat)
+
+
   #----------------------------------------------------------------------------
   # Filter for sighting-related events
   event.sight <- c("S", "K", "M", "G", "s", "k", "g", "t", "F")
@@ -160,8 +174,6 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
 
   #----------------------------------------------------------------------------
   # Get applicable data for each type of sighting event
-
-  # TODO: Don't filter for A events - slice based on idx above?
 
   #--------------------------------------------------------
   ### Data that is in all sighting events
@@ -224,15 +236,17 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
                     sum(!is.na(c(d5, d6, d7, d8)))
                   })),
            Mixed = .data$nSp > 1) %>%
-    select(.data$sight_cumsum, .data$Photos, .data$Birds, .data$nSp,
-           .data$Mixed, Sp1 = .data$Data5, Sp2 = .data$Data6,
+    select(.data$sight_cumsum, .data$Photos, .data$Birds, .data$nSp, .data$Mixed,
+           Sp1 = .data$Data5, Sp2 = .data$Data6,
            Sp3 = .data$Data7, Sp4 = .data$Data8)
 
   # Data from grouped
   sight.info.skmg3 <- sight.df %>%
-    filter(.data$Event %in% c("S", "K", "M", "G")) %>%
+    filter(.data$Event %in% c("?")) %>%
     group_by(.data$sight_cumsum) %>%
-    summarise(Prob = any("?" %in% .data$Event))
+    summarise(Prob = TRUE,
+              ProbSp1 = .data$Data5, ProbSp2 = .data$Data6,
+              ProbSp3 = .data$Data7, ProbSp4 = .data$Data8)
 
   sight.info.skmg4 <- sight.df %>%
     filter(.data$Event %in% as.character(1:8)) %>%
@@ -253,7 +267,8 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
                nrow(sight.info.skmg3), nrow(sight.info.skmg4))
   if (!isTRUE(all.equal(nrow(sight.info.skmg1), nrow(sight.info.skmg2))))
     stop("Unequal number of S/K/M/G and A events. ",
-         "This should have been caught earlier?")
+         "This should have been caught earlier?. ",
+         "Please report this as an issue")
   if (!isTRUE(all.equal(nrow(sight.info.skmg1), nrow(sight.info.skmg4))))
     warning("Not all S/K/M/G events have corresponding numeric (1:8) events; ",
             "please check the data using `das_check`")
@@ -300,6 +315,7 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
 
 
   #----------------------------------------------------------------------------
+  # Format and return
   to.return <- sight.df %>%
     filter(.data$Event %in% event.sight) %>%
     select(-.data$Data1, -.data$Data2, -.data$Data3,
@@ -310,49 +326,60 @@ das_sight.das_df <- function(x, mixed.multi = FALSE) {
     left_join(sight.info.resight, by = "sight_cumsum") %>%
     left_join(sight.info.t, by = "sight_cumsum") %>%
     left_join(sight.info.f, by = "sight_cumsum") %>%
-    # mutate(nSp = ifelse(is.na(.data$nSp), 0, .data$nSp),
-    #        Mixed = .data$nSp > 1) %>%
     select(-.data$sight_cumsum)
 
-  # Split multi-species sightings into multiple rows, if necessary
-  if (mixed.multi) {
+
+  if (returnformat == "default") {
+    # Split multi-species sightings into multiple rows as necessary
     to.return$idx <- seq_len(nrow(to.return))
 
     to.return.multi <- to.return %>%
       filter(.data$Event %in% c("S", "K", "M", "G")) %>%
       group_by(.data$idx) %>%
-      summarise(Sp1_list = list(c(.data$Sp1, .data$GsSp1)),
-                Sp2_list = list(c(.data$Sp2, .data$GsSp2)),
-                Sp3_list = list(c(.data$Sp3, .data$GsSp3)),
-                Sp4_list = list(c(.data$Sp4, .data$GsSp4))) %>%
+      summarise(Sp1_list = list(c(.data$Sp1, .data$ProbSp1, .data$GsSp1)),
+                Sp2_list = list(c(.data$Sp2, .data$ProbSp2, .data$GsSp2)),
+                Sp3_list = list(c(.data$Sp3, .data$ProbSp3, .data$GsSp3)),
+                Sp4_list = list(c(.data$Sp4, .data$ProbSp4, .data$GsSp4))) %>%
       gather(.data$Sp1_list, .data$Sp2_list, .data$Sp3_list, .data$Sp4_list,
              key = "sp_list_name", value = "sp_list", na.rm = TRUE) %>%
       mutate(Sp = map_chr(.data$sp_list, function(i) i[1]),
-             GsSp = as.numeric(map_chr(.data$sp_list, function(i) i[2]))) %>%
+             ProbSp = map_chr(.data$sp_list, function(i) i[2]),
+             GsSp = as.numeric(map_chr(.data$sp_list, function(i) i[3]))) %>%
       filter(!is.na(.data$Sp)) %>%
-      select(.data$idx, .data$Sp, .data$GsSp) %>%
+      select(.data$idx, .data$Sp, .data$ProbSp, .data$GsSp) %>%
       arrange(.data$idx)
 
-    # Names and order of columns to reurn
-    names1 <- c(names(sight.df), names(sight.info.all), names(sight.info.skmg))
-    names1 <- names1[!(names1 %in% c("sight_cumsum", paste0("Data", 1:9)))]
-    names1 <- names1[!grepl("Sp", names1) | names1 == "nSp"]
-
-    names2 <- c(
-      names(sight.info.resight), names(sight.info.t), names(sight.info.f)
+    # Names and order of columns to return
+    sight.names <- setdiff(
+      c(names(sight.df), names(sight.info.all), #names(sight.info.skmg)[1:9],
+        "Cue", "Method", "Photos", "Birds", "Prob", "nSp", "Mixed", "GsTotal",
+        "Sp", "ProbSp", "GsSp",
+        names(sight.info.resight), names(sight.info.t), names(sight.info.f)),
+      c("sight_cumsum", paste0("Data", 1:9))
     )
-    names2 <- names2[!(names2 %in% "sight_cumsum")]
 
-    sight.names <- c(names1, "Sp", "GsSp", names2)
-
-    # Finalize mixed.multi return data frame
+    # Finalize return data frame, consolidating columns as possible
     to.return <- to.return %>%
       select(-.data$Sp1, -.data$Sp2, -.data$Sp3, -.data$Sp4,
+             -.data$ProbSp1, -.data$ProbSp2, -.data$ProbSp3, -.data$ProbSp4,
              -.data$Sp1Perc, -.data$Sp2Perc, -.data$Sp3Perc, -.data$Sp4Perc,
              -.data$GsSp1, -.data$GsSp2, -.data$GsSp3, -.data$GsSp4) %>%
       full_join(to.return.multi, by = "idx") %>%
-      select(!!sight.names)
+      select(!!sight.names) %>%
+      mutate(Sp = case_when(.data$Event %in% c("S", "K", "M", "G") ~ .data$Sp,
+                            .data$Event == "t" ~ .data$TurtleSp,
+                            .data$Event == "F" ~ .data$BoatType),
+             GsTotal = case_when(.data$Event %in% c("S", "K", "M", "G") ~ .data$GsTotal,
+                                 .data$Event == "t" ~ .data$TurtleNum,
+                                 .data$Event == "F" ~ .data$BoatNum),
+             GsSp = ifelse(.data$Event %in% c("t", "F"), .data$GsTotal, .data$GsSp)) %>%
+      select(-.data$TurtleSp, -.data$TurtleNum, -.data$BoatType, -.data$BoatNum)
+
+
+  } else if (returnformat == "comprehensive") {
+    stop("comprehensive option has not been implemented")
   }
+
 
   to.return %>%
     mutate(PerpDistKm = abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852)

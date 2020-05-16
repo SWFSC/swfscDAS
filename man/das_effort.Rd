@@ -130,7 +130,8 @@ y.proc <- das_process(y)
 
 # Using "condition" method
 das_effort(
-  y.proc, method = "condition", seg.min.km = 0.05, num.cores = 1
+  y.proc, method = "condition", conditions = c("Bft", "SwellHght", "Vis"),
+  seg.min.km = 0.05, num.cores = 1
 )
 
 # Using "equallength" method
