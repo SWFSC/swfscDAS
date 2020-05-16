@@ -24,7 +24,10 @@
   call.func1
 )
 
-.dist_from_prev(z, z.dist.method)
+.dist_from_prev(
+  z,
+  z.dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")
+)
 
 .fn.grcirclkm(lat1, lon1, lat2, lon2)
 

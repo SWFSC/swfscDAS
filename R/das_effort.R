@@ -5,9 +5,7 @@
 #' @param x \code{das_df} object; output from \code{\link{das_process}},
 #'  or a data frame that can be coerced to a \code{das_df} object
 #' @param method character; method to use to chop DAS data into effort segments
-#'   Can be \code{"condition"} or \code{"equallength"} (case-sensitive)
-#'   to usex \code{\link{das_chop_condition}} or \code{\link{das_chop_condition}},
-#'   respectively
+#'   Can be "condition", "equallength", or any partial match thereof (case sensitive)
 #' @param conditions character vector of names of conditions to include in segdata output.
 #'   These values must be column names from the output of \code{\link{das_process}},
 #'   e.g. 'Bft', 'SwellHght', etc.
@@ -15,12 +13,12 @@
 #'   trigger segment chopping when they change.
 #' @param dist.method character;
 #'   method to use to calculate distance between lat/lon coordinates.
-#'   Can be \code{"greatcircle"} to use the great circle distance method (TODO - add ref),
-#'   or one of \code{"lawofcosines"}, \code{"haversine"},
-#'   or \code{"vincenty"} to use
-#'   \code{\link[swfscMisc]{distance}}. Default is \code{"vincenty"}
+#'   Can be "greatcircle", "lawofcosines", "haversine", "vincenty",
+#'   or any partial match thereof (case sensitive).
+#'   Default is "greatcircle"
 #' @param seg0.drop logical; flag indicating whether or not to drop segments
-#'   of length 0 that contain no "S" events. Default is \code{FALSE}
+#'   of length 0 that contain no sighting (S, K, M, G, t) events.
+#'   Default is \code{FALSE}
 #' @param comment.drop logical; flag indicating if comments ("C" events)
 #'   should be ignored (i.e. position information should not be used)
 #'   when segment chopping. Default is \code{FALSE}
@@ -66,6 +64,8 @@
 #'
 #'   The distance between the lat/lon points of subsequent events
 #'   is calculated using the method specified in \code{dist.method}.
+#'   If "greatcircle", the great circle distance method is used (TODO - add ref),
+#'   while \code{\link[swfscMisc]{distance}} is used otherwise.
 #'   See \code{\link{das_sight}} for how the sightings are processed.
 #'
 #'   The siteinfo data frame includes the column 'included',
@@ -120,22 +120,25 @@ das_effort.data.frame <- function(x, ...) {
 
 #' @name das_effort
 #' @export
-das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vincenty",
+das_effort.das_df <- function(x, method = c("condition", "equallength"),
+                              conditions = NULL,
+                              dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
                               seg0.drop = FALSE, comment.drop = FALSE, event.touse = NULL,
                               num.cores = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
-  stopifnot(
-    "seg0.drop must be a logical" = inherits(seg0.drop, "logical"),
-    "comment.drop must be a logical" = inherits(comment.drop, "logical")
-  )
+  if (!(inherits(seg0.drop, "logical") & inherits(comment.drop, "logical")))
+    stop("seg0.drop and comment.drop must both be logicals (either TRUE or FALSE)")
 
-  methods.acc <- c("equallength", "condition")
-  if (!(length(method) == 1 & (method %in% methods.acc)))
-    stop("method must be a string of length one, and must be one of: ",
-         paste0("\"", paste(methods.acc, collapse = "\", \""), "\""))
+  method <- match.arg(method)
+  dist.method <- match.arg(dist.method)
 
-  #Check for dist.method happens in .dist_from_prev()
+  # methods.acc <- c("equallength", "condition")
+  # if (!(length(method) == 1 & (method %in% methods.acc)))
+  #   stop("method must be a string of length one, and must be one of: ",
+  #        paste0("\"", paste(methods.acc, collapse = "\", \""), "\""))
+  #
+  # #Check for dist.method happens in .dist_from_prev()
 
   # Conditions
   conditions.acc <- c(
@@ -207,7 +210,7 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
   if (any(is.na(x.oneff$Lat) | is.na(x.oneff$Lon) | is.na(x.oneff$DateTime))) {
     x.nacheck <- x.oneff %>%
       mutate(ll_dt_na = is.na(.data$Lat) | is.na(.data$Lon) | is.na(.data$DateTime),
-             sight_na = .data$ll_dt_na & (.data$Event %in% c("S", "K", "M")))
+             sight_na = .data$ll_dt_na & (.data$Event %in% c("S", "K", "M", "G", "t", "A")))
 
     # Check that no sightings have NA lat/lon/dt info
     if (any(x.nacheck$sight_na))
@@ -236,12 +239,12 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
   # Determine continuous effort sections
   x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
 
-  # If specified, verbosely remove cont eff sections with length 0 and no "S" events
+  # If specified, verbosely remove cont eff sections with length 0 and no sighting events
   if (seg0.drop) {
     x.ces.summ <- x.oneff %>%
       group_by(.data$cont_eff_section) %>%
       summarise(dist_sum = sum(.data$dist_from_prev[-1]),
-                has_sight = "S" %in% .data$Event,
+                has_sight = any(c("S", "K", "M", "G", "t") %in% .data$Event),
                 line_min = min(.data$line_num))
     ces.keep <- filter(x.ces.summ, .data$has_sight | .data$dist_sum > 0)[["cont_eff_section"]]
 
@@ -251,7 +254,7 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
 
     message(paste("There were", nrow(x.ces.summ) - length(ces.keep),
                   "continuous effort sections removed because they have a",
-                  "length of 0 and contain no S events"))
+                  "length of 0 and contain no sighting events"))
     rm(x.ces.summ, ces.keep)
   }
 
@@ -324,7 +327,7 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
 #' @param z ignore
 #' @param z.dist.method ignore
 #' @export
-.dist_from_prev <- function(z, z.dist.method) {
+.dist_from_prev <- function(z, z.dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")) {
   ### Inputs
   # z: data frame of class das_df
   # z.dist.method: dist.method from das_effort()
@@ -332,10 +335,11 @@ das_effort.das_df <- function(x, method, conditions = NULL, dist.method = "vince
   ### Output: numeric of distance (km) to previous event; first element is NA
 
   # Input check
-  dist.methods.acc <- c("greatcircle", "lawofcosines", "haversine", "vincenty")
-  if (!(length(z.dist.method) == 1 & (z.dist.method %in% dist.methods.acc)))
-    stop("dist.method must be a string of length one, and must be one of: ",
-         paste0("\"", paste(dist.methods.acc, collapse = "\", \""), "\""))
+  z.dist.method <- match.arg(z.dist.method)
+  # dist.methods.acc <- c("greatcircle", "lawofcosines", "haversine", "vincenty")
+  # if (!(length(z.dist.method) == 1 & (z.dist.method %in% dist.methods.acc)))
+  #   stop("dist.method must be a string of length one, and must be one of: ",
+  #        paste0("\"", paste(dist.methods.acc, collapse = "\", \""), "\""))
 
   # Check for NA Lat/Lon
   z.llna <- which(is.na(z$Lat) | is.na(z$Lon))

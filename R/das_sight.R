@@ -140,7 +140,8 @@ das_sight.data.frame <- function(x, ...) {
 
 #' @name das_sight
 #' @export
-das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensive"), ...) {
+das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensive"),
+                             ...) {
   #----------------------------------------------------------------------------
   returnformat <- match.arg(returnformat)
 

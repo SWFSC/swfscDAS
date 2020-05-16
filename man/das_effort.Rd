@@ -12,9 +12,9 @@ das_effort(x, ...)
 
 \method{das_effort}{das_df}(
   x,
-  method,
+  method = c("condition", "equallength"),
   conditions = NULL,
-  dist.method = "vincenty",
+  dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
   seg0.drop = FALSE,
   comment.drop = FALSE,
   event.touse = NULL,
@@ -30,9 +30,7 @@ or a data frame that can be coerced to a \code{das_df} object}
 such as \code{seg.km} or \code{seg.min.km}}
 
 \item{method}{character; method to use to chop DAS data into effort segments
-Can be \code{"condition"} or \code{"equallength"} (case-sensitive)
-to usex \code{\link{das_chop_condition}} or \code{\link{das_chop_condition}},
-respectively}
+Can be "condition", "equallength", or any partial match thereof (case sensitive)}
 
 \item{conditions}{character vector of names of conditions to include in segdata output.
 These values must be column names from the output of \code{\link{das_process}},
@@ -42,13 +40,13 @@ trigger segment chopping when they change.}
 
 \item{dist.method}{character;
 method to use to calculate distance between lat/lon coordinates.
-Can be \code{"greatcircle"} to use the great circle distance method (TODO - add ref),
-or one of \code{"lawofcosines"}, \code{"haversine"},
-or \code{"vincenty"} to use
-\code{\link[swfscMisc]{distance}}. Default is \code{"vincenty"}}
+Can be "greatcircle", "lawofcosines", "haversine", "vincenty",
+or any partial match thereof (case sensitive).
+Default is "greatcircle"}
 
 \item{seg0.drop}{logical; flag indicating whether or not to drop segments
-of length 0 that contain no "S" events. Default is \code{FALSE}}
+of length 0 that contain no sighting (S, K, M, G, t) events.
+Default is \code{FALSE}}
 
 \item{comment.drop}{logical; flag indicating if comments ("C" events)
 should be ignored (i.e. position information should not be used)
@@ -112,6 +110,8 @@ This is the top-level function for chopping processed DAS data
 
   The distance between the lat/lon points of subsequent events
   is calculated using the method specified in \code{dist.method}.
+  If "greatcircle", the great circle distance method is used (TODO - add ref),
+  while \code{\link[swfscMisc]{distance}} is used otherwise.
   See \code{\link{das_sight}} for how the sightings are processed.
 
   The siteinfo data frame includes the column 'included',
