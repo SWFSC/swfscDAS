@@ -17,6 +17,7 @@
 #'   marine mammal subgroup sightings (code "G"),
 #'   marine mammal subgroup resights (code "g"),
 #'   turtle sightings (code "t"),
+#'   pinniped sightings (code "p")
 #'   and fishing vessel sightings (code "F").
 #'   See \code{\link{das_format_pdf}} for more information about events and event formats.
 #'
@@ -107,13 +108,15 @@
 #'     Species 3 probable code       \tab ProbSp3 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
 #'     Species 4 probable code       \tab ProbSp4 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
 #'     Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
-#'     Turtle species             \tab TurtleSp   \tab \code{NA} for non-"t" events\cr
-#'     Number of turtles          \tab TurtleNum  \tab \code{NA} for non-"t" events\cr
-#'     Presence of associated JFR \tab TurtleJFR  \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
-#'     Estimated turtle maturity  \tab TurtleAge  \tab \code{NA} for non-"t" events\cr
-#'     Was turtle captured?       \tab TurtleCapt \tab \code{NA} for non-"t" events\cr
-#'     Boat or gear type          \tab BoatType   \tab \code{NA} for non-"F" events\cr
-#'     Number of boats            \tab BoatNum    \tab \code{NA} for non-"F" events\cr
+#'     Turtle species             \tab TurtleSp    \tab \code{NA} for non-"t" events\cr
+#'     Number of turtles          \tab TurtleNum   \tab \code{NA} for non-"t" events\cr
+#'     Presence of associated JFR \tab TurtleJFR   \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
+#'     Estimated turtle maturity  \tab TurtleAge   \tab \code{NA} for non-"t" events\cr
+#'     Was turtle captured?       \tab TurtleCapt  \tab \code{NA} for non-"t" events\cr
+#'     Pinniped species           \tab PinnipedSp  \tab \code{NA} for non-"p" events\cr
+#'     Number of pinnipeds        \tab PinnipedNum \tab \code{NA} for non-"p" events\cr
+#'     Boat or gear type          \tab BoatType    \tab \code{NA} for non-"F" events\cr
+#'     Number of boats            \tab BoatNum     \tab \code{NA} for non-"F" events\cr
 #'     Perpendicular distance (km) \tab PerpDistKm \tab Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}\cr
 #'   }
 #'
@@ -125,7 +128,7 @@
 #' y.proc <- das_process(y)
 #'
 #' das_sight(y.proc)
-#' das_sight(y.proc, returnformat = "long")
+#' das_sight(y.proc, returnformat = "wide")
 #'
 #' @export
 das_sight <- function(x, ...) UseMethod("das_sight")
@@ -140,7 +143,7 @@ das_sight.data.frame <- function(x, ...) {
 
 #' @name das_sight
 #' @export
-das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensive"),
+das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensive"),
                              ...) {
   #----------------------------------------------------------------------------
   returnformat <- match.arg(returnformat)
@@ -148,7 +151,7 @@ das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensi
 
   #----------------------------------------------------------------------------
   # Filter for sighting-related events
-  event.sight <- c("S", "K", "M", "G", "s", "k", "g", "t", "F")
+  event.sight <- c("S", "K", "M", "G", "s", "k", "g", "t", "p", "F")
   event.sight.info <- c("A", "?", 1:8)
 
   sight.df <- x %>%
@@ -189,6 +192,7 @@ das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensi
            Obs = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data2,
                            .data$Event =="G" ~ .data$Data3,
                            .data$Event == "t" ~ .data$Data1,
+                           .data$Event == "p" ~ .data$Data1,
                            .data$Event == "F" ~ .data$Data1),
            Obs_std = pmap_lgl(list(.data$Obs, .data$ObsL, .data$Rec, .data$ObsR),
                               function(obs, o1, o2, o3) {
@@ -200,18 +204,21 @@ das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensi
                .data$Event %in% c("S", "K", "M", "G") ~ .data$Data5,
                .data$Event %in% c("s", "k", "g") ~ .data$Data2,
                .data$Event == "t" ~ .data$Data3,
+               .data$Event == "p" ~ .data$Data3,
                .data$Event == "F" ~ .data$Data2)),
            Reticle = as.numeric(
              case_when(
                .data$Event %in% c("S", "K", "M", "G") ~ .data$Data6,
                .data$Event %in% c("s", "k", "g") ~ .data$Data3,
                .data$Event == "t" ~ .data$Data7,
+               .data$Event == "p" ~ .data$Data6,
                .data$Event == "F" ~ .data$Data4)),
            DistNm = as.numeric(
              case_when(
                .data$Event %in% c("S", "K", "M", "G") ~ .data$Data7,
                .data$Event %in% c("s", "k", "g") ~ .data$Data4,
                .data$Event == "t" ~ .data$Data4,
+               .data$Event == "p" ~ .data$Data4,
                .data$Event == "F" ~ .data$Data3))) %>%
     select(.data$sight_cumsum, .data$SightNo, .data$Subgroup,
            .data$Obs, .data$Obs_std, .data$Bearing, .data$Reticle, .data$DistNm)
@@ -308,6 +315,15 @@ das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensi
 
 
   #--------------------------------------------------------
+  ### Pinnipeds; event p
+  sight.info.p <- sight.df %>%
+    filter(.data$Event == "p") %>%
+    mutate(PinnipedSp = .data$Data2,
+           PinnipedNum = as.numeric(.data$Data5)) %>%
+    select(.data$sight_cumsum, .data$PinnipedSp, .data$PinnipedNum)
+
+
+  #--------------------------------------------------------
   ### Fishing boats; Events F
   sight.info.f <- sight.df %>%
     filter(.data$Event == "F") %>%
@@ -327,6 +343,7 @@ das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensi
     left_join(sight.info.skmg, by = "sight_cumsum") %>%
     left_join(sight.info.resight, by = "sight_cumsum") %>%
     left_join(sight.info.t, by = "sight_cumsum") %>%
+    left_join(sight.info.p, by = "sight_cumsum") %>%
     left_join(sight.info.f, by = "sight_cumsum") %>%
     select(-.data$sight_cumsum)
 
@@ -356,7 +373,8 @@ das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensi
       c(names(sight.df), names(sight.info.all), #names(sight.info.skmg)[1:9],
         "Cue", "Method", "Photos", "Birds", "Prob", "nSp", "Mixed", "GsTotal",
         "Sp", "ProbSp", "GsSp",
-        names(sight.info.resight), names(sight.info.t), names(sight.info.f)),
+        names(sight.info.resight), names(sight.info.t),
+        names(sight.info.p), names(sight.info.f)),
       c("sight_cumsum", paste0("Data", 1:9))
     )
 
@@ -370,12 +388,15 @@ das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensi
       select(!!sight.names) %>%
       mutate(Sp = case_when(.data$Event %in% c("S", "K", "M", "G") ~ .data$Sp,
                             .data$Event == "t" ~ .data$TurtleSp,
+                            .data$Event == "p" ~ .data$PinnipedSp,
                             .data$Event == "F" ~ .data$BoatType),
              GsTotal = case_when(.data$Event %in% c("S", "K", "M", "G") ~ .data$GsTotal,
                                  .data$Event == "t" ~ .data$TurtleNum,
+                                 .data$Event == "p" ~ .data$PinnipedNum,
                                  .data$Event == "F" ~ .data$BoatNum),
-             GsSp = ifelse(.data$Event %in% c("t", "F"), .data$GsTotal, .data$GsSp)) %>%
-      select(-.data$TurtleSp, -.data$TurtleNum, -.data$BoatType, -.data$BoatNum)
+             GsSp = ifelse(.data$Event %in% c("t", "p", "F"), .data$GsTotal, .data$GsSp)) %>%
+      select(-.data$TurtleSp, -.data$TurtleNum, -.data$PinnipedSp,
+             -.data$PinnipedNum, -.data$BoatType, -.data$BoatNum)
 
 
   } else if (returnformat == "comprehensive") {

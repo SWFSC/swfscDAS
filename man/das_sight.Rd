@@ -10,7 +10,7 @@ das_sight(x, ...)
 
 \method{das_sight}{data.frame}(x, ...)
 
-\method{das_sight}{das_df}(x, returnformat = c("default", "long", "comprehensive"), ...)
+\method{das_sight}{das_df}(x, returnformat = c("default", "wide", "comprehensive"), ...)
 }
 \arguments{
 \item{x}{\code{das_df} object; output from \code{\link{das_process}},
@@ -65,13 +65,15 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Species 3 probable code       \tab ProbSp3 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
     Species 4 probable code       \tab ProbSp4 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
     Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
-    Turtle species             \tab TurtleSp   \tab \code{NA} for non-"t" events\cr
-    Number of turtles          \tab TurtleNum  \tab \code{NA} for non-"t" events\cr
-    Presence of associated JFR \tab TurtleJFR  \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
-    Estimated turtle maturity  \tab TurtleAge  \tab \code{NA} for non-"t" events\cr
-    Was turtle captured?       \tab TurtleCapt \tab \code{NA} for non-"t" events\cr
-    Boat or gear type          \tab BoatType   \tab \code{NA} for non-"F" events\cr
-    Number of boats            \tab BoatNum    \tab \code{NA} for non-"F" events\cr
+    Turtle species             \tab TurtleSp    \tab \code{NA} for non-"t" events\cr
+    Number of turtles          \tab TurtleNum   \tab \code{NA} for non-"t" events\cr
+    Presence of associated JFR \tab TurtleJFR   \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
+    Estimated turtle maturity  \tab TurtleAge   \tab \code{NA} for non-"t" events\cr
+    Was turtle captured?       \tab TurtleCapt  \tab \code{NA} for non-"t" events\cr
+    Pinniped species           \tab PinnipedSp  \tab \code{NA} for non-"p" events\cr
+    Number of pinnipeds        \tab PinnipedNum \tab \code{NA} for non-"p" events\cr
+    Boat or gear type          \tab BoatType    \tab \code{NA} for non-"F" events\cr
+    Number of boats            \tab BoatNum     \tab \code{NA} for non-"F" events\cr
     Perpendicular distance (km) \tab PerpDistKm \tab Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}\cr
   }
 
@@ -92,6 +94,7 @@ DAS events contain specific information in the 'Data#' columns,
   marine mammal subgroup sightings (code "G"),
   marine mammal subgroup resights (code "g"),
   turtle sightings (code "t"),
+  pinniped sightings (code "p")
   and fishing vessel sightings (code "F").
   See \code{\link{das_format_pdf}} for more information about events and event formats.
 
@@ -143,6 +146,6 @@ y <- system.file("das_sample.das", package = "swfscDAS")
 y.proc <- das_process(y)
 
 das_sight(y.proc)
-das_sight(y.proc, returnformat = "long")
+das_sight(y.proc, returnformat = "wide")
 
 }

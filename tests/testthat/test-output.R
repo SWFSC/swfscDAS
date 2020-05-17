@@ -20,12 +20,12 @@ exp.sight.name.default <- c(
   "TurtleJFR", "TurtleAge", "TurtleCapt", "PerpDistKm"
 )
 
-exp.sight.name.long <- c(
+exp.sight.name.wide <- c(
   "Sp1", "Sp2","Sp3", "Sp4", "ProbSp1", "ProbSp2", "ProbSp3", "ProbSp4",
   "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
   "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
   "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-  "BoatType", "BoatNum", "PerpDistKm"
+  "PinnipedSp", "PinnipedNum", "BoatType", "BoatNum", "PerpDistKm"
 )
 
 
@@ -106,22 +106,22 @@ test_that("das_process output has expected column names and classes", {
 
 test_that("das_sight output has expected column names and classes", {
   y.sight <- das_sight(y.proc)
-  y.sight.long <- das_sight(y.proc, returnformat = "long")
+  y.sight.wide <- das_sight(y.proc, returnformat = "wide")
 
   expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.default),
                    names(y.sight))
-  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.long),
-                   names(y.sight.long))
+  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.wide),
+                   names(y.sight.wide))
 })
 
 
 test_that("das_sight output has expected column names and classes with extra column", {
   y.proc$testrr <- 4
   y.sight <- das_sight(y.proc)
-  y.sight.long <- das_sight(y.proc, returnformat = "long")
+  y.sight.wide <- das_sight(y.proc, returnformat = "wide")
 
   expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.default),
                    names(y.sight))
-  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.long),
-                   names(y.sight.long))
+  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.wide),
+                   names(y.sight.wide))
 })
