@@ -279,6 +279,7 @@ das_sight.das_df <- function(x, returnformat = c("default", "long", "comprehensi
     left_join(sight.info.skmg2, by = "sight_cumsum") %>%
     left_join(sight.info.skmg3, by = "sight_cumsum") %>%
     left_join(sight.info.skmg4, by = "sight_cumsum") %>%
+    mutate(Prob = ifelse(is.na(.data$Prob), FALSE, .data$Prob)) %>%
     select(.data$sight_cumsum, .data$Cue, .data$Method,
            .data$Photos, .data$Birds,
            .data$Prob, .data$nSp, .data$Mixed, .data$GsTotal, everything())
