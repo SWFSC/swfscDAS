@@ -25,7 +25,7 @@
 
 .dist_from_prev(
   z,
-  z.dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")
+  z.distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")
 )
 
 .process_num(init.val, das.df, col.name, event.curr, event.na)
@@ -60,7 +60,7 @@
 
 \item{z}{ignore}
 
-\item{z.dist.method}{ignore}
+\item{z.distance.method}{ignore}
 
 \item{init.val}{ignore}
 

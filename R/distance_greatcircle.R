@@ -12,7 +12,7 @@
 #' @seealso TODO - provide reference
 #'
 #' @export
-dist_greatcircle <- function(lat1, lon1, lat2, lon2) {
+distance_greatcircle <- function(lat1, lon1, lat2, lon2) {
   # From EAB and KAF
   stopifnot(
     inherits(lat1, c("numeric", "integer")),

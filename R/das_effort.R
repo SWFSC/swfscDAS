@@ -11,7 +11,7 @@
 #'   e.g. 'Bft', 'SwellHght', etc.
 #'   If \code{method == "condition"}, then these also are the conditions which
 #'   trigger segment chopping when they change.
-#' @param dist.method character;
+#' @param distance.method character;
 #'   method to use to calculate distance between lat/lon coordinates.
 #'   Can be "greatcircle", "lawofcosines", "haversine", "vincenty",
 #'   or any partial match thereof (case sensitive).
@@ -63,8 +63,8 @@
 #'   including arguments that must be passed to it via the argument \code{...}
 #'
 #'   The distance between the lat/lon points of subsequent events
-#'   is calculated using the method specified in \code{dist.method}.
-#'   If "greatcircle", \code{\link{dist_greatcircle}} is used,
+#'   is calculated using the method specified in \code{distance.method}.
+#'   If "greatcircle", \code{\link{distance_greatcircle}} is used,
 #'   while \code{\link[swfscMisc]{distance}} is used otherwise.
 #'   See \code{\link{das_sight}} for how the sightings are processed.
 #'
@@ -122,7 +122,7 @@ das_effort.data.frame <- function(x, ...) {
 #' @export
 das_effort.das_df <- function(x, method = c("condition", "equallength"),
                               conditions = NULL,
-                              dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
+                              distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
                               seg0.drop = FALSE, comment.drop = FALSE, event.touse = NULL,
                               num.cores = NULL, ...) {
   #----------------------------------------------------------------------------
@@ -131,14 +131,14 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
     stop("seg0.drop and comment.drop must both be logicals (either TRUE or FALSE)")
 
   method <- match.arg(method)
-  dist.method <- match.arg(dist.method)
+  distance.method <- match.arg(distance.method)
 
   # methods.acc <- c("equallength", "condition")
   # if (!(length(method) == 1 & (method %in% methods.acc)))
   #   stop("method must be a string of length one, and must be one of: ",
   #        paste0("\"", paste(methods.acc, collapse = "\", \""), "\""))
   #
-  # #Check for dist.method happens in .dist_from_prev()
+  # #Check for distance.method happens in .dist_from_prev()
 
   # Conditions
   conditions.acc <- c(
@@ -234,7 +234,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
   if (!is.null(event.touse))
     x.oneff <- x.oneff %>% filter(.data$Event %in% event.touse)
 
-  x.oneff$dist_from_prev <- .dist_from_prev(x.oneff, dist.method)
+  x.oneff$dist_from_prev <- .dist_from_prev(x.oneff, distance.method)
 
   # Determine continuous effort sections
   x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
@@ -325,21 +325,21 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
 
 #' @name swfscAirDAS-internals
 #' @param z ignore
-#' @param z.dist.method ignore
+#' @param z.distance.method ignore
 #' @export
-.dist_from_prev <- function(z, z.dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")) {
+.dist_from_prev <- function(z, z.distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")) {
   ### Inputs
   # z: data frame of class das_df
-  # z.dist.method: dist.method from das_effort()
+  # z.distance.method: distance.method from das_effort()
 
   ### Output: numeric of distance (km) to previous event; first element is NA
 
   # Input check
-  z.dist.method <- match.arg(z.dist.method)
-  # dist.methods.acc <- c("greatcircle", "lawofcosines", "haversine", "vincenty")
-  # if (!(length(z.dist.method) == 1 & (z.dist.method %in% dist.methods.acc)))
-  #   stop("dist.method must be a string of length one, and must be one of: ",
-  #        paste0("\"", paste(dist.methods.acc, collapse = "\", \""), "\""))
+  z.distance.method <- match.arg(z.distance.method)
+  # distance.methods.acc <- c("greatcircle", "lawofcosines", "haversine", "vincenty")
+  # if (!(length(z.distance.method) == 1 & (z.distance.method %in% distance.methods.acc)))
+  #   stop("distance.method must be a string of length one, and must be one of: ",
+  #        paste0("\"", paste(distance.methods.acc, collapse = "\", \""), "\""))
 
   # Check for NA Lat/Lon
   z.llna <- which(is.na(z$Lat) | is.na(z$Lon))
@@ -352,23 +352,23 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
          paste(z$line_num[z.llna], collapse = ", "))
 
   # Calculate distances
-  if (identical(z.dist.method, "greatcircle")) {
+  if (identical(z.distance.method, "greatcircle")) {
     dist.from.prev <- mapply(function(x1, y1, x2, y2) {
-      dist_greatcircle(y1, x1, y2, x2)
+      swfscDAS::distance_greatcircle(y1, x1, y2, x2)
     },
     y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
     SIMPLIFY = TRUE)
 
-  } else if (z.dist.method %in% c("lawofcosines", "haversine", "vincenty")) {
+  } else if (z.distance.method %in% c("lawofcosines", "haversine", "vincenty")) {
     dist.from.prev <- mapply(function(x1, y1, x2, y2) {
-      distance(y1, x1, y2, x2, units = "km", method = z.dist.method)
+      swfscMisc::distance(y1, x1, y2, x2, units = "km", method = z.distance.method)
     },
     y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
     SIMPLIFY = TRUE)
 
   } else {
     stop("Error in distance calcualtion - ",
-         "please pass an accepted argument to dist.method")
+         "please pass an accepted argument to distance.method")
   }
 
   # Return distances, with inital NA since this are distances from previous point

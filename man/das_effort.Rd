@@ -14,7 +14,7 @@ das_effort(x, ...)
   x,
   method = c("condition", "equallength"),
   conditions = NULL,
-  dist.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
+  distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
   seg0.drop = FALSE,
   comment.drop = FALSE,
   event.touse = NULL,
@@ -38,7 +38,7 @@ e.g. 'Bft', 'SwellHght', etc.
 If \code{method == "condition"}, then these also are the conditions which
 trigger segment chopping when they change.}
 
-\item{dist.method}{character;
+\item{distance.method}{character;
 method to use to calculate distance between lat/lon coordinates.
 Can be "greatcircle", "lawofcosines", "haversine", "vincenty",
 or any partial match thereof (case sensitive).
@@ -109,8 +109,8 @@ This is the top-level function for chopping processed DAS data
   including arguments that must be passed to it via the argument \code{...}
 
   The distance between the lat/lon points of subsequent events
-  is calculated using the method specified in \code{dist.method}.
-  If "greatcircle", \code{\link{dist_greatcircle}} is used,
+  is calculated using the method specified in \code{distance.method}.
+  If "greatcircle", \code{\link{distance_greatcircle}} is used,
   while \code{\link[swfscMisc]{distance}} is used otherwise.
   See \code{\link{das_sight}} for how the sightings are processed.
 
