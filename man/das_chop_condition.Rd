@@ -14,7 +14,7 @@ das_chop_condition(x, ...)
   x,
   conditions,
   seg.min.km = 0.1,
-  dist.method = NULL,
+  distance.method = NULL,
   num.cores = NULL,
   ...
 )
@@ -33,7 +33,7 @@ see \code{\link{das_effort}}}
 \item{seg.min.km}{numeric; minimum allowable segment length (in kilometers).
 Default is 0.1. See the Details section below for more information}
 
-\item{dist.method}{character; see \code{\link{das_effort}}.
+\item{distance.method}{character; see \code{\link{das_effort}}.
 Default is \code{NULL} since these distances should have already been calculated}
 
 \item{num.cores}{see \code{\link{das_effort}}}

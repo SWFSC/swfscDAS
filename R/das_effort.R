@@ -133,41 +133,14 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
   method <- match.arg(method)
   distance.method <- match.arg(distance.method)
 
-  # methods.acc <- c("equallength", "condition")
-  # if (!(length(method) == 1 & (method %in% methods.acc)))
-  #   stop("method must be a string of length one, and must be one of: ",
-  #        paste0("\"", paste(methods.acc, collapse = "\", \""), "\""))
-  #
-  # #Check for distance.method happens in .dist_from_prev()
-
-  # Conditions
-  conditions.acc <- c(
-    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis"
-  )
-
-  if (is.null(conditions)) {
-    conditions <- if (method == "condition") {
-      c("Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis")
-    } else {
-      c("Bft", "SwellHght", "HorizSun", "VertSun", "Glare", "Vis")
-    }
-
-  } else {
-    if (!all(conditions %in% conditions.acc))
-      stop("Please ensure all components of the conditions argument are ",
-           "one of the following accepted values:\n",
-           paste(conditions.acc, collapse  = ", "))
-
-    if (!("Bft" %in% conditions))
-      stop("The conditions argument must include 'Bft'")
-  }
+  conditions <- .das_conditions_check(conditions, method)
 
   if (!is.null(event.touse)) {
     if (comment.drop)
       warning("comment.drop is ignored because event.touse is not NULL")
 
     if (!all(c("R", "E", "S", "A") %in% event.touse))
-      stop("event.use must include the following events: ",
+      stop("event.use must include at least the following events: ",
            paste(c("R", "E", "S", "A"), collapse = ", "))
   }
 
@@ -318,59 +291,4 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
            .data$DateTime, .data$year, everything())
 
   list(segdata = segdata, siteinfo = siteinfo, randpicks = randpicks)
-}
-
-
-
-
-#' @name swfscAirDAS-internals
-#' @param z ignore
-#' @param z.distance.method ignore
-#' @export
-.dist_from_prev <- function(z, z.distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")) {
-  ### Inputs
-  # z: data frame of class das_df
-  # z.distance.method: distance.method from das_effort()
-
-  ### Output: numeric of distance (km) to previous event; first element is NA
-
-  # Input check
-  z.distance.method <- match.arg(z.distance.method)
-  # distance.methods.acc <- c("greatcircle", "lawofcosines", "haversine", "vincenty")
-  # if (!(length(z.distance.method) == 1 & (z.distance.method %in% distance.methods.acc)))
-  #   stop("distance.method must be a string of length one, and must be one of: ",
-  #        paste0("\"", paste(distance.methods.acc, collapse = "\", \""), "\""))
-
-  # Check for NA Lat/Lon
-  z.llna <- which(is.na(z$Lat) | is.na(z$Lon))
-  if (length(z.llna) > 0)
-    stop("Error in das_effort: Some unexpected events ",
-         "have NA values in the Lat and/or Lon columns, ",
-         "and thus the distance between each point cannot be determined. ",
-         "Please remove or fix these events before running this function. ",
-         "These events are in the following lines of the original file:\n",
-         paste(z$line_num[z.llna], collapse = ", "))
-
-  # Calculate distances
-  if (identical(z.distance.method, "greatcircle")) {
-    dist.from.prev <- mapply(function(x1, y1, x2, y2) {
-      swfscDAS::distance_greatcircle(y1, x1, y2, x2)
-    },
-    y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
-    SIMPLIFY = TRUE)
-
-  } else if (z.distance.method %in% c("lawofcosines", "haversine", "vincenty")) {
-    dist.from.prev <- mapply(function(x1, y1, x2, y2) {
-      swfscMisc::distance(y1, x1, y2, x2, units = "km", method = z.distance.method)
-    },
-    y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
-    SIMPLIFY = TRUE)
-
-  } else {
-    stop("Error in distance calcualtion - ",
-         "please pass an accepted argument to distance.method")
-  }
-
-  # Return distances, with inital NA since this are distances from previous point
-  c(NA, dist.from.prev)
 }

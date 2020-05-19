@@ -1,7 +1,93 @@
 # Internal helper functions for swfscDAS
-#   All functions begin with "."
 # Some internal functions are exported to be used internally in swfscAirDAS;
-#   these functions are in 'swfscDAS-internal-AirDAS.R'
+#   these functions have the name 'swfscAirDAS-internals'
+# Some function-specifc functions are in their functions's R file
+
+
+###############################################################################
+# Internals for use in effort-processing functions
+
+#------------------------------------------------------------------------------
+#' @name swfscAirDAS-internals
+#' @param z ignore
+#' @param z.distance.method ignore
+#' @export
+.dist_from_prev <- function(z, z.distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty")) {
+  ### Inputs
+  # z: data frame of class das_df
+  # z.distance.method: distance.method from das_effort()
+
+  ### Output: numeric of distance (km) to previous event; first element is NA
+
+  # Input check
+  z.distance.method <- match.arg(z.distance.method)
+
+  # Check for NA Lat/Lon
+  z.llna <- which(is.na(z$Lat) | is.na(z$Lon))
+  if (length(z.llna) > 0)
+    stop("Error in das_effort: Some unexpected events ",
+         "have NA values in the Lat and/or Lon columns, ",
+         "and thus the distance between each point cannot be determined. ",
+         "Please remove or fix these events before running this function. ",
+         "These events are in the following lines of the original file:\n",
+         paste(z$line_num[z.llna], collapse = ", "))
+
+  # Calculate distances
+  if (identical(z.distance.method, "greatcircle")) {
+    dist.from.prev <- mapply(function(x1, y1, x2, y2) {
+      swfscDAS::distance_greatcircle(y1, x1, y2, x2)
+    },
+    y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
+    SIMPLIFY = TRUE)
+
+  } else if (z.distance.method %in% c("lawofcosines", "haversine", "vincenty")) {
+    dist.from.prev <- mapply(function(x1, y1, x2, y2) {
+      swfscMisc::distance(y1, x1, y2, x2, units = "km", method = z.distance.method)
+    },
+    y1 = head(z$Lat, -1), x1 = head(z$Lon, -1), y2 = z$Lat[-1], x2 = z$Lon[-1],
+    SIMPLIFY = TRUE)
+
+  } else {
+    stop("Error in distance calcualtion - ",
+         "please pass an accepted argument to distance.method")
+  }
+
+  # Return distances, with inital NA since this are distances from previous point
+  c(NA, dist.from.prev)
+}
+
+
+#------------------------------------------------------------------------------
+# Check that conditions are valid for DAS data
+.das_conditions_check <- function(x, x.method) {
+  # x: character; condition name(s)
+  # x.method: character; method argument from effort function
+  # Output: x, or an error message
+
+  stopifnot(x.method %in% c("condition", "equallength"))
+
+  conditions.acc <- c(
+    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis"
+  )
+
+  if (is.null(x)) {
+    x <- if (x.method == "condition") {
+      c("Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis")
+    } else {
+      c("Bft", "SwellHght", "HorizSun", "VertSun", "Glare", "Vis")
+    }
+
+  } else {
+    if (!all(x %in% conditions.acc))
+      stop("Please ensure that all 'conditions' are ",
+           "one of the following accepted values:\n",
+           paste(conditions.acc, collapse  = ", "))
+
+    if (!("Bft" %in% x))  stop("The conditions argument must include 'Bft'")
+  }
+
+  x
+}
 
 
 ###############################################################################

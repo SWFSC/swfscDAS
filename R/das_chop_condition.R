@@ -11,7 +11,7 @@
 #' see \code{\link{das_effort}}
 #' @param seg.min.km numeric; minimum allowable segment length (in kilometers).
 #'   Default is 0.1. See the Details section below for more information
-#' @param dist.method character; see \code{\link{das_effort}}.
+#' @param distance.method character; see \code{\link{das_effort}}.
 #'   Default is \code{NULL} since these distances should have already been calculated
 #' @param num.cores see \code{\link{das_effort}}
 #'
@@ -79,10 +79,12 @@ das_chop_condition.data.frame <- function(x, ...) {
 #' @name das_chop_condition
 #' @export
 das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
-                                      dist.method = NULL, num.cores = NULL,
+                                      distance.method = NULL, num.cores = NULL,
                                       ...) {
   #----------------------------------------------------------------------------
   # Input checks
+  conditions <- .das_conditions_check(conditions, "condition")
+
   if (!all(x$OnEffort | x$Event == "E"))
     stop("x must be filtered for on effort events; see `?das_chop_condition")
 
@@ -98,7 +100,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
     stop("seg.min.km must be greater than or equal to 0; ",
          "see `?das_chop_condition")
 
-  #Check for dist.method happens in .dist_from_prev()
+  #Check for distance.method happens in .dist_from_prev()
 
 
   #----------------------------------------------------------------------------
@@ -114,12 +116,12 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
 
   # Calculate distance between points; checks happen in .dist_from_prev()
   if (!("dist_from_prev" %in% names(x))) {
-    if (is.null(dist.method))
+    if (is.null(distance.method))
       stop("If the distance between consectutive points (events) ",
            "has not already been calculated, ",
-           "then you must provide a valid argument for dist.method")
+           "then you must provide a valid argument for distance.method")
 
-    x$dist_from_prev <- .dist_from_prev(x, dist.method)
+    x$dist_from_prev <- .dist_from_prev(x, distance.method)
   }
 
 
