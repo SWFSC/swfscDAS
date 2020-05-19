@@ -72,26 +72,12 @@ das_segdata.data.frame <- function(x, ...) {
 
 #' @name das_segdata
 #' @export
-das_segdata.das_df <- function(x, conditions, segdata.method,
+das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist"),
                                seg.lengths, section.id, ...) {
   #----------------------------------------------------------------------------
   # Input checks
-  conditions.acc <- c(
-    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis"
-  )
-  if (!all(conditions %in% conditions.acc))
-    stop("Was this function called by one of the das_chop_ functions? ",
-         "Please ensure all components of the conditions argument are ",
-         "one of the following accepted values:\n",
-         paste(conditions.acc, collapse  = ", "))
-
-
-  segdata.method.acc <- c("avg", "maxdist")
-  if (!(segdata.method %in% segdata.method.acc))
-    stop("It is strongly recommended to not call this method directly, ",
-         "but rather to use one of the das_chop_ functions.",
-         "segdata.method must be one of the following:\n",
-         paste(segdata.method.acc, collapse = ", "))
+  conditions <- .das_conditions_check(conditions, "condition")
+  segdata.method <- match.arg(segdata.method)
 
   if (!("dist_from_prev" %in% names(x)))
     stop("x must contain a 'dist_from_prev' column; ",
@@ -106,8 +92,6 @@ das_segdata.das_df <- function(x, conditions, segdata.method,
     stop("The sum of the seg.lengths values does not equal the sum of the ",
          "x$dist_from_prev' values; ",
          "was this function called by a _chop_ function?")
-
-  rm(conditions.acc, segdata.method.acc)
 
 
   #----------------------------------------------------------------------------

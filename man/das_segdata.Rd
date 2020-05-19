@@ -10,7 +10,14 @@ das_segdata(x, ...)
 
 \method{das_segdata}{data.frame}(x, ...)
 
-\method{das_segdata}{das_df}(x, conditions, segdata.method, seg.lengths, section.id, ...)
+\method{das_segdata}{das_df}(
+  x,
+  conditions,
+  segdata.method = c("avg", "maxdist"),
+  seg.lengths,
+  section.id,
+  ...
+)
 }
 \arguments{
 \item{x}{\code{das_df} object,
