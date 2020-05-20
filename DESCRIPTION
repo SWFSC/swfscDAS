@@ -23,6 +23,7 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
+    stringr, 
     testthat (>= 2.1.0)
 License: GPL-3
 Encoding: UTF-8
