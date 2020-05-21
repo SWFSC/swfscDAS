@@ -64,7 +64,7 @@
   # x.method: character; method argument from effort function
   # Output: x, or an error message
 
-  stopifnot(x.method %in% c("condition", "equallength"))
+  stopifnot(x.method %in% c("condition", "equallength", "section"))
 
   conditions.acc <- c(
     "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis"

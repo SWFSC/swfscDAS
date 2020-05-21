@@ -120,7 +120,7 @@ das_effort.data.frame <- function(x, ...) {
 
 #' @name das_effort
 #' @export
-das_effort.das_df <- function(x, method = c("condition", "equallength"),
+das_effort.das_df <- function(x, method = c("condition", "equallength", "section"),
                               conditions = NULL,
                               distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
                               seg0.drop = FALSE, comment.drop = FALSE, event.touse = NULL,
@@ -239,15 +239,19 @@ das_effort.das_df <- function(x, method = c("condition", "equallength"),
 
   #----------------------------------------------------------------------------
   # Chop and summarize effort using specified method
-  eff.list <- if (method == "equallength") {
-    das_chop_equal(as_das_df(x.oneff), conditions = conditions,
-                   num.cores = num.cores, ...)
+  func.chop <- if (method == "equallength") {
+    das_chop_equal
   } else if (method == "condition") {
-    das_chop_condition(as_das_df(x.oneff), conditions = conditions,
-                       num.cores = num.cores, ...)
+    das_chop_condition
+  } else if (method == "section") {
+    das_chop_section
   } else {
     stop("method is not an accepted value")
   }
+
+  eff.list <- func.chop(
+    as_das_df(x.oneff), conditions = conditions, num.cores = num.cores, ...
+  )
 
   x.eff <- eff.list[[1]]
   segdata <- eff.list[[2]]

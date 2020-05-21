@@ -46,24 +46,24 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
     Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
     Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
-    Species  code                 \tab Sp      \tab Only present when \code{mixed.multi = TRUE}\cr
-    Species-specific group size   \tab GsSp    \tab Only present when \code{mixed.multi = TRUE}\cr
-    Species 1 code                \tab Sp1     \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 2 code                \tab Sp2     \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 3 code                \tab Sp3     \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 4 code                \tab Sp4     \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 1-specific group size \tab Sp1Perc \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 2-specific group size \tab Sp2Perc \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 3-specific group size \tab Sp3Perc \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 4-specific group size \tab Sp4Perc \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 1 group size          \tab GsSp1   \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 2 group size          \tab GsSp2   \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 3 group size          \tab GsSp3   \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 4 group size          \tab GsSp4   \tab Only present when \code{mixed.multi = FALSE}\cr
-    Species 1 probable code       \tab ProbSp1 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
-    Species 2 probable code       \tab ProbSp2 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
-    Species 3 probable code       \tab ProbSp3 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
-    Species 4 probable code       \tab ProbSp4 \tab From '?' event, only present when \code{mixed.multi = FALSE}\cr
+    Species  code                 \tab Sp      \tab Only present when \code{returnformat = "wide"}\cr
+    Species-specific group size   \tab GsSp    \tab Only present when \code{returnformat = "wide"}\cr
+    Species 1 code                \tab Sp1     \tab Only present when \code{returnformat = "wide"}\cr
+    Species 2 code                \tab Sp2     \tab Only present when \code{returnformat = "wide"}\cr
+    Species 3 code                \tab Sp3     \tab Only present when \code{returnformat = "wide"}\cr
+    Species 4 code                \tab Sp4     \tab Only present when \code{returnformat = "wide"}\cr
+    Percentage of Sp1 in sighting \tab Sp1Perc \tab Only present when \code{returnformat = "wide"}\cr
+    Percentage of Sp2 in sighting \tab Sp2Perc \tab Only present when \code{returnformat = "wide"}\cr
+    Percentage of Sp3 in sighting \tab Sp3Perc \tab Only present when \code{returnformat = "wide"}\cr
+    Percentage of Sp4 in sighting \tab Sp4Perc \tab Only present when \code{returnformat = "wide"}\cr
+    Species 1 group size          \tab GsSp1   \tab Only present when \code{returnformat = "wide"}\cr
+    Species 2 group size          \tab GsSp2   \tab Only present when \code{returnformat = "wide"}\cr
+    Species 3 group size          \tab GsSp3   \tab Only present when \code{returnformat = "wide"}\cr
+    Species 4 group size          \tab GsSp4   \tab Only present when \code{returnformat = "wide"}\cr
+    Species 1 probable code       \tab ProbSp1 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
+    Species 2 probable code       \tab ProbSp2 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
+    Species 3 probable code       \tab ProbSp3 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
+    Species 4 probable code       \tab ProbSp4 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
     Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
     Turtle species             \tab TurtleSp    \tab \code{NA} for non-"t" events\cr
     Number of turtles          \tab TurtleNum   \tab \code{NA} for non-"t" events\cr
@@ -90,7 +90,7 @@ DAS events contain specific information in the 'Data#' columns,
   extracted to dedicated columns as described below.
   This function recognizes the following types of sightings:
   marine mammal sightings (event codes "S", "K", or "M"),
-  marine mammal resights (codes "s" or "k"),
+  marine mammal resights (codes "s", "k", "m"),
   marine mammal subgroup sightings (code "G"),
   marine mammal subgroup resights (code "g"),
   turtle sightings (code "t"),

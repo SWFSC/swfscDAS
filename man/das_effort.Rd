@@ -12,7 +12,7 @@ das_effort(x, ...)
 
 \method{das_effort}{das_df}(
   x,
-  method = c("condition", "equallength"),
+  method = c("condition", "equallength", "section"),
   conditions = NULL,
   distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
   seg0.drop = FALSE,
