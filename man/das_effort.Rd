@@ -30,7 +30,8 @@ or a data frame that can be coerced to a \code{das_df} object}
 such as \code{seg.km} or \code{seg.min.km}}
 
 \item{method}{character; method to use to chop DAS data into effort segments
-Can be "condition", "equallength", or any partial match thereof (case sensitive)}
+Can be "condition", "equallength", "section",
+or any partial match thereof (case sensitive)}
 
 \item{conditions}{character vector of names of conditions to include in segdata output.
 These values must be column names from the output of \code{\link{das_process}},
@@ -95,7 +96,7 @@ This is the top-level function for chopping processed DAS data
   with \code{NA} DateTime, Lat, or Lon values are verbosely removed.
 
   The following chopping methods are currently available:
-  "condition" and "equallength".
+  "condition", "equallength", and "section.
   When using the \code{"condition"} method, effort sections are chopped
   into segments every time a condition changes,
   thereby ensuring that the conditions are consistent across the entire segment.
@@ -107,6 +108,10 @@ This is the top-level function for chopping processed DAS data
   and doing a weighted average of the conditions for the length of that segment.
   See \code{\link{das_chop_equal}} for more details about this method,
   including arguments that must be passed to it via the argument \code{...}
+
+  The "section" method involves 'chopping' the effort into continuous effort sections,
+  i.e. each continuous effort section is a single effort segment.
+  See \code{\link{das_chop_section}} for more details about this method.
 
   The distance between the lat/lon points of subsequent events
   is calculated using the method specified in \code{distance.method}.
@@ -140,5 +145,8 @@ das_effort(
   y.proc, method = "equallength", seg.km = 10, randpicks.load = y.rand,
   num.cores = 1
 )
+
+# Using "section" method
+das_effort(y.proc, method = "section", num.cores = 1)
 
 }

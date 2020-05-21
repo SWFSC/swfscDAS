@@ -63,7 +63,6 @@ das_chop_section.das_df <- function(x, conditions, distance.method = NULL,
 
   conditions <- .das_conditions_check(conditions, "section")
 
-
   #----------------------------------------------------------------------------
   # Calculate distance between points if necessary
   if (!("dist_from_prev" %in% names(x))) {
@@ -79,6 +78,8 @@ das_chop_section.das_df <- function(x, conditions, distance.method = NULL,
   # ID continuous effort sections, make randpicks, and get max section length
   if (!("cont_eff_section" %in% names(x))) {
     x$cont_eff_section <- cumsum(x$Event %in% c("R"))
+    # event.B.preR <- (x$Event == "B") & (c(x$Event[-1], NA) == "R")
+    # x$cont_eff_section[event.B.preR] <- x$cont_eff_section[event.B.preR] + 1
   }
 
   randpicks.df <- data.frame(

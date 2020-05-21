@@ -100,18 +100,14 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
     stop("seg.min.km must be greater than or equal to 0; ",
          "see `?das_chop_condition")
 
-  #Check for distance.method happens in .dist_from_prev()
-
-
   #----------------------------------------------------------------------------
   # Add columns if necessary
 
   # Determine continuous effort sections
   if (!("cont_eff_section" %in% names(x))) {
     x$cont_eff_section <- cumsum(x$Event %in% "R")
-
-    event.B.preR <- (x$Event == "B") & (c(x$Event[-1], NA) == "R")
-    x$cont_eff_section[event.B.preR] <- x$cont_eff_section[event.B.preR] + 1
+    # event.B.preR <- (x$Event == "B") & (c(x$Event[-1], NA) == "R")
+    # x$cont_eff_section[event.B.preR] <- x$cont_eff_section[event.B.preR] + 1
   }
 
   # Calculate distance between points; checks happen in .dist_from_prev()
