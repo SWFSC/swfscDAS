@@ -235,7 +235,7 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
     Data8 = substr(x.lines.all, 75, 79),
     Data9 = substr(x.lines.all, 80, 84),
     Extra_data = substr(x.lines.all, 85, max(nchar(x.lines.all))),
-    idx = x$idx,
+    idx = seq_along(x.lines.all),
     stringsAsFactors = FALSE
   ) %>%
     filter(!(.data$Event %in% c("C", "*", "#"))) %>%
