@@ -103,7 +103,6 @@ DAS events contain specific information in the 'Data#' columns,
   \code{returnformat} "wide": One column for everything, one row for each sighting event. Values averaged for different observers
   \code{returnformat} "comprehensive": TODO
 
-
   Abbreviations used in column names: Gs = group size, Sp = species,
   Nm = nautical mile, Perc = percentage, Prob = probable
 

@@ -56,9 +56,6 @@
 #'   Events that are 'expected' to have \code{NA} DateTime/Lat/Lon values are:
 #'   C, ?, 1, 2, 3, 4, 5, 6, 7, 8
 #'
-#' @seealso For more details about WinCruz, see
-#'   \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
-#'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
 #' das_read(y)

@@ -61,7 +61,7 @@
 #'   Sighting info \tab 1-8 \tab Data9   \tab The Data9 column must be NA (blank) for events 1-8\cr
 #' }
 #'
-#' Outstanding questions:
+#' Outstanding questions/todo:
 #' \itemize{
 #'   \item There are ~3000 V events from 2018 with non-NA Data6 columns.
 #'   \item There are ~3500 S/K/M events with data past the Data9 columns.
@@ -71,7 +71,8 @@
 #'   \item Check that A events only come immediately after a G/S/K/M event,
 #'     and all G/S/K/M events have an A after them.
 #'     Also check about these related to ?/1:8 events?
-#'   \item Check that lat/lon values are within [-90, 90] and [-180, 180]
+#'   \item TODO: Check that lat/lon values are within [-90, 90] and [-180, 180]
+#'   \item TODO: Check G/g/m/p codes as necessary
 #' }
 #'
 #' @return

@@ -22,7 +22,8 @@
 #'   at the beginning of each day. This argument should only
 #'   be set to \code{FALSE} for comparison with older methods, such as REPORT
 #'
-#' @details If \code{x} is a character, it is assumed to be a filepath and first passed to \code{\link{das_read}}.
+#' @details If \code{x} is a character,
+#'   it is assumed to be a filepath and first passed to \code{\link{das_read}}.
 #'   This output is then passed to \code{das_process}.
 #'
 #'   DAS data is event-based, meaning most events indicate when a state or weather condition changes.
@@ -78,7 +79,7 @@
 #'     Cruise number                 \tab Cruise    \tab Event: B; Column: Data1\cr
 #'     Effort mode                   \tab Mode      \tab Event: B; Column: Data2\cr
 #'     Effort type                   \tab EffType   \tab Event: R; Column: Data1\cr
-#'     Effort type                   \tab ESWSide   \tab Event: R; Column: Data2\cr
+#'     Number of sides with observer \tab ESWSide   \tab Event: R; Column: Data2\cr
 #'     Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
 #'     Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr
 #'     Swell height (ft)             \tab SwellHght \tab Event: V; Column: Data2\cr

@@ -56,7 +56,7 @@ when segment chopping. Default is \code{FALSE}}
 \item{event.touse}{character vector of events to use to determine
 segment lengths; overrides \code{comment.drop}.
 If \code{NULL} (the default), then all on effort events are used.
-If used, this argument must include R, E, S, and A events}
+If used, this argument must include at least R, E, S, and A events}
 
 \item{num.cores}{Number of CPUs to over which to distribute computations.
 Defaults to \code{NULL}, which uses one fewer than the number of cores

@@ -75,7 +75,3 @@ y <- system.file("das_sample.das", package = "swfscDAS")
 das_read(y)
 
 }
-\seealso{
-For more details about WinCruz, see
-  \url{https://swfsc.noaa.gov/uploadedFiles/Divisions/PRD/WinCruz.pdf}
-}
