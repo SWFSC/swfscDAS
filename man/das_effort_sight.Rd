@@ -15,7 +15,7 @@ das_effort_sight(x.list, sp.codes)
 A list, identical to \code{x.list} except for
   1) the nSI and ANI columns added to \code{x.list$segdata},
   one each for each element of \code{sp.codes}, and
-  2) the included column of \code{x.list$siteinfo}, which has been set as
+  2) the included column of \code{x.list$sightinfo}, which has been set as
   \code{FALSE} for sightings of species not listed in \code{sp.codes}
 }
 \description{
@@ -27,7 +27,7 @@ This function takes the output of \code{\link{das_effort}} and
   for selected species (selected via \code{sp.codes}) for each segment
   to the segdata element of \code{x.list}.
   However, only sightings with an included value of \code{TRUE}
-  (included is a column in siteinfo) are included in the summaries.
+  (included is a column in sightinfo) are included in the summaries.
   Having this step separate from \code{\link{das_effort}} allows users to
   personalize the included values as desired for their analysis.
 }
@@ -39,8 +39,8 @@ y.cond <- das_effort(
   conditions = "Bft", seg.min.km = 0.05, num.cores = 1
 )
 
-y.cond$siteinfo <- y.cond$siteinfo[y.cond$siteinfo$Event \%in\% c("S", "t"), ]
-y.cond$siteinfo$included <- TRUE
+y.cond$sightinfo <- y.cond$sightinfo[y.cond$sightinfo$Event \%in\% c("S", "t"), ]
+y.cond$sightinfo$included <- TRUE
 
 das_effort_sight(y.cond, sp.codes = c("013", "076", "DC"))
 

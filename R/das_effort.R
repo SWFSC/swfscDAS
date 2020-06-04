@@ -38,7 +38,7 @@
 #'   into modeling segments (henceforth 'segments'), and assigning sightings
 #'   and related information (e.g., weather conditions) to each segment.
 #'   This function returns data frames with all relevant information for the
-#'   effort segments and associated sightings ('segdata' and 'siteinfo', respectively).
+#'   effort segments and associated sightings ('segdata' and 'sightinfo', respectively).
 #'   Before chopping, the DAS data is filtered for events (rows) where either
 #'   the 'OnEffort' column is \code{TRUE} or the 'Event' column "E".
 #'   In other words, the data is filtered for continuous effort sections (henceforth 'effort sections'),
@@ -73,7 +73,7 @@
 #'   while \code{\link[swfscMisc]{distance}} is used otherwise.
 #'   See \code{\link{das_sight}} for how the sightings are processed.
 #'
-#'   The siteinfo data frame includes the column 'included',
+#'   The sightinfo data frame includes the column 'included',
 #'   which is used in \code{\link{das_effort_sight}} when summarizing
 #'   the number of sightings and animals for selected species.
 #'   \code{\link{das_effort_sight}} is a separate function to allow users to
@@ -87,7 +87,7 @@
 #'   \itemize{
 #'     \item segdata: one row for every segment, and columns for information including
 #'       unique segment number, start/end/midpoint coordinates, and conditions (e.g. Beaufort)
-#'     \item siteinfo: details for all sightings in \code{x}, including:
+#'     \item sightinfo: details for all sightings in \code{x}, including:
 #'       the unique segment number it is associated with, segment mid points (lat/lon),
 #'       the 'included' column described in the 'Details' section,
 #'       and the output information described in \code{\link{das_sight}}
@@ -277,7 +277,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
          "Please report this as an issue")
 
   # Add back in ? and 1:8 (events.tmp) events
-  # Only for siteinfo groupsizes, and thus no segdata info doesn't matter
+  # Only for sightinfo groupsizes, and thus no segdata info doesn't matter
   x.eff.all <- rbind(x.eff, x.oneff.tmp) %>%
     arrange(.data$idx_eff) %>%
     select(-.data$idx_eff)
@@ -285,7 +285,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
 
   #----------------------------------------------------------------------------
   # Summarize sightings
-  siteinfo <- x.eff.all %>%
+  sightinfo <- x.eff.all %>%
     left_join(select(segdata, .data$segnum, .data$mlat, .data$mlon),
               by = "segnum") %>%
     das_sight(returnformat = "default") %>%
@@ -296,11 +296,11 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
   # Clean and return
   segdata <- segdata %>% select(-.data$seg_idx)
 
-  siteinfo <- siteinfo %>%
+  sightinfo <- sightinfo %>%
     mutate(year = year(.data$DateTime)) %>%
     select(-.data$seg_idx) %>%
     select(.data$segnum, .data$mlat, .data$mlon, .data$Event,
            .data$DateTime, .data$year, everything())
 
-  list(segdata = segdata, siteinfo = siteinfo, randpicks = randpicks)
+  list(segdata = segdata, sightinfo = sightinfo, randpicks = randpicks)
 }

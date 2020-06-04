@@ -10,14 +10,14 @@
 #'   for selected species (selected via \code{sp.codes}) for each segment
 #'   to the segdata element of \code{x.list}.
 #'   However, only sightings with an included value of \code{TRUE}
-#'   (included is a column in siteinfo) are included in the summaries.
+#'   (included is a column in sightinfo) are included in the summaries.
 #'   Having this step separate from \code{\link{das_effort}} allows users to
 #'   personalize the included values as desired for their analysis.
 #'
 #' @return A list, identical to \code{x.list} except for
 #'   1) the nSI and ANI columns added to \code{x.list$segdata},
 #'   one each for each element of \code{sp.codes}, and
-#'   2) the included column of \code{x.list$siteinfo}, which has been set as
+#'   2) the included column of \code{x.list$sightinfo}, which has been set as
 #'   \code{FALSE} for sightings of species not listed in \code{sp.codes}
 #'
 #' @examples
@@ -28,8 +28,8 @@
 #'   conditions = "Bft", seg.min.km = 0.05, num.cores = 1
 #' )
 #'
-#' y.cond$siteinfo <- y.cond$siteinfo[y.cond$siteinfo$Event %in% c("S", "t"), ]
-#' y.cond$siteinfo$included <- TRUE
+#' y.cond$sightinfo <- y.cond$sightinfo[y.cond$sightinfo$Event %in% c("S", "t"), ]
+#' y.cond$sightinfo$included <- TRUE
 #'
 #' das_effort_sight(y.cond, sp.codes = c("013", "076", "DC"))
 #'
@@ -39,30 +39,30 @@ das_effort_sight <- function(x.list, sp.codes) {
   stopifnot(
     inherits(x.list, "list"),
     inherits(sp.codes, "character"),
-    identical(names(x.list), c("segdata", "siteinfo", "randpicks")),
-    "included" %in% names(x.list$siteinfo)
+    identical(names(x.list), c("segdata", "sightinfo", "randpicks")),
+    "included" %in% names(x.list$sightinfo)
   )
 
   ### Prep
   segdata <- x.list$segdat
-  siteinfo <- x.list$siteinfo
+  sightinfo <- x.list$sightinfo
   randpicks <- x.list$randpicks
 
   ### Processing
   # Prep sp.codes
   sp.codes <- sort(sp.codes)
-  if (!all(sp.codes %in% siteinfo$Sp))
+  if (!all(sp.codes %in% sightinfo$Sp))
     warning("The following species codes are not present in the provided data: ",
-            paste(sp.codes[!(sp.codes %in% siteinfo$Sp)], collapse = ", "))
+            paste(sp.codes[!(sp.codes %in% sightinfo$Sp)], collapse = ", "))
 
   # Make data frame with nSI and ANI columns, and join it with segdata
   segdata$seg_idx <- paste(segdata$section_id, segdata$section_sub_id, sep = "_")
-  siteinfo <- left_join(siteinfo, select(segdata, .data$segnum, .data$seg_idx),
+  sightinfo <- left_join(sightinfo, select(segdata, .data$segnum, .data$seg_idx),
                         by = "segnum")
 
   segdata.col1 <- select(segdata, .data$seg_idx)
-  siteinfo.forsegdata.list <- lapply(sp.codes, function(i, siteinfo, d1) {
-    d0 <- siteinfo %>%
+  sightinfo.forsegdata.list <- lapply(sp.codes, function(i, sightinfo, d1) {
+    d0 <- sightinfo %>%
       filter(.data$included, .data$Sp == i) %>%
       group_by(.data$seg_idx) %>%
       summarise(nSI = length(.data$Sp),
@@ -74,19 +74,19 @@ das_effort_sight <- function(x.list, sp.codes) {
     z[is.na(z)] <- 0
 
     z
-  }, siteinfo = siteinfo, d1 = segdata.col1)
+  }, sightinfo = sightinfo, d1 = segdata.col1)
 
-  siteinfo.forsegdata.df <- bind_cols(segdata.col1, siteinfo.forsegdata.list)
+  sightinfo.forsegdata.df <- bind_cols(segdata.col1, sightinfo.forsegdata.list)
 
 
   ### Clean up and return
   segdata <- segdata %>%
-    left_join(siteinfo.forsegdata.df, by = "seg_idx") %>%
+    left_join(sightinfo.forsegdata.df, by = "seg_idx") %>%
     select(-.data$seg_idx)
 
-  siteinfo <- siteinfo %>%
+  sightinfo <- sightinfo %>%
     mutate(included = ifelse(.data$Sp %in% sp.codes, .data$included, FALSE)) %>%
     select(-.data$seg_idx)
 
-  list(segdata = segdata, siteinfo = siteinfo, randpicks = randpicks)
+  list(segdata = segdata, sightinfo = sightinfo, randpicks = randpicks)
 }

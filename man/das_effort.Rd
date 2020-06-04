@@ -68,7 +68,7 @@ List of three data frames:
   \itemize{
     \item segdata: one row for every segment, and columns for information including
       unique segment number, start/end/midpoint coordinates, and conditions (e.g. Beaufort)
-    \item siteinfo: details for all sightings in \code{x}, including:
+    \item sightinfo: details for all sightings in \code{x}, including:
       the unique segment number it is associated with, segment mid points (lat/lon),
       the 'included' column described in the 'Details' section,
       and the output information described in \code{\link{das_sight}}
@@ -84,7 +84,7 @@ This is the top-level function for chopping processed DAS data
   into modeling segments (henceforth 'segments'), and assigning sightings
   and related information (e.g., weather conditions) to each segment.
   This function returns data frames with all relevant information for the
-  effort segments and associated sightings ('segdata' and 'siteinfo', respectively).
+  effort segments and associated sightings ('segdata' and 'sightinfo', respectively).
   Before chopping, the DAS data is filtered for events (rows) where either
   the 'OnEffort' column is \code{TRUE} or the 'Event' column "E".
   In other words, the data is filtered for continuous effort sections (henceforth 'effort sections'),
@@ -119,7 +119,7 @@ This is the top-level function for chopping processed DAS data
   while \code{\link[swfscMisc]{distance}} is used otherwise.
   See \code{\link{das_sight}} for how the sightings are processed.
 
-  The siteinfo data frame includes the column 'included',
+  The sightinfo data frame includes the column 'included',
   which is used in \code{\link{das_effort_sight}} when summarizing
   the number of sightings and animals for selected species.
   \code{\link{das_effort_sight}} is a separate function to allow users to
