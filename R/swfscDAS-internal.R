@@ -102,7 +102,7 @@
 
   stopifnot(
     inherits(z, "das_dfr"),
-    z.col %in% paste0("Data", 1:9)
+    z.col %in% paste0("Data", 1:12)
   )
 
   z$idx <- seq_len(nrow(z))
@@ -135,7 +135,7 @@
 
   stopifnot(
     inherits(z, "das_dfr"),
-    z.col %in% paste0("Data", 1:9)
+    z.col %in% paste0("Data", 1:12)
   )
 
   z$idx <- seq_len(nrow(z))
@@ -163,7 +163,7 @@
 
   stopifnot(
     inherits(z, "das_df") | inherits(z, "das_dfr"),
-    z.col %in% paste0("Data", 1:9), # | (identical(event.code, "1") & z.col %in% c("DateTime", "Lat", "Lon")),
+    z.col %in% paste0("Data", 1:12), # | (identical(event.code, "1") & z.col %in% c("DateTime", "Lat", "Lon")),
     "idx" %in% names(z)
   )
 

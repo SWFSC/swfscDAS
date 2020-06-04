@@ -50,14 +50,14 @@
 #'       respectively, for the associated "1"-"8" events
 #'     \item The 'GsSp1', 'GsSp2', 'GsSp3', and 'GsSp4' values are the product of
 #'       the 'GsTotal' and the respective '...Perc' columns
-#'     \item The values for the following columns were capitalized using
+#'     \item The values for the following columns are capitalized using
 #'       \code{\link[base:chartr]{toupper}}:
-#'       'Birds', 'Photos', 'TurtleAge', and 'TurtleCapt'
+#'       'Birds', 'Photos', 'CalibSchool', 'PhotosAerial', 'Biopsy',
+#'       'TurtleAge', and 'TurtleCapt'
 #'   }
 #'
 #'   Outstanding questions/todo:
 #'   \itemize{
-#'     \item Should any columns be converted to logicals, e.g. 'Birds', 'Photos', and 'TurtleCapt'?
 #'     \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc.,
 #'       be changed from \code{NA} to \code{0}?
 #'     \item TODO: Add flag for option to have comprehensive output of group size estimations
@@ -84,11 +84,14 @@
 #'     Sighting method                 \tab Method\cr
 #'     Photos of school?               \tab Photos\cr
 #'     Birds present with school?      \tab Birds\cr
+#'     Calibration school?             \tab CalibSchool\cr
+#'     Aerial photos taken?            \tab PhotosAerial\cr
+#'     Biopsy taken?                   \tab Biopsy\cr
 #'     Probable sighting               \tab Prob  \tab Logical\cr
 #'     Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
 #'     Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
 #'     Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
-#'     Species  code                 \tab Sp      \tab Only present when \code{returnformat = "wide"}\cr
+#'     Species code                  \tab Sp      \tab Only present when \code{returnformat = "wide"}\cr
 #'     Species-specific group size   \tab GsSp    \tab Only present when \code{returnformat = "wide"}\cr
 #'     Species 1 code                \tab Sp1     \tab Only present when \code{returnformat = "wide"}\cr
 #'     Species 2 code                \tab Sp2     \tab Only present when \code{returnformat = "wide"}\cr
@@ -229,8 +232,12 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
   sight.info.skmg1 <- sight.df %>%
     filter(.data$Event %in% c("S", "K", "M", "G")) %>%
     mutate(Cue = ifelse(.data$Event == "G", NA, as.numeric(.data$Data3)),
-           Method = as.numeric(.data$Data4)) %>%
-    select(.data$sight_cumsum, .data$Cue, .data$Method)
+           Method = as.numeric(.data$Data4),
+           CalibSchool = toupper(.data$Data10),
+           PhotosAerial = toupper(.data$Data11),
+           Biopsy = toupper(.data$Data12)) %>%
+    select(.data$sight_cumsum, .data$Cue, .data$Method,
+           .data$CalibSchool, .data$PhotosAerial, .data$Biopsy)
 
   # Data from A row
   sight.info.skmg2 <- sight.df %>%
@@ -266,9 +273,7 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
               GsSp1 = .data$GsTotal * .data$Sp1Perc / 100,
               GsSp2 = .data$GsTotal * .data$Sp2Perc / 100,
               GsSp3 = .data$GsTotal * .data$Sp3Perc / 100,
-              GsSp4 = .data$GsTotal * .data$Sp4Perc / 100) #%>%
-  # replace_na(list(Sp2Perc = 0, Sp3Perc = 0, Sp4Perc = 0))
-  # @importFrom tidyr replace_na
+              GsSp4 = .data$GsTotal * .data$Sp4Perc / 100)
 
   num.vec <- c(nrow(sight.info.skmg1), nrow(sight.info.skmg2),
                nrow(sight.info.skmg3), nrow(sight.info.skmg4))
@@ -288,6 +293,7 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
     mutate(Prob = ifelse(is.na(.data$Prob), FALSE, .data$Prob)) %>%
     select(.data$sight_cumsum, .data$Cue, .data$Method,
            .data$Photos, .data$Birds,
+           .data$CalibSchool, .data$PhotosAerial, .data$Biopsy,
            .data$Prob, .data$nSp, .data$Mixed, .data$GsTotal, everything())
   rm(sight.info.skmg1, sight.info.skmg2, sight.info.skmg3, sight.info.skmg4)
 
@@ -337,7 +343,8 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
     filter(.data$Event %in% event.sight) %>%
     select(-.data$Data1, -.data$Data2, -.data$Data3,
            -.data$Data4, -.data$Data5, -.data$Data6,
-           -.data$Data7, -.data$Data8, -.data$Data9) %>%
+           -.data$Data7, -.data$Data8, -.data$Data9,
+           -.data$Data10, -.data$Data11, -.data$Data12) %>%
     left_join(sight.info.all, by = "sight_cumsum") %>%
     left_join(sight.info.skmg, by = "sight_cumsum") %>%
     left_join(sight.info.resight, by = "sight_cumsum") %>%
@@ -370,11 +377,11 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
     # Names and order of columns to return
     sight.names <- setdiff(
       c(names(sight.df), names(sight.info.all), #names(sight.info.skmg)[1:9],
-        "Cue", "Method", "Photos", "Birds", "Prob", "nSp", "Mixed", "GsTotal",
-        "Sp", "ProbSp", "GsSp",
+        "Cue", "Method", "Photos", "Birds", "CalibSchool", "PhotosAerial", "Biopsy",
+        "Prob", "nSp", "Mixed", "GsTotal", "Sp", "ProbSp", "GsSp",
         names(sight.info.resight), names(sight.info.t),
         names(sight.info.p), names(sight.info.f)),
-      c("sight_cumsum", paste0("Data", 1:9))
+      c("sight_cumsum", paste0("Data", 1:12))
     )
 
     # Finalize return data frame, consolidating columns as possible

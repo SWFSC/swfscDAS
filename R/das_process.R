@@ -46,7 +46,7 @@
 #'     \item All '#' events (deleted events) are removed
 #'     \item An event is considered 'on effort' if it is 1) an R event,
 #'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
-#'       (not including the E event). The 'EffortDot' column is ignored here.
+#'       (not including the E event). The 'EffortDot' column is not used when determining on effort data.
 #'     \item All state/condition information is reset at the beginning of each cruise.
 #'       New cruises are identified using \code{days.gap}.
 #'     \item All state/condition information relating to B, R, P, V, N, and W events
@@ -60,15 +60,13 @@
 #'     \item 'ESWsides' represents the number of sides being searched during that effort section -
 #'       a value of \code{NA} (for compatibility with older data) or "F" means 2 sides are being searched,
 #'       and a value of "H" means 1 side is being searched.
-#'       A value that is not one of "F", \code{NA}, or "H" means ESWsides will be \code{NA}
+#'       ESWsides will be \code{NA} for values that are not one of "F", \code{NA}, or "H"
 #'     \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,
 #'       or if 'HorizSun' is 12 and 'VertSun' is 1;
 #'       \code{NA} if 'HorizSun' or 'VertSun' is \code{NA};
 #'       otherwise \code{FALSE}
 #'     \item Missing values are \code{NA} rather than \code{-1}
 #'   }
-#'
-#'   This function was inspired by \code{\link[swfscMisc]{das.read}}
 #'
 #' @return A \code{das_df} object, which is also a data frame.
 #'   It consists of the input data frame, i.e. the output of \code{\link{das_read}},
@@ -216,10 +214,10 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
 
   ### Determine indices where time-date change is by more than 'day.gap' days
   ###   Used to recognize data from new cruise in concatenated DAS files
-  time_diff <- rep(NA, nDAS)
-  time_diff[!dt.na] <- c(NA, abs(diff(x$DateTime[!dt.na]))) / (60*60*24)
+  time.diff <- rep(NA, nDAS)
+  time.diff[!dt.na] <- c(NA, abs(diff(x$DateTime[!dt.na]))) / (60*60*24)
 
-  idx.new.cruise <- c(1, which(time_diff > days.gap))
+  idx.new.cruise <- c(1, which(time.diff > days.gap))
 
   ### Determine row numbers of new days in x;
   ###   these will include idxs of new cruises. Used when reset.day is TRUE
@@ -369,7 +367,7 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
     "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
     "ObsL", "Rec", "ObsR", "ObsInd",
-    paste0("Data", 1:9), "EffortDot", "EventNum", "file_das", "line_num"
+    paste0("Data", 1:12), "EffortDot", "EventNum", "file_das", "line_num"
   )
 
   as_das_df(

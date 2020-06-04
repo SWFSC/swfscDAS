@@ -42,11 +42,14 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Sighting method                 \tab Method\cr
     Photos of school?               \tab Photos\cr
     Birds present with school?      \tab Birds\cr
+    Calibration school?             \tab CalibSchool\cr
+    Aerial photos taken?            \tab PhotosAerial\cr
+    Biopsy taken?                   \tab Biopsy\cr
     Probable sighting               \tab Prob  \tab Logical\cr
     Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
     Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
     Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
-    Species  code                 \tab Sp      \tab Only present when \code{returnformat = "wide"}\cr
+    Species code                  \tab Sp      \tab Only present when \code{returnformat = "wide"}\cr
     Species-specific group size   \tab GsSp    \tab Only present when \code{returnformat = "wide"}\cr
     Species 1 code                \tab Sp1     \tab Only present when \code{returnformat = "wide"}\cr
     Species 2 code                \tab Sp2     \tab Only present when \code{returnformat = "wide"}\cr
@@ -127,14 +130,14 @@ DAS events contain specific information in the 'Data#' columns,
       respectively, for the associated "1"-"8" events
     \item The 'GsSp1', 'GsSp2', 'GsSp3', and 'GsSp4' values are the product of
       the 'GsTotal' and the respective '...Perc' columns
-    \item The values for the following columns were capitalized using
+    \item The values for the following columns are capitalized using
       \code{\link[base:chartr]{toupper}}:
-      'Birds', 'Photos', 'TurtleAge', and 'TurtleCapt'
+      'Birds', 'Photos', 'CalibSchool', 'PhotosAerial', 'Biopsy',
+      'TurtleAge', and 'TurtleCapt'
   }
 
   Outstanding questions/todo:
   \itemize{
-    \item Should any columns be converted to logicals, e.g. 'Birds', 'Photos', and 'TurtleCapt'?
     \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc.,
       be changed from \code{NA} to \code{0}?
     \item TODO: Add flag for option to have comprehensive output of group size estimations

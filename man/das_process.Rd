@@ -109,7 +109,7 @@ If \code{x} is a character,
     \item All '#' events (deleted events) are removed
     \item An event is considered 'on effort' if it is 1) an R event,
       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
-      (not including the E event). The 'EffortDot' column is ignored here.
+      (not including the E event). The 'EffortDot' column is not used when determining on effort data.
     \item All state/condition information is reset at the beginning of each cruise.
       New cruises are identified using \code{days.gap}.
     \item All state/condition information relating to B, R, P, V, N, and W events
@@ -123,15 +123,13 @@ If \code{x} is a character,
     \item 'ESWsides' represents the number of sides being searched during that effort section -
       a value of \code{NA} (for compatibility with older data) or "F" means 2 sides are being searched,
       and a value of "H" means 1 side is being searched.
-      A value that is not one of "F", \code{NA}, or "H" means ESWsides will be \code{NA}
+      ESWsides will be \code{NA} for values that are not one of "F", \code{NA}, or "H"
     \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,
       or if 'HorizSun' is 12 and 'VertSun' is 1;
       \code{NA} if 'HorizSun' or 'VertSun' is \code{NA};
       otherwise \code{FALSE}
     \item Missing values are \code{NA} rather than \code{-1}
   }
-
-  This function was inspired by \code{\link[swfscMisc]{das.read}}
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")

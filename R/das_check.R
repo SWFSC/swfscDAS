@@ -24,7 +24,7 @@
 #'   \item A BR event series or R event does not occur while already on effort
 #'   \item An E event does not occur while already off effort
 #'   \item All Data# columns for non-C events are right-justified
-#'   \item Only C, S, K, and M events have data past the 84th column in the DAS file
+#'   \item Only C events have data past the 99th column in the DAS file
 #'   \item The following events have NA (blank) Data# columns: *
 #'   \item All of  *, B, R, E, V, W, N, P, and Q events have NA Data# columns
 #'     where specified (see format pdf for more details)
@@ -45,12 +45,16 @@
 #'   Horizontal sun \tab W \tab Data2 \tab Must be a whole number between 0 and 12\cr
 #'   Vertical sun   \tab W \tab Data3 \tab Must be a whole number between 0 and 12\cr
 #'   Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
-#'   Sighting (mammal)        \tab S, K, M \tab Data3-7 \tab Can be converted to a numeric value\cr
-#'   Sighting cue (mammal)    \tab S, K, M \tab Data3   \tab Must be a whole number between 1 and 6\cr
-#'   Sighting method (mammal) \tab S, K, M \tab Data4   \tab Must be a whole number between 1 and 7\cr
-#'   Bearing (mammal)         \tab S, K, M \tab Data5   \tab Must be a whole number between 0 and 360\cr
-#'   Photos         \tab A \tab Data3   \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   Birds          \tab A \tab Data4   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   Sighting (mammal)        \tab S, K, M    \tab Data3-7 \tab Can be converted to a numeric value\cr
+#'   Sighting (mammal)        \tab G          \tab Data5-7 \tab Can be converted to a numeric value\cr
+#'   Sighting cue (mammal)    \tab S, K, M    \tab Data3   \tab Must be a whole number between 1 and 6\cr
+#'   Sighting method (mammal) \tab S, K, M, G \tab Data4   \tab Must be a whole number between 1 and 7\cr
+#'   Bearing (mammal)         \tab S, K, M, G \tab Data5   \tab Must be a whole number between 0 and 360\cr
+#'   Photos \tab A \tab Data3   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   Birds  \tab A \tab Data4   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   Calibration school   \tab S, K, M \tab Data10 \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   Aerial photos taken  \tab S, K, M \tab Data11 \tab Must be one of N, Y, n, y, or NA (blank)\cr
+#'   Biopsy taken         \tab S, K, M \tab Data12 \tab Must be one of N, Y, n, y, or NA (blank)\cr
 #'   Species codes  \tab A \tab Data5-8 \tab If a species codes file is provided, must be one of the provided codes\cr
 #'   Resight         \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
 #'   Turtle species  \tab t       \tab Data2      \tab If a species codes file is provided, must be one of the provided codes\cr
@@ -64,15 +68,12 @@
 #' Outstanding questions/todo:
 #' \itemize{
 #'   \item There are ~3000 V events from 2018 with non-NA Data6 columns.
-#'   \item There are ~3500 S/K/M events with data past the Data9 columns.
-#'   \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
 #'   \item TODO: Add check for sequential date/time
 #'   \item TODO: Add column with cruise number to output
 #'   \item Check that A events only come immediately after a G/S/K/M event,
 #'     and all G/S/K/M events have an A after them.
 #'     Also check about these related to ?/1:8 events?
 #'   \item TODO: Check that lat/lon values are within [-90, 90] and [-180, 180]
-#'   \item TODO: Check G/g/m/p codes as necessary
 #' }
 #'
 #' @return
@@ -235,7 +236,10 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
     Data7 = substr(x.lines.all, 70, 74),
     Data8 = substr(x.lines.all, 75, 79),
     Data9 = substr(x.lines.all, 80, 84),
-    Extra_data = substr(x.lines.all, 85, max(nchar(x.lines.all))),
+    Data10 = substr(x.lines.all, 85, 89),
+    Data11 = substr(x.lines.all, 90, 94),
+    Data12 = substr(x.lines.all, 95, 99),
+    Extra_data = substr(x.lines.all, 100, max(nchar(x.lines.all))),
     idx = seq_along(x.lines.all),
     stringsAsFactors = FALSE
   ) %>%
@@ -243,7 +247,6 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
     mutate(Extra_data = trimws(.data$Extra_data, which = "both"))
 
   x.tmp.filt.data <- x.tmp.filt %>% select(starts_with("Data"))
-  x.tmp.filt.noSKM <- x.tmp.filt %>% filter(!(.data$Event %in% c("S", "K", "M")))
 
   x.tmp.which <- lapply(1:ncol(x.tmp.filt.data), function(i) {
     x1 <- trimws(x.tmp.filt.data[[i]], which = "left")
@@ -252,7 +255,7 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   })
 
   rj.which <- x.tmp.filt$idx[sort(unique(unlist(x.tmp.which)))]
-  rj.extra.which <- x.tmp.filt.noSKM$idx[x.tmp.filt.noSKM$Extra_data != ""]
+  rj.extra.which <- x.tmp.filt$idx[x.tmp.filt$Extra_data != ""]
 
 
   error.out <- rbind(
@@ -261,7 +264,7 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
     .check_list(x.proc, x.lines, rj.extra.which, "Row contains information past the 84th column")
   )
 
-  rm(x.tmp.filt, x.tmp.filt.data, x.tmp.filt.noSKM, x.tmp.which)
+  rm(x.tmp.filt, x.tmp.filt.data, x.tmp.which)
 
 
   #----------------------------------------------------------------------------
@@ -396,22 +399,37 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
 
   #----------------------------------------------------------------------------
   ### Check Data# columns for sightings data format
-  # Marine mammal sightings (SKM)
+  # Marine mammal sightings (SKMG)
   idx.skm.num <- .check_numeric(x, c("S", "K", "M"), paste0("Data", 3:7)) #3:9
   txt.skm.num <- paste(
-    "At least one of the Data3-9 columns for S, K, and M events",
+    "At least one of the Data3-7 columns for S, K, and M events",
+    "cannot be converted to a numeric"
+  )
+
+  idx.g.num <- .check_numeric(x, c("G"), paste0("Data", 5:7))
+  txt.g.num <- paste(
+    "At least one of the Data5-7 columns for G events",
     "cannot be converted to a numeric"
   )
 
   idx.skm.3 <- .check_character(x, c("S", "K", "M"), "Data3", c(1:6, NA))
-  txt.skm.3 <- "Sighting cue must be a whole number between 1 and 6"
+  txt.skm.3 <- "Sighting cue (Data3 of S/K/M events) must be a whole number between 1 and 6"
 
-  idx.skm.4 <- .check_character(x, c("S", "K", "M"), "Data4", c(1:7, NA))
-  txt.skm.4 <- "Sighting method must be a whole number between 1 and 7"
+  idx.skm.4 <- .check_character(x, c("S", "K", "M", "G"), "Data4", c(1:7, NA))
+  txt.skm.4 <- "Sighting method (Data4 of S/K/M events) must be a whole number between 1 and 7"
 
   bearing.acc <- c(0:360, sprintf("%02d", 0:360), sprintf("%03d", 0:360))
-  idx.skm.b <- .check_character(x, c("S", "K", "M"), "Data5", c(bearing.acc, NA))
-  txt.skm.b <- "Bearing (Data5 of S/K/M events) is not a whole number between 0 and 360, or NA"
+  idx.skm.b <- .check_character(x, c("S", "K", "M", "G"), "Data5", c(bearing.acc, NA))
+  txt.skm.b <- "Bearing (Data5 of S/K/M/G events) is not a whole number between 0 and 360, or NA"
+
+  idx.skm.10 <- .check_character(x, c("S", "K", "M"), "Data10", c("N", "Y", "n", "y", NA))
+  txt.skm.10 <- "Calibration school (Data10 of S/K/M events) is not one of N, Y, n, y, or NA"
+
+  idx.skm.11 <- .check_character(x, c("S", "K", "M"), "Data11", c("N", "Y", "n", "y", NA))
+  txt.skm.11 <- "Aerial photos (Data11 of S/K/M events) is not one of N, Y, n, y, or NA"
+
+  idx.skm.12 <- .check_character(x, c("S", "K", "M"), "Data12", c("N", "Y", "n", "y", NA))
+  txt.skm.12 <- "Biopsy (Data12 of S/K/M events) is not one of N, Y, n, y, or NA"
 
 
   # Auxillary info (A)
@@ -474,9 +492,13 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   error.out <- rbind(
     error.out,
     .check_list(x.proc, x.lines, idx.skm.num, txt.skm.num),
+    .check_list(x.proc, x.lines, idx.g.num, txt.g.num),
     .check_list(x.proc, x.lines, idx.skm.3, txt.skm.3),
     .check_list(x.proc, x.lines, idx.skm.4, txt.skm.4),
     .check_list(x.proc, x.lines, idx.skm.b, txt.skm.b),
+    .check_list(x.proc, x.lines, idx.skm.10, txt.skm.10),
+    .check_list(x.proc, x.lines, idx.skm.11, txt.skm.11),
+    .check_list(x.proc, x.lines, idx.skm.12, txt.skm.12),
     .check_list(x.proc, x.lines, idx.res.num, txt.res.num),
     .check_list(x.proc, x.lines, idx.f.num, txt.f.num),
     .check_list(x.proc, x.lines, idx.num.num, txt.num.num),

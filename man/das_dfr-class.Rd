@@ -41,6 +41,9 @@ The \code{das_dfr} class is a subclass of \code{\link[base]{data.frame}},
     Data7 \tab "character"\cr
     Data8 \tab "character"\cr
     Data9 \tab "character"\cr
+    Data10 \tab "character"\cr
+    Data11 \tab "character"\cr
+    Data12 \tab "character"\cr
     EventNum \tab "integer"\cr
     file_das \tab "character"\cr
     line_num \tab "integer"\cr

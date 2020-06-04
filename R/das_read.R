@@ -29,7 +29,10 @@
 #'     Data6        \tab 65-69\cr
 #'     Data7        \tab 70-74\cr
 #'     Data8        \tab 75-79\cr
-#'     Data9        \tab 80+\cr
+#'     Data9        \tab 80-84\cr
+#'     Data10       \tab 85-89\cr
+#'     Data11       \tab 90-94\cr
+#'     Data12       \tab 95+\cr
 #'   }
 #'
 #'   See \code{\link{das_format_pdf}} for more information about DAS format requirements, and
@@ -81,8 +84,8 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   stopifnot(inherits(file, "character"))
 
   # Start and end (inclusive) column indices
-  fwf.start <- c(1,4,5, 06,13, 20,21,24, 30,31,35, 40,45,50,55,60,65,70,75,80)
-  fwf.end   <- c(3,4,5, 11,18, 20,22,28, 30,33,39, 44,49,54,59,64,69,74,79,NA)
+  fwf.start <- c(1,4,5, 06,13, 20,21,24, 30,31,35, 40,45,50,55,60,65,70,75,80,85,90,95)
+  fwf.end   <- c(3,4,5, 11,18, 20,22,28, 30,33,39, 44,49,54,59,64,69,74,79,94,89,94,NA)
 
   # suppressWarnings() is for lines that do not have data in all columns
   x <- suppressWarnings(read_fwf(
@@ -95,7 +98,8 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   names(x) <- c(
     "EventNum", "Event", "EffortDot", "Time", "Date",
     "Lat1", "Lat2", "Lat3", "Lon1", "Lon2", "Lon3",
-    "Data1", "Data2", "Data3", "Data4", "Data5", "Data6", "Data7", "Data8", "Data9"
+    "Data1", "Data2", "Data3", "Data4", "Data5", "Data6", "Data7",
+    "Data8", "Data9", "Data10", "Data11", "Data12"
   )
 
   # Check for if lines should be skipped
@@ -168,12 +172,15 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
     Data6 = ifelse(x$Event == "C", x$Data6, trimws(x$Data6)),
     Data7 = ifelse(x$Event == "C", x$Data7, trimws(x$Data7)),
     Data8 = ifelse(x$Event == "C", x$Data8, trimws(x$Data8)),
-    Data9 = ifelse(x$Event == "C",
-                   ifelse(trimws(x$Data9) == "", NA, x$Data9),
-                   trimws(x$Data9)),
+    Data9 = ifelse(x$Event == "C", x$Data9, trimws(x$Data9)),
+    Data10 = ifelse(x$Event == "C", x$Data10, trimws(x$Data10)),
+    Data11 = ifelse(x$Event == "C", x$Data11, trimws(x$Data11)),
+    Data12 = ifelse(x$Event == "C",
+                    ifelse(trimws(x$Data12) == "", NA, x$Data12),
+                    trimws(x$Data12)),
     stringsAsFactors = FALSE
   )
-  # Data9 extra ^ is for entries with >6 spaces (eg "       ")
+  # Data12 extra ^ is for entries with >6 spaces (eg "       ")
   data.df[data.df == ""] <- NA
 
   # Coerce data frame to das_dfr object and return

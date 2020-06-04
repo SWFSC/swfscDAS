@@ -12,7 +12,8 @@ exp.proc.name <- c(
 
 exp.sight.name <- c(
   "SightNo", "Subgroup", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
-  "Cue", "Method", "Photos", "Birds", "Prob", "nSp", "Mixed", "GsTotal"
+  "Cue", "Method", "Photos", "Birds", "CalibSchool", "PhotosAerial", "Biopsy",
+  "Prob", "nSp", "Mixed", "GsTotal"
 )
 
 exp.sight.name.default <- c(
@@ -48,6 +49,9 @@ test_that("das_read output has expected column names and classes", {
     Data7 = "character",
     Data8 = "character",
     Data9 = "character",
+    Data10 = "character",
+    Data11 = "character",
+    Data12 = "character",
     EventNum = "character",
     file_das = "character",
     line_num = "integer"
@@ -93,6 +97,9 @@ test_that("das_process output has expected column names and classes", {
     Data7 = "character",
     Data8 = "character",
     Data9 = "character",
+    Data10 = "character",
+    Data11 = "character",
+    Data12 = "character",
     EffortDot = "logical",
     EventNum = "character",
     file_das = "character",

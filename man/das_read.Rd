@@ -63,7 +63,10 @@ Reads/parses DAS data into columns of a data frame.
     Data6        \tab 65-69\cr
     Data7        \tab 70-74\cr
     Data8        \tab 75-79\cr
-    Data9        \tab 80+\cr
+    Data9        \tab 80-84\cr
+    Data10       \tab 85-89\cr
+    Data11       \tab 90-94\cr
+    Data12       \tab 95+\cr
   }
 
   See \code{\link{das_format_pdf}} for more information about DAS format requirements, and

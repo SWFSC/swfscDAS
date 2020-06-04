@@ -51,7 +51,7 @@ Precursor to DASCHECK. Checks that the following is true:
   \item A BR event series or R event does not occur while already on effort
   \item An E event does not occur while already off effort
   \item All Data# columns for non-C events are right-justified
-  \item Only C, S, K, and M events have data past the 84th column in the DAS file
+  \item Only C events have data past the 99th column in the DAS file
   \item The following events have NA (blank) Data# columns: *
   \item All of  *, B, R, E, V, W, N, P, and Q events have NA Data# columns
     where specified (see format pdf for more details)
@@ -72,12 +72,16 @@ Precursor to DASCHECK. Checks that the following is true:
   Horizontal sun \tab W \tab Data2 \tab Must be a whole number between 0 and 12\cr
   Vertical sun   \tab W \tab Data3 \tab Must be a whole number between 0 and 12\cr
   Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
-  Sighting (mammal)        \tab S, K, M \tab Data3-7 \tab Can be converted to a numeric value\cr
-  Sighting cue (mammal)    \tab S, K, M \tab Data3   \tab Must be a whole number between 1 and 6\cr
-  Sighting method (mammal) \tab S, K, M \tab Data4   \tab Must be a whole number between 1 and 7\cr
-  Bearing (mammal)         \tab S, K, M \tab Data5   \tab Must be a whole number between 0 and 360\cr
-  Photos         \tab A \tab Data3   \tab Must be one of N, Y, n, y, or NA (blank)\cr
-  Birds          \tab A \tab Data4   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  Sighting (mammal)        \tab S, K, M    \tab Data3-7 \tab Can be converted to a numeric value\cr
+  Sighting (mammal)        \tab G          \tab Data5-7 \tab Can be converted to a numeric value\cr
+  Sighting cue (mammal)    \tab S, K, M    \tab Data3   \tab Must be a whole number between 1 and 6\cr
+  Sighting method (mammal) \tab S, K, M, G \tab Data4   \tab Must be a whole number between 1 and 7\cr
+  Bearing (mammal)         \tab S, K, M, G \tab Data5   \tab Must be a whole number between 0 and 360\cr
+  Photos \tab A \tab Data3   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  Birds  \tab A \tab Data4   \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  Calibration school   \tab S, K, M \tab Data10 \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  Aerial photos taken  \tab S, K, M \tab Data11 \tab Must be one of N, Y, n, y, or NA (blank)\cr
+  Biopsy taken         \tab S, K, M \tab Data12 \tab Must be one of N, Y, n, y, or NA (blank)\cr
   Species codes  \tab A \tab Data5-8 \tab If a species codes file is provided, must be one of the provided codes\cr
   Resight         \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
   Turtle species  \tab t       \tab Data2      \tab If a species codes file is provided, must be one of the provided codes\cr
@@ -91,15 +95,12 @@ Precursor to DASCHECK. Checks that the following is true:
 Outstanding questions/todo:
 \itemize{
   \item There are ~3000 V events from 2018 with non-NA Data6 columns.
-  \item There are ~3500 S/K/M events with data past the Data9 columns.
-  \item Documentation says Data8 and Data9 for SKM events be numeric, but currently ~5000 lines are not
   \item TODO: Add check for sequential date/time
   \item TODO: Add column with cruise number to output
   \item Check that A events only come immediately after a G/S/K/M event,
     and all G/S/K/M events have an A after them.
     Also check about these related to ?/1:8 events?
   \item TODO: Check that lat/lon values are within [-90, 90] and [-180, 180]
-  \item TODO: Check G/g/m/p codes as necessary
 }
 }
 \examples{
