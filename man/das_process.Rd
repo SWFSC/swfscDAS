@@ -18,7 +18,7 @@ das_process(x, ...)
 
 \method{das_process}{das_dfr}(
   x,
-  days.gap = 10,
+  days.gap = 20,
   reset.event = TRUE,
   reset.effort = TRUE,
   reset.day = TRUE,
@@ -32,7 +32,7 @@ or a character (filepath) which is first passed to \code{\link{das_read}}}
 \item{...}{passed to \code{\link{das_read}} if \code{x} is a character.
 Otherwise ignored}
 
-\item{days.gap}{numeric of length 1; default is \code{10}.
+\item{days.gap}{numeric of length 1; default is \code{20}.
 Time gap (in days) used to identify a new cruise in concatenated DAS files,
 and thus also when state/condition information
 (cruise number, weather, Bft, Mode, etc) is reset}
