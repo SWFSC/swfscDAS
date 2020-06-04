@@ -68,7 +68,7 @@ das_effort_sight <- function(x.list, sp.codes) {
       summarise(nSI = length(.data$Sp),
                 ANI = sum(.data$GsSp))
 
-    names(d0) <- c("seg_idx", paste0(i, "_", names(d0)[-1]))
+    names(d0) <- c("seg_idx", paste(names(d0)[-1], i, sep = "_"))
 
     z <- full_join(d1, d0, by = "seg_idx") %>% select(-.data$seg_idx)
     z[is.na(z)] <- 0
