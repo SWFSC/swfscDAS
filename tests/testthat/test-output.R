@@ -14,18 +14,23 @@ exp.proc.name <- c(
 exp.sight.name <- c(
   "SightNo", "Subgroup", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
   "Cue", "Method", "Photos", "Birds", "CalibSchool", "PhotosAerial", "Biopsy",
-  "Prob", "nSp", "Mixed", "GsTotal"
+  "Prob", "nSp", "Mixed"
 )
 
 exp.sight.name.default <- c(
-  "Sp", "ProbSp", "GsSp", "CourseSchool",
+  "SpCode", "SpProb", "GsSpBest", "GsSpHigh", "GsSpLow",
+  "GsSchoolBest", "GsSchoolHigh", "GsSchoolLow",
+  "CourseSchool",
   "TurtleJFR", "TurtleAge", "TurtleCapt", "PerpDistKm"
 )
 
 exp.sight.name.wide <- c(
-  "Sp1", "Sp2","Sp3", "Sp4", "ProbSp1", "ProbSp2", "ProbSp3", "ProbSp4",
-  "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
-  "GsSp1", "GsSp2", "GsSp3", "GsSp4", "CourseSchool",
+  "SpCode1", "SpCode2","SpCode3", "SpCode4",
+  "SpProb1", "SpProb2", "SpProb3", "SpProb4",
+  "SpPerc1", "SpPerc2", "SpPerc3", "SpPerc4",
+  "GsSpBest1", "GsSpBest2", "GsSpBest3", "GsSpBest4",
+  "GsSchoolBest", "GsSchoolHigh", "GsSchoolLow",
+  "CourseSchool",
   "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
   "PinnipedSp", "PinnipedNum", "BoatType", "BoatNum", "PerpDistKm"
 )

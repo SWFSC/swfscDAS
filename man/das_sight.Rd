@@ -24,10 +24,13 @@ or a data frame that can be coerced to a \code{das_df} object}
 Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
   and 2) columns with sighting information extracted from 'Data#' columns (described below).
   See \code{\link{das_format_pdf}} for more information the sighting information.
-  The data frame has one row for each sighting,
-  or one row for each species of each sighting if \code{mixed.multi} is \code{TRUE}.
+  If \code{returnformat} is "default", then there is one row for each species of each sighting;
+  if \code{returnformat} is "wide", then there is one row for each sighting event;
+  if \code{returnformat} is "complete", then there is one row for every
+  group size estimate for each sighting.
+  The specific columns in each output are described below.
 
-  Added sighting information columns:
+  Sighting information columns in every format:
   \tabular{lll}{
     \emph{Sighting information}     \tab \emph{Column name} \tab \emph{Notes}\cr
     Sighting number                 \tab SightNo\cr
@@ -48,40 +51,55 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Probable sighting               \tab Prob  \tab Logical; \code{NA} for non-S/K/M/G events\cr
     Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
     Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
-    Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
-    Species code                  \tab Sp      \tab Only present when \code{returnformat = "wide"}\cr
-    Species-specific group size   \tab GsSp    \tab Only present when \code{returnformat = "wide"}\cr
-    Species 1 code                \tab Sp1     \tab Only present when \code{returnformat = "wide"}\cr
-    Species 2 code                \tab Sp2     \tab Only present when \code{returnformat = "wide"}\cr
-    Species 3 code                \tab Sp3     \tab Only present when \code{returnformat = "wide"}\cr
-    Species 4 code                \tab Sp4     \tab Only present when \code{returnformat = "wide"}\cr
-    Percentage of Sp1 in sighting \tab Sp1Perc \tab Only present when \code{returnformat = "wide"}\cr
-    Percentage of Sp2 in sighting \tab Sp2Perc \tab Only present when \code{returnformat = "wide"}\cr
-    Percentage of Sp3 in sighting \tab Sp3Perc \tab Only present when \code{returnformat = "wide"}\cr
-    Percentage of Sp4 in sighting \tab Sp4Perc \tab Only present when \code{returnformat = "wide"}\cr
-    Species 1 group size          \tab GsSp1   \tab Only present when \code{returnformat = "wide"}\cr
-    Species 2 group size          \tab GsSp2   \tab Only present when \code{returnformat = "wide"}\cr
-    Species 3 group size          \tab GsSp3   \tab Only present when \code{returnformat = "wide"}\cr
-    Species 4 group size          \tab GsSp4   \tab Only present when \code{returnformat = "wide"}\cr
-    Species 1 probable code       \tab ProbSp1 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
-    Species 2 probable code       \tab ProbSp2 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
-    Species 3 probable code       \tab ProbSp3 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
-    Species 4 probable code       \tab ProbSp4 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
     Course (true heading) of school at resight \tab CourseSchool \tab \code{NA} for non-s/k/m events\cr
+    Presence of associated JFR  \tab TurtleJFR  \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
+    Estimated turtle maturity   \tab TurtleAge  \tab \code{NA} for non-"t" events\cr
+    Perpendicular distance (km) to sighting \tab PerpDistKm \tab Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}\cr
+  }
+  To convert the perpendicular distance back to nautical miles,
+  one would divide PerpDistKm by 1.852.
+
+  Sighting information columns present specifically in the "default" format output:
+  \tabular{lll}{
+    School group size - best estimate \tab GsSchoolBest \tab Arithemtic mean of all best estimates\cr
+    School group size - high estimate \tab GsSchoolHigh \tab Arithmetic mean of all high estimates\cr
+    School group size - low estimate  \tab GsSchoolLow  \tab Arithmetic mean of all low estimates\cr
+    Species code \tab SpCode  \tab For mammal, turtle, and pinniped species codes, as well as boat type\cr
+    Species-specific group size - best estimate \tab GsSpBest \tab
+      GsSchoolBest multiplied by the (average) corresponding species percentage \cr
+  }
+
+  Sighting information columns present specifically in the "wide" format output:
+  \tabular{lll}{
+    Species 1 code                \tab SpCode1\cr
+    Species 2 code                \tab SpCode2\cr
+    Species 3 code                \tab SpCode3\cr
+    Species 4 code                \tab SpCode4\cr
+    Percentage of Sp1 in sighting \tab SpPerc1\cr
+    Percentage of Sp2 in sighting \tab SpPerc2\cr
+    Percentage of Sp3 in sighting \tab SpPerc3\cr
+    Percentage of Sp4 in sighting \tab SpPerc4\cr
+    Species 1 group size          \tab GsSpBest1\cr
+    Species 2 group size          \tab GsSpBest2\cr
+    Species 3 group size          \tab GsSpBest3\cr
+    Species 4 group size          \tab GsSpBest4\cr
+    Species 1 probable code       \tab SpProb1 \tab Extracted from '?' event\cr
+    Species 2 probable code       \tab SpProb2 \tab Extracted from '?' event\cr
+    Species 3 probable code       \tab SpProb3 \tab Extracted from '?' event\cr
+    Species 4 probable code       \tab SpProb4 \tab Extracted from '?' event\cr
     Turtle species             \tab TurtleSp    \tab \code{NA} for non-"t" events\cr
     Number of turtles          \tab TurtleNum   \tab \code{NA} for non-"t" events\cr
-    Presence of associated JFR \tab TurtleJFR   \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
-    Estimated turtle maturity  \tab TurtleAge   \tab \code{NA} for non-"t" events\cr
     Was turtle captured?       \tab TurtleCapt  \tab \code{NA} for non-"t" events\cr
     Pinniped species           \tab PinnipedSp  \tab \code{NA} for non-"p" events\cr
     Number of pinnipeds        \tab PinnipedNum \tab \code{NA} for non-"p" events\cr
     Boat or gear type          \tab BoatType    \tab \code{NA} for non-"F" events\cr
     Number of boats            \tab BoatNum     \tab \code{NA} for non-"F" events\cr
-    Perpendicular distance (km) \tab PerpDistKm \tab Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}\cr
   }
 
-  To convert the perpendicular distance back to nautical miles,
-  one would divide PerpDistKm by 1.852.
+  Sighting information columns present specifically in the "complete" format output:
+  \tabular{lll}{
+    TODO
+  }
 }
 \description{
 Extract sightings and associated information from processed DAS data
@@ -120,17 +138,17 @@ DAS events contain specific information in the 'Data#' columns,
     \item The 'nSp' column is equivalent to the number of non-\code{NA}
       'Data5', 'Data6', 'Data7', and 'Data8' values
       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
-      This column has a non-\code{NA} value for only "S", "K", and "M" events
+      This column has a non-\code{NA} value for only "S", "K", "M", and "G" events
     \item The 'Prob' column is \code{TRUE} is the sighting has an associated "?" event,
       and \code{FALSE} otherwise.
       This column has a non-\code{NA} value for only "S", "K", and "M" events
-    \item The 'GsTotal' column is the mean of the 'Data2' columns (with \code{NA}s removed)
+    \item The 'GsSchoolBest', 'GsSchoolHigh', and 'GsSchoolLow' columns are the arithmetic mean of
+      the 'Data2', 'Data3', and 'Data4' columns, respectively, with \code{na.rm = TRUE}
       for the associated "1"-"8" events
-    \item The 'Sp1Perc', 'Sp2Perc', 'Sp3Perc', and 'Sp4Perc' values are the
-      means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{na.rm = TRUE}),
+    \item The 'SpPerc1', 'SpPerc2', 'SpPerc3', and 'SpPerc4' values are the
+      arithemtic means of the 'Data5', 'Data6', 'Data7', and 'Data8' columns (with \code{na.rm = TRUE}),
       respectively, for the associated "1"-"8" events
-    \item The 'GsSp1', 'GsSp2', 'GsSp3', and 'GsSp4' values are the product of
-      the 'GsTotal' and the respective '...Perc' columns
+    \item The 'GsSpBest#' values are the product of the 'GsSchoolBest' and the respective 'SpPerc#' columns
     \item The values for the following columns are capitalized using
       \code{\link[base:chartr]{toupper}}:
       'Birds', 'Photos', 'CalibSchool', 'PhotosAerial', 'Biopsy',

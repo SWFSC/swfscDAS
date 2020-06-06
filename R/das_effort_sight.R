@@ -14,6 +14,9 @@
 #'   Having this step separate from \code{\link{das_effort}} allows users to
 #'   personalize the included values as desired for their analysis.
 #'
+#'   The ANI columns are the sum of the 'GsSpBest' column output from
+#'   \code{\link{das_sight}}
+#'
 #' @return A list, identical to \code{x.list} except for
 #'   1) the nSI and ANI columns added to \code{x.list$segdata},
 #'   one each for each element of \code{sp.codes}, and
@@ -51,9 +54,9 @@ das_effort_sight <- function(x.list, sp.codes) {
   ### Processing
   # Prep sp.codes
   sp.codes <- sort(sp.codes)
-  if (!all(sp.codes %in% sightinfo$Sp))
+  if (!all(sp.codes %in% sightinfo$SpCode))
     warning("The following species codes are not present in the provided data: ",
-            paste(sp.codes[!(sp.codes %in% sightinfo$Sp)], collapse = ", "))
+            paste(sp.codes[!(sp.codes %in% sightinfo$SpCode)], collapse = ", "))
 
   # Make data frame with nSI and ANI columns, and join it with segdata
   segdata$seg_idx <- paste(segdata$section_id, segdata$section_sub_id, sep = "_")
@@ -63,10 +66,10 @@ das_effort_sight <- function(x.list, sp.codes) {
   segdata.col1 <- select(segdata, .data$seg_idx)
   sightinfo.forsegdata.list <- lapply(sp.codes, function(i, sightinfo, d1) {
     d0 <- sightinfo %>%
-      filter(.data$included, .data$Sp == i) %>%
+      filter(.data$included, .data$SpCode == i) %>%
       group_by(.data$seg_idx) %>%
-      summarise(nSI = length(.data$Sp),
-                ANI = sum(.data$GsSp))
+      summarise(nSI = length(.data$SpCode),
+                ANI = sum(.data$GsSpBest))
 
     names(d0) <- c("seg_idx", paste(names(d0)[-1], i, sep = "_"))
 
@@ -85,7 +88,7 @@ das_effort_sight <- function(x.list, sp.codes) {
     select(-.data$seg_idx)
 
   sightinfo <- sightinfo %>%
-    mutate(included = ifelse(.data$Sp %in% sp.codes, .data$included, FALSE)) %>%
+    mutate(included = ifelse(.data$SpCode %in% sp.codes, .data$included, FALSE)) %>%
     select(-.data$seg_idx)
 
   list(segdata = segdata, sightinfo = sightinfo, randpicks = randpicks)

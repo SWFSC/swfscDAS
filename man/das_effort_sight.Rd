@@ -30,6 +30,9 @@ This function takes the output of \code{\link{das_effort}} and
   (included is a column in sightinfo) are included in the summaries.
   Having this step separate from \code{\link{das_effort}} allows users to
   personalize the included values as desired for their analysis.
+
+  The ANI columns are the sum of the 'GsSpBest' column output from
+  \code{\link{das_sight}}
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
