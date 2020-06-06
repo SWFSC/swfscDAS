@@ -39,8 +39,10 @@
 #'   Effort type    \tab R \tab Data1 \tab Must be one of F, N, S, or NA (blank)\cr
 #'   Effective strip width sides \tab R \tab Data2 \tab Must be one of F, H, or NA (blank)\cr
 #'   Course         \tab N \tab Data1 \tab Can be converted to a numeric value\cr
+#'   Speed          \tab N \tab Data2 \tab Can be converted to a numeric value\cr
 #'   Beaufort       \tab V \tab Data1 \tab Must be a whole number between 0 and 9\cr
 #'   Swell height   \tab V \tab Data2 \tab Can be converted to a numeric value\cr
+#'   Wind speed     \tab V \tab Data5 \tab Can be converted to a numeric value\cr
 #'   Rain or fog    \tab W \tab Data1 \tab Must be between 0 and 5 and be either a whole number or have a decimal value of 0.5\cr
 #'   Horizontal sun \tab W \tab Data2 \tab Must be a whole number between 0 and 12\cr
 #'   Vertical sun   \tab W \tab Data3 \tab Must be a whole number between 0 and 12\cr
@@ -349,7 +351,11 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
 
   # Course
   idx.n.1 <- .check_numeric(x, "N", "Data1")
-  txt.n.1 <- "Course (Data1 of N events) cannot be converted to a numeric"
+  txt.n.1 <- "Ship course (Data1 of N events) cannot be converted to a numeric"
+
+  # Speed
+  idx.n.2 <- .check_numeric(x, "N", "Data2")
+  txt.n.2 <- "Ship speed (Data1 of N events) cannot be converted to a numeric"
 
   # Beaufort
   bft.acc <- c(0:9, sprintf("%02d", 0:9), NA)
@@ -359,6 +365,10 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   # Swell Height
   idx.v.2 <- .check_numeric(x, "V", "Data2")
   txt.v.2 <- "Swell height (Data2 of V events) cannot be converted to a numeric"
+
+  # Wind speed
+  idx.v.5 <- .check_numeric(x, "V", "Data5")
+  txt.v.5 <- "Wind speed (Data5 of V events) cannot be converted to a numeric"
 
   # RainFog
   rf.acc <- c(seq(0, 5, by = 0.5), sprintf("%02d", 1:5), NA)
@@ -388,8 +398,10 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
     .check_list(x.proc, x.lines, idx.r.1, txt.r.1),
     .check_list(x.proc, x.lines, idx.r.2, txt.r.2),
     .check_list(x.proc, x.lines, idx.n.1, txt.n.1),
+    .check_list(x.proc, x.lines, idx.n.2, txt.n.2),
     .check_list(x.proc, x.lines, idx.v.1, txt.v.1),
     .check_list(x.proc, x.lines, idx.v.2, txt.v.2),
+    .check_list(x.proc, x.lines, idx.v.5, txt.v.5),
     .check_list(x.proc, x.lines, idx.w.1, txt.w.1),
     .check_list(x.proc, x.lines, idx.w.2, txt.w.2),
     .check_list(x.proc, x.lines, idx.w.3, txt.w.3),

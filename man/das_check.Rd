@@ -66,8 +66,10 @@ Precursor to DASCHECK. Checks that the following is true:
   Effort type    \tab R \tab Data1 \tab Must be one of F, N, S, or NA (blank)\cr
   Effective strip width sides \tab R \tab Data2 \tab Must be one of F, H, or NA (blank)\cr
   Course         \tab N \tab Data1 \tab Can be converted to a numeric value\cr
+  Speed          \tab N \tab Data2 \tab Can be converted to a numeric value\cr
   Beaufort       \tab V \tab Data1 \tab Must be a whole number between 0 and 9\cr
   Swell height   \tab V \tab Data2 \tab Can be converted to a numeric value\cr
+  Wind speed     \tab V \tab Data5 \tab Can be converted to a numeric value\cr
   Rain or fog    \tab W \tab Data1 \tab Must be between 0 and 5 and be either a whole number or have a decimal value of 0.5\cr
   Horizontal sun \tab W \tab Data2 \tab Must be a whole number between 0 and 12\cr
   Vertical sun   \tab W \tab Data3 \tab Must be a whole number between 0 and 12\cr
