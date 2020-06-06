@@ -19,6 +19,8 @@
 #'   turtle sightings (code "t"),
 #'   pinniped sightings (code "p")
 #'   and fishing vessel sightings (code "F").
+#'   Warnings are printed if all S, K, M, and G events (and only these events) are followed by
+#'   an A event and at least one numeric event.
 #'   See \code{\link{das_format_pdf}} for more information about events and event formats.
 #'
 #'   \code{returnformat} "default": One row per species; multi-species sighitngs are split into multiple lines.
@@ -33,9 +35,8 @@
 #'   \itemize{
 #'     \item "G", "S", "K", and "M" events, and only these events,
 #'       are immediately followed by an "A" event.
-#'     \item "A" events following an S/K/M event have the same Data1 (sighting number)
-#'       as the S/K/M event.
-#'       "A" events following a "G" event have a character (e.g. "A" or "B")
+#'     \item "A" events following an S/K/M/G event have the same Data1 (sighting number)
+#'       as the S/K/M/G event.
 #'     \item The 'nSp' column is equivalent to the number of non-\code{NA}
 #'       'Data5', 'Data6', 'Data7', and 'Data8' values
 #'       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
@@ -54,13 +55,6 @@
 #'       \code{\link[base:chartr]{toupper}}:
 #'       'Birds', 'Photos', 'CalibSchool', 'PhotosAerial', 'Biopsy',
 #'       'TurtleAge', and 'TurtleCapt'
-#'   }
-#'
-#'   Outstanding questions/todo:
-#'   \itemize{
-#'     \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc.,
-#'       be changed from \code{NA} to \code{0}?
-#'     \item TODO: Add flag for option to have comprehensive output of group size estimations
 #'   }
 #'
 #' @return Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
@@ -87,7 +81,7 @@
 #'     Calibration school?             \tab CalibSchool\cr
 #'     Aerial photos taken?            \tab PhotosAerial\cr
 #'     Biopsy taken?                   \tab Biopsy\cr
-#'     Probable sighting               \tab Prob  \tab Logical\cr
+#'     Probable sighting               \tab Prob  \tab Logical; \code{NA} for non-S/K/M/G events\cr
 #'     Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
 #'     Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
 #'     Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
@@ -105,11 +99,11 @@
 #'     Species 2 group size          \tab GsSp2   \tab Only present when \code{returnformat = "wide"}\cr
 #'     Species 3 group size          \tab GsSp3   \tab Only present when \code{returnformat = "wide"}\cr
 #'     Species 4 group size          \tab GsSp4   \tab Only present when \code{returnformat = "wide"}\cr
-#'     Species 1 probable code       \tab ProbSp1 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
-#'     Species 2 probable code       \tab ProbSp2 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
-#'     Species 3 probable code       \tab ProbSp3 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
-#'     Species 4 probable code       \tab ProbSp4 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
-#'     Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
+#'     Species 1 probable code       \tab ProbSp1 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
+#'     Species 2 probable code       \tab ProbSp2 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
+#'     Species 3 probable code       \tab ProbSp3 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
+#'     Species 4 probable code       \tab ProbSp4 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
+#'     Course (true heading) of school at resight \tab CourseSchool \tab \code{NA} for non-s/k/m events\cr
 #'     Turtle species             \tab TurtleSp    \tab \code{NA} for non-"t" events\cr
 #'     Number of turtles          \tab TurtleNum   \tab \code{NA} for non-"t" events\cr
 #'     Presence of associated JFR \tab TurtleJFR   \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
@@ -161,21 +155,21 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
     mutate(sight_cumsum = cumsum(.data$Event %in% event.sight))
 
   # Check that all GSKM events are followed by an A event
-  idx.skm <- which(x$Event %in% c("S", "K", "M"))
-  idx.g <- which(x$Event %in% c("G"))
-  skmga.check1a <- all(x$Event[c(idx.skm, idx.g) + 1] == "A")
-  skmga.check1b <- isTRUE(all.equal(sort(c(idx.skm, idx.g)) + 1, which(x$Event == "A")))
-  skmga.check2 <- identical(x$Data1[idx.skm], x$Data1[idx.skm + 1])
-  # skmga.check3 <- identical(x$Data2[idx.g], x$Data1[idx.g + 1])
+  idx.skmg <- which(x$Event %in% c("S", "K", "M", "G"))
+  skmga.check1a <- which(x$Event[idx.skmg + 1] != "A")
+  skmga.check1b <- isTRUE(all.equal(idx.skmg + 1, which(x$Event == "A")))
+  skmga.check2 <- identical(x$Data1[idx.skmg], x$Data1[idx.skmg + 1])
 
-  if (!(skmga.check1a & skmga.check1b)) {
-    stop("All 'G', 'S', 'K', and 'M' events (and only these events) ",
-         "must be immediately followed by an 'A' event")
+  if (!(length(skmga.check1a) == 0 & skmga.check1b)) {
+    warning("All 'G', 'S', 'K', and 'M' events (and only these events) ",
+            "should be immediately followed by an 'A' event",
+            immediate. = TRUE)
   } else if (!skmga.check2) {
-    stop("The sighting number in some 'S', 'K', and 'M' events do not match ",
-         "the sighting numbers of their corresponding 'A' events")
+    warning("The sighting number in some 'S', 'K', and 'M' events do not match ",
+            "the sighting numbers of their corresponding 'A' events",
+            immediate. = TRUE)
   }
-  rm(skmga.check1a, skmga.check1b, skmga.check2) #skmga.check3
+  rm(skmga.check1a, skmga.check1b, skmga.check2)
 
 
   #----------------------------------------------------------------------------
@@ -187,38 +181,39 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
   sight.info.all <- sight.df %>%
     filter(.data$Event %in% event.sight) %>%
     mutate(SightNo = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data1,
-                               .data$Event =="G" ~ .data$Data1,
+                               .data$Event %in% c("G", "g") ~ .data$Data1,
                                .data$Event %in% c("s", "k", "m") ~ .data$Data1),
-           Subgroup = case_when(.data$Event == "G" ~ .data$Data2,
-                                .data$Event == "g" ~ .data$Data1),
+           Subgroup = case_when(.data$Event %in% c("G", "g") ~ .data$Data2),
            Obs = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data2,
-                           .data$Event =="G" ~ .data$Data3,
+                           .data$Event == "G" ~ .data$Data3,
                            .data$Event == "t" ~ .data$Data1,
                            .data$Event == "p" ~ .data$Data1,
                            .data$Event == "F" ~ .data$Data1),
            Obs_std = pmap_lgl(list(.data$Obs, .data$ObsL, .data$Rec, .data$ObsR),
                               function(obs, o1, o2, o3) {
                                 obs %in% c(o1, o2, o3)
-                                # ifelse(is.na(obs), NA, obs %in% c(o1, o2, o3))
                               }),
            Bearing = as.numeric(
              case_when(
                .data$Event %in% c("S", "K", "M", "G") ~ .data$Data5,
-               .data$Event %in% c("s", "k", "m", "g") ~ .data$Data2,
+               .data$Event %in% c("s", "k", "m") ~ .data$Data2,
+               .data$Event == "g" ~ .data$Data3,
                .data$Event == "t" ~ .data$Data3,
                .data$Event == "p" ~ .data$Data3,
                .data$Event == "F" ~ .data$Data2)),
            Reticle = as.numeric(
              case_when(
                .data$Event %in% c("S", "K", "M", "G") ~ .data$Data6,
-               .data$Event %in% c("s", "k", "m", "g") ~ .data$Data3,
+               .data$Event %in% c("s", "k", "m") ~ .data$Data3,
+               .data$Event == "g" ~ .data$Data4,
                .data$Event == "t" ~ .data$Data7,
                .data$Event == "p" ~ .data$Data6,
                .data$Event == "F" ~ .data$Data4)),
            DistNm = as.numeric(
              case_when(
                .data$Event %in% c("S", "K", "M", "G") ~ .data$Data7,
-               .data$Event %in% c("s", "k", "m", "g") ~ .data$Data4,
+               .data$Event %in% c("s", "k", "m") ~ .data$Data4,
+               .data$Event == "g" ~ .data$Data4,
                .data$Event == "t" ~ .data$Data4,
                .data$Event == "p" ~ .data$Data4,
                .data$Event == "F" ~ .data$Data3))) %>%
@@ -277,10 +272,7 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
 
   num.vec <- c(nrow(sight.info.skmg1), nrow(sight.info.skmg2),
                nrow(sight.info.skmg3), nrow(sight.info.skmg4))
-  if (!isTRUE(all.equal(nrow(sight.info.skmg1), nrow(sight.info.skmg2))))
-    stop("Unequal number of S/K/M/G and A events. ",
-         "This should have been caught earlier?. ",
-         "Please report this as an issue")
+
   if (!isTRUE(all.equal(nrow(sight.info.skmg1), nrow(sight.info.skmg4))))
     warning("Not all S/K/M/G events have corresponding numeric (1:8) events; ",
             "please check the data using `das_check`")
@@ -299,11 +291,11 @@ das_sight.das_df <- function(x, returnformat = c("default", "wide", "comprehensi
 
 
   #--------------------------------------------------------
-  ### Marine mammal (+subgroup) resights; Events s, k, m, g
+  ### Marine mammal (+subgroup) resights; Events s, k, m
   sight.info.resight <- sight.df %>%
-    filter(.data$Event %in% c("s", "k", "m", "g")) %>%
-    mutate(ResightCourse = as.numeric(.data$Data5)) %>%
-    select(.data$sight_cumsum, .data$ResightCourse)
+    filter(.data$Event %in% c("s", "k", "m")) %>%
+    mutate(CourseSchool = as.numeric(.data$Data5)) %>%
+    select(.data$sight_cumsum, .data$CourseSchool)
 
 
   #--------------------------------------------------------

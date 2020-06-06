@@ -45,7 +45,7 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Calibration school?             \tab CalibSchool\cr
     Aerial photos taken?            \tab PhotosAerial\cr
     Biopsy taken?                   \tab Biopsy\cr
-    Probable sighting               \tab Prob  \tab Logical\cr
+    Probable sighting               \tab Prob  \tab Logical; \code{NA} for non-S/K/M/G events\cr
     Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
     Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
     Total group size                \tab GsTotal \tab Only different from GsSp if mixed species sighting\cr
@@ -63,11 +63,11 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
     Species 2 group size          \tab GsSp2   \tab Only present when \code{returnformat = "wide"}\cr
     Species 3 group size          \tab GsSp3   \tab Only present when \code{returnformat = "wide"}\cr
     Species 4 group size          \tab GsSp4   \tab Only present when \code{returnformat = "wide"}\cr
-    Species 1 probable code       \tab ProbSp1 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
-    Species 2 probable code       \tab ProbSp2 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
-    Species 3 probable code       \tab ProbSp3 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
-    Species 4 probable code       \tab ProbSp4 \tab From '?' event, only present when \code{returnformat = "wide"}\cr
-    Course of resight group    \tab ResightCourse \tab \code{NA} for non-resight events\cr
+    Species 1 probable code       \tab ProbSp1 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
+    Species 2 probable code       \tab ProbSp2 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
+    Species 3 probable code       \tab ProbSp3 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
+    Species 4 probable code       \tab ProbSp4 \tab From '?' event; only present when \code{returnformat = "wide"}\cr
+    Course (true heading) of school at resight \tab CourseSchool \tab \code{NA} for non-s/k/m events\cr
     Turtle species             \tab TurtleSp    \tab \code{NA} for non-"t" events\cr
     Number of turtles          \tab TurtleNum   \tab \code{NA} for non-"t" events\cr
     Presence of associated JFR \tab TurtleJFR   \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
@@ -99,6 +99,8 @@ DAS events contain specific information in the 'Data#' columns,
   turtle sightings (code "t"),
   pinniped sightings (code "p")
   and fishing vessel sightings (code "F").
+  Warnings are printed if all S, K, M, and G events (and only these events) are followed by
+  an A event and at least one numeric event.
   See \code{\link{das_format_pdf}} for more information about events and event formats.
 
   \code{returnformat} "default": One row per species; multi-species sighitngs are split into multiple lines.
@@ -113,9 +115,8 @@ DAS events contain specific information in the 'Data#' columns,
   \itemize{
     \item "G", "S", "K", and "M" events, and only these events,
       are immediately followed by an "A" event.
-    \item "A" events following an S/K/M event have the same Data1 (sighting number)
-      as the S/K/M event.
-      "A" events following a "G" event have a character (e.g. "A" or "B")
+    \item "A" events following an S/K/M/G event have the same Data1 (sighting number)
+      as the S/K/M/G event.
     \item The 'nSp' column is equivalent to the number of non-\code{NA}
       'Data5', 'Data6', 'Data7', and 'Data8' values
       for the corresponding "A" event are not \code{NA}, and \code{FALSE} otherwise.
@@ -134,13 +135,6 @@ DAS events contain specific information in the 'Data#' columns,
       \code{\link[base:chartr]{toupper}}:
       'Birds', 'Photos', 'CalibSchool', 'PhotosAerial', 'Biopsy',
       'TurtleAge', and 'TurtleCapt'
-  }
-
-  Outstanding questions/todo:
-  \itemize{
-    \item Should \code{NA} values for columns 'Sp1', 'Sp1Perc', 'GsSp1', etc.,
-      be changed from \code{NA} to \code{0}?
-    \item TODO: Add flag for option to have comprehensive output of group size estimations
   }
 }
 \examples{

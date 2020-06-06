@@ -17,14 +17,14 @@ exp.sight.name <- c(
 )
 
 exp.sight.name.default <- c(
-  "Sp", "ProbSp", "GsSp", "ResightCourse",
+  "Sp", "ProbSp", "GsSp", "CourseSchool",
   "TurtleJFR", "TurtleAge", "TurtleCapt", "PerpDistKm"
 )
 
 exp.sight.name.wide <- c(
   "Sp1", "Sp2","Sp3", "Sp4", "ProbSp1", "ProbSp2", "ProbSp3", "ProbSp4",
   "Sp1Perc", "Sp2Perc", "Sp3Perc", "Sp4Perc",
-  "GsSp1", "GsSp2", "GsSp3", "GsSp4", "ResightCourse",
+  "GsSp1", "GsSp2", "GsSp3", "GsSp4", "CourseSchool",
   "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
   "PinnipedSp", "PinnipedNum", "BoatType", "BoatNum", "PerpDistKm"
 )
