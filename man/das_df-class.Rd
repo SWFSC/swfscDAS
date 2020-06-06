@@ -36,8 +36,10 @@ The \code{das_df} class is a subclass of \code{\link[base]{data.frame}},
     Mode      \tab "character"\cr
     EffType   \tab "character"\cr
     Course    \tab "numeric"\cr
+    SpdKt     \tab "numeric"\cr
     Bft       \tab "numeric"\cr
     SwellHght \tab "numeric"\cr
+    WindSpdKt \tab "numeric"\cr
     RainFog   \tab "numeric"\cr
     HorizSun  \tab "numeric"\cr
     VertSun   \tab "numeric"\cr

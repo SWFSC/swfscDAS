@@ -79,8 +79,10 @@
 #'     Effort type                   \tab EffType   \tab Event: R; Column: Data1\cr
 #'     Number of sides with observer \tab ESWSide   \tab Event: R; Column: Data2\cr
 #'     Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
+#'     Speed (ship speed, knots)     \tab SpdKt   \tab Event: N; Column: Data2\cr
 #'     Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr
 #'     Swell height (ft)             \tab SwellHght \tab Event: V; Column: Data2\cr
+#'     Wind speed (knots)            \tab WindSpdKt \tab Event: V; Column: Data5\cr
 #'     Rain/fog/haze code            \tab RainFog   \tab Event: W; Column: Data1\cr
 #'     Horizontal sun (clock system) \tab HorizSun  \tab Event: W; Column: Data2\cr
 #'     Vertical sun (clock system)   \tab VertSun   \tab Event: W; Column: Data3\cr
@@ -254,9 +256,11 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
   EffType   <- .process_chr(init.val, x, "Data1", event.R, "S")
   ESWsides  <- .process_chr(init.val, x, "Data2", event.R, "F")
 
+  Course    <- .process_num(init.val, x, "Data1", event.N, event.na)
+  SpdKt     <- .process_num(init.val, x, "Data2", event.N, event.na)
   Bft       <- .process_num(init.val, x, "Data1", event.V, event.na)
   SwellHght <- .process_num(init.val, x, "Data2", event.V, event.na)
-  Course    <- .process_num(init.val, x, "Data1", event.N, event.na)
+  WindSpdKt <- .process_num(init.val, x, "Data5", event.V, event.na)
   RainFog   <- .process_num(init.val, x, "Data1", event.W, event.na)
   HorizSun  <- .process_num(init.val, x, "Data2", event.W, event.na)
   VertSun   <- .process_num(init.val, x, "Data3", event.W, event.na)
@@ -284,23 +288,28 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
   for (i in 1:nDAS) {
     # Reset all info when starting data for a new cruise
     if (i %in% idx.new.cruise) {
-      LastEff <- LastEMode <- LastEType <- LastESW <- LastBft <- LastSwH <-
-        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <-
+      LastEff <- LastEMode <- LastEType <- LastESW <-
+        LastCourse <- LastSpdKt <-
+        LastBft <- LastSwH <- LastWSpdKt <-
+        LastRF <- LastHS <- LastVS <- LastVis <-
         LastObsL <- LastRec <- LastObsR <- LastObsInd <-
         LastCruise <- NA
     }
 
     # Reset applicable info (aka all but 'LastCruise') when starting a new day
     if ((i %in% idx.new.day) & reset.day) {
-      LastEff <- LastEMode <- LastEType <- LastESW <- LastBft <- LastSwH <-
-        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <-
+      LastEff <- LastEMode <- LastEType <- LastESW <-
+        LastCourse <- LastSpdKt <-
+        LastBft <- LastSwH <- LastWSpdKt <-
+        LastRF <- LastHS <- LastVS <- LastVis <-
         LastObsL <- LastRec <- LastObsR <- LastObsInd <- NA
     }
 
     # Reset applicable info (all RPVNW-related) when starting BR/R event sequence
     if ((i %in% idx.eff) & reset.effort) {
-      LastEType <- LastESW <- LastBft <- LastSwH <-
-        LastCourse <- LastRF <- LastHS <- LastVS <- LastVis <-
+      LastEType <- LastESW <-  LastCourse <- LastSpdKt <-
+        LastBft <- LastSwH <- LastWSpdKt <-
+        LastRF <- LastHS <- LastVS <- LastVis <-
         LastObsL <- LastRec <- LastObsR <- LastObsInd <- NA
     }
 
@@ -308,10 +317,12 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
     if (is.na(Cruise[i]))    Cruise[i] <- LastCruise else LastCruise <- Cruise[i] #Cruise
     if (is.na(Mode[i]))      Mode[i] <- LastEMode    else LastEMode <- Mode[i]    #Mode
     if (is.na(Course[i]))    Course[i] <- LastCourse else LastCourse <- Course[i] #Course
+    if (is.na(SpdKt[i]))     SpdKt[i] <- LastSpdKt   else LastSpdKt <- SpdKt[i]   #Speed
     if (is.na(EffType[i]))   EffType[i] <- LastEType else LastEType <- EffType[i] #Effort type
     if (is.na(ESWsides[i]))  ESWsides[i] <- LastESW  else LastESW <- ESWsides[i]  #Sides being surveyed
     if (is.na(Bft[i]))       Bft[i] <- LastBft       else LastBft <- Bft[i]       #Beaufort
     if (is.na(SwellHght[i])) SwellHght[i] <- LastSwH else LastSwH <- SwellHght[i] #Swell height
+    if (is.na(WindSpdKt[i])) WindSpdKt[i] <- LastWSpdKt else LastWSpdKt <- WindSpdKt[i] #Wind speed
     if (is.na(RainFog[i]))   RainFog[i] <- LastRF    else LastRF <- RainFog[i]    #Rain or fog
     if (is.na(HorizSun[i]))  HorizSun[i] <- LastHS   else LastHS <- HorizSun[i]   #Horizontal sun
     if (is.na(VertSun[i]))   VertSun[i] <- LastVS    else LastVS <- VertSun[i]    #Vertical sun
@@ -327,9 +338,11 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
   #--------------------------------------------------------
   ### Post-processing
   tmp <- list(
-    Cruise = Cruise, Mode = Mode, Course = Course, EffType = EffType,
-    ESWsides = ESWsides, Bft = Bft, SwellHght = SwellHght, RainFog = RainFog,
-    HorizSun = HorizSun, VertSun = VertSun, Vis = Vis, OnEffort = Eff,
+    Cruise = Cruise, Mode = Mode, EffType = EffType, ESWsides = ESWsides,
+    Course = Course, SpdKt = SpdKt,
+    Bft = Bft, SwellHght = SwellHght, WindSpdKt = WindSpdKt,
+    RainFog = RainFog, HorizSun = HorizSun, VertSun = VertSun, Vis = Vis,
+    OnEffort = Eff,
     ObsL = ObsL, Rec = Rec, ObsR = ObsR, ObsInd = ObsInd
   )
 
@@ -364,7 +377,8 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
   ### Create and order data frame to return
   cols.tokeep <- c(
     "Event", "DateTime", "Lat", "Lon", "OnEffort",
-    "Cruise", "Mode", "EffType", "ESWsides", "Course", "Bft", "SwellHght",
+    "Cruise", "Mode", "EffType", "ESWsides", "Course", "SpdKt",
+    "Bft", "SwellHght", "WindSpdKt",
     "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
     "ObsL", "Rec", "ObsR", "ObsInd",
     paste0("Data", 1:12), "EffortDot", "EventNum", "file_das", "line_num"
