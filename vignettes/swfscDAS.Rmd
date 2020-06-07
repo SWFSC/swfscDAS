@@ -94,7 +94,7 @@ y.sight.complete %>%
 You can also easily filter or subset the sighting data for the desired event code(s)
 
 ```{r}
-y.sight.sg <- das_sight(y.proc, return.events = c("S"))
+y.sight.sg <- das_sight(y.proc, return.events = c("S", "G"))
 
 # Note that this is equivalent to:
 y.sight.sg2 <- das_sight(y.proc) %>% filter(Event %in% c("S", "G"))
