@@ -72,29 +72,37 @@ y.proc %>%
 
 ## Sightings
 
-The `swfscDAS` package does contain specific functions for extracting and/or summarizing particular information from the processed data. First is `das_sight`, a function that returns a data frame with pertinent sighting data pulled out to their own columns. Due to the different data collected for each type of sighting, this function offers several different return formats
+The `swfscDAS` package does contain specific functions for extracting and/or summarizing particular information from the processed data. First is `das_sight`, a function that returns a data frame with pertinent sighting data pulled out to their own columns. Due to the different data collected for each type of sighting and the different needs of end-users, this function offers several different return formats. For the  "default" format there is one row for each species of each sighting, for the "wide" format, there is one row for each sighting event, and for the "complete" format there is one row for every group size estimate for each sighting. See `?das_sight` for more details. The "complete" format is intended for users looking to do observer corrections, or to combine estimates using a different method than the arithmetic mean (e.g. the geometric mean)
 
 ```{r sight}
-y.sight <- das_sight(y.proc, returnformat = "default")
+y.sight <- das_sight(y.proc, return.format = "default")
 y.sight %>% 
   select(Event, SightNo:PerpDistKm) %>% 
   glimpse()
 
-y.sight.wide <- das_sight(y.proc, returnformat = "wide")
+y.sight.wide <- das_sight(y.proc, return.format = "wide")
 y.sight.wide %>% 
+  select(Event, SightNo:PerpDistKm) %>% 
+  glimpse()
+
+y.sight.complete <- das_sight(y.proc, return.format = "complete")
+y.sight.complete %>% 
   select(Event, SightNo:PerpDistKm) %>% 
   glimpse()
 ```
 
-You can also easily filter or subset the sighting data for the desired event codes
+You can also easily filter or subset the sighting data for the desired event code(s)
 
 ```{r}
-y.sight.sg <- y.sight %>% filter(Event %in% c("S", "G"))
+y.sight.sg <- das_sight(y.proc, return.events = c("S"))
+
+# Note that this is equivalent to:
+y.sight.sg2 <- das_sight(y.proc) %>% filter(Event %in% c("S", "G"))
 ```
 
 ## Effort
 
-In addition, you can chop the effort data into segments, and summarize the conditions and sightings on those segments using `das_effort` and `das_effort_sight`. These effort segments can be used for line transect estimates using the Distance software, species distribution modeling, or summarizing the number of sightigns of certain species on each segemnt, among other uses. `das_effort` chops continuous effort sections (the event sequence from R to E events) into effort segments using one of several different chopping methods: condition (a new effort segment every time a condition changes), equal length (effort segments of equal length), or section (each segment is a full continuous effort section, i.e. it runs from an R event to an E event). `das_effort_sight` takes the output of `das_effort` and returns the number of included sightings and animals per segment for specified species codes. 
+In addition, you can chop the effort data into segments, and summarize the conditions and sightings on those segments using `das_effort` and `das_effort_sight`. These effort segments can be used for line transect estimates using the Distance software, species distribution modeling, or summarizing the number of sightings of certain species on each segment, among other uses. `das_effort` chops continuous effort sections (the event sequence from R to E events) into effort segments using one of several different chopping methods: condition (a new effort segment every time a condition changes), equal length (effort segments of equal length), or section (each segment is a full continuous effort section, i.e. it runs from an R event to an E event). `das_effort_sight` takes the output of `das_effort` and returns the number of included sightings and animals per segment for specified species codes. 
 
 Both functions return a list of three data frames: segdata, sightinfo, and randpicks. These data frames and the different chopping methodologies are described in depth in the function documentation (`?das_effort` and `?das_effort_sight`), but briefly segdata contains information about each effort segment, sightinfo contains information about the sightings such as their corresponding segment, and randpicks contains information specific to the 'equal length' chopping method. `das_effort` and `das_effort_sight` are separate functions to allow the user more control over which sightings should be included in the effort segment summaries (see `?das_effort`).
 
@@ -104,7 +112,6 @@ y.eff <- das_effort(
   y.proc, method = "equallength", seg.km = 10, dist.method = "greatcircle", 
   num.cores = 1
 )
-
 
 # Chop the effort every time a condition changes
 y.eff <- das_effort(

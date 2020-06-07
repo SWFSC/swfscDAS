@@ -39,10 +39,8 @@
 #'   The following assumptions/decisions are made during processing:
 #'   \itemize{
 #'     \item Event codes are expected to be one of the following:
-#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z.
-#'       The codes G, g (subgroup of a current sighting, and resight of subgroup, respectively),
-#'       p (pinniped sighting), X (to identify an 'object' on the WinCruz map, typically the small RHIB boat),
-#'       and Y/Z (biopsy-related position) were added for the sake of the 2014 and 2018 cruise data
+#'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N,
+#'       P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z
 #'     \item All '#' events (deleted events) are removed
 #'     \item An event is considered 'on effort' if it is 1) an R event,
 #'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
@@ -94,7 +92,7 @@
 #'     Independent observer          \tab ObsInd    \tab Event: P; Column: Data4\cr
 #'   }
 #'
-#'   Warnings are printed with row numbers of the input file
+#'   Internal warning messages are printed with row numbers of the input file
 #'   (NOT of the output data frame) of unexpected event codes and r events,
 #'   as well as if there is are potential issues with the number and/or order
 #'   of R and E events

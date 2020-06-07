@@ -14,7 +14,7 @@
 #' @seealso \url{https://smwoodman.github.io/swfscDAS/}
 #'
 #' @importFrom dplyr arrange between bind_cols case_when desc everything filter full_join group_by
-#'   left_join mutate n right_join select slice starts_with summarise
+#'   left_join mutate n right_join select slice starts_with summarise ungroup
 #' @importFrom lubridate year month day tz
 #' @importFrom magrittr %>%
 #' @importFrom parallel clusterExport detectCores parLapplyLB stopCluster

@@ -12,7 +12,7 @@ exp.proc.name <- c(
 )
 
 exp.sight.name <- c(
-  "SightNo", "Subgroup", "Obs", "Obs_std", "Bearing", "Reticle", "DistNm",
+  "SightNo", "Subgroup", "SightNoDaily", "Obs", "ObsStd", "Bearing", "Reticle", "DistNm",
   "Cue", "Method", "Photos", "Birds", "CalibSchool", "PhotosAerial", "Biopsy",
   "Prob", "nSp", "Mixed"
 )
@@ -25,14 +25,17 @@ exp.sight.name.default <- c(
 )
 
 exp.sight.name.wide <- c(
-  "SpCode1", "SpCode2","SpCode3", "SpCode4",
+  "ObsEstimate", "SpCode1", "SpCode2","SpCode3", "SpCode4",
   "SpProb1", "SpProb2", "SpProb3", "SpProb4",
   "SpPerc1", "SpPerc2", "SpPerc3", "SpPerc4",
   "GsSpBest1", "GsSpBest2", "GsSpBest3", "GsSpBest4",
   "GsSchoolBest", "GsSchoolHigh", "GsSchoolLow",
   "CourseSchool",
-  "TurtleSp", "TurtleNum", "TurtleJFR", "TurtleAge", "TurtleCapt",
-  "PinnipedSp", "PinnipedNum", "BoatType", "BoatNum", "PerpDistKm"
+  "TurtleSp", "TurtleGs", "TurtleJFR", "TurtleAge", "TurtleCapt",
+  "PinnipedSp", "PinnipedGs", "BoatType", "BoatGs", "PerpDistKm"
+)
+exp.sight.name.complete <- setdiff(
+  exp.sight.name.wide, c("GsSpBest1", "GsSpBest2", "GsSpBest3", "GsSpBest4")
 )
 
 
@@ -121,22 +124,27 @@ test_that("das_process output has expected column names and classes", {
 
 test_that("das_sight output has expected column names and classes", {
   y.sight <- das_sight(y.proc)
-  y.sight.wide <- das_sight(y.proc, returnformat = "wide")
+  y.sight.wide <- das_sight(y.proc, return.format = "wide")
+  y.sight.complete <- das_sight(y.proc, return.format = "complete")
 
   expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.default),
                    names(y.sight))
   expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.wide),
                    names(y.sight.wide))
+  expect_identical(c(exp.proc.name, exp.sight.name, exp.sight.name.complete),
+                   names(y.sight.complete))
 })
 
 
 test_that("das_sight output has expected column names and classes with extra column", {
   y.proc$testrr <- 4
   y.sight <- das_sight(y.proc)
-  y.sight.wide <- das_sight(y.proc, returnformat = "wide")
+  y.sight.wide <- das_sight(y.proc, return.format = "wide")
+  y.sight.complete <- das_sight(y.proc, return.format = "complete")
 
   expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.default),
                    names(y.sight))
-  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.wide),
-                   names(y.sight.wide))
+  expect_identical(c(exp.proc.name, "testrr", exp.sight.name, exp.sight.name.complete),
+                   names(y.sight.complete))
+
 })

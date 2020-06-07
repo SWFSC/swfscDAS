@@ -289,7 +289,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
     left_join(select(segdata, .data$segnum, .data$mlat, .data$mlon),
               by = "segnum") %>%
     das_sight(returnformat = "default") %>%
-    mutate(included = (.data$Bft <= 5 & .data$OnEffort & .data$Obs_std),
+    mutate(included = (.data$Bft <= 5 & .data$OnEffort & .data$ObsStd),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-.data$dist_from_prev, -.data$cont_eff_section)
 
