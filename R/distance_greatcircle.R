@@ -9,7 +9,7 @@
 #'
 #' @return Distance in kilometers between lat1/lon1 and lat2/lon2
 #'
-#' @seealso TODO - provide reference
+#' @seealso \url{https://en.wikipedia.org/wiki/Great-circle_distance}
 #'
 #' @export
 distance_greatcircle <- function(lat1, lon1, lat2, lon2) {

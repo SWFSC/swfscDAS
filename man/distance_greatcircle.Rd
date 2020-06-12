@@ -22,5 +22,5 @@ Distance in kilometers between lat1/lon1 and lat2/lon2
 Calculate the great-circle distance between two lat/lon points
 }
 \seealso{
-TODO - provide reference
+\url{https://en.wikipedia.org/wiki/Great-circle_distance}
 }
