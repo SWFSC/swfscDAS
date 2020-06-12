@@ -21,6 +21,9 @@
 #'   Indicates if state/condition information should be reset to \code{NA}
 #'   at the beginning of each day. This argument should only
 #'   be set to \code{FALSE} for comparison with older methods, such as REPORT
+#' @param add.dtll.sight logical indicating if the DateTime (dt) and latitude and longitude (ll)
+#'   columns should be added to the sighting events (?, 1, 2, 3, 4, 5, 6, 7, and 8)
+#'   from the corresponding (immediately preceding) A event
 #'
 #' @details If \code{x} is a character,
 #'   it is assumed to be a filepath and first passed to \code{\link{das_read}}.
@@ -77,7 +80,7 @@
 #'     Effort type                   \tab EffType   \tab Event: R; Column: Data1\cr
 #'     Number of sides with observer \tab ESWSide   \tab Event: R; Column: Data2\cr
 #'     Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
-#'     Speed (ship speed, knots)     \tab SpdKt   \tab Event: N; Column: Data2\cr
+#'     Speed (ship speed, knots)     \tab SpdKt     \tab Event: N; Column: Data2\cr
 #'     Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr
 #'     Swell height (ft)             \tab SwellHght \tab Event: V; Column: Data2\cr
 #'     Wind speed (knots)            \tab WindSpdKt \tab Event: V; Column: Data5\cr
@@ -133,7 +136,8 @@ das_process.tbl_df <- function(x, ...) {
 #' @name das_process
 #' @export
 das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
-                                reset.effort = TRUE, reset.day = TRUE, ...)
+                                reset.effort = TRUE, reset.day = TRUE,
+                                add.dtll.sight = TRUE, ...)
 {
   #----------------------------------------------------------------------------
   # Prep 1
@@ -370,6 +374,29 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
   tmp$ObsR <- as.character(tmp$ObsR)
   tmp$ObsInd <- as.character(tmp$ObsInd)
 
+
+  #----------------------------------------------------------------------------
+  # Add DateTime/Lat/Lon info to ?, 1, 2, 3, 4, 5, 6, 7, 8 events
+  if (add.dtll.sight) {
+    event.tmp <- c("?", 1:8)
+    x$a_idx <- cumsum(x$Event == "A")
+    x$idx <- seq_along(x$Event)
+    x.key <- x %>%
+      filter(.data$Event == "A") %>%
+      select(.data$a_idx, .data$DateTime, .data$Lat, .data$Lon)
+    x.tmp <- x %>%
+      filter(.data$Event %in% event.tmp) %>%
+      select(-.data$DateTime, -.data$Lat, -.data$Lon) %>%
+      left_join(x.key, by = "a_idx") %>%
+      select(!!names(x))
+
+    x <- x %>%
+      filter(!(.data$Event %in% event.tmp)) %>%
+      bind_rows(x.tmp) %>%
+      arrange(.data$idx) %>%
+      select(-.data$idx, -.data$a_idx)
+    rm(x.key, x.tmp)
+  }
 
   #----------------------------------------------------------------------------
   ### Create and order data frame to return

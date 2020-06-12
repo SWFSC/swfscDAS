@@ -22,6 +22,7 @@ das_process(x, ...)
   reset.event = TRUE,
   reset.effort = TRUE,
   reset.day = TRUE,
+  add.dtll.sight = TRUE,
   ...
 )
 }
@@ -49,6 +50,10 @@ when beginning a new continuous effort section. See Details section}
 Indicates if state/condition information should be reset to \code{NA}
 at the beginning of each day. This argument should only
 be set to \code{FALSE} for comparison with older methods, such as REPORT}
+
+\item{add.dtll.sight}{logical indicating if the DateTime (dt) and latitude and longitude (ll)
+columns should be added to the sighting events (?, 1, 2, 3, 4, 5, 6, 7, and 8)
+from the corresponding (immediately preceding) A event}
 }
 \value{
 A \code{das_df} object, which is also a data frame.
@@ -62,7 +67,7 @@ A \code{das_df} object, which is also a data frame.
     Effort type                   \tab EffType   \tab Event: R; Column: Data1\cr
     Number of sides with observer \tab ESWSide   \tab Event: R; Column: Data2\cr
     Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
-    Speed (ship speed, knots)     \tab SpdKt   \tab Event: N; Column: Data2\cr
+    Speed (ship speed, knots)     \tab SpdKt     \tab Event: N; Column: Data2\cr
     Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr
     Swell height (ft)             \tab SwellHght \tab Event: V; Column: Data2\cr
     Wind speed (knots)            \tab WindSpdKt \tab Event: V; Column: Data5\cr
