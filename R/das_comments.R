@@ -1,8 +1,8 @@
-#' Extract comments from das data
+#' Extract comments from DAS data
 #'
-#' Extract comments from \code{das_dfr} or \code{das_df} object
+#' Extract comments from DAS data
 #'
-#' @param x \code{das_dfr} or \code{das_df} object,
+#' @param x an object of class \code{das_dfr} or \code{das_df},
 #'  or a data frame that can be coerced to a \code{das_dfr} object
 #'
 #' @details This function recreates the comment strings by

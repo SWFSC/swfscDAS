@@ -7,7 +7,7 @@
 das_format_pdf(file, ...)
 }
 \arguments{
-\item{file}{character vector, the name of the file where the pdf will be saved}
+\item{file}{character, the name of the file where the pdf will be saved}
 
 \item{...}{passed on to \code{\link[base:files]{file.copy}}; might included named argument \code{overwrite}}
 }

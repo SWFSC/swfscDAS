@@ -1,9 +1,9 @@
 #' Summarize DAS data for a continuous effort section
 #'
-#' Summarize DAS effort data by effort segment, while averaging conditions
+#' Summarize DAS effort data by effort segment, while averaging or getting the max for each condition
 #'
-#' @param x \code{das_df} object,
-#'   or a data frame that can be coerced to a \code{das_df} object.
+#' @param x an object of class \code{das_df},
+#'   or a data frame that can be coerced to class \code{das_df}
 #'   Must contain a single continuous effort section of DAS data;
 #'   see the Details section below
 #' @param conditions see \code{\link{das_effort}}, or

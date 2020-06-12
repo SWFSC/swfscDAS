@@ -2,7 +2,7 @@
 #'
 #' Check if an object is of class \code{das_df}, or coerce it if possible.
 #'
-#' @param x An object to be coerced to class \code{das_df}
+#' @param x n object to be coerced to class \code{das_df}
 #'
 #' @details Currently only data frames can be coerced to an object of class \code{das_df}.
 #'   If \code{x} does not have column names and classes as specified in \code{\link{das_df-class}},

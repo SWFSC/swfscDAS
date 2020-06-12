@@ -23,8 +23,8 @@ das_effort(x, ...)
 )
 }
 \arguments{
-\item{x}{\code{das_df} object; output from \code{\link{das_process}},
-or a data frame that can be coerced to a \code{das_df} object}
+\item{x}{an object of class \code{das_df},
+or a data frame that can be coerced to class \code{das_df}}
 
 \item{...}{arguments passed to the specified chopping function,
 such as \code{seg.km} or \code{seg.min.km}}
@@ -56,7 +56,8 @@ when segment chopping. Default is \code{FALSE}}
 \item{event.touse}{character vector of events to use to determine
 segment lengths; overrides \code{comment.drop}.
 If \code{NULL} (the default), then all on effort events are used.
-If used, this argument must include at least R, E, S, and A events}
+If used, this argument must include at least R, E, S, and A events,
+and cannot include ? or 1:8 events}
 
 \item{num.cores}{Number of CPUs to over which to distribute computations.
 Defaults to \code{NULL}, which uses one fewer than the number of cores

@@ -21,8 +21,8 @@ das_chop_equal(x, ...)
 )
 }
 \arguments{
-\item{x}{\code{das_df} object,
-or a data frame that can be coerced to a \code{das_df} object.
+\item{x}{an object of class \code{das_df},
+or a data frame that can be coerced to class \code{das_df}.
 This data must be filtered for 'OnEffort' events;
 see the Details section below}
 

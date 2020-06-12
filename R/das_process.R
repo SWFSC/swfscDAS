@@ -3,7 +3,7 @@
 #' Process DAS data (the output of \code{\link{das_read}}),
 #'   including extracting state and condition information for each DAS event
 #'
-#' @param x either a \code{das_dfr} object (the output of \code{\link{das_read}}),
+#' @param x either a \code{das_dfr} object, an object that can be coreced to class \code{das_dfr},
 #'   or a character (filepath) which is first passed to \code{\link{das_read}}
 #' @param ... passed to \code{\link{das_read}} if \code{x} is a character.
 #'   Otherwise ignored
@@ -122,13 +122,6 @@ das_process.character <- function(x, ...) {
 #' @name das_process
 #' @export
 das_process.data.frame <- function(x, ...) {
-  das_process(as_das_dfr(x), ...)
-}
-
-
-#' @name das_process
-#' @export
-das_process.tbl_df <- function(x, ...) {
   das_process(as_das_dfr(x), ...)
 }
 

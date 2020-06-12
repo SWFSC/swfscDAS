@@ -7,9 +7,12 @@
 das_effort_sight(x.list, sp.codes)
 }
 \arguments{
-\item{x.list}{list; output of \code{\link{das_effort}}}
+\item{x.list}{output of \code{\link{das_effort}}; a list with three elements
+names 'segdata', 'sightinfo', and 'randpicks', respectively}
 
-\item{sp.codes}{character; species code(s) to include in segdata output}
+\item{sp.codes}{character; species code(s) to include in segdata output.
+These must exactly match the species codes in the data,
+such as including leading zeros}
 }
 \value{
 A list, identical to \code{x.list} except for

@@ -5,7 +5,7 @@
 \alias{das_comments.data.frame}
 \alias{das_comments.das_df}
 \alias{das_comments.das_dfr}
-\title{Extract comments from das data}
+\title{Extract comments from DAS data}
 \usage{
 das_comments(x)
 
@@ -16,7 +16,7 @@ das_comments(x)
 \method{das_comments}{das_dfr}(x)
 }
 \arguments{
-\item{x}{\code{das_dfr} or \code{das_df} object,
+\item{x}{an object of class \code{das_dfr} or \code{das_df},
 or a data frame that can be coerced to a \code{das_dfr} object}
 }
 \value{
@@ -24,7 +24,7 @@ or a data frame that can be coerced to a \code{das_dfr} object}
   comment_str containing the concatenated comment strings
 }
 \description{
-Extract comments from \code{das_dfr} or \code{das_df} object
+Extract comments from DAS data
 }
 \details{
 This function recreates the comment strings by

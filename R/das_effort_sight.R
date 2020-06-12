@@ -2,8 +2,11 @@
 #'
 #' Summarize number of sightings and animals for selected species by segment
 #'
-#' @param x.list list; output of \code{\link{das_effort}}
-#' @param sp.codes character; species code(s) to include in segdata output
+#' @param x.list output of \code{\link{das_effort}}; a list with three elements
+#'   names 'segdata', 'sightinfo', and 'randpicks', respectively
+#' @param sp.codes character; species code(s) to include in segdata output.
+#'   These must exactly match the species codes in the data,
+#'   such as including leading zeros
 #'
 #' @details This function takes the output of \code{\link{das_effort}} and
 #'   adds columns for the number of sightings (nSI) and number of animals (ANI)

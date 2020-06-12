@@ -20,8 +20,8 @@ das_segdata(x, ...)
 )
 }
 \arguments{
-\item{x}{\code{das_df} object,
-or a data frame that can be coerced to a \code{das_df} object.
+\item{x}{an object of class \code{das_df},
+or a data frame that can be coerced to class \code{das_df}
 Must contain a single continuous effort section of DAS data;
 see the Details section below}
 
@@ -43,7 +43,7 @@ Data frame with the segdata information described in Details
   and in \code{\link{das_effort}}
 }
 \description{
-Summarize DAS effort data by effort segment, while averaging conditions
+Summarize DAS effort data by effort segment, while averaging or getting the max for each condition
 }
 \details{
 This function was designed to be called by one of the das_chop_ functions,

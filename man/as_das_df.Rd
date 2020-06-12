@@ -13,7 +13,7 @@ as_das_df(x)
 \method{as_das_df}{data.frame}(x)
 }
 \arguments{
-\item{x}{An object to be coerced to class \code{das_df}}
+\item{x}{n object to be coerced to class \code{das_df}}
 }
 \value{
 An object of class `das_df`

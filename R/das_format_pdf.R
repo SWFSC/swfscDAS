@@ -2,7 +2,7 @@
 #'
 #' Save the pdf document describing the DAS format required by \code{swfscDAS} to a specified file
 #'
-#' @param file character vector, the name of the file where the pdf will be saved
+#' @param file character, the name of the file where the pdf will be saved
 #' @param ... passed on to \code{\link[base:files]{file.copy}}; might included named argument \code{overwrite}
 #'
 #' @details A wrapper function for \code{\link[base:files]{file.copy}}.

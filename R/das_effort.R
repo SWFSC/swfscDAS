@@ -2,8 +2,8 @@
 #'
 #' Chop DAS data into effort segments
 #'
-#' @param x \code{das_df} object; output from \code{\link{das_process}},
-#'  or a data frame that can be coerced to a \code{das_df} object
+#' @param x an object of class \code{das_df},
+#'   or a data frame that can be coerced to class \code{das_df}
 #' @param method character; method to use to chop DAS data into effort segments
 #'   Can be "condition", "equallength", "section",
 #'   or any partial match thereof (case sensitive)
@@ -26,7 +26,8 @@
 #' @param event.touse character vector of events to use to determine
 #'   segment lengths; overrides \code{comment.drop}.
 #'   If \code{NULL} (the default), then all on effort events are used.
-#'   If used, this argument must include at least R, E, S, and A events
+#'   If used, this argument must include at least R, E, S, and A events,
+#'   and cannot include ? or 1:8 events
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL}, which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}.
@@ -143,13 +144,17 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
 
   conditions <- .das_conditions_check(conditions, method)
 
+  event.tmp <- c("?", 1:8)
   if (!is.null(event.touse)) {
-    if (comment.drop)
-      warning("comment.drop is ignored because event.touse is not NULL")
+    if (comment.drop) warning("comment.drop is ignored because event.touse is not NULL")
 
     if (!all(c("R", "E", "S", "A") %in% event.touse))
       stop("event.use must include at least the following events: ",
            paste(c("R", "E", "S", "A"), collapse = ", "))
+
+    if (any(event.tmp %in% event.touse))
+      stop("event.use cannot include the following events: ",
+           paste(event.tmp, collapse = ", "))
   }
 
 
@@ -161,7 +166,6 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
 
   # Add index column for adding back in ? and 1:8 events, and extract those events
   x$idx_eff <- seq_len(nrow(x))
-  event.tmp <- c("?", 1:8)
 
   # Filter for continuous effort sections; extract ? and 1:8 events
   #   'on effort + 1' is to capture O/E event.

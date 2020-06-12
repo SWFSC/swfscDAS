@@ -2,8 +2,8 @@
 #'
 #' Extract sightings and associated information from processed DAS data
 #'
-#' @param x \code{das_df} object; output from \code{\link{das_process}},
-#'   or a data frame that can be coerced to a \code{das_df} object
+#' @param x an object of class \code{das_df},
+#'   or a data frame that can be coerced to class \code{das_df}
 #' @param ... ignored
 #' @param return.format character; can be one of "default", "wide", "complete",
 #'   or any partial match thereof (case sensitive). Formats described below

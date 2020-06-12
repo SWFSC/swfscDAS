@@ -18,8 +18,8 @@ das_sight(x, ...)
 )
 }
 \arguments{
-\item{x}{\code{das_df} object; output from \code{\link{das_process}},
-or a data frame that can be coerced to a \code{das_df} object}
+\item{x}{an object of class \code{das_df},
+or a data frame that can be coerced to class \code{das_df}}
 
 \item{...}{ignored}
 
