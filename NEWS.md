@@ -1,8 +1,10 @@
 # swfscDAS 0.3 (in development)
 
-* `das_process` now lets the user add the DateTime, Lat, and Lon information to ? and numeric (1:8) events. This allows the user to filter the processed DAS data by date/time or coordinates, if desired.
+* `das_process` now lets the user add the DateTime, Lat, and Lon information to "?" and numeric (1:8) events. This enables the user to filter the processed DAS data by date/time or coordinates, if desired.
 
 * Added `das_within_strata` for checking if individual points, such as event points or segment midpoints, are within user-provided strata
+
+* The "DAS_data_join" vignette demonstrates how to join external data, such as from DAT files, to processed DAS data
 
 
 # swfscDAS 0.2
