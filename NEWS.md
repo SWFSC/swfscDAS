@@ -1,10 +1,14 @@
 # swfscDAS 0.3 (in development)
 
-* `das_process` now lets the user add the DateTime, Lat, and Lon information to "?" and numeric (1:8) events. This enables the user to filter the processed DAS data by date/time or coordinates, if desired.
+* `das_process` now lets the user add the DateTime, Lat, and Lon information to "?" and numeric (1:8) events. This enables the user to filter the processed DAS data by date/time or coordinates, if desired
 
-* Added `das_within_strata` for checking if individual points, such as event points or segment midpoints, are within user-provided strata
+* For consistency with species code columns, the column name 'SpProb' is now 'SpCodeProb' in `das_sight` output
+
+* In `das_sight`, species-specific group sizes are now calculated as the mean of the product of the school estimate and the corresponding species percentage (for each estimate), rather than the product of the mean of the school estimate and the mean of the corresponding species percentage.
 
 * `das_effort_sight` now has an argument that lets the user use the low group size estimate in place of an `NA` best group size estimate 
+
+* Added `das_within_strata` for checking if individual points, such as event points or segment midpoints, are within user-provided strata
 
 * The "DAS_data_join" vignette demonstrates how to join external data, such as from DAT files, to processed DAS data
 
@@ -25,7 +29,7 @@
 
 * Added columns for high and low (in addition to best) estimates of school size
 
-* Renamed columns to follow a consistent format - see `das_sight` documentation for a complete descrption of the various return format outputs
+* Renamed columns to follow a consistent format - see `das_sight` documentation for a complete description of the various return format outputs
 
 * Added a "complete" return format, which has a row for every observer estimate for each sighting
 

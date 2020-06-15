@@ -18,25 +18,28 @@ exp.sight.name <- c(
 )
 
 exp.sight.name.default <- c(
-  "SpCode", "SpProb", "GsSpBest", "GsSpHigh", "GsSpLow",
+  "SpCode", "SpCodeProb",
   "GsSchoolBest", "GsSchoolHigh", "GsSchoolLow",
+  "GsSpBest", "GsSpHigh", "GsSpLow",
   "CourseSchool",
   "TurtleJFR", "TurtleAge", "TurtleCapt", "PerpDistKm"
 )
 
+names.wide <- c(
+  "GsSpBest1", "GsSpBest2", "GsSpBest3", "GsSpBest4",
+  "GsSpHigh1", "GsSpHigh2", "GsSpHigh3", "GsSpHigh4",
+  "GsSpLow1", "GsSpLow2", "GsSpLow3", "GsSpLow4"
+)
 exp.sight.name.wide <- c(
   "ObsEstimate", "SpCode1", "SpCode2","SpCode3", "SpCode4",
-  "SpProb1", "SpProb2", "SpProb3", "SpProb4",
+  "SpCodeProb1", "SpCodeProb2", "SpCodeProb3", "SpCodeProb4",
   "SpPerc1", "SpPerc2", "SpPerc3", "SpPerc4",
-  "GsSpBest1", "GsSpBest2", "GsSpBest3", "GsSpBest4",
   "GsSchoolBest", "GsSchoolHigh", "GsSchoolLow",
-  "CourseSchool",
+  names.wide, "CourseSchool",
   "TurtleSp", "TurtleGs", "TurtleJFR", "TurtleAge", "TurtleCapt",
   "PinnipedSp", "PinnipedGs", "BoatType", "BoatGs", "PerpDistKm"
 )
-exp.sight.name.complete <- setdiff(
-  exp.sight.name.wide, c("GsSpBest1", "GsSpBest2", "GsSpBest3", "GsSpBest4")
-)
+exp.sight.name.complete <- setdiff(exp.sight.name.wide, names.wide)
 
 
 test_that("das_read output has expected column names and classes", {

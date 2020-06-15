@@ -138,9 +138,9 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   ll.na.event <- c("C", "?", 1:8)
   ll.na.which <- which((!(x$Event %in% ll.na.event)) & ll.na)
   if (length(ll.na.which) > 0) {
-    warning("There are unexpected (i.e. for events other than ",
+    warning("There are unexpected Lat and/or Lon NAs (i.e. for events other than ",
             paste(ll.na.event, collapse = ", "),
-            ") Lat and/or Lon NAs in line(s):\n",
+            ") in line(s):\n",
             paste(line_num[ll.na.which], collapse = ", "))
   }
   rm(ll.na, ll.na.event, ll.na.which)
@@ -155,9 +155,9 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   dt.na.event <- c("*", "#", "?", "C", 1:8)
   dt.na.which <- which((!(x$Event %in% dt.na.event) & dt.na))
   if (length(dt.na.which) > 0) {
-    warning("There are unexpected (i.e. for events other than ",
+    warning("There are unexpected DateTime NAs (i.e. for events other than ",
             paste(dt.na.event, collapse = ", "),
-            ") DateTime NAs in line(s):\n",
+            ") in line(s):\n",
             paste(line_num[dt.na.which], collapse = ", "))
   }
   rm(dt.na, dt.na.event, dt.na.which)

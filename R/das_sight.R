@@ -56,13 +56,13 @@
 #' @return Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
 #'   and 2) columns with sighting information extracted from 'Data#' columns.
 #'   See \code{\link{das_format_pdf}} for more information the sighting information.
-#'   If \code{return.format} is "default", then there is one row for each species of each sighting;
+#'   If \code{return.format} is "default", then there is one row for each species of each sighting event;
 #'   if \code{return.format} is "wide", then there is one row for each sighting event;
 #'   if \code{return.format} is "complete", then there is one row for every
-#'   group size estimate for each sighting.
+#'   group size estimate for each sighting event.
 #'
-#'   The format-specific columns are described in their respective sections,
-#'   while the sighting information columns included for all return formats are described here:
+#'   The format-specific columns are described in their respective sections.
+#'   The following sighting information columns are included in all return formats:
 #'
 #'   \tabular{lll}{
 #'     \emph{Sighting information} \tab \emph{Column name} \tab \emph{Notes}\cr
@@ -72,7 +72,7 @@
 #'     Observer that made the sighting \tab Obs\cr
 #'     Standard observer               \tab ObsStd \tab Logical; \code{TRUE} if Obs is one of
 #'       ObsL, Rec or ObsR, and \code{FALSE} otherwise (including if Obs is \code{NA})\cr
-#'     Bearing to the sighting         \tab Bearing \tab Numeric; degrees, range 0 to 360\cr
+#'     Bearing to the sighting         \tab Bearing \tab Numeric; degrees, expected range 0 to 360\cr
 #'     Number of reticle marks         \tab Reticle \tab Numeric\cr
 #'     Distance (nautical miles)       \tab DistNm  \tab Numeric\cr
 #'     Sighting cue                    \tab Cue\cr
@@ -102,24 +102,27 @@
 #'   The GsSchoolBest, GsSchoolHigh, and GsSchoolLow columns are either:
 #'   1) the arithmetic mean across observer estimates for the "default" and "wide" formats, or
 #'   2) the individual observer estimates for the "complete" format.
+#'   Note that for non-"complete" formats, \code{na.rm = TRUE} is used when calculating the mean,
+#'   and thus blank elements of estimates (but not the whole incomplete estimate) are ignored.
 #'   To convert the perpendicular distance back to nautical miles,
 #'   one would divide PerpDistKm by 1.852
 #'
 #' @section The "default" format output:
-#'   One row for each species of each sighting, with group size estimates
-#'   calculated via an arithmetic average across observer estimates
+#'   One row for each species of each sighting event, with group size estimates
+#'   calculated via an arithmetic mean across observer estimates
+#'   (using \code{\link[base]{mean}} with \code{na.rm = TRUE})
 #'
 #'   Sighting information columns/formats present specifically in the "default" format output:
 #'   \tabular{lll}{
 #'     \emph{Sighting information} \tab \emph{Column name} \tab \emph{Notes}\cr
 #'     Species code          \tab SpCode \tab Boat type or mammal, turtle, or pinniped species codes\cr
-#'     Probable species code \tab SpProb \tab Probable mammal species codes, if applicable; otherwise \code{NA}\cr
+#'     Probable species code \tab SpCodeProb \tab Probable mammal species codes; \code{NA} if none or not applicable\cr
 #'     Group size of species - best estimate \tab GsSpBest \tab
-#'       Product of GsSchoolBest and the (average) corresponding species percentage \cr
+#'       Arithmetic mean of the product of GsSchoolBest and the corresponding species percentage \cr
 #'     Group size of species - high estimate \tab GsSpHigh \tab
-#'       Product of GsSchoolHigh and the (average) corresponding species percentage \cr
+#'       Arithmetic mean of the product of GsSchoolHigh and the corresponding species percentage \cr
 #'     Group size of species - low estimate \tab GsSpLow \tab
-#'       Product of GsSchoolLow and the (average) corresponding species percentage \cr
+#'       Arithmetic mean of the product of GsSchoolLow and the corresponding species percentage \cr
 #'   }
 #'
 #' @section The "wide" and "complete" format outputs:
@@ -135,20 +138,20 @@
 #'
 #'   Sighting information columns present in the "wide" and "complete" format outputs:
 #'   \tabular{lll}{
-#'     \emph{Sighting information} \tab \emph{Column name} \tab \emph{Notes}\cr
-#'     Observer code - estimate    \tab ObsEstimate \tab See below\cr
-#'     Species 1 code              \tab SpCode1 \tab The species code for turtle and pinniped sightings\cr
-#'     Species 2 code              \tab SpCode2\cr
-#'     Species 3 code              \tab SpCode3\cr
-#'     Species 4 code              \tab SpCode4\cr
-#'     Percentage of Sp1 in school \tab SpPerc1\cr
-#'     Percentage of Sp2 in school \tab SpPerc2\cr
-#'     Percentage of Sp3 in school \tab SpPerc3\cr
-#'     Percentage of Sp4 in school \tab SpPerc4\cr
-#'     Species 1 probable code     \tab SpProb1 \tab Extracted from '?' event\cr
-#'     Species 2 probable code     \tab SpProb2 \tab Extracted from '?' event\cr
-#'     Species 3 probable code     \tab SpProb3 \tab Extracted from '?' event\cr
-#'     Species 4 probable code     \tab SpProb4 \tab Extracted from '?' event\cr
+#'     \emph{Sighting information}  \tab \emph{Column name} \tab \emph{Notes}\cr
+#'     Observer code - estimate     \tab ObsEstimate \tab See below\cr
+#'     Species 1 code               \tab SpCode1 \tab The species code for turtle and pinniped sightings\cr
+#'     Species 2 code               \tab SpCode2\cr
+#'     Species 3 code               \tab SpCode3\cr
+#'     Species 4 code               \tab SpCode4\cr
+#'     Species 1 probable code      \tab SpCodeProb1 \tab Extracted from '?' event\cr
+#'     Species 2 probable code      \tab SpCodeProb2 \tab Extracted from '?' event\cr
+#'     Species 3 probable code      \tab SpCodeProb3 \tab Extracted from '?' event\cr
+#'     Species 4 probable code      \tab SpCodeProb4 \tab Extracted from '?' event\cr
+#'     Percentage of Sp 1 in school \tab SpPerc1\cr
+#'     Percentage of Sp 2 in school \tab SpPerc2\cr
+#'     Percentage of Sp 3 in school \tab SpPerc3\cr
+#'     Percentage of Sp 4 in school \tab SpPerc4\cr
 #'     Group size of species 1     \tab GsSpBest1 \tab Present in "wide" output only; see below\cr
 #'     Group size of species 2     \tab GsSpBest2 \tab Present in "wide" output only; see below\cr
 #'     Group size of species 3     \tab GsSpBest3 \tab Present in "wide" output only; see below\cr
@@ -164,7 +167,8 @@
 #'
 #'   ObsEstimate refers to the code of the observer that made the corresponding estimate.
 #'   For the "wide" format, ObsEstimate is a list-column of all of the observer codes
-#'   that provided an estimate. The GsSpBest# columns are the product of
+#'   that provided an estimate.
+#'   Also in the "wide" format, the GsSpBest# columns are the product of
 #'   GsSchoolBest and the corresponding species percentage
 #'
 #' @examples
@@ -311,41 +315,53 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     filter(.data$Event %in% c("?")) %>%
     group_by(.data$sight_cumsum) %>%
     summarise(Prob = TRUE,
-              SpProb1 = .data$Data5, SpProb2 = .data$Data6,
-              SpProb3 = .data$Data7, SpProb4 = .data$Data8)
+              SpCodeProb1 = .data$Data5, SpCodeProb2 = .data$Data6,
+              SpCodeProb3 = .data$Data7, SpCodeProb4 = .data$Data8)
 
 
   # Data from numeric events (groupsize and composition estimates)
   if (return.format == "complete") {
     sight.info.skmg4 <- sight.df %>%
       filter(.data$Event %in% as.character(1:8)) %>%
-      mutate(GsSchoolBest = as.numeric(.data$Data2),
-             GsSchoolHigh = as.numeric(.data$Data3),
-             GsSchoolLow = as.numeric(.data$Data4),
-             SpPerc1 = as.numeric(.data$Data5),
+      mutate(SpPerc1 = as.numeric(.data$Data5),
              SpPerc2 = as.numeric(.data$Data6),
              SpPerc3 = as.numeric(.data$Data7),
-             SpPerc4 = as.numeric(.data$Data8)) %>%
+             SpPerc4 = as.numeric(.data$Data8),
+             GsSchoolBest = as.numeric(.data$Data2),
+             GsSchoolHigh = as.numeric(.data$Data3),
+             GsSchoolLow = as.numeric(.data$Data4)) %>%
       select(.data$sight_cumsum, ObsEstimate = .data$Data1,
-             .data$GsSchoolBest, .data$GsSchoolHigh, .data$GsSchoolLow,
-             .data$SpPerc1, .data$SpPerc2, .data$SpPerc3, .data$SpPerc4)
+             .data$SpPerc1, .data$SpPerc2, .data$SpPerc3, .data$SpPerc4,
+             .data$GsSchoolBest, .data$GsSchoolHigh, .data$GsSchoolLow)
 
-  } else { #if (return.format == "wide") {
+  } else {
     sight.info.skmg4 <- sight.df %>%
       filter(.data$Event %in% as.character(1:8)) %>%
+      mutate(Data2 = as.numeric(.data$Data2), Data3 = as.numeric(.data$Data3),
+             Data4 = as.numeric(.data$Data4), Data5 = as.numeric(.data$Data5),
+             Data6 = as.numeric(.data$Data6), Data7 = as.numeric(.data$Data7),
+             Data8 = as.numeric(.data$Data8)) %>%
       group_by(.data$sight_cumsum) %>%
       summarise(ObsEstimate = list(.data$Data1),
-                GsSchoolBest = mean(as.numeric(.data$Data2), na.rm = TRUE),
-                GsSchoolHigh = mean(as.numeric(.data$Data3), na.rm = TRUE),
-                GsSchoolLow = mean(as.numeric(.data$Data4), na.rm = TRUE),
-                SpPerc1 = mean(as.numeric(.data$Data5), na.rm = TRUE),
-                SpPerc2 = mean(as.numeric(.data$Data6), na.rm = TRUE),
-                SpPerc3 = mean(as.numeric(.data$Data7), na.rm = TRUE),
-                SpPerc4 = mean(as.numeric(.data$Data8), na.rm = TRUE),
-                GsSpBest1 = .data$GsSchoolBest * .data$SpPerc1 / 100,
-                GsSpBest2 = .data$GsSchoolBest * .data$SpPerc2 / 100,
-                GsSpBest3 = .data$GsSchoolBest * .data$SpPerc3 / 100,
-                GsSpBest4 = .data$GsSchoolBest * .data$SpPerc4 / 100)
+                SpPerc1 = mean(.data$Data5, na.rm = TRUE),
+                SpPerc2 = mean(.data$Data6, na.rm = TRUE),
+                SpPerc3 = mean(.data$Data7, na.rm = TRUE),
+                SpPerc4 = mean(.data$Data8, na.rm = TRUE),
+                GsSchoolBest = mean(.data$Data2, na.rm = TRUE),
+                GsSchoolHigh = mean(.data$Data3, na.rm = TRUE),
+                GsSchoolLow = mean(.data$Data4, na.rm = TRUE),
+                GsSpBest1 = mean(.data$Data2 * .data$Data5 / 100, na.rm = TRUE),
+                GsSpBest2 = mean(.data$Data2 * .data$Data6 / 100, na.rm = TRUE),
+                GsSpBest3 = mean(.data$Data2 * .data$Data7 / 100, na.rm = TRUE),
+                GsSpBest4 = mean(.data$Data2 * .data$Data8 / 100, na.rm = TRUE),
+                GsSpHigh1 = mean(.data$Data3 * .data$Data5 / 100, na.rm = TRUE),
+                GsSpHigh2 = mean(.data$Data3 * .data$Data6 / 100, na.rm = TRUE),
+                GsSpHigh3 = mean(.data$Data3 * .data$Data7 / 100, na.rm = TRUE),
+                GsSpHigh4 = mean(.data$Data3 * .data$Data8 / 100, na.rm = TRUE),
+                GsSpLow1 = mean(.data$Data4 * .data$Data5 / 100, na.rm = TRUE),
+                GsSpLow2 = mean(.data$Data4 * .data$Data6 / 100, na.rm = TRUE),
+                GsSpLow3 = mean(.data$Data4 * .data$Data7 / 100, na.rm = TRUE),
+                GsSpLow4 = mean(.data$Data4 * .data$Data8 / 100, na.rm = TRUE))
   }
 
   if (!all(sight.info.skmg1$sight_cumsum %in% sight.info.skmg4$sight_cumsum))
@@ -362,12 +378,13 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
            .data$CalibSchool, .data$PhotosAerial, .data$Biopsy,
            .data$Prob, .data$nSp, .data$Mixed,
            .data$ObsEstimate,
-           starts_with("SpCode"), starts_with("SpProb"), starts_with("SpPerc"),
-           starts_with("GsSpBest"), starts_with("GsSchool"),
+           starts_with("SpCode"), starts_with("SpCodeProb"), starts_with("SpPerc"),
+           starts_with("GsSchool"), starts_with("GsSpBest"),
+           starts_with("GsSpHigh"), starts_with("GsSpLow"),
            everything())
   rm(sight.info.skmg1, sight.info.skmg2, sight.info.skmg3, sight.info.skmg4)
 
-  sight.info.skmg[is.na(sight.info.skmg)] <- NA
+  sight.info.skmg[is.na(sight.info.skmg)] <- NA #to get NaNs
 
   #--------------------------------------------------------
   ### Marine mammal (+subgroup) resights; Events s, k, m
@@ -436,41 +453,41 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
     to.return.multi <- to.return %>%
       filter(.data$Event %in% c("S", "K", "M", "G")) %>%
-      mutate(GsSpHigh1 = .data$SpPerc1 * .data$GsSchoolHigh / 100,
-             GsSpHigh2 = .data$SpPerc2 * .data$GsSchoolHigh / 100,
-             GsSpHigh3 = .data$SpPerc3 * .data$GsSchoolHigh / 100,
-             GsSpHigh4 = .data$SpPerc4 * .data$GsSchoolHigh / 100,
-             GsSpLow1 = .data$SpPerc1 * .data$GsSchoolLow / 100,
-             GsSpLow2 = .data$SpPerc2 * .data$GsSchoolLow / 100,
-             GsSpLow3 = .data$SpPerc3 * .data$GsSchoolLow / 100,
-             GsSpLow4 = .data$SpPerc4 * .data$GsSchoolLow / 100) %>%
+      # mutate(GsSpHigh1 = .data$SpPerc1 * .data$GsSchoolHigh / 100,
+      #        GsSpHigh2 = .data$SpPerc2 * .data$GsSchoolHigh / 100,
+      #        GsSpHigh3 = .data$SpPerc3 * .data$GsSchoolHigh / 100,
+      #        GsSpHigh4 = .data$SpPerc4 * .data$GsSchoolHigh / 100,
+      #        GsSpLow1 = .data$SpPerc1 * .data$GsSchoolLow / 100,
+      #        GsSpLow2 = .data$SpPerc2 * .data$GsSchoolLow / 100,
+      #        GsSpLow3 = .data$SpPerc3 * .data$GsSchoolLow / 100,
+      #        GsSpLow4 = .data$SpPerc4 * .data$GsSchoolLow / 100) %>%
       group_by(.data$idx) %>%
-      summarise(Sp1_list = list(c(.data$SpCode1, .data$SpProb1, .data$GsSpBest1,
+      summarise(Sp1_list = list(c(.data$SpCode1, .data$SpCodeProb1, .data$GsSpBest1,
                                   .data$GsSpHigh1, .data$GsSpLow1)),
-                Sp2_list = list(c(.data$SpCode2, .data$SpProb2, .data$GsSpBest2,
+                Sp2_list = list(c(.data$SpCode2, .data$SpCodeProb2, .data$GsSpBest2,
                                   .data$GsSpHigh2, .data$GsSpLow2)),
-                Sp3_list = list(c(.data$SpCode3, .data$SpProb3, .data$GsSpBest3,
+                Sp3_list = list(c(.data$SpCode3, .data$SpCodeProb3, .data$GsSpBest3,
                                   .data$GsSpHigh3, .data$GsSpLow3)),
-                Sp4_list = list(c(.data$SpCode4, .data$SpProb4, .data$GsSpBest4,
+                Sp4_list = list(c(.data$SpCode4, .data$SpCodeProb4, .data$GsSpBest4,
                                   .data$GsSpHigh4, .data$GsSpLow4))) %>%
       gather(.data$Sp1_list, .data$Sp2_list, .data$Sp3_list, .data$Sp4_list,
              key = "sp_list_name", value = "sp_list", na.rm = TRUE) %>%
       mutate(SpCode = map_chr(.data$sp_list, function(i) i[1]),
-             SpProb = map_chr(.data$sp_list, function(i) i[2]),
+             SpCodeProb = map_chr(.data$sp_list, function(i) i[2]),
              GsSpBest = as.numeric(map_chr(.data$sp_list, function(i) i[3])),
              GsSpHigh = as.numeric(map_chr(.data$sp_list, function(i) i[4])),
              GsSpLow = as.numeric(map_chr(.data$sp_list, function(i) i[5]))) %>%
       filter(!is.na(.data$SpCode)) %>%
-      select(.data$idx, .data$SpCode, .data$SpProb, .data$GsSpBest, .data$GsSpHigh, .data$GsSpLow) %>%
+      select(.data$idx, .data$SpCode, .data$SpCodeProb, .data$GsSpBest, .data$GsSpHigh, .data$GsSpLow) %>%
       arrange(.data$idx)
 
     # Names and order of columns to return
     sight.names <- setdiff(
       c(names(sight.df), names(sight.info.all), #names(sight.info.skmg)[1:9],
         "Cue", "Method", "Photos", "Birds", "CalibSchool", "PhotosAerial", "Biopsy",
-        "Prob", "nSp", "Mixed", "SpCode", "SpProb",
-        "GsSpBest", "GsSpHigh", "GsSpLow",
+        "Prob", "nSp", "Mixed", "SpCode", "SpCodeProb",
         "GsSchoolBest", "GsSchoolHigh", "GsSchoolLow",
+        "GsSpBest", "GsSpHigh", "GsSpLow",
         names(sight.info.resight), names(sight.info.t),
         names(sight.info.p), names(sight.info.f)),
       c("sight_cumsum", paste0("Data", 1:12))
@@ -479,9 +496,11 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     # Finalize return data frame, consolidating columns as possible
     to.return <- to.return %>%
       select(-.data$SpCode1, -.data$SpCode2, -.data$SpCode3, -.data$SpCode4,
-             -.data$SpProb1, -.data$SpProb2, -.data$SpProb3, -.data$SpProb4,
+             -.data$SpCodeProb1, -.data$SpCodeProb2, -.data$SpCodeProb3, -.data$SpCodeProb4,
              -.data$SpPerc1, -.data$SpPerc2, -.data$SpPerc3, -.data$SpPerc4,
-             -.data$GsSpBest1, -.data$GsSpBest2, -.data$GsSpBest3, -.data$GsSpBest4) %>%
+             -.data$GsSpBest1, -.data$GsSpBest2, -.data$GsSpBest3, -.data$GsSpBest4,
+             -.data$GsSpHigh1, -.data$GsSpHigh2, -.data$GsSpHigh3, -.data$GsSpHigh4,
+             -.data$GsSpLow1, -.data$GsSpLow2, -.data$GsSpLow3, -.data$GsSpLow4) %>%
       full_join(to.return.multi, by = "idx") %>%
       arrange(.data$idx) %>%
       select(!!sight.names) %>%
