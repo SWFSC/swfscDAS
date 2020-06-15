@@ -4,22 +4,38 @@
 \alias{das_effort_sight}
 \title{Summarize DAS sightings by effort segment}
 \usage{
-das_effort_sight(x.list, sp.codes)
+das_effort_sight(
+  x.list,
+  sp.codes,
+  sp.events = c("S", "G", "K", "M", "t", "p"),
+  gs.low.use = TRUE
+)
 }
 \arguments{
-\item{x.list}{output of \code{\link{das_effort}}; a list with three elements
-names 'segdata', 'sightinfo', and 'randpicks', respectively}
+\item{x.list}{output of \code{\link{das_effort}}; a list of three data frames
+named 'segdata', 'sightinfo', and 'randpicks', respectively}
 
 \item{sp.codes}{character; species code(s) to include in segdata output.
 These must exactly match the species codes in the data,
 such as including leading zeros}
+
+\item{sp.events}{character; event code(s) to include in the sightinfo output.
+This argument supercedes the 'included' value when determining
+whether a sighting is included in the segment summaries.
+Must be one or more of: "S", "K", "M", "G", "t", "p" (case-sensitive).
+The default is that all of these event codes are kept}
+
+\item{gs.low.use}{logical indicating if the low species group size estimate ('GsSpLow')
+should be used ONLY if the best estimate ('GsSpLow') is \code{NA}}
 }
 \value{
 A list, identical to \code{x.list} except for
   1) the nSI and ANI columns added to \code{x.list$segdata},
   one each for each element of \code{sp.codes}, and
-  2) the included column of \code{x.list$sightinfo}, which has been set as
-  \code{FALSE} for sightings of species not listed in \code{sp.codes}
+  2) the 'included' column of \code{x.list$sightinfo}, which has been set as
+  \code{FALSE} for sightings of species not listed in \code{sp.codes}.
+  Thus, the 'included' column accurately reflects the sightings that were
+  included in the effort segment summaries
 }
 \description{
 Summarize number of sightings and animals for selected species by segment
@@ -35,7 +51,8 @@ This function takes the output of \code{\link{das_effort}} and
   personalize the included values as desired for their analysis.
 
   The ANI columns are the sum of the 'GsSpBest' column output from
-  \code{\link{das_sight}}
+  \code{\link{das_sight}}. The only exception is if 'GsSpBest' is \code{NA} and
+  \code{gs.low.use} is \code{TRUE}, in which case the value from 'GsSpLow' is used instead
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
@@ -45,9 +62,6 @@ y.cond <- das_effort(
   conditions = "Bft", seg.min.km = 0.05, num.cores = 1
 )
 
-y.cond$sightinfo <- y.cond$sightinfo[y.cond$sightinfo$Event \%in\% c("S", "t"), ]
-y.cond$sightinfo$included <- TRUE
-
-das_effort_sight(y.cond, sp.codes = c("013", "076", "DC"))
+das_effort_sight(y.cond, sp.codes = c("013", "076", "DC"), sp.events = c("S", "t"))
 
 }

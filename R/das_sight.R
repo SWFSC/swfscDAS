@@ -8,8 +8,8 @@
 #' @param return.format character; can be one of "default", "wide", "complete",
 #'   or any partial match thereof (case sensitive). Formats described below
 #' @param return.events character; event codes included in the output.
-#'   The default is all event codes.
-#'   One or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
+#'   Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
+#'   (case-sensitive). The default is all of these event codes
 #'
 #' @details DAS events contain specific information in the 'Data#' columns,
 #'   with the information depending on the event code for that row.

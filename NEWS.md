@@ -4,6 +4,8 @@
 
 * Added `das_within_strata` for checking if individual points, such as event points or segment midpoints, are within user-provided strata
 
+* `das_effort_sight` now has an argument that lets the user use the low group size estimate in place of an `NA` best group size estimate 
+
 * The "DAS_data_join" vignette demonstrates how to join external data, such as from DAT files, to processed DAS data
 
 

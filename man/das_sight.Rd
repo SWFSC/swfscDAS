@@ -27,8 +27,8 @@ or a data frame that can be coerced to class \code{das_df}}
 or any partial match thereof (case sensitive). Formats described below}
 
 \item{return.events}{character; event codes included in the output.
-The default is all event codes.
-One or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"}
+Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
+(case-sensitive). The default is all of these event codes}
 }
 \value{
 Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
