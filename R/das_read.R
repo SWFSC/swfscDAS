@@ -80,6 +80,7 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
 
 
 .das_read <- function(file, skip, tz) {
+  #--------------------------------------------------------
   # Input checks
   stopifnot(inherits(file, "character"))
 
@@ -114,8 +115,9 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   x$EffortDot <- ifelse(is.na(x$EffortDot), FALSE, TRUE)
   EventNum <- trimws(x$EventNum)
   file_das  <- basename(file)
-  line_num  <- as.integer(seq_along(x$Event) + skip)
+  line_num  <- as.integer(seq_len(nrow(x)) + skip)
 
+  #--------------------------------------------------------
   # Convert lat and lon values to decimal degrees
   Lat <- ifelse(x$Lat1 == "N", 1, -1) * (as.numeric(x$Lat2) + as.numeric(x$Lat3)/60)
   Lon <- ifelse(x$Lon1 == "E", 1, -1) * (as.numeric(x$Lon2) + as.numeric(x$Lon3)/60)
@@ -126,10 +128,10 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
       .numeric_na(x$Lon2), .numeric_na(x$Lon3))
   )
   if (length(ll.num.na) > 0)
-    warning("The following lines (not row numbers) have values in the ",
+    warning("The following line number(s) have values in the ",
             "Latitude and/or Longitude ",
             "columns that could not be converted to a numeric value:\n",
-            paste(line_num[ll.num.na], collapse = ", "))
+            .print_file_line(file_das, line_num, ll.num.na))
   rm(ll.num.na)
 
 
@@ -140,11 +142,12 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   if (length(ll.na.which) > 0) {
     warning("There are unexpected Lat and/or Lon NAs (i.e. for events other than ",
             paste(ll.na.event, collapse = ", "),
-            ") in line(s):\n",
-            paste(line_num[ll.na.which], collapse = ", "))
+            ") in the following:\n",
+            .print_file_line(file_das, line_num, ll.na.which))
   }
   rm(ll.na, ll.na.event, ll.na.which)
 
+  #--------------------------------------------------------
   # Extract date/time
   DateTime <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M%S", tz)
   dt.na <- is.na(DateTime)
@@ -157,11 +160,12 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
   if (length(dt.na.which) > 0) {
     warning("There are unexpected DateTime NAs (i.e. for events other than ",
             paste(dt.na.event, collapse = ", "),
-            ") in line(s):\n",
-            paste(line_num[dt.na.which], collapse = ", "))
+            ") in the following:\n",
+            .print_file_line(file_das, line_num, dt.na.which))
   }
   rm(dt.na, dt.na.event, dt.na.which)
 
+  #--------------------------------------------------------
   # Extract Data# values, and trim whitespace as necessary
   data.df <- data.frame(
     Data1 = ifelse(x$Event == "C", x$Data1, trimws(x$Data1)),

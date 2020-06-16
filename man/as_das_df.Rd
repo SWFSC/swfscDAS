@@ -13,7 +13,7 @@ as_das_df(x)
 \method{as_das_df}{data.frame}(x)
 }
 \arguments{
-\item{x}{n object to be coerced to class \code{das_df}}
+\item{x}{an object to be coerced to class \code{das_df}}
 }
 \value{
 An object of class `das_df`
@@ -22,7 +22,7 @@ An object of class `das_df`
 Check if an object is of class \code{das_df}, or coerce it if possible.
 }
 \details{
-Currently only data frames can be coerced to an object of class \code{das_df}.
+Only data frames can be coerced to an object of class \code{das_df}.
   If \code{x} does not have column names and classes as specified in \code{\link{das_df-class}},
   then the function returns an error message detailing the first column that does not
   meet the requirements of a \code{das_df} object.

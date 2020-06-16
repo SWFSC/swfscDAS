@@ -133,6 +133,15 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
                                 add.dtll.sight = TRUE, ...)
 {
   #----------------------------------------------------------------------------
+  # Check that there are no Event columns with NA
+  #   This is here rather than as_das_dfr b/c users should still be
+  #   able to get the das_read output
+  if (any(is.na(x$Event)))
+    stop("To be processed, the Event column must not contain any NAs. ",
+         "Should you use the 'skip' argument in das_read? ",
+         "The following contain NA Event entries:\n",
+         .print_file_line(x$file_das, x$line_num, which(is.na(x$Event))))
+
   # Prep 1
   x <- x[x$Event != "#", ]
   rownames(x) <- NULL # for debugging purposes
@@ -147,16 +156,6 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
     inherits(reset.day, "logical")
   )
 
-  # Check that there are no Event columns with NA
-  #   This is here rather than as_das_dfr b/c users should still be
-  #   able to get the das_read output
-  if (any(is.na(x$Event)))
-    stop("To be processed, the Event column must not contain any NAs. ",
-         "Should you use the 'skip' argument in das_read? ",
-         "The following line(s) contain NA Event entries:\n",
-         paste(x$line_num[is.na(x$Event)], collapse = ", "))
-
-
   # Check event codes
   event.acc <- c("*", "?", 1:8, "A", "B", "C", "E", "F", "k", "K", "M", "N",
                  "P", "Q", "r", "R", "s", "S", "t", "V", "W",
@@ -167,8 +166,8 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
             "Please address this issue before continuing.\n",
             paste0("Expected event codes (case sensitive): ",
                    paste(event.acc, collapse = ", "), "\n"),
-            "The following line number(s) of the input file contain unexpected event codes:\n",
-            paste(x$line_num[!(x$Event %in% event.acc)], collapse = ", "),
+            "The following contain unexpected event codes:\n",
+            .print_file_line(x$file_das, x$line_num, which(!(x$Event %in% event.acc))),
             immediate. = TRUE)
 
 
@@ -179,9 +178,9 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
     x.r.which <- which(x$Event == "r")
     warning("The provided file contains 'r' events. Is this on purpose? ",
             "These events will be CONVERTED to R events with non-standard effort, ",
-            "i.e. with an \"N\" value in the Data1 column, in the output.\n",
-            paste("There are", length(x.r.which), "r events, including at the following line numbers: "),
-            paste(head(x$line_num[x$Event == "r"]), collapse = ", "),
+            "i.e. with an \"N\" value in the Data1 column, in the output. ",
+            paste("There are", length(x.r.which), "r events at the following:\n"),
+            .print_file_line(x$file_das, x$line_num, which(x$Event == "r")),
             immediate. = TRUE)
 
     x$Data1[x.r.which] <- "N"

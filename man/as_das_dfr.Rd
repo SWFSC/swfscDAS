@@ -22,7 +22,7 @@ An object of class `das_dfr`
 Check if an object is of class \code{das_dfr}, or coerce it if possible.
 }
 \details{
-Currently only data frames can be coerced to an object of class \code{das_dfr}.
+Only data frames can be coerced to an object of class \code{das_dfr}.
   If \code{x} does not have column names and classes as specified in \code{\link{das_dfr-class}},
   then the function returns an error message detailing the first column that does not
   meet the requirements of a \code{das_dfr} object.

@@ -52,7 +52,6 @@
 #'   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
 #'   are used to calculate the segment start, mid, and end points,
 #'   with \code{method = "vincenty"}.
-#'   TODO: option to pass distance method to swfscMisc functions?
 #'
 #' @return Data frame with the segdata information described in Details
 #'   and in \code{\link{das_effort}}

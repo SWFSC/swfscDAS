@@ -88,10 +88,6 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   if (!all(x$OnEffort | x$Event == "E"))
     stop("x must be filtered for on effort events; see `?das_chop_condition")
 
-  if (missing(seg.min.km))
-    stop("You must specify a 'seg.min.km' argument when using the \"equallength\" ",
-         "method. See `?das_chop_condition` for more details")
-
   if (!inherits(seg.min.km, c("integer", "numeric")))
     stop("When using the \"condition\" method, seg.min.km must be a numeric. ",
          "See `?das_chop_condition` for more details")
@@ -106,8 +102,6 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   # Determine continuous effort sections
   if (!("cont_eff_section" %in% names(x))) {
     x$cont_eff_section <- cumsum(x$Event %in% "R")
-    # event.B.preR <- (x$Event == "B") & (c(x$Event[-1], NA) == "R")
-    # x$cont_eff_section[event.B.preR] <- x$cont_eff_section[event.B.preR] + 1
   }
 
   # Calculate distance between points; checks happen in .dist_from_prev()

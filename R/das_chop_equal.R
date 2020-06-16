@@ -131,8 +131,6 @@ das_chop_equal.das_df <- function(x, conditions, seg.km, randpicks.load = NULL,
   # Determine continuous effort sections
   if (!("cont_eff_section" %in% names(x))) {
     x$cont_eff_section <- cumsum(x$Event %in% "R")
-    # event.B.preR <- (x$Event == "B") & (c(x$Event[-1], NA) == "R")
-    # x$cont_eff_section[event.B.preR] <- x$cont_eff_section[event.B.preR] + 1
   }
 
 

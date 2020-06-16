@@ -12,6 +12,8 @@
 
 * The "DAS_data_join" vignette demonstrates how to join external data, such as from DAT files, to processed DAS data
 
+* Where applicable, error, warning, and informational messages now report both the file name and line number. This makes the messages useful when working with concatenated DAS objects with multiple DAS files.
+
 
 # swfscDAS 0.2
 

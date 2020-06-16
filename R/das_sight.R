@@ -211,20 +211,24 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
   # Check that all GSKM events are followed by an A event
   idx.skmg <- which(x$Event %in% c("S", "K", "M", "G"))
-  skmga.check1a <- which(x$Event[idx.skmg + 1] != "A")
-  skmga.check1b <- isTRUE(all.equal(idx.skmg + 1, which(x$Event == "A")))
-  skmga.check2 <- identical(x$Data1[idx.skmg], x$Data1[idx.skmg + 1])
+  idx.a <- which(x$Event %in% c("A"))
+  skmga.check1a <- idx.skmg[x$Event[idx.skmg + 1] != "A"]
+  skmga.check1b <- idx.a[!(x$Event[idx.a - 1] %in% c("S", "K", "M", "G"))]
+  skmga.check2 <- idx.skmg[x$Data1[idx.skmg] != x$Data1[idx.skmg + 1]]
 
-  if (!(length(skmga.check1a) == 0 & skmga.check1b)) {
-    warning("All 'G', 'S', 'K', and 'M' events (and only these events) ",
-            "should be immediately followed by an 'A' event",
+  if (length(skmga.check1a) != 0 | length(skmga.check1b) != 0) {
+    warning("All 'S', 'G', 'K', and 'M' events (and only these events) ",
+            "should be immediately followed by an 'A' event. ",
+            "This rule is not followed at the following:\n",
+            .print_file_line(x$file_das, x$line_num, sort(c(skmga.check1a, skmga.check1b))),
             immediate. = TRUE)
-  } else if (!skmga.check2) {
-    warning("The sighting number in some 'S', 'K', and 'M' events do not match ",
-            "the sighting numbers of their corresponding 'A' events",
+  } else if (length(skmga.check2) != 0) {
+    warning("The sighting number in the following 'S', 'G', 'K', and 'M' events do not ",
+            "match the sighting numbers of their corresponding 'A' events:\n",
+            .print_file_line(x$file_das, x$line_num, skmga.check2),
             immediate. = TRUE)
   }
-  rm(skmga.check1a, skmga.check1b, skmga.check2)
+  rm(idx.skmg, idx.a, skmga.check1a, skmga.check1b, skmga.check2)
 
 
   #----------------------------------------------------------------------------
@@ -365,7 +369,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   }
 
   if (!all(sight.info.skmg1$sight_cumsum %in% sight.info.skmg4$sight_cumsum))
-    warning("Not all S/K/M/G events have corresponding numeric (1:8) events")
+    warning("Not all S/K/M/G events have corresponding numeric (1:8) events. ",
+            "The Gs... values for these events will all be NA in the output")
 
 
   sight.info.skmg <- sight.info.skmg1 %>%
@@ -453,14 +458,6 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
     to.return.multi <- to.return %>%
       filter(.data$Event %in% c("S", "K", "M", "G")) %>%
-      # mutate(GsSpHigh1 = .data$SpPerc1 * .data$GsSchoolHigh / 100,
-      #        GsSpHigh2 = .data$SpPerc2 * .data$GsSchoolHigh / 100,
-      #        GsSpHigh3 = .data$SpPerc3 * .data$GsSchoolHigh / 100,
-      #        GsSpHigh4 = .data$SpPerc4 * .data$GsSchoolHigh / 100,
-      #        GsSpLow1 = .data$SpPerc1 * .data$GsSchoolLow / 100,
-      #        GsSpLow2 = .data$SpPerc2 * .data$GsSchoolLow / 100,
-      #        GsSpLow3 = .data$SpPerc3 * .data$GsSchoolLow / 100,
-      #        GsSpLow4 = .data$SpPerc4 * .data$GsSchoolLow / 100) %>%
       group_by(.data$idx) %>%
       summarise(Sp1_list = list(c(.data$SpCode1, .data$SpCodeProb1, .data$GsSpBest1,
                                   .data$GsSpHigh1, .data$GsSpLow1)),

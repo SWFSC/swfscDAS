@@ -83,6 +83,5 @@ This function was designed to be called by one of the das_chop_ functions,
   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
   are used to calculate the segment start, mid, and end points,
   with \code{method = "vincenty"}.
-  TODO: option to pass distance method to swfscMisc functions?
 }
 \keyword{internal}

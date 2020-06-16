@@ -202,11 +202,10 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
       stop("One or more sightings at the following line number(s) ",
            "have NA Lat/Lon/DateTime values; ",
            "please fix or remove before processing:\n",
-           paste(x.oneff$line_num[x.nacheck$sight_na], collapse = ", "))
+           .print_file_line(x.nacheck$file_das, x.nacheck$line_num, which(x.nacheck$sight_na)))
 
     # Remove events with NA lat/lon/dt info
-    x.oneff <- x.oneff %>%
-      filter(!is.na(.data$Lat) & !is.na(.data$Lon) & !is.na(.data$DateTime))
+    x.oneff <- x.oneff %>% filter(!is.na(.data$Lat) & !is.na(.data$Lon) & !is.na(.data$DateTime))
     message(paste0("There were ", sum(x.nacheck$ll_dt_na), " on effort ",
                    ifelse(comment.drop, "(non-C) ", ""), "events ",
                    "with NA Lat/Lon/DateTime values that will ignored ",
@@ -216,8 +215,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
   }
 
   # For each event, calculate distance to previous event
-  if (!is.null(event.touse))
-    x.oneff <- x.oneff %>% filter(.data$Event %in% event.touse)
+  if (!is.null(event.touse)) x.oneff <- x.oneff %>% filter(.data$Event %in% event.touse)
 
   x.oneff$dist_from_prev <- .dist_from_prev(x.oneff, distance.method)
 
@@ -244,9 +242,10 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
   }
 
   if (length(unique(x.oneff$cont_eff_section)) != sum(x.oneff$Event == "R") |
-      max(x.oneff$cont_eff_section) != sum(x.oneff$Event == "R"))
+      max(x.oneff$cont_eff_section) != sum(x.oneff$Event == "R")) {
     stop("Error in processing continuous effort sections - ",
          "please report this as an issue")
+  }
 
 
   #----------------------------------------------------------------------------

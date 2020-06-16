@@ -4,7 +4,7 @@
 #'
 #' @param x an object to be coerced to class \code{das_dfr}
 #'
-#' @details Currently only data frames can be coerced to an object of class \code{das_dfr}.
+#' @details Only data frames can be coerced to an object of class \code{das_dfr}.
 #'   If \code{x} does not have column names and classes as specified in \code{\link{das_dfr-class}},
 #'   then the function returns an error message detailing the first column that does not
 #'   meet the requirements of a \code{das_dfr} object.
@@ -63,11 +63,11 @@ as_das_dfr.data.frame <- function(x) {
     }
   }
 
-  # Check that no events are NA
-  if (any(is.na(x$Event)))
-    stop("The provided data cannot be coerced to an object of class das_dfr ",
-         "because the following line(s) have NA Event value(s):\n",
-         paste(x$line_num[is.na(x$Event)], collapse = ", "))
+  # # Check that no events are NA
+  # if (any(is.na(x$Event)))
+  #   stop("The provided data cannot be coerced to an object of class das_dfr ",
+  #        "because the following have NA Event value(s):\n",
+  #        .print_file_line(x$file_das, x$line_num, which(is.na(x$Event))))
 
   class(x) <- c("das_dfr", setdiff(class(x), "das_dfr"))
 

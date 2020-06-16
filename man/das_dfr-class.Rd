@@ -18,10 +18,8 @@ The \code{das_dfr} class is a subclass of \code{\link[base]{data.frame}},
   \code{das_dfr} object. It is \bold{strongly} recommended to pass an object of class \code{das_dfr} to
   \code{\link{das_process}} before subsetting, e.g. for events from a certain date range.
 }
-\section{Properties of \code{das_dfr}}{
+\section{Properties of \code{das_dfr} objects}{
 
-
-  All values in the Event column must not be \code{NA}.
 
   Objects of class \code{das_dfr} have a class attribute of \code{c("das_dfr", "data.frame")}.
   In addition, they must have the following column names and classes:

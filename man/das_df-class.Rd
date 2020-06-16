@@ -18,7 +18,7 @@ The \code{das_df} class is a subclass of \code{\link[base]{data.frame}},
   If this object is then passed to a DAS processing function such as \code{\link{das_sight}}, the function
   will try to coerce the object to a \code{das_df} object.
 }
-\section{Properties of \code{das_df}}{
+\section{Properties of \code{das_df} objects}{
 
 
   All values in the Event column must not be \code{NA}.

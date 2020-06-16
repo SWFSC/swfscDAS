@@ -13,9 +13,7 @@
 #'   \code{das_dfr} object. It is \bold{strongly} recommended to pass an object of class \code{das_dfr} to
 #'   \code{\link{das_process}} before subsetting, e.g. for events from a certain date range.
 #'
-#' @section Properties of \code{das_dfr}:
-#'
-#'   All values in the Event column must not be \code{NA}.
+#' @section Properties of \code{das_dfr} objects:
 #'
 #'   Objects of class \code{das_dfr} have a class attribute of \code{c("das_dfr", "data.frame")}.
 #'   In addition, they must have the following column names and classes:
@@ -65,7 +63,7 @@ NULL
 #'   If this object is then passed to a DAS processing function such as \code{\link{das_sight}}, the function
 #'   will try to coerce the object to a \code{das_df} object.
 #'
-#' @section Properties of \code{das_df}:
+#' @section Properties of \code{das_df} objects:
 #'
 #'   All values in the Event column must not be \code{NA}.
 #'

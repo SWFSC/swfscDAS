@@ -58,7 +58,7 @@ das_chop_section.das_df <- function(x, conditions, distance.method = NULL,
                                           num.cores = NULL, ...) {
   #----------------------------------------------------------------------------
   # Input checks
-  if (!all(x$OnEffort | x$Event %in% c("O", "E")))
+  if (!all(x$OnEffort | x$Event %in% c("E")))
     stop("x must be filtered for on effort events; see `?das_chop_equal")
 
   conditions <- .das_conditions_check(conditions, "section")
