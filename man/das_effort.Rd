@@ -73,7 +73,7 @@ List of three data frames:
       the unique segment number it is associated with, segment mid points (lat/lon),
       the 'included' column described in the 'Details' section,
       and the output information described in \code{\link{das_sight}}
-    \item randpicks: see \code{\link{das_chop_equal}};
+    \item randpicks: see \code{\link{das_chop_equallength}};
       \code{NULL} if using "condition" method
   }
 }
@@ -107,7 +107,7 @@ This is the top-level function for chopping processed DAS data
   The "equallength" method consists of
   chopping effort sections into equal-length segments of length \code{seg.km},
   and doing a weighted average of the conditions for the length of that segment.
-  See \code{\link{das_chop_equal}} for more details about this method,
+  See \code{\link{das_chop_equallength}} for more details about this method,
   including arguments that must be passed to it via the argument \code{...}
 
   The "section" method involves 'chopping' the effort into continuous effort sections,

@@ -22,7 +22,7 @@ das_chop_condition(x, ...)
 \arguments{
 \item{x}{an object of class \code{das_df},
 or a data frame that can be coerced to class \code{das_df}.
-This data must be filtered for 'OnEffort' events;
+This data must be filtered for continuous effort sections;
 see the Details section below}
 
 \item{...}{ignored}
@@ -50,7 +50,7 @@ List of two data frames:
 Chop DAS data into a new effort segment every time a specified condition changes
 }
 \details{
-This function is intended to only be called by \code{\link{das_effort}}
+This function is intended to be called by \code{\link{das_effort}}
   when the "condition" method is specified.
   Thus, \code{x} must be filtered for events (rows) where either
   the 'OnEffort' column is \code{TRUE} or the 'Event' column is "E";
@@ -58,27 +58,27 @@ This function is intended to only be called by \code{\link{das_effort}}
   This function chops each continuous effort section (henceforth 'effort sections')
   in \code{x} into modeling segments (henceforth 'segments') by
   creating a new segment every time a specified condition changes.
-  Each effort section runs from a B/R event to its corresponding E event.
+  Each effort section runs from an "R" event to its corresponding "E" event.
   After chopping, \code{\link{das_segdata}} is called
   (with \code{segdata.method = "maxdist"})
   to get relevant segdata information for each segment.
 
   Changes in the one of the conditions specified in the \code{conditions}
   argument triggers a new segment.
-  An exception is when multiple condition changes happen at
-  the same location, such as a 'BRPVNW' series of events.
+  The main exception is when multiple condition changes happen at
+  the same location, such as a "RPVNW" series of events at the beginning of the effort section.
   When this happens, no segments of length zero are created;
   rather, a single segment is created that includes all of the condition changes
   (i.e. all of the events in the event series) that happened during
   the series of events (i.e. at the same location).
-  Note that this combining of events at the same Lat/Lon happens
+  Note that this combining of events at the same position happens
   even if \code{seg.min.km = 0}.
 
   In addition, (almost) all segments whose length is less than \code{seg.min.km}
   are combined with the segment immediately following them to ensure that the length
   of (almost) all segments is at least \code{seg.min.km}.
   This allows users to account for situations where multiple conditions,
-  such as Beaufort and the visibility, change in rapid succession, say <0.1 km apart.
+  such as Beaufort and the visibility, change in rapid succession, for instance <0.1 km apart.
   When segments are combined, a message is printed, and the condition that was
   recorded for the maximum distance within the new segment is reported.
   See \code{\link{das_segdata}}, \code{segdata.method = "maxdist"}, for more details

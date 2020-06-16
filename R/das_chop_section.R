@@ -12,15 +12,15 @@
 #'   Default is \code{NULL} since these distances should have already been calculated
 #' @param num.cores see \code{\link{das_effort}}
 #'
-#' @details This function is simply a wrapper for \code{\link{das_chop_equal}}.
-#'   It calls \code{\link{das_chop_equal}}, with \code{seg.km} set to a
+#' @details This function is simply a wrapper for \code{\link{das_chop_equallength}}.
+#'   It calls \code{\link{das_chop_equallength}}, with \code{seg.km} set to a
 #'   value larger than the longest continuous effort section in \code{x}.
 #'   Thus, the effort is 'chopped' into the continuous effort sections and then summarized.
 #'
 #'   See the Examples section for an example where the two methods give the same output.
 #'   Note that the longest continuous effort section in the sample data is ~22km.
 #'
-#' @return See \code{\link{das_chop_equal}}. The randpicks values will all be \code{NA}
+#' @return See \code{\link{das_chop_equallength}}. The randpicks values will all be \code{NA}
 #'
 #' @examples
 #' \dontrun{
@@ -38,8 +38,6 @@
 #' }
 #'
 #' @keywords internal
-#'
-#' @seealso das_chop_condition, das_chop_equal
 #'
 #' @export
 das_chop_section <- function(x, ...) UseMethod("das_chop_section")
@@ -59,7 +57,7 @@ das_chop_section.das_df <- function(x, conditions, distance.method = NULL,
   #----------------------------------------------------------------------------
   # Input checks
   if (!all(x$OnEffort | x$Event %in% c("E")))
-    stop("x must be filtered for on effort events; see `?das_chop_equal")
+    stop("x must be filtered for on effort events; see `?das_chop_equallength")
 
   conditions <- .das_conditions_check(conditions, "section")
 
@@ -93,8 +91,8 @@ das_chop_section.das_df <- function(x, conditions, distance.method = NULL,
     group_by(.data$cont_eff_section) %>%
     summarise(dist_sum = sum(.data$dist_from_prev_sect, na.rm = TRUE))
 
-  # Call das_chop_equal using max section length + 1
-  das_chop_equal(
+  # Call das_chop_equallength using max section length + 1
+  das_chop_equallength(
     x %>% select(-.data$cont_eff_section),
     conditions = conditions,
     seg.km = max(x.summ$dist_sum) + 1, randpicks.load = randpicks.df,

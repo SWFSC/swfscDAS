@@ -28,14 +28,14 @@ Default is \code{NULL} since these distances should have already been calculated
 \item{num.cores}{see \code{\link{das_effort}}}
 }
 \value{
-See \code{\link{das_chop_equal}}. The randpicks values will all be \code{NA}
+See \code{\link{das_chop_equallength}}. The randpicks values will all be \code{NA}
 }
 \description{
 Chop DAS data into effort segments by continuous effort section
 }
 \details{
-This function is simply a wrapper for \code{\link{das_chop_equal}}.
-  It calls \code{\link{das_chop_equal}}, with \code{seg.km} set to a
+This function is simply a wrapper for \code{\link{das_chop_equallength}}.
+  It calls \code{\link{das_chop_equallength}}, with \code{seg.km} set to a
   value larger than the longest continuous effort section in \code{x}.
   Thus, the effort is 'chopped' into the continuous effort sections and then summarized.
 
@@ -57,8 +57,5 @@ y.eff2 <- das_effort(y.proc, method = "section", num.cores = 1)
 all.equal(y.eff1, y.eff2)
 }
 
-}
-\seealso{
-das_chop_condition, das_chop_equal
 }
 \keyword{internal}

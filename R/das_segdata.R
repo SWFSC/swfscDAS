@@ -16,7 +16,7 @@
 #' @param ... ignored
 #'
 #' @details This function was designed to be called by one of the das_chop_ functions,
-#'   e.g. \code{\link{das_chop_equal}}, and thus
+#'   e.g. \code{\link{das_chop_equallength}}, and thus
 #'   users should avoid calling it themselves.
 #'   It loops through the events in \code{x}, chopping \code{x} into modeling segments
 #'   while calculating and storing relevant information for each segment.

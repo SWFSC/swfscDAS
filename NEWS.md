@@ -8,11 +8,13 @@
 
 * `das_effort_sight` now has an argument that lets the user use the low group size estimate in place of an `NA` best group size estimate 
 
+* Changed `das_chop_equal` to `das_chop_equallength` for naming consistency. This change should not affect users, as it does not affect any of the syntax required when using `das_effort`
+
 * Added `das_within_strata` for checking if individual points, such as event points or segment midpoints, are within user-provided strata
 
 * The "DAS_data_join" vignette demonstrates how to join external data, such as from DAT files, to processed DAS data
 
-* Where applicable, error, warning, and informational messages now report both the file name and line number. This makes the messages useful when working with concatenated DAS objects with multiple DAS files.
+* Where applicable, error, warning, and informational messages now report both the file name and line number. This makes the messages more useful when working with concatenated DAS objects with multiple DAS files.
 
 
 # swfscDAS 0.2
