@@ -1,4 +1,4 @@
-# swfscDAS 0.3
+# swfscDAS 0.3.0
 
 * `das_process` now lets the user add the DateTime, Lat, and Lon information to "?" and numeric (1:8) events. This enables the user to filter the processed DAS data by date/time or coordinates, if desired
 
@@ -17,7 +17,7 @@
 * Where applicable, error, warning, and informational messages now report both the file name and line number. This makes the messages more useful when working with concatenated DAS objects with multiple DAS files.
 
 
-# swfscDAS 0.2
+# swfscDAS 0.2.0
 
 ## General 
 
@@ -40,6 +40,6 @@
 * Users can now use a `das_sight` argument to provide the event code(s) by which they wish to filter the function output
 
 
-# swfscDAS 0.1
+# swfscDAS 0.1.0
 
 * Initial version, presented to NMFS users
