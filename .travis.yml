@@ -1,23 +1,27 @@
-# Copied over from sf/.travis.yml, and then cleaned and simplified as possible
-language: r
+# tic documentation: https://docs.ropensci.org/tic/dev/
+# Copied some over from sf/.travis.yml
 
+# OS ---------------------------------------------------------------------------
 os: linux
+dist: bionic
 
-r:
-  - release
-  - oldrel
-  - devel
-
-warnings_are_errors: true
-
-sudo: required
-dist: trusty
-
+# meta -------------------------------------------------------------------------
+language: r
 cache:
   - packages
   - ccache
-
 latex: false
+
+# multiple R versions ----------------------------------------------------------
+matrix:
+  include:
+  - r: devel
+  - r: oldrel
+  - r: release
+    env:
+    # if you use bookdown or blogdown, replace "PKGDOWN" by the respective
+    # capitalized term. This also might need to be done in tic.R
+    - BUILD_PKGDOWN=true
 
 addons:
   apt:
