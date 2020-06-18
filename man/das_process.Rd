@@ -24,7 +24,7 @@ das_process(x, ...)
 )
 }
 \arguments{
-\item{x}{either a \code{das_dfr} object, an object that can be coreced to class \code{das_dfr},
+\item{x}{either a \code{das_dfr} object, an object that can be coerced to class \code{das_dfr},
 or a character (filepath) which is first passed to \code{\link{das_read}}}
 
 \item{...}{passed to \code{\link{das_read}} if \code{x} is a character.

@@ -8,7 +8,7 @@
 #'   These must exactly match the species codes in the data,
 #'   such as including leading zeros
 #' @param sp.events character; event code(s) to include in the sightinfo output.
-#'   This argument supercedes the 'included' value when determining
+#'   This argument supersedes the 'included' value when determining
 #'   whether a sighting is included in the segment summaries.
 #'   Must be one or more of: "S", "K", "M", "G", "t", "p" (case-sensitive).
 #'   The default is that all of these event codes are kept

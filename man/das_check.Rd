@@ -94,14 +94,14 @@ Precursor to DASCHECK. Checks that the following is true:
   Sighting info \tab 1-8 \tab Data9   \tab The Data9 column must be NA (blank) for events 1-8\cr
 }
 
-Outstanding questions/todo:
+Outstanding questions/to add:
 \itemize{
   \item There are ~3000 V events from 2018 with non-NA Data6 columns.
   \item TODO: Add check for sequential date/time
   \item TODO: Add column with cruise number to output
   \item Check that A events only come immediately after a G/S/K/M event,
     and all G/S/K/M events have an A after them.
-    Also check about these related to ?/1:8 events?
+    That each has at least one groupsize estimate (1:8 event)
   \item TODO: Check that lat/lon values are within [-90, 90] and [-180, 180]
 }
 }

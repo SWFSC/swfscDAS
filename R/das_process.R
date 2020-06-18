@@ -3,7 +3,7 @@
 #' Process DAS data (the output of \code{\link{das_read}}),
 #'   including extracting state and condition information for each DAS event
 #'
-#' @param x either a \code{das_dfr} object, an object that can be coreced to class \code{das_dfr},
+#' @param x either a \code{das_dfr} object, an object that can be coerced to class \code{das_dfr},
 #'   or a character (filepath) which is first passed to \code{\link{das_read}}
 #' @param ... passed to \code{\link{das_read}} if \code{x} is a character.
 #'   Otherwise ignored
