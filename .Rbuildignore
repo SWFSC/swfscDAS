@@ -10,3 +10,4 @@
 ^pkgdown$
 ^data-raw$
 ^tic\.R$
+^cran-comments\.md$
