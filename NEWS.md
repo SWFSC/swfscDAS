@@ -1,4 +1,4 @@
-# swfscDAS 0.3 (in development)
+# swfscDAS 0.3
 
 * `das_process` now lets the user add the DateTime, Lat, and Lon information to "?" and numeric (1:8) events. This enables the user to filter the processed DAS data by date/time or coordinates, if desired
 
@@ -25,7 +25,7 @@
 
 * Added 'SpdKt' (ship speed in knots) and 'WindSpdKt' (wind speed in knots) to the output of `das_process`. The sources for these data are also checked in `das_check`
 
-* Renamed items in effort list output of `das_effort` and `das_effort_sight`: 'siteinfo' is now 'sightinfo', and segdata columns indicating the number of sighitngs or animals on a segment are now formatted as 'description'_'species code', e.g. "nSI_075"
+* Renamed items in effort list output of `das_effort` and `das_effort_sight`: 'siteinfo' is now 'sightinfo', and segdata columns indicating the number of sightings or animals on a segment are now formatted as 'description'_'species code', e.g. "nSI_075"
 
 ## `das_sight` changes
 

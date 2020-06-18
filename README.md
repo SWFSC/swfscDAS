@@ -11,15 +11,14 @@ status](https://travis-ci.com/smwoodman/swfscDAS.svg?branch=master)](https://tra
 status](https://ci.appveyor.com/api/projects/status/github/smwoodman/swfscDAS?branch=master&svg=true)](https://ci.appveyor.com/project/smwoodman/swfscDAS)
 <!-- badges: end -->
 
-Warning: `swfscDAS` is still under active development\! Please consult
-with the author (<sam.woodman@noaa.gov>) before using it.
-
 This package contains functions designed for processing and analyzing
-DAS data generated using the WinCruz program by the Southwest Fisheries
-Science Center. Functionality currently includes reading DAS data into a
-data frame, processing this data (extracting state and condition
-information for each DAS event), and summarizing sighting and effort
-information.
+shipboard DAS data generated using the WinCruz program from the
+Southwest Fisheries Science Center. It is intended to standardize and
+streamline basic DAS data processing. Functionality currently includes
+reading DAS data into a data frame, processing this data (extracting
+state and condition information for each DAS event), and summarizing
+sighting, effort, and comment information. Learn more in
+`vignette("swfscDAS")`
 
 ## Installation
 
@@ -30,47 +29,20 @@ You can install `swfscDAS` from [GitHub](https://github.com) with:
 devtools::install_github("smwoodman/swfscDAS")
 ```
 
-## DAS format
+Before installing swfscDAS, you must have
+[R](https://www.r-project.org/),
+[RStudio](https://rstudio.com/products/rstudio/download/#download), and
+the appropriate version of
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed. It
+is best practice to install after closing all instances of R and
+RStudio, and then running the install code from the R GUI rather than
+RStudio. Please contact the developer if you have any issues.
 
-You can [download the
-PDF](https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_Format.pdf)
-describing the DAS data format requirements of `swfscDAS`.
+## DAS data format
 
-## Usage
-
-First, you must read and process the DAS data
-
-``` r
-library(swfscDAS)
-# Get file paths of sample files included in the package
-y <- system.file("das_sample.das", package = "swfscDAS")
-
-# Read and process DAS file, i.e. read DAS data into a data frame and add info columns
-y.read <- das_read(y)
-y.proc <- das_process(y.read)
-
-# Alternatively, the file path can be passed directly to das_process
-y.proc <- das_process(y)
-```
-
-Note that `das_read` can read multiple files simultaneously
-
-``` r
-y.read.mult <- das_read(c(y, y))
-```
-
-Next, you can summarize the processed DAS data
-
-``` r
-# Summarize sighting information
-y.sight <- das_sight(y.proc, mixed.multi = TRUE)
-
-# Summarize effort - coming soon..
-```
-
-You can also check that your DAS data has accepted formatting and
-values:
-
-``` r
-das_check(y)
-```
+`swfscDAS` expects data to follow the conventions and format used by the
+WinCruz program. You can [download a PDF
+here](https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_Format.pdf)
+describing the DAS data format requirements. See `das_format_pdf` for
+instructions on how to access the local copy of the format PDF that is
+included in the package.

@@ -2,9 +2,7 @@
 #'
 #' This package contains functions designed for processing and analyzing DAS data
 #' generated using the WinCruz program by the Southwest Fisheries Science Center.
-#' Functionality currently includes reading DAS data into a data frame,
-#' processing this data (extracting state and condition information for each DAS event),
-#' and summarizing sighting and effort information.
+#' It is intended to standardize and streamline basic DAS data processing.
 #'
 #' @name swfscDAS-package
 #' @aliases swfscDAS

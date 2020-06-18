@@ -19,7 +19,7 @@ Data frame with one line for each continuous effort section in \code{x.segdata},
   and two columns: \code{effort_section} and \code{randpicks}
 }
 \description{
-Convert randpicks file from 'segchopr format' to 'swfscDAS format'
+Convert randpicks file from segchopr format to swfscDAS format
 }
 \details{
 Past DAS processing code (segchopr) only recorded the generated random values,

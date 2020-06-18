@@ -52,6 +52,9 @@ glimpse(y.read)
 # Process
 y.proc <- das_process(y)
 glimpse(y.proc)
+
+# Note that das_read can read multiple files at once
+y2.read <- das_read(c(y, y))
 ```
 
 Once you have processed the DAS data, you can easily access a variety of information. For instance, you can look at the different events or Beaufort values that occurred in the data, or filter for specific events to get the beginning and ending points of each effort section. 
