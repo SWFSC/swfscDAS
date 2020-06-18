@@ -11,3 +11,4 @@
 ^data-raw$
 ^tic\.R$
 ^cran-comments\.md$
+^CRAN-RELEASE$
