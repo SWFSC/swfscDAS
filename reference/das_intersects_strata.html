@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DAS strata - points — das_within_strata • swfscDAS</title>
+<title>DAS strata - points — das_intersects_strata • swfscDAS</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="DAS strata - points — das_within_strata" />
-<meta property="og:description" content="Determine the strata for swfscDAS outputs" />
+<meta property="og:title" content="DAS strata - points — das_intersects_strata" />
+<meta property="og:description" content="Determine if swfscDAS outputs intsersect with strata polygons" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -127,21 +127,21 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>DAS strata - points</h1>
-    <small class="dont-index">Source: <a href='https://github.com/smwoodman/swfscDAS/blob/master/R/das_within_strata.R'><code>R/das_within_strata.R</code></a></small>
-    <div class="hidden name"><code>das_within_strata.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/smwoodman/swfscDAS/blob/master/R/das_intersects_strata.R'><code>R/das_intersects_strata.R</code></a></small>
+    <div class="hidden name"><code>das_intersects_strata.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Determine the strata for swfscDAS outputs</p>
+    <p>Determine if swfscDAS outputs intsersect with strata polygons</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_within_strata</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>das_intersects_strata</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for list</span>
-<span class='fu'>das_within_strata</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
+<span class='fu'>das_intersects_strata</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_within_strata</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>x.lon</span> <span class='kw'>=</span> <span class='st'>"Lon"</span>, <span class='kw'>x.lat</span> <span class='kw'>=</span> <span class='st'>"Lat"</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>das_intersects_strata</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='kw'>x.lon</span> <span class='kw'>=</span> <span class='st'>"Lon"</span>, <span class='kw'>x.lat</span> <span class='kw'>=</span> <span class='st'>"Lat"</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,7 +161,7 @@ using <code>x.lon</code> and <code>x.lat</code>.</p></td>
     </tr>
     <tr>
       <th>y</th>
-      <td><p>list of file path(s) of the CSV(s) that contain points defining the strata.
+      <td><p>list of file path(s) of the CSV(s) that contain points defining each stratum.
 The list may be named; see 'Value' section for how these names are used</p></td>
     </tr>
     <tr>
@@ -178,23 +178,24 @@ Ignored if <code>x</code> is a list; default is "Lat"</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Columns are added to <code>x</code> indicating if each point was
-  in (<code>TRUE</code>) or out (<code>FALSE</code>) of the corresponding strata polygon.
+    <p>Logical columns are added to <code>x</code> indicating if each point intersected
+  with the corresponding stratum polygon.
   The names of these columns are the names of <code>y</code>;
   the element(s) of <code>y</code> will have the name InPoly#,
-  where '#' is the index of that strata polygon in <code>y</code>.</p>
+  where '#' is the index of that stratum polygon in <code>y</code>.</p>
 <p>If <code>x</code> is a list (i.e. the output of one of the effort functions),
-  then the strata columns are added to both the segdata and sightinfo data frames.
+  then the stratum columns are added to both the segdata and sightinfo data frames.
   However, note that the columns added to the sightinfo data frame still indicate
-  whether or not the corresponding segment midpoint was in the strata,
-  not the sighting point itself.</p>
+  whether or not the segment midpoint was in the corresponding stratum,
+  rather than the sighting point itself.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Assigns DAS event points or segment midpoints to strata polygon.
-  If <code>x</code> is a list, then 1) it must be the output of
+    <p>Assigns DAS event points or segment midpoints to strata polygons
+  using <code><a href='https://rdrr.io/pkg/sf/man/geos_binary_pred.html'>st_intersects</a></code>.</p>
+<p>If <code>x</code> is a list, then 1) it must be the output of
   <code>link{das_effort}</code> or <code>link{das_effort_sight}</code> and
   2) the segment midpoints (column names mlon and mlat, respectively)
-  are the points checked if they are in the strata.
+  are the points checked if they intersect with each provided stratum.
   If <code>x</code> is a data frame, then the user must provide the columns
   that specify the point coordinates to check.</p>
 <p><code>x</code> should not be an object of class <code>das_dfr</code>,
@@ -206,8 +207,8 @@ Ignored if <code>x</code> is a list; default is "Lat"</p></td>
 <span class='no'>y.proc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='no'>y</span>)
 <span class='no'>y.eff</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(<span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"section"</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
-<span class='no'>strata.file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample_strata.csv"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
-<span class='fu'>das_within_strata</span>(<span class='no'>y.eff</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>InPoly</span> <span class='kw'>=</span> <span class='no'>strata.file</span>), <span class='kw'>x.lon</span> <span class='kw'>=</span> <span class='st'>"Lon"</span>, <span class='kw'>x.lat</span> <span class='kw'>=</span> <span class='st'>"Lat"</span>)</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; $segdata
+<span class='no'>stratum.file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample_stratum.csv"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
+<span class='fu'>das_intersects_strata</span>(<span class='no'>y.eff</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>InPoly</span> <span class='kw'>=</span> <span class='no'>stratum.file</span>), <span class='kw'>x.lon</span> <span class='kw'>=</span> <span class='st'>"Lon"</span>, <span class='kw'>x.lat</span> <span class='kw'>=</span> <span class='st'>"Lat"</span>)</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 43.94750
 #&gt; 2       2          2              1 das_sample.das    23     43 44.00333
@@ -388,7 +389,7 @@ Ignored if <code>x</code> is a list; default is "Lat"</p></td>
 #&gt; 9               9        NA
 #&gt; 10             10        NA
 #&gt; </div><div class='input'>
-<span class='fu'>das_within_strata</span>(<span class='no'>y.proc</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>strata.file</span>))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt;     Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
+<span class='fu'>das_intersects_strata</span>(<span class='no'>y.proc</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>stratum.file</span>))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt;     Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
 #&gt; 1       B 2014-03-05 06:27:39 43.94750 -141.0217     TRUE   1000    C    &lt;NA&gt;
 #&gt; 2       R 2014-03-05 06:27:39 43.94750 -141.0217     TRUE   1000    C       S
 #&gt; 3       P 2014-03-05 06:27:39 43.94750 -141.0217     TRUE   1000    C       S
@@ -1673,23 +1674,19 @@ Ignored if <code>x</code> is a list; default is "Lat"</p></td>
 #&gt; 254      257       0
 #&gt; 255      258       0
 #&gt; 256      259       0</div><div class='input'>
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># Visualize effort midpoints and strata polygon</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>sf</span>)
-<span class='no'>y.eff.strata</span> <span class='kw'>&lt;-</span> <span class='fu'>das_within_strata</span>(<span class='no'>y.eff</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>InPoly</span> <span class='kw'>=</span> <span class='no'>strata.file</span>))
-<span class='no'>segdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sf/man/st_as_sf.html'>st_as_sf</a></span>(<span class='no'>y.eff.strata</span>$<span class='no'>segdata</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mlon"</span>, <span class='st'>"mlat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
+<span class='co'># Visualize effort midpoints and stratum polygon</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>sf</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: sf</span></div><div class='output co'>#&gt; <span class='message'>Linking to GEOS 3.7.1, GDAL 2.2.2, PROJ 4.9.2</span></div><div class='input'><span class='no'>y.eff.strata</span> <span class='kw'>&lt;-</span> <span class='fu'>das_intersects_strata</span>(<span class='no'>y.eff</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>InPoly</span> <span class='kw'>=</span> <span class='no'>stratum.file</span>))</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='input'><span class='no'>segdata</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sf/man/st_as_sf.html'>st_as_sf</a></span>(<span class='no'>y.eff.strata</span>$<span class='no'>segdata</span>, <span class='kw'>coords</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mlon"</span>, <span class='st'>"mlat"</span>), <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>)
 
-<span class='co'># Make strata polygon</span>
-<span class='no'>strata.df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='no'>strata.file</span>)
-<span class='no'>strata.sfc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sf/man/sfc.html'>st_sfc</a></span>(
-  <span class='fu'><a href='https://rdrr.io/pkg/sf/man/st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>strata.df</span>$<span class='no'>Lon</span>, <span class='no'>strata.df</span>$<span class='no'>Lat</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>))),
+<span class='co'># Make stratum polygon</span>
+<span class='no'>stratum.df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span>(<span class='no'>stratum.file</span>)
+<span class='no'>stratum.sfc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/sf/man/sfc.html'>st_sfc</a></span>(
+  <span class='fu'><a href='https://rdrr.io/pkg/sf/man/st.html'>st_polygon</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>stratum.df</span>$<span class='no'>Lon</span>, <span class='no'>stratum.df</span>$<span class='no'>Lat</span>), <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>2</span>))),
   <span class='kw'>crs</span> <span class='kw'>=</span> <span class='fl'>4326</span>
 )
 
 <span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='no'>segdata</span>[<span class='st'>"InPoly"</span>], <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reset</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-     <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>137</span>, -<span class='fl'>142.5</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>42</span>, <span class='fl'>47</span>))
-<span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='no'>strata.sfc</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-}</div></pre>
+     <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>137</span>, -<span class='fl'>142.5</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>42</span>, <span class='fl'>47</span>))</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/sf/man/plot.html'>plot</a></span>(<span class='no'>stratum.sfc</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='das_intersects_strata-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

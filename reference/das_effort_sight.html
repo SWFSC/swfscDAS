@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -197,12 +197,12 @@ should be used ONLY if the best estimate ('GsSpLow') is <code>NA</code></p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
 <span class='no'>y.proc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='no'>y</span>)
-<span class='no'>y.cond</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(
-  <span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"condition"</span>,
-  <span class='kw'>conditions</span> <span class='kw'>=</span> <span class='st'>"Bft"</span>, <span class='kw'>seg.min.km</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>
+<span class='no'>y.eff.cond</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(
+  <span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"condition"</span>, <span class='kw'>conditions</span> <span class='kw'>=</span> <span class='st'>"Bft"</span>, <span class='kw'>seg.min.km</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
+  <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>
 )
 
-<span class='fu'>das_effort_sight</span>(<span class='no'>y.cond</span>, <span class='kw'>sp.codes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"013"</span>, <span class='st'>"076"</span>, <span class='st'>"DC"</span>), <span class='kw'>sp.events</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"t"</span>))</div><div class='output co'>#&gt; $segdata
+<span class='fu'>das_effort_sight</span>(<span class='no'>y.eff.cond</span>, <span class='kw'>sp.codes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"013"</span>, <span class='st'>"076"</span>, <span class='st'>"DC"</span>), <span class='kw'>sp.events</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"t"</span>))</div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 43.94750
 #&gt; 2       2          2              1 das_sample.das    23     43 44.00333

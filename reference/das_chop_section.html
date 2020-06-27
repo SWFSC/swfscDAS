@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -185,19 +185,13 @@ Default is <code>NULL</code> since these distances should have already been calc
   Note that the longest continuous effort section in the sample data is ~22km.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
+    <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
 <span class='no'>y.proc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='no'>y</span>)
 
-<span class='no'>y.eff1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(
-  <span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"equallength"</span>, <span class='kw'>seg.km</span> <span class='kw'>=</span> <span class='fl'>25</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>
-)
+<span class='no'>y.eff1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(<span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"equallength"</span>, <span class='kw'>seg.km</span> <span class='kw'>=</span> <span class='fl'>25</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>No argument was passed via randpicks.load, and thus new randpicks values will be generated</span></div><div class='input'><span class='no'>y.eff2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(<span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"section"</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
-<span class='no'>y.eff2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(<span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"section"</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)
-
-
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>y.eff1</span>, <span class='no'>y.eff2</span>)
-}</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>y.eff1</span>, <span class='no'>y.eff2</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

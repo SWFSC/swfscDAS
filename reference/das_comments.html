@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
       </span>
     </div>
 
@@ -200,7 +200,7 @@ or a data frame that can be coerced to a <code>das_dfr</code> object</p></td>
 #&gt; 3            off effort after the sighting          
 #&gt; 4  off effort, first seen by CO while riding bow    
 #&gt; 5                 crossing fishing gear             </div><div class='input'>
-<span class='co'># Extract all comments containing "record"</span>
+<span class='co'># Extract all comments containing "record" - could also use stringr pacakge</span>
 <span class='no'>y.comm</span> <span class='kw'>&lt;-</span> <span class='fu'>das_comments</span>(<span class='no'>y.proc</span>)
 <span class='no'>y.comm</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span>(<span class='st'>"record"</span>, <span class='no'>y.comm</span>$<span class='no'>comment_str</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), ]</div><div class='output co'>#&gt;  [1] Event       DateTime    Lat         Lon         OnEffort    Cruise     
 #&gt;  [7] Mode        EffType     ESWsides    Course      SpdKt       Bft        
