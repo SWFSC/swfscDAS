@@ -19,7 +19,7 @@
 #'   using \code{\link[sf:geos_binary_pred]{st_intersects}}.
 #'
 #'   If \code{x} is a list, then 1) it must be the output of
-#'   \code{link{das_effort}} or \code{link{das_effort_sight}} and
+#'   \code{\link{das_effort}} or \code{\link{das_effort_sight}} and
 #'   2) the segment midpoints (column names mlon and mlat, respectively)
 #'   are the points checked if they intersect with each provided stratum.
 #'   If \code{x} is a data frame, then the user must provide the columns
@@ -35,7 +35,7 @@
 #'   the element(s) of \code{y} will have the name InPoly#,
 #'   where '#' is the index of that stratum polygon in \code{y}.
 #'
-#'   If \code{x} is a list (i.e. the output of one of the effort functions),
+#'   If \code{x} is a list (meaning the output of one of the effort functions),
 #'   then the stratum columns are added to both the segdata and sightinfo data frames.
 #'   However, note that the columns added to the sightinfo data frame still indicate
 #'   whether or not the segment midpoint was in the corresponding stratum,

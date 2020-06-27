@@ -5,7 +5,7 @@
 
 # swfscDAS 0.3.0
 
-* `das_process` now lets the user add the DateTime, Lat, and Lon information to "?" and numeric (1:8) events. This enables the user to filter the processed DAS data by date/time or coordinates, if desired
+* `das_process` now lets the user add the DateTime, Lat, and Lon information to "?" and numeric (1:8) events using the 'add.dtll.sight' argument. This enables the user to filter the processed DAS data by date/time or coordinates, if desired
 
 * For consistency with species code columns, the column name 'SpProb' is now 'SpCodeProb' in `das_sight` output
 
