@@ -1,10 +1,10 @@
 Package: swfscDAS
 Title: Southwest Fisheries Science Center Shipboard DAS Data Processing
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: 
     person("Sam", "Woodman", email = "sam.woodman@noaa.gov", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6071-8186"))
-Description: Process and summarize shipboard DAS data collected using the 
-    Southwest Fisheries Science Center (SWFSC) 'WinCruz' program.
+Description: Process and summarize shipboard DAS data (data written to a .das file) 
+    collected using the Southwest Fisheries Science Center (SWFSC) 'WinCruz' program.
     This package is intended to standardize and streamline basic DAS data processing.
     A PDF with the DAS data format requirements is included in this package.
 URL: https://smwoodman.github.io/swfscDAS, https://github.com/smwoodman/swfscDAS

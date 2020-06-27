@@ -140,6 +140,7 @@ das_effort(
   seg.min.km = 0.05, num.cores = 1
 )
 
+\donttest{
 # Using "equallength" method
 y.rand <- system.file("das_sample_randpicks.csv", package = "swfscDAS")
 das_effort(
@@ -149,5 +150,6 @@ das_effort(
 
 # Using "section" method
 das_effort(y.proc, method = "section", num.cores = 1)
+}
 
 }

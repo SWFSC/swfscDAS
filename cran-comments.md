@@ -1,5 +1,12 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Changed a function name to better reflect its functionality, hence the version bump from 0.3.0 to 0.4.0
+* Explained 'DAS' in the DESCRIPTION text
+* Replaced \dontrun{} with \donttest{}, or unwrapped examples where appropriate
+* Ensured that all examples and vignettes use only 1 core
+
 ## Release summary
-Initial release
+Initial release (0.3.0)
 
 ## Test environments
 * Windows 10, R 4.0.1 (local)
@@ -14,7 +21,7 @@ There was one NOTE on win-builder:
 
 * "Possibly mis-spelled words in DESCRIPTION: DAS, SWFSC"
 
-DAS is the name of the data type, and SWFSC is an acronym explained in DESCRIPTION
+DAS and SWFSC are acronyms explained in DESCRIPTION
 
 ## Downstream dependencies
 No downstream dependencies

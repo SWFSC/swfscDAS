@@ -17,8 +17,8 @@
 #'   \code{TRUE} if writing of file was successful, and \code{FALSE} otherwise
 #'
 #' @examples
-#' \dontrun{
-#' das_format_pdf("DAS_Format.pdf", overwrite = FALSE)
+#' \donttest{
+#' # das_format_pdf("DAS_Format.pdf", overwrite = FALSE)
 #' }
 #'
 #' @export

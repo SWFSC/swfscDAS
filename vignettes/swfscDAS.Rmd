@@ -2,20 +2,20 @@
 title: "Introduction to swfscDAS"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{swfscDAS}
+%\VignetteIndexEntry{swfscDAS}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+  ---
   
-```{r, include = FALSE}
-knitr::opts_chunk$set(
+  ```{r, include = FALSE}
+  knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
-)
-```
+  )
+  ```
   
-```{r setup, message=FALSE}
-library(dplyr)
+  ```{r setup, message=FALSE}
+  library(dplyr)
 library(stringr)
 library(swfscDAS)
 ```
@@ -96,7 +96,7 @@ y.sight.complete %>%
 
 You can also easily filter or subset the sighting data for the desired event code(s)
 
-```{r}
+```{r sight2}
 y.sight.sg <- das_sight(y.proc, return.events = c("S", "G"))
 
 # Note that this is equivalent to:
@@ -127,6 +127,17 @@ y.eff.sight <- das_effort_sight(y.eff, sp.codes = c("018", "076"))
 glimpse(y.eff.sight$segdata)
 
 glimpse(y.eff.sight$sightinfo)
+```
+
+## Strata
+
+This package contains the function `das_intersects_strata`, which allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. A list must be the output of `das_effort` or `das_effort_sight`, and the function will use the segment midpoints to determine if a segment (and associated sighting) intersected each stratum. There currently is no functionality for chopping effort lines by stratum.
+
+```{r}
+stratum.file <- system.file("das_sample_stratum.csv", package = "swfscDAS")
+y.eff.sight.strata <- das_intersects_strata(y.eff.sight, list(InPoly = stratum.file))
+
+glimpse(y.eff.sight.strata$segdata)
 ```
 
 ## Comments

@@ -37,7 +37,7 @@ y.proc <- das_process(y)
 
 das_comments(y.proc)
 
-# Extract all comments containing "record"
+# Extract all comments containing "record" - could also use stringr pacakge
 y.comm <- das_comments(y.proc)
 y.comm[grepl("record", y.comm$comment_str, ignore.case = TRUE), ]
 

@@ -23,19 +23,13 @@
 #' @return See \code{\link{das_chop_equallength}}. The randpicks values will all be \code{NA}
 #'
 #' @examples
-#' \dontrun{
 #' y <- system.file("das_sample.das", package = "swfscDAS")
 #' y.proc <- das_process(y)
 #'
-#' y.eff1 <- das_effort(
-#'   y.proc, method = "equallength", seg.km = 25, num.cores = 1
-#' )
-#'
+#' y.eff1 <- das_effort(y.proc, method = "equallength", seg.km = 25, num.cores = 1)
 #' y.eff2 <- das_effort(y.proc, method = "section", num.cores = 1)
 #'
-#'
 #' all.equal(y.eff1, y.eff2)
-#' }
 #'
 #' @keywords internal
 #'

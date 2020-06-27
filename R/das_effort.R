@@ -106,6 +106,7 @@
 #'   seg.min.km = 0.05, num.cores = 1
 #' )
 #'
+#' \donttest{
 #' # Using "equallength" method
 #' y.rand <- system.file("das_sample_randpicks.csv", package = "swfscDAS")
 #' das_effort(
@@ -115,6 +116,7 @@
 #'
 #' # Using "section" method
 #' das_effort(y.proc, method = "section", num.cores = 1)
+#' }
 #'
 #' @export
 das_effort <- function(x, ...) UseMethod("das_effort")

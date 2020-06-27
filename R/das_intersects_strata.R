@@ -1,6 +1,6 @@
 #' DAS strata - points
 #'
-#' Determine the strata for swfscDAS outputs
+#' Determine if swfscDAS outputs intsersect with strata polygons
 #'
 #' @param x a list or a data frame (including an object of class \code{das_df}).
 #'   If \code{x} is a list, then it must be the output of
@@ -9,18 +9,20 @@
 #'   the columns of \code{x} with the relevant coordinates
 #'   using \code{x.lon} and \code{x.lat}.
 #' @param ... ignored
-#' @param y list of file path(s) of the CSV(s) that contain points defining the strata.
+#' @param y list of file path(s) of the CSV(s) that contain points defining each stratum.
 #'   The list may be named; see 'Value' section for how these names are used
 #' @param x.lon character; name of the longitude column of \code{x}.
 #'   Ignored if \code{x} is a list; default is "Lon"
 #' @param x.lat character; name of the latitude column of \code{x}.
 #'   Ignored if \code{x} is a list; default is "Lat"
 #'
-#' @details Assigns DAS event points or segment midpoints to strata polygon.
+#' @details Assigns DAS event points or segment midpoints to strata polygons
+#'   using \code{\link[sf:geos_binary_pred]{st_intersects}}.
+#'
 #'   If \code{x} is a list, then 1) it must be the output of
 #'   \code{link{das_effort}} or \code{link{das_effort_sight}} and
 #'   2) the segment midpoints (column names mlon and mlat, respectively)
-#'   are the points checked if they are in the strata.
+#'   are the points checked if they intersect with each provided stratum.
 #'   If \code{x} is a data frame, then the user must provide the columns
 #'   that specify the point coordinates to check.
 #'
@@ -28,71 +30,69 @@
 #'   or an object of class \code{das_df} created with \code{add.dtll.sight = FALSE},
 #'   because the ? and numeric event codes will have NA latitude and longitude values.
 #'
-#' @return Columns are added to \code{x} indicating if each point was
-#'   in (\code{TRUE}) or out (\code{FALSE}) of the corresponding strata polygon.
+#' @return Logical columns are added to \code{x} indicating if each point intersected
+#'   with the corresponding stratum polygon.
 #'   The names of these columns are the names of \code{y};
 #'   the element(s) of \code{y} will have the name InPoly#,
-#'   where '#' is the index of that strata polygon in \code{y}.
+#'   where '#' is the index of that stratum polygon in \code{y}.
 #'
 #'   If \code{x} is a list (i.e. the output of one of the effort functions),
-#'   then the strata columns are added to both the segdata and sightinfo data frames.
+#'   then the stratum columns are added to both the segdata and sightinfo data frames.
 #'   However, note that the columns added to the sightinfo data frame still indicate
-#'   whether or not the corresponding segment midpoint was in the strata,
-#'   not the sighting point itself.
+#'   whether or not the segment midpoint was in the corresponding stratum,
+#'   rather than the sighting point itself.
 #'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
 #' y.proc <- das_process(y)
 #' y.eff <- das_effort(y.proc, method = "section", num.cores = 1)
 #'
-#' strata.file <- system.file("das_sample_strata.csv", package = "swfscDAS")
-#' das_within_strata(y.eff, list(InPoly = strata.file), x.lon = "Lon", x.lat = "Lat")
+#' stratum.file <- system.file("das_sample_stratum.csv", package = "swfscDAS")
+#' das_intersects_strata(y.eff, list(InPoly = stratum.file), x.lon = "Lon", x.lat = "Lat")
 #'
-#' das_within_strata(y.proc, list(strata.file))
+#' das_intersects_strata(y.proc, list(stratum.file))
 #'
-#' \dontrun{
-#' # Visualize effort midpoints and strata polygon
+#' # Visualize effort midpoints and stratum polygon
 #' require(sf)
-#' y.eff.strata <- das_within_strata(y.eff, list(InPoly = strata.file))
+#' y.eff.strata <- das_intersects_strata(y.eff, list(InPoly = stratum.file))
 #' segdata <- st_as_sf(y.eff.strata$segdata, coords = c("mlon", "mlat"), crs = 4326)
 #'
-#' # Make strata polygon
-#' strata.df <- read.csv(strata.file)
-#' strata.sfc <- st_sfc(
-#'   st_polygon(list(matrix(c(strata.df$Lon, strata.df$Lat), ncol = 2))),
+#' # Make stratum polygon
+#' stratum.df <- read.csv(stratum.file)
+#' stratum.sfc <- st_sfc(
+#'   st_polygon(list(matrix(c(stratum.df$Lon, stratum.df$Lat), ncol = 2))),
 #'   crs = 4326
 #' )
 #'
 #' plot(segdata["InPoly"], axes = TRUE, reset = FALSE,
 #'      xlim = c(-137, -142.5), ylim = c(42, 47))
-#' plot(strata.sfc, add = TRUE)
-#' }
+#' plot(stratum.sfc, add = TRUE)
 #'
 #' @export
-das_within_strata <- function(x, ...) UseMethod("das_within_strata")
+das_intersects_strata <- function(x, ...) UseMethod("das_intersects_strata")
 
-#' @name das_within_strata
+#' @name das_intersects_strata
 #' @export
-das_within_strata.list <- function(x, y, ...) {
+das_intersects_strata.list <- function(x, y, ...) {
   if (!identical(names(x), c("segdata", "sightinfo", "randpicks")))
     stop("If x is a list, then it must be the output of das_effort or ",
          "das_effort_sight. ",
          "Thus, it must contain exactly three named elements: ",
          "segdata, sightinfo, and randpicks (in order)")
 
-  x1 <- das_within_strata(x$segdata, y, "mlon", "mlat")
+  x1 <- das_intersects_strata(x$segdata, y, "mlon", "mlat")
   names.new <- base::setdiff(names(x1), names(x$segdata))
   x1.tojoin <- x1 %>% select(.data$segnum, !!names.new)
 
   x2 <- left_join(x$sightinfo, x1.tojoin, by = "segnum")
-  # x2 <- das_within_strata(x$sightinfo, y, "mlat", "mlon")
+  # x2 <- das_intersects_strata(x$sightinfo, y, "mlat", "mlon")
 
   list(segdata = x1, sightinfo = x2, randpicks = x$randpicks)
 }
 
-#' @name das_within_strata
+#' @name das_intersects_strata
 #' @export
-das_within_strata.data.frame <- function(x, y, x.lon = "Lon", x.lat = "Lat", ...) {
+das_intersects_strata.data.frame <- function(x, y, x.lon = "Lon", x.lat = "Lat", ...) {
   # Make x into an sfc object
   if (!all(c(x.lat, x.lon) %in% names(x)))
     stop("x.lon and x.lat must be the names of numeric columns in x")

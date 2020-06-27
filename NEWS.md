@@ -1,3 +1,8 @@
+# swfscDAS 0.4.0
+
+* Changed das_within_strata to `das_intersects_strata` because it uses the geometric binary predicate `st_intersects` rather than `st_within`
+
+
 # swfscDAS 0.3.0
 
 * `das_process` now lets the user add the DateTime, Lat, and Lon information to "?" and numeric (1:8) events. This enables the user to filter the processed DAS data by date/time or coordinates, if desired

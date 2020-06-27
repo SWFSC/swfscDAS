@@ -176,7 +176,6 @@
 #' y.proc <- das_process(y)
 #'
 #' das_sight(y.proc)
-#' das_sight(y.proc, return.format = "wide")
 #' das_sight(y.proc, return.format = "complete")
 #'
 #' @export

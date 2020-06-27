@@ -57,11 +57,11 @@ This function takes the output of \code{\link{das_effort}} and
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
 y.proc <- das_process(y)
-y.cond <- das_effort(
-  y.proc, method = "condition",
-  conditions = "Bft", seg.min.km = 0.05, num.cores = 1
+y.eff.cond <- das_effort(
+  y.proc, method = "condition", conditions = "Bft", seg.min.km = 0.05,
+  num.cores = 1
 )
 
-das_effort_sight(y.cond, sp.codes = c("013", "076", "DC"), sp.events = c("S", "t"))
+das_effort_sight(y.eff.cond, sp.codes = c("013", "076", "DC"), sp.events = c("S", "t"))
 
 }
