@@ -22,11 +22,11 @@ sighting, effort, and comment information. Learn more in
 
 ## Installation
 
-You can install `swfscDAS` from [GitHub](https://github.com) with:
+You can install swfscDAS from [GitHub](https://github.com) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("smwoodman/swfscDAS")
+# install.packages("remotes")
+remotes::install_github("smwoodman/swfscDAS")
 ```
 
 Before installing swfscDAS, you must have
@@ -40,7 +40,7 @@ RStudio. Please contact the developer if you have any issues.
 
 ## DAS data format
 
-`swfscDAS` expects data to follow the conventions and format used by the
+swfscDAS expects data to follow the conventions and format used by the
 WinCruz program. You can [download a PDF
 here](https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_Format.pdf)
 describing the DAS data format requirements. See `das_format_pdf` for
