@@ -1,6 +1,6 @@
 ## Resubmission
 This is a resubmission. In this version I have:
-* Changed a function name to better reflect its functionality, hence the version bump from 0.3.0 to 0.4.0
+* Changed a function name (see news), hence the version bump from 0.3.0 to 0.4.0
 * Explained 'DAS' in the DESCRIPTION text
 * Replaced \dontrun{} with \donttest{}, or unwrapped examples where appropriate
 * Ensured that all examples and vignettes use only 1 core
@@ -19,9 +19,9 @@ There were no ERRORs, WARNINGs
 
 There was one NOTE on win-builder: 
 
-* "Possibly mis-spelled words in DESCRIPTION: DAS, SWFSC"
+* "Possibly mis-spelled words in DESCRIPTION: DAS, SWFSC, das"
 
-DAS and SWFSC are acronyms explained in DESCRIPTION
+DAS and SWFSC are acronyms explained in DESCRIPTION, while .das refers to a file type
 
 ## Downstream dependencies
 No downstream dependencies

@@ -2,12 +2,11 @@
 #'
 #' Determine if swfscDAS outputs intsersect with strata polygons
 #'
-#' @param x a list or a data frame (including an object of class \code{das_df}).
+#' @param x a data frame (such as an object of class \code{das_df}) or a list.
 #'   If \code{x} is a list, then it must be the output of
 #'   \code{\link{das_effort}} or \code{\link{das_effort_sight}}.
 #'   If \code{x} is a data frame, the user must also specify
-#'   the columns of \code{x} with the relevant coordinates
-#'   using \code{x.lon} and \code{x.lat}.
+#'   the coordinate columns of \code{x} using \code{x.lon} and \code{x.lat}
 #' @param ... ignored
 #' @param y list of file path(s) of the CSV(s) that contain points defining each stratum.
 #'   The list may be named; see 'Value' section for how these names are used
