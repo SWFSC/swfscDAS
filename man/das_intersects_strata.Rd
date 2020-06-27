@@ -44,7 +44,7 @@ Logical columns are added to \code{x} indicating if each point intersected
   rather than the sighting point itself.
 }
 \description{
-Determine if swfscDAS outputs intsersect with strata polygons
+Determine if swfscDAS outputs intersect with strata polygons
 }
 \details{
 Assigns DAS event points or segment midpoints to strata polygons

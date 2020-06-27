@@ -1,6 +1,6 @@
 #' DAS strata - points
 #'
-#' Determine if swfscDAS outputs intsersect with strata polygons
+#' Determine if swfscDAS outputs intersect with strata polygons
 #'
 #' @param x a data frame (such as an object of class \code{das_df}) or a list.
 #'   If \code{x} is a list, then it must be the output of
