@@ -182,7 +182,7 @@ Ignored if <code>x</code> is a list; default is "Lat"</p></td>
   The names of these columns are the names of <code>y</code>;
   the element(s) of <code>y</code> will have the name InPoly#,
   where '#' is the index of that stratum polygon in <code>y</code>.</p>
-<p>If <code>x</code> is a list (i.e. the output of one of the effort functions),
+<p>If <code>x</code> is a list (meaning the output of one of the effort functions),
   then the stratum columns are added to both the segdata and sightinfo data frames.
   However, note that the columns added to the sightinfo data frame still indicate
   whether or not the segment midpoint was in the corresponding stratum,
@@ -192,7 +192,7 @@ Ignored if <code>x</code> is a list; default is "Lat"</p></td>
     <p>Assigns DAS event points or segment midpoints to strata polygons
   using <code><a href='https://rdrr.io/pkg/sf/man/geos_binary_pred.html'>st_intersects</a></code>.</p>
 <p>If <code>x</code> is a list, then 1) it must be the output of
-  <code>link{das_effort}</code> or <code>link{das_effort_sight}</code> and
+  <code><a href='das_effort.html'>das_effort</a></code> or <code><a href='das_effort_sight.html'>das_effort_sight</a></code> and
   2) the segment midpoints (column names mlon and mlat, respectively)
   are the points checked if they intersect with each provided stratum.
   If <code>x</code> is a data frame, then the user must provide the columns
