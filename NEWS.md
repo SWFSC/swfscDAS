@@ -1,3 +1,6 @@
+# swfscDAS 0.5.0 (in development)
+
+
 # swfscDAS 0.4.0
 
 * Changed `das_within_strata` to `das_intersects_strata` because it uses the geometric binary predicate `st_intersects` rather than `st_within`
