@@ -2,20 +2,20 @@
 title: "Introduction to swfscDAS"
 output: rmarkdown::html_vignette
 vignette: >
-%\VignetteIndexEntry{swfscDAS}
+  %\VignetteIndexEntry{swfscDAS}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  ---
+---
   
-  ```{r, include = FALSE}
-  knitr::opts_chunk$set(
+```{r, include = FALSE}
+knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
-  )
-  ```
-  
-  ```{r setup, message=FALSE}
-  library(dplyr)
+)
+```
+
+```{r setup, message=FALSE}
+library(dplyr)
 library(stringr)
 library(swfscDAS)
 ```

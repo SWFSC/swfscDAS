@@ -2,10 +2,10 @@
 title: "Joining DAS outputs with external data"
 output: rmarkdown::html_vignette
 vignette: >
- %\VignetteIndexEntry{Joining DAS outputs with external data}
+  %\VignetteIndexEntry{Joining DAS outputs with external data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  ---
+---
   
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
