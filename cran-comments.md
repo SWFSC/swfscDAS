@@ -1,4 +1,8 @@
 ## Resubmission
+This is a second resubmission. In this version I have:
+* The das_format_pdf example is uncommented (sorry) and uses interactive() as in base:files examples
+* Made small documentation fixes
+
 This is a resubmission. In this version I have:
 * Changed a function name (see news), hence the version bump from 0.3.0 to 0.4.0
 * Explained 'DAS' in the DESCRIPTION text

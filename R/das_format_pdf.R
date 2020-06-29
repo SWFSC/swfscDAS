@@ -17,7 +17,7 @@
 #'   \code{TRUE} if writing of file was successful, and \code{FALSE} otherwise
 #'
 #' @examples
-#' if (interactive()) das_format_pdf("DAS_Format.pdf", overwrite = FALSE)
+#' das_format_pdf(file.path(tempdir(), "DAS_Format.pdf"), overwrite = FALSE)
 #'
 #' @export
 das_format_pdf <- function(file, ...) {

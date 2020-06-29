@@ -14,7 +14,7 @@
 #'   The default is that all of these event codes are kept
 #' @param gs.columns character; the column(s) to use to get the group size
 #'   values that will be summarized in the segdata output.
-#'   Must be one or more of 'GsSpBest', 'GsSpLow', and 'GsSpBest' (case-senitive).
+#'   Must be one or more of 'GsSpBest', 'GsSpLow', and 'GsSpBest' (case-sensitive).
 #'   See Details section for more information
 #'
 #' @details This function takes the output of \code{\link{das_effort}} and

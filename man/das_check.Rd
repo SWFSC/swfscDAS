@@ -100,7 +100,7 @@ Long-term items, and checks that are not performed:
   \item Add column with cruise number to output
   \item Check that A events only come immediately after a G/S/K/M event,
     and all G/S/K/M events have an A after them.
-    And that each has at least one groupsize estimate (1:8 event)
+    And that each has at least one group size estimate (1:8 event)
   \item Check that lat/lon values are within [-90, 90] and [-180, 180]
 }
 }
