@@ -2,6 +2,8 @@
 
 * Changed `das_within_strata` to `das_intersects_strata` because it uses the geometric binary predicate `st_intersects` rather than `st_within`
 
+* In `das_effort_sight`, users can now use `gs.columns` tp specify secondary group size columns in case of an `NA` group size value
+
 
 # swfscDAS 0.3.0
 

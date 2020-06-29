@@ -12,8 +12,10 @@
 #'   whether a sighting is included in the segment summaries.
 #'   Must be one or more of: "S", "K", "M", "G", "t", "p" (case-sensitive).
 #'   The default is that all of these event codes are kept
-#' @param gs.low.use logical indicating if the low species group size estimate ('GsSpLow')
-#'   should be used ONLY if the best estimate ('GsSpLow') is \code{NA}
+#' @param gs.columns character; the column(s) to use to get the group size
+#'   values that will be summarized in the segdata output.
+#'   Must be one or more of 'GsSpBest', 'GsSpLow', and 'GsSpBest' (case-senitive).
+#'   See Details section for more information
 #'
 #' @details This function takes the output of \code{\link{das_effort}} and
 #'   adds columns for the number of sightings (nSI) and number of animals (ANI)
@@ -24,17 +26,22 @@
 #'   Having this step separate from \code{\link{das_effort}} allows users to
 #'   personalize the included values as desired for their analysis.
 #'
-#'   The ANI columns are the sum of the 'GsSpBest' column output from
-#'   \code{\link{das_sight}}. The only exception is if 'GsSpBest' is \code{NA} and
-#'   \code{gs.low.use} is \code{TRUE}, in which case the value from 'GsSpLow' is used instead
+#'   The ANI columns are the sum of the 'GsSp...' column(s) from
+#'   \code{\link{das_sight}} specified using \code{gs.columns}.
+#'   If \code{gs.columns} specifies more than one column,
+#'   then the secondary columns will only be used if
+#'   the values for the previous columns are \code{NA}.
+#'   For instance, if \code{gs.columns = c('GsSpBest', 'GsSpLow')},
+#'   then for each row in sightinfo, the value from GsSpLow
+#'   will be used only if the value from GsSpBest is \code{NA}
 #'
 #' @return A list, identical to \code{x.list} except for
 #'   1) the nSI and ANI columns added to \code{x.list$segdata},
 #'   one each for each element of \code{sp.codes}, and
 #'   2) the 'included' column of \code{x.list$sightinfo}, which has been set as
 #'   \code{FALSE} for sightings of species not listed in \code{sp.codes}.
-#'   Thus, the 'included' column accurately reflects the sightings that were
-#'   included in the effort segment summaries
+#'   Thus, the 'included' column in the output accurately reflects
+#'   the sightings that were included in the effort segment summaries
 #'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
@@ -48,18 +55,18 @@
 #'
 #' @export
 das_effort_sight <- function(x.list, sp.codes, sp.events = c("S", "G", "K", "M", "t", "p"),
-                             gs.low.use = TRUE) {
+                             gs.columns = c("GsSpBest", "GsSpLow", "GsSpHigh")) {
   ### Input checks
   stopifnot(
     inherits(x.list, "list"),
     inherits(sp.codes, "character"),
     inherits(sp.events, "character"),
-    inherits(gs.low.use, "logical"),
     identical(names(x.list), c("segdata", "sightinfo", "randpicks")),
     "included" %in% names(x.list$sightinfo)
   )
 
   sp.events <- match.arg(sp.events, several.ok = TRUE)
+  gs.columns <- match.arg(gs.columns, several.ok = TRUE)
 
   ### Prep
   segdata <- x.list$segdata
@@ -77,11 +84,11 @@ das_effort_sight <- function(x.list, sp.codes, sp.events = c("S", "G", "K", "M",
   segdata$seg_idx <- paste(segdata$section_id, segdata$section_sub_id, sep = "_")
   sightinfo <- left_join(sightinfo, select(segdata, .data$segnum, .data$seg_idx),
                          by = "segnum")
-  sightinfo$GsSegment <- if (gs.low.use) {
-    ifelse(is.na(sightinfo$GsSpBest), sightinfo$GsSpLow, sightinfo$GsSpBest)
-  } else {
-    sightinfo$GsSpBest
-  }
+
+  sightinfo$GsSegment <- apply(select(sightinfo, !!gs.columns), 1, function(i) {
+    i.na <- is.na(i)
+    if (all(i.na)) NA else i[!i.na][1]
+  })
 
   segdata.col1 <- select(segdata, .data$seg_idx)
   sightinfo.forsegdata.list <- lapply(sp.codes, function(i, sightinfo, d1) {

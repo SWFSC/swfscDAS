@@ -15,7 +15,7 @@
 #'   \code{\link[base]{table}}. Default is \code{TRUE}
 #'
 #' @details
-#' Precursor to DASCHECK. Checks that the following is true:
+#' Precursor to a more comprehensive DASCHECK program. Checks that the following is true:
 #' \itemize{
 #'   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
 #'     A, B, C, E, F, k, K, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z.
@@ -67,15 +67,14 @@
 #'   Sighting info \tab 1-8 \tab Data9   \tab The Data9 column must be NA (blank) for events 1-8\cr
 #' }
 #'
-#' Outstanding questions/to add:
+#' Long-term items, and checks that are not performed:
 #' \itemize{
-#'   \item There are ~3000 V events from 2018 with non-NA Data6 columns.
-#'   \item TODO: Add check for sequential date/time
-#'   \item TODO: Add column with cruise number to output
+#'   \item Add check for sequential date/time
+#'   \item Add column with cruise number to output
 #'   \item Check that A events only come immediately after a G/S/K/M event,
 #'     and all G/S/K/M events have an A after them.
-#'     That each has at least one groupsize estimate (1:8 event)
-#'   \item TODO: Check that lat/lon values are within [-90, 90] and [-180, 180]
+#'     And that each has at least one groupsize estimate (1:8 event)
+#'   \item Check that lat/lon values are within [-90, 90] and [-180, 180]
 #' }
 #'
 #' @return

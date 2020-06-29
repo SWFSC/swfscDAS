@@ -79,7 +79,7 @@ x$Data6[event.prob] <- "016"
 
 
 # Jitter group sizes
-event.num <- which(x$Event %in% 1:7)
+event.num <- which(x$Event %in% 1:8)
 
 x$Data2[event.num] <- as.character(as.numeric(x$Data2[event.num]) + rpois(length(event.num), 1.5))
 x$Data3[event.num] <- as.character(vapply(event.num, function(i) {
@@ -88,6 +88,9 @@ x$Data3[event.num] <- as.character(vapply(event.num, function(i) {
 x$Data4[event.num] <- as.character(vapply(event.num, function(i) {
   min(as.numeric(x$Data2[i]), abs(as.numeric(x$Data3[i]) - rpois(1, 4)))
 }, 1))
+
+x$Data2[event.num[1:3]] <- NA
+x$Data3[event.num[1:3]] <- NA
 
 stopifnot(
   all(na.omit(as.numeric(x$Data2[event.num]) <= as.numeric(x$Data3[event.num]))),
@@ -118,7 +121,7 @@ x$line_num <- seq_len(nrow(x))
 
 #------------------------------------------------------------------------------
 # Write DAS data to file
-raw_das_fwf(x, file = "inst/das_sample2.das", 10)
+raw_das_fwf(x, file = "inst/das_sample.das", 10)
 
 # usethis::use_data("das_sample")
 

@@ -28,8 +28,6 @@ A wrapper function for \code{\link[base:files]{file.copy}}.
   \url{https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_Format.pdf}
 }
 \examples{
-\donttest{
-# das_format_pdf("DAS_Format.pdf", overwrite = FALSE)
-}
+if (interactive()) das_format_pdf("DAS_Format.pdf", overwrite = FALSE)
 
 }

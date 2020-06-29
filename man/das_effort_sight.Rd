@@ -8,7 +8,7 @@ das_effort_sight(
   x.list,
   sp.codes,
   sp.events = c("S", "G", "K", "M", "t", "p"),
-  gs.low.use = TRUE
+  gs.columns = c("GsSpBest", "GsSpLow", "GsSpHigh")
 )
 }
 \arguments{
@@ -25,8 +25,10 @@ whether a sighting is included in the segment summaries.
 Must be one or more of: "S", "K", "M", "G", "t", "p" (case-sensitive).
 The default is that all of these event codes are kept}
 
-\item{gs.low.use}{logical indicating if the low species group size estimate ('GsSpLow')
-should be used ONLY if the best estimate ('GsSpLow') is \code{NA}}
+\item{gs.columns}{character; the column(s) to use to get the group size
+values that will be summarized in the segdata output.
+Must be one or more of 'GsSpBest', 'GsSpLow', and 'GsSpBest' (case-senitive).
+See Details section for more information}
 }
 \value{
 A list, identical to \code{x.list} except for
@@ -34,8 +36,8 @@ A list, identical to \code{x.list} except for
   one each for each element of \code{sp.codes}, and
   2) the 'included' column of \code{x.list$sightinfo}, which has been set as
   \code{FALSE} for sightings of species not listed in \code{sp.codes}.
-  Thus, the 'included' column accurately reflects the sightings that were
-  included in the effort segment summaries
+  Thus, the 'included' column in the output accurately reflects
+  the sightings that were included in the effort segment summaries
 }
 \description{
 Summarize number of sightings and animals for selected species by segment
@@ -50,9 +52,14 @@ This function takes the output of \code{\link{das_effort}} and
   Having this step separate from \code{\link{das_effort}} allows users to
   personalize the included values as desired for their analysis.
 
-  The ANI columns are the sum of the 'GsSpBest' column output from
-  \code{\link{das_sight}}. The only exception is if 'GsSpBest' is \code{NA} and
-  \code{gs.low.use} is \code{TRUE}, in which case the value from 'GsSpLow' is used instead
+  The ANI columns are the sum of the 'GsSp...' column(s) from
+  \code{\link{das_sight}} specified using \code{gs.columns}.
+  If \code{gs.columns} specifies more than one column,
+  then the secondary columns will only be used if
+  the values for the previous columns are \code{NA}.
+  For instance, if \code{gs.columns = c('GsSpBest', 'GsSpLow')},
+  then for each row in sightinfo, the value from GsSpLow
+  will be used only if the value from GsSpBest is \code{NA}
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
