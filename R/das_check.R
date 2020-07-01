@@ -103,7 +103,8 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   x$idx <- seq_along(x$Event)
   x <- as_das_dfr(x)
 
-  x.lines.all <- readLines(file)
+  # x.lines.all <- readLines(file)
+  x.lines.all <- do.call(c, lapply(file, readLines))
   x.lines <- substr(x.lines.all, 4, 39)
   if (skip > 0) x.lines <- x.lines[-c(1:skip)]
 
@@ -111,7 +112,8 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
 
   message("Processing DAS file")
   x.proc <- suppressWarnings(das_process(x)) %>%
-    left_join(select(x, .data$line_num, .data$idx), by = "line_num")
+    left_join(select(x, .data$file_das, .data$line_num, .data$idx),
+              by = c('file_das', "line_num"))
   x.proc <- as_das_df(x.proc)
 
 

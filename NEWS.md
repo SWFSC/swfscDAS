@@ -1,3 +1,10 @@
+# swfscDAS 0.5.0 (in development)
+
+* Fixed a bug in `das_check` where multiple files could not be checked at once
+
+* Fixed an issue where the sample stratum file did not overlap with any of the sample data
+
+
 # swfscDAS 0.4.0
 
 * Changed `das_within_strata` to `das_intersects_strata` because it uses the geometric binary predicate `st_intersects` rather than `st_within`

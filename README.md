@@ -22,7 +22,15 @@ sighting, effort, and comment information. Learn more in
 
 ## Installation
 
-You can install swfscDAS from [GitHub](https://github.com) with:
+You can install the released version of swfscDAS from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("swfscDAS")
+```
+
+You can install the developmental version of swfscDAS from
+[GitHub](https://github.com) with:
 
 ``` r
 # install.packages("remotes")
@@ -33,10 +41,11 @@ Before installing swfscDAS, you must have
 [R](https://www.r-project.org/),
 [RStudio](https://rstudio.com/products/rstudio/download/#download), and
 the appropriate version of
-[Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed. It
-is best practice to install after closing all instances of R and
-RStudio, and then running the install code from the R GUI rather than
-RStudio. Please contact the developer if you have any issues.
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed. When
+istalling the developmental version, it is best practice to install
+after closing all instances of R and RStudio, and then running the
+install code from the R GUI rather than RStudio. Please contact the
+developer if you have any issues.
 
 ## DAS data format
 
