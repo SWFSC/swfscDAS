@@ -189,26 +189,28 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 <tr><td>Sighting number</td><td>SightNo</td><td>Character</td></tr>
 <tr><td>Subgroup code</td><td>Subgroup</td><td>Character</td></tr>
 <tr><td>Daily sighting number</td><td>SightNoDaily</td><td>See below</td></tr>
-<tr><td>Observer that made the sighting</td><td>Obs</td><td>Standard observer</td></tr>
-<tr><td>ObsStd</td><td>Logical; <code>TRUE</code> if Obs is one of
-      ObsL, Rec or ObsR, and <code>FALSE</code> otherwise (including if Obs is <code>NA</code>)</td><td>Bearing to the sighting</td></tr>
-<tr><td>Bearing</td><td>Numeric; degrees, expected range 0 to 360</td><td>Number of reticle marks</td></tr>
-<tr><td>Reticle</td><td>Numeric</td><td>Distance (nautical miles)</td></tr>
-<tr><td>DistNm</td><td>Numeric</td><td>Sighting cue</td></tr>
-<tr><td>Cue</td><td>Sighting method</td><td>Method</td></tr>
-<tr><td>Photos of school?</td><td>Photos</td><td>Birds present with school?</td></tr>
-<tr><td>Birds</td><td>Calibration school?</td><td>CalibSchool</td></tr>
-<tr><td>Aerial photos taken?</td><td>PhotosAerial</td><td>Biopsy taken?</td></tr>
-<tr><td>Biopsy</td><td>Probable sighting</td><td>Prob</td></tr>
-<tr><td>Logical indicating if sighting has associated ? event; <code>NA</code> for non-S/K/M/G events</td><td>Number of species in sighting</td><td>nSp</td></tr>
-<tr><td><code>NA</code> for non-S/K/M/G events</td><td>Mixed species sighting</td><td>Mixed</td></tr>
-<tr><td>Logical; <code>TRUE</code> if nSp &gt; 1</td><td>Group size of school - best estimate</td><td>GsSchoolBest</td></tr>
-<tr><td>See below</td><td>Group size of school - high estimate</td><td>GsSchoolHigh</td></tr>
-<tr><td>See below</td><td>Group size of school - low estimate</td><td>GsSchoolLow</td></tr>
-<tr><td>See below</td><td>Course (true heading) of school at resight</td><td>CourseSchool</td></tr>
-<tr><td><code>NA</code> for non-s/k/m events</td><td>Presence of associated JFR</td><td>TurtleJFR</td></tr>
-<tr><td><code>NA</code> for non-"t" events; JFR = jellyfish, floating debris, or red tide</td><td>Estimated turtle maturity</td><td>TurtleAge</td></tr>
-<tr><td><code>NA</code> for non-"t" events</td><td>Perpendicular distance (km) to sighting</td><td>PerpDistKm</td></tr>
+<tr><td>Observer that made the sighting</td><td>Obs</td><td></td></tr>
+<tr><td>Standard observer</td><td>ObsStd</td><td>Logical; <code>TRUE</code> if Obs is one of ObsL, Rec or ObsR, and <code>FALSE</code> otherwise</td></tr>
+<tr><td>Bearing to the sighting</td><td>Bearing</td><td>Numeric; degrees, expected range 0 to 360</td></tr>
+<tr><td>Number of reticle marks</td><td>Reticle</td><td>Numeric</td></tr>
+<tr><td>Distance (nautical miles)</td><td>DistNm</td><td>Numeric</td></tr>
+<tr><td>Sighting cue</td><td>Cue</td><td></td></tr>
+<tr><td>Sighting method</td><td>Method</td><td></td></tr>
+<tr><td>Photos of school?</td><td>Photos</td><td></td></tr>
+<tr><td>Birds present with school?</td><td>Birds</td><td></td></tr>
+<tr><td>Calibration school?</td><td>CalibSchool</td><td></td></tr>
+<tr><td>Aerial photos taken?</td><td>PhotosAerial</td><td></td></tr>
+<tr><td>Biopsy taken?</td><td>Biopsy</td><td></td></tr>
+<tr><td>Probable sighting</td><td>Prob</td><td>Logical indicating if sighting has associated ? event; <code>NA</code> for non-S/K/M/G events</td></tr>
+<tr><td>Number of species in sighting</td><td>nSp</td><td><code>NA</code> for non-S/K/M/G events</td></tr>
+<tr><td>Mixed species sighting</td><td>Mixed</td><td>Logical; <code>TRUE</code> if nSp &gt; 1</td></tr>
+<tr><td>Group size of school - best estimate</td><td>GsSchoolBest</td><td>See below</td></tr>
+<tr><td>Group size of school - high estimate</td><td>GsSchoolHigh</td><td>See below</td></tr>
+<tr><td>Group size of school - low estimate</td><td>GsSchoolLow</td><td>See below</td></tr>
+<tr><td>Course (true heading) of school at resight</td><td>CourseSchool</td><td><code>NA</code> for non-s/k/m events</td></tr>
+<tr><td>Presence of associated JFR</td><td>TurtleJFR</td><td><code>NA</code> for non-"t" events; JFR = jellyfish, floating debris, or red tide</td></tr>
+<tr><td>Estimated turtle maturity</td><td>TurtleAge</td><td><code>NA</code> for non-"t" events</td></tr>
+<tr><td>Perpendicular distance (km) to sighting</td><td>PerpDistKm</td><td>Calculated via <code>(abs(sin(Bearing*pi/180) * DistNm) * 1.852)</code></td></tr>
 </table>
 
 
@@ -293,27 +295,29 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 <p>Sighting information columns present in the "wide" and "complete" format outputs:</p><table class='table'>
 <tr><td><em>Sighting information</em></td><td><em>Column name</em></td><td><em>Notes</em></td></tr>
 <tr><td>Observer code - estimate</td><td>ObsEstimate</td><td>See below</td></tr>
-<tr><td>Species 1 code</td><td>SpCode1</td><td>The species code for turtle and pinniped sightings</td></tr>
-<tr><td>Species 2 code</td><td>SpCode2</td><td>Species 3 code</td></tr>
-<tr><td>SpCode3</td><td>Species 4 code</td><td>SpCode4</td></tr>
+<tr><td>Species 1 code</td><td>SpCode1</td><td></td></tr>
+<tr><td>Species 2 code</td><td>SpCode2</td><td></td></tr>
+<tr><td>Species 3 code</td><td>SpCode3</td><td></td></tr>
+<tr><td>Species 4 code</td><td>SpCode4</td><td></td></tr>
 <tr><td>Species 1 probable code</td><td>SpCodeProb1</td><td>Extracted from '?' event</td></tr>
 <tr><td>Species 2 probable code</td><td>SpCodeProb2</td><td>Extracted from '?' event</td></tr>
 <tr><td>Species 3 probable code</td><td>SpCodeProb3</td><td>Extracted from '?' event</td></tr>
 <tr><td>Species 4 probable code</td><td>SpCodeProb4</td><td>Extracted from '?' event</td></tr>
-<tr><td>Percentage of Sp 1 in school</td><td>SpPerc1</td><td>Percentage of Sp 2 in school</td></tr>
-<tr><td>SpPerc2</td><td>Percentage of Sp 3 in school</td><td>SpPerc3</td></tr>
-<tr><td>Percentage of Sp 4 in school</td><td>SpPerc4</td><td>Group size of species 1</td></tr>
-<tr><td>GsSpBest1</td><td>Present in "wide" output only; see below</td><td>Group size of species 2</td></tr>
-<tr><td>GsSpBest2</td><td>Present in "wide" output only; see below</td><td>Group size of species 3</td></tr>
-<tr><td>GsSpBest3</td><td>Present in "wide" output only; see below</td><td>Group size of species 4</td></tr>
-<tr><td>GsSpBest4</td><td>Present in "wide" output only; see below</td><td>Turtle species</td></tr>
-<tr><td>TurtleSp</td><td><code>NA</code> for non-"t" events</td><td>Sighting group size</td></tr>
-<tr><td>TurtleGs</td><td><code>NA</code> for non-"t" events; i.e. number of turtles</td><td>Was turtle captured?</td></tr>
-<tr><td>TurtleCapt</td><td><code>NA</code> for non-"t" events</td><td>Pinniped species</td></tr>
-<tr><td>PinnipedSp</td><td><code>NA</code> for non-"p" events</td><td>Sighting group size</td></tr>
-<tr><td>PinnipedGs</td><td><code>NA</code> for non-"p" events; i.e. number of pinnipeds</td><td>Boat or gear type</td></tr>
-<tr><td>BoatType</td><td><code>NA</code> for non-"F" events</td><td>Sighting group size</td></tr>
-<tr><td>BoatGs</td><td><code>NA</code> for non-"F" events; i.e. number of boats</td><td></td></tr>
+<tr><td>Percentage of Sp 1 in school</td><td>SpPerc1</td><td></td></tr>
+<tr><td>Percentage of Sp 2 in school</td><td>SpPerc2</td><td></td></tr>
+<tr><td>Percentage of Sp 3 in school</td><td>SpPerc3</td><td></td></tr>
+<tr><td>Percentage of Sp 4 in school</td><td>SpPerc4</td><td></td></tr>
+<tr><td>Group size of species 1</td><td>GsSpBest1</td><td>Present in "wide" output only; see below</td></tr>
+<tr><td>Group size of species 2</td><td>GsSpBest2</td><td>Present in "wide" output only; see below</td></tr>
+<tr><td>Group size of species 3</td><td>GsSpBest3</td><td>Present in "wide" output only; see below</td></tr>
+<tr><td>Group size of species 4</td><td>GsSpBest4</td><td>Present in "wide" output only; see below</td></tr>
+<tr><td>Turtle species</td><td>TurtleSp</td><td><code>NA</code> for non-"t" events</td></tr>
+<tr><td>Turtle group size</td><td>TurtleGs</td><td><code>NA</code> for non-"t" events</td></tr>
+<tr><td>Was turtle captured?</td><td>TurtleCapt</td><td><code>NA</code> for non-"t" events</td></tr>
+<tr><td>Pinniped species</td><td>PinnipedSp</td><td><code>NA</code> for non-"p" events</td></tr>
+<tr><td>Pinniped group size</td><td>PinnipedGs</td><td><code>NA</code> for non-"p" events</td></tr>
+<tr><td>Boat or gear type</td><td>BoatType</td><td><code>NA</code> for non-"F" events</td></tr>
+<tr><td>Number of boats</td><td>BoatGs</td><td><code>NA</code> for non-"F" events</td></tr>
 </table>
 
 
@@ -321,7 +325,8 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
   For the "wide" format, ObsEstimate is a list-column of all of the observer codes
   that provided an estimate.
   Also in the "wide" format, the GsSpBest# columns are the product of
-  GsSchoolBest and the corresponding species percentage</p>
+  GsSchoolBest and the corresponding species percentage.
+  These numbers, 1 to 4, correspond to the order of the data as it appears in the DAS file</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)

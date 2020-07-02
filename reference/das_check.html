@@ -204,13 +204,13 @@ written to a text file</p>
 <tr><td>Mode</td><td>B</td><td>Data2</td><td>Must be one of C, P, c, p, or NA (blank)</td></tr>
 <tr><td>Echo sounder</td><td>B</td><td>Data4</td><td>Must be one of Y, N, y, n, or NA (blank)</td></tr>
 <tr><td>Effort type</td><td>R</td><td>Data1</td><td>Must be one of F, N, S, or NA (blank)</td></tr>
-<tr><td>Effective strip width sides</td><td>R</td><td>Data2</td><td>Must be one of F, H, or NA (blank)</td></tr>
+<tr><td>ESW sides</td><td>R</td><td>Data2</td><td>Effective strip width; must be one of F, H, or NA (blank)</td></tr>
 <tr><td>Course</td><td>N</td><td>Data1</td><td>Can be converted to a numeric value</td></tr>
 <tr><td>Speed</td><td>N</td><td>Data2</td><td>Can be converted to a numeric value</td></tr>
 <tr><td>Beaufort</td><td>V</td><td>Data1</td><td>Must be a whole number between 0 and 9</td></tr>
 <tr><td>Swell height</td><td>V</td><td>Data2</td><td>Can be converted to a numeric value</td></tr>
 <tr><td>Wind speed</td><td>V</td><td>Data5</td><td>Can be converted to a numeric value</td></tr>
-<tr><td>Rain or fog</td><td>W</td><td>Data1</td><td>Must be between 0 and 5 and be either a whole number or have a decimal value of 0.5</td></tr>
+<tr><td>Rain or fog</td><td>W</td><td>Data1</td><td>Must be between 0 and 5 and either a whole number or have decimal value .5</td></tr>
 <tr><td>Horizontal sun</td><td>W</td><td>Data2</td><td>Must be a whole number between 0 and 12</td></tr>
 <tr><td>Vertical sun</td><td>W</td><td>Data3</td><td>Must be a whole number between 0 and 12</td></tr>
 <tr><td>Visibility</td><td>W</td><td>Data5</td><td>Can be converted to a numeric value</td></tr>
@@ -235,6 +235,7 @@ written to a text file</p>
 </table>
 
 
+<p>In the table above, 'between' means inclusive.</p>
 <p>Long-term items, and checks that are not performed:</p><ul>
 <li><p>Add check for sequential date/time</p></li>
 <li><p>Add column with cruise number to output</p></li>
