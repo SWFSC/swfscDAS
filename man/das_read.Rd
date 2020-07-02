@@ -48,25 +48,25 @@ Reads/parses DAS data into columns of a data frame.
   The provided DAS file must adhere to the following column number and format specifications:
   \tabular{lrr}{
     \emph{Item}  \tab \emph{Columns} \tab \emph{Format}\cr
-    Event number \tab 1-3\cr
-    Event        \tab 4\cr
-    Effort dot   \tab 5\cr
+    Event number \tab 1-3   \tab \cr
+    Event        \tab 4     \tab \cr
+    Effort dot   \tab 5     \tab \cr
     Time         \tab 6-11  \tab HHMMSS or HHMM\cr
     Date         \tab 13-18 \tab MMDDYY\cr
     Latitude     \tab 20-28 \tab NDD:MM.MM\cr
     Longitude    \tab 30-39 \tab WDDD:MM.MM\cr
-    Data1        \tab 40-44\cr
-    Data2        \tab 45-49\cr
-    Data3        \tab 50-54\cr
-    Data4        \tab 55-59\cr
-    Data5        \tab 60-64\cr
-    Data6        \tab 65-69\cr
-    Data7        \tab 70-74\cr
-    Data8        \tab 75-79\cr
-    Data9        \tab 80-84\cr
-    Data10       \tab 85-89\cr
-    Data11       \tab 90-94\cr
-    Data12       \tab 95+\cr
+    Data1        \tab 40-44 \tab \cr
+    Data2        \tab 45-49 \tab \cr
+    Data3        \tab 50-54 \tab \cr
+    Data4        \tab 55-59 \tab \cr
+    Data5        \tab 60-64 \tab \cr
+    Data6        \tab 65-69 \tab \cr
+    Data7        \tab 70-74 \tab \cr
+    Data8        \tab 75-79 \tab \cr
+    Data9        \tab 80-84 \tab \cr
+    Data10       \tab 85-89 \tab \cr
+    Data11       \tab 90-94 \tab \cr
+    Data12       \tab 95+   \tab \cr
   }
 
   See \code{\link{das_format_pdf}} for more information about DAS format requirements, and

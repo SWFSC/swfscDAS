@@ -43,36 +43,32 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
   The following sighting information columns are included in all return formats:
 
   \tabular{lll}{
-    \emph{Sighting information} \tab \emph{Column name} \tab \emph{Notes}\cr
-    Sighting number                 \tab SightNo \tab Character\cr
-    Subgroup code                   \tab Subgroup \tab Character\cr
-    Daily sighting number           \tab SightNoDaily \tab See below\cr
-    Observer that made the sighting \tab Obs\cr
-    Standard observer               \tab ObsStd \tab Logical; \code{TRUE} if Obs is one of
-      ObsL, Rec or ObsR, and \code{FALSE} otherwise (including if Obs is \code{NA})\cr
-    Bearing to the sighting         \tab Bearing \tab Numeric; degrees, expected range 0 to 360\cr
-    Number of reticle marks         \tab Reticle \tab Numeric\cr
-    Distance (nautical miles)       \tab DistNm  \tab Numeric\cr
-    Sighting cue                    \tab Cue\cr
-    Sighting method                 \tab Method\cr
-    Photos of school?               \tab Photos\cr
-    Birds present with school?      \tab Birds\cr
-    Calibration school?             \tab CalibSchool\cr
-    Aerial photos taken?            \tab PhotosAerial\cr
-    Biopsy taken?                   \tab Biopsy\cr
-    Probable sighting               \tab Prob  \tab
-      Logical indicating if sighting has associated ? event; \code{NA} for non-S/K/M/G events\cr
-    Number of species in sighting   \tab nSp   \tab \code{NA} for non-S/K/M/G events\cr
-    Mixed species sighting          \tab Mixed \tab Logical; \code{TRUE} if nSp > 1\cr
-    Group size of school - best estimate \tab GsSchoolBest \tab See below\cr
-    Group size of school - high estimate \tab GsSchoolHigh \tab See below\cr
-    Group size of school - low estimate  \tab GsSchoolLow  \tab See below\cr
-    Course (true heading) of school at resight \tab CourseSchool \tab \code{NA} for non-s/k/m events\cr
-    Presence of associated JFR  \tab TurtleJFR  \tab
-      \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide \cr
-    Estimated turtle maturity   \tab TurtleAge  \tab \code{NA} for non-"t" events\cr
-    Perpendicular distance (km) to sighting \tab PerpDistKm \tab
-      Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}\cr
+    \emph{Sighting information}                \tab \emph{Column name} \tab \emph{Notes} \cr
+    Sighting number                            \tab SightNo      \tab Character                                                                              \cr
+    Subgroup code                              \tab Subgroup     \tab Character                                                                              \cr
+    Daily sighting number                      \tab SightNoDaily \tab See below                                                                              \cr
+    Observer that made the sighting            \tab Obs          \tab                                                                                        \cr
+    Standard observer                          \tab ObsStd       \tab Logical; \code{TRUE} if Obs is one of ObsL, Rec or ObsR, and \code{FALSE} otherwise    \cr
+    Bearing to the sighting                    \tab Bearing      \tab Numeric; degrees, expected range 0 to 360                                              \cr
+    Number of reticle marks                    \tab Reticle      \tab Numeric                                                                                \cr
+    Distance (nautical miles)                  \tab DistNm       \tab Numeric                                                                                \cr
+    Sighting cue                               \tab Cue          \tab                                                                                        \cr
+    Sighting method                            \tab Method       \tab                                                                                        \cr
+    Photos of school?                          \tab Photos       \tab                                                                                        \cr
+    Birds present with school?                 \tab Birds        \tab                                                                                        \cr
+    Calibration school?                        \tab CalibSchool  \tab                                                                                        \cr
+    Aerial photos taken?                       \tab PhotosAerial \tab                                                                                        \cr
+    Biopsy taken?                              \tab Biopsy       \tab                                                                                        \cr
+    Probable sighting                          \tab Prob         \tab Logical indicating if sighting has associated ? event; \code{NA} for non-S/K/M/G events\cr
+    Number of species in sighting              \tab nSp          \tab \code{NA} for non-S/K/M/G events                                                       \cr
+    Mixed species sighting                     \tab Mixed        \tab Logical; \code{TRUE} if nSp > 1                                                        \cr
+    Group size of school - best estimate       \tab GsSchoolBest \tab See below                                                                              \cr
+    Group size of school - high estimate       \tab GsSchoolHigh \tab See below                                                                              \cr
+    Group size of school - low estimate        \tab GsSchoolLow  \tab See below                                                                              \cr
+    Course (true heading) of school at resight \tab CourseSchool \tab \code{NA} for non-s/k/m events                                                         \cr
+    Presence of associated JFR                 \tab TurtleJFR    \tab \code{NA} for non-"t" events; JFR = jellyfish, floating debris, or red tide            \cr
+    Estimated turtle maturity                  \tab TurtleAge    \tab \code{NA} for non-"t" events                                                           \cr
+    Perpendicular distance (km) to sighting    \tab PerpDistKm   \tab Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}
   }
 
   SightNoDaily is a running count of the number of S/K/M/G sightings that occurred on each day.
@@ -165,38 +161,39 @@ DAS events contain specific information in the 'Data#' columns,
 
   Sighting information columns present in the "wide" and "complete" format outputs:
   \tabular{lll}{
-    \emph{Sighting information}  \tab \emph{Column name} \tab \emph{Notes}\cr
-    Observer code - estimate     \tab ObsEstimate \tab See below\cr
-    Species 1 code               \tab SpCode1 \tab The species code for turtle and pinniped sightings\cr
-    Species 2 code               \tab SpCode2\cr
-    Species 3 code               \tab SpCode3\cr
-    Species 4 code               \tab SpCode4\cr
-    Species 1 probable code      \tab SpCodeProb1 \tab Extracted from '?' event\cr
-    Species 2 probable code      \tab SpCodeProb2 \tab Extracted from '?' event\cr
-    Species 3 probable code      \tab SpCodeProb3 \tab Extracted from '?' event\cr
-    Species 4 probable code      \tab SpCodeProb4 \tab Extracted from '?' event\cr
-    Percentage of Sp 1 in school \tab SpPerc1\cr
-    Percentage of Sp 2 in school \tab SpPerc2\cr
-    Percentage of Sp 3 in school \tab SpPerc3\cr
-    Percentage of Sp 4 in school \tab SpPerc4\cr
-    Group size of species 1     \tab GsSpBest1 \tab Present in "wide" output only; see below\cr
-    Group size of species 2     \tab GsSpBest2 \tab Present in "wide" output only; see below\cr
-    Group size of species 3     \tab GsSpBest3 \tab Present in "wide" output only; see below\cr
-    Group size of species 4     \tab GsSpBest4 \tab Present in "wide" output only; see below\cr
-    Turtle species        \tab TurtleSp    \tab \code{NA} for non-"t" events\cr
-    Sighting group size   \tab TurtleGs    \tab \code{NA} for non-"t" events; i.e. number of turtles\cr
-    Was turtle captured?  \tab TurtleCapt  \tab \code{NA} for non-"t" events\cr
-    Pinniped species      \tab PinnipedSp  \tab \code{NA} for non-"p" events\cr
-    Sighting group size   \tab PinnipedGs  \tab \code{NA} for non-"p" events; i.e. number of pinnipeds\cr
-    Boat or gear type     \tab BoatType    \tab \code{NA} for non-"F" events\cr
-    Sighting group size   \tab BoatGs      \tab \code{NA} for non-"F" events; i.e. number of boats\cr
+    \emph{Sighting information}  \tab \emph{Column name}  \tab \emph{Notes}                            \cr
+    Observer code - estimate     \tab ObsEstimate         \tab See below                               \cr
+    Species 1 code               \tab SpCode1             \tab                                         \cr
+    Species 2 code               \tab SpCode2             \tab                                         \cr
+    Species 3 code               \tab SpCode3             \tab                                         \cr
+    Species 4 code               \tab SpCode4             \tab                                         \cr
+    Species 1 probable code      \tab SpCodeProb1         \tab Extracted from '?' event                \cr
+    Species 2 probable code      \tab SpCodeProb2         \tab Extracted from '?' event                \cr
+    Species 3 probable code      \tab SpCodeProb3         \tab Extracted from '?' event                \cr
+    Species 4 probable code      \tab SpCodeProb4         \tab Extracted from '?' event                \cr
+    Percentage of Sp 1 in school \tab SpPerc1             \tab                                         \cr
+    Percentage of Sp 2 in school \tab SpPerc2             \tab                                         \cr
+    Percentage of Sp 3 in school \tab SpPerc3             \tab                                         \cr
+    Percentage of Sp 4 in school \tab SpPerc4             \tab                                         \cr
+    Group size of species 1      \tab GsSpBest1           \tab Present in "wide" output only; see below\cr
+    Group size of species 2      \tab GsSpBest2           \tab Present in "wide" output only; see below\cr
+    Group size of species 3      \tab GsSpBest3           \tab Present in "wide" output only; see below\cr
+    Group size of species 4      \tab GsSpBest4           \tab Present in "wide" output only; see below\cr
+    Turtle species               \tab TurtleSp            \tab \code{NA} for non-"t" events            \cr
+    Turtle group size            \tab TurtleGs            \tab \code{NA} for non-"t" events            \cr
+    Was turtle captured?         \tab TurtleCapt          \tab \code{NA} for non-"t" events            \cr
+    Pinniped species             \tab PinnipedSp          \tab \code{NA} for non-"p" events            \cr
+    Pinniped group size          \tab PinnipedGs          \tab \code{NA} for non-"p" events            \cr
+    Boat or gear type            \tab BoatType            \tab \code{NA} for non-"F" events            \cr
+    Number of boats              \tab BoatGs              \tab \code{NA} for non-"F" events
   }
 
   ObsEstimate refers to the code of the observer that made the corresponding estimate.
   For the "wide" format, ObsEstimate is a list-column of all of the observer codes
   that provided an estimate.
   Also in the "wide" format, the GsSpBest# columns are the product of
-  GsSchoolBest and the corresponding species percentage
+  GsSchoolBest and the corresponding species percentage.
+  These numbers, 1 to 4, correspond to the order of the data as it appears in the DAS file
 }
 
 \examples{

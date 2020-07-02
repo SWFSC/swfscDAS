@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![CRAN
+version](http://www.r-pkg.org/badges/version/swfscDAS)](https://cran.r-project.org/package=swfscDAS)
 [![Travis build
 status](https://travis-ci.com/smwoodman/swfscDAS.svg?branch=master)](https://travis-ci.com/smwoodman/swfscDAS)
 [![AppVeyor build

@@ -32,40 +32,42 @@
 #' }
 #'
 #' \tabular{llll}{
-#'   \emph{Item} \tab \emph{Event} \tab \emph{Column} \tab \emph{Requirement}\cr
-#'   Cruise number  \tab B \tab Data1 \tab Can be converted to a numeric value\cr
-#'   Mode           \tab B \tab Data2 \tab Must be one of C, P, c, p, or NA (blank)\cr
-#'   Echo sounder   \tab B \tab Data4 \tab Must be one of Y, N, y, n, or NA (blank)\cr
-#'   Effort type    \tab R \tab Data1 \tab Must be one of F, N, S, or NA (blank)\cr
-#'   Effective strip width sides \tab R \tab Data2 \tab Must be one of F, H, or NA (blank)\cr
-#'   Course         \tab N \tab Data1 \tab Can be converted to a numeric value\cr
-#'   Speed          \tab N \tab Data2 \tab Can be converted to a numeric value\cr
-#'   Beaufort       \tab V \tab Data1 \tab Must be a whole number between 0 and 9\cr
-#'   Swell height   \tab V \tab Data2 \tab Can be converted to a numeric value\cr
-#'   Wind speed     \tab V \tab Data5 \tab Can be converted to a numeric value\cr
-#'   Rain or fog    \tab W \tab Data1 \tab Must be between 0 and 5 and be either a whole number or have a decimal value of 0.5\cr
-#'   Horizontal sun \tab W \tab Data2 \tab Must be a whole number between 0 and 12\cr
-#'   Vertical sun   \tab W \tab Data3 \tab Must be a whole number between 0 and 12\cr
-#'   Visibility     \tab W \tab Data5 \tab Can be converted to a numeric value\cr
-#'   Sighting (mammal)        \tab S, K, M    \tab Data3-7 \tab Can be converted to a numeric value\cr
-#'   Sighting (mammal)        \tab G          \tab Data5-7 \tab Can be converted to a numeric value\cr
-#'   Sighting cue (mammal)    \tab S, K, M    \tab Data3   \tab Must be a whole number between 1 and 6\cr
-#'   Sighting method (mammal) \tab S, K, M, G \tab Data4   \tab Must be a whole number between 1 and 7\cr
-#'   Bearing (mammal)         \tab S, K, M, G \tab Data5   \tab Must be a whole number between 0 and 360\cr
-#'   Photos \tab A \tab Data3   \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   Birds  \tab A \tab Data4   \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   Calibration school   \tab S, K, M \tab Data10 \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   Aerial photos taken  \tab S, K, M \tab Data11 \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   Biopsy taken         \tab S, K, M \tab Data12 \tab Must be one of N, Y, n, y, or NA (blank)\cr
-#'   Species codes  \tab A \tab Data5-8 \tab If a species codes file is provided, must be one of the provided codes\cr
-#'   Resight         \tab s, k    \tab Data2-5    \tab Can be converted to a numeric value\cr
-#'   Turtle species  \tab t       \tab Data2      \tab If a species codes file is provided, must be one of the provided codes\cr
-#'   Turtle sighting \tab t       \tab Data3-5, 7 \tab Can be converted to a numeric value\cr
-#'   Turtle JFR      \tab t       \tab Data6      \tab Must be one of F, J, N, R, or NA (blank)\cr
-#'   Fishing vessel  \tab F       \tab Data2-4    \tab Can be converted to a numeric value\cr
-#'   Sighting info \tab 1-8 \tab Data2-8 \tab Can be converted to a numeric value\cr
-#'   Sighting info \tab 1-8 \tab Data9   \tab The Data9 column must be NA (blank) for events 1-8\cr
+#'   \emph{Item}              \tab \emph{Event}  \tab \emph{Column}  \tab \emph{Requirement}                                                        \cr
+#'   Cruise number            \tab B             \tab Data1          \tab Can be converted to a numeric value                                       \cr
+#'   Mode                     \tab B             \tab Data2          \tab Must be one of C, P, c, p, or NA (blank)                                  \cr
+#'   Echo sounder             \tab B             \tab Data4          \tab Must be one of Y, N, y, n, or NA (blank)                                  \cr
+#'   Effort type              \tab R             \tab Data1          \tab Must be one of F, N, S, or NA (blank)                                     \cr
+#'   ESW sides                \tab R             \tab Data2          \tab Effective strip width; must be one of F, H, or NA (blank)                 \cr
+#'   Course                   \tab N             \tab Data1          \tab Can be converted to a numeric value                                       \cr
+#'   Speed                    \tab N             \tab Data2          \tab Can be converted to a numeric value                                       \cr
+#'   Beaufort                 \tab V             \tab Data1          \tab Must be a whole number between 0 and 9                                    \cr
+#'   Swell height             \tab V             \tab Data2          \tab Can be converted to a numeric value                                       \cr
+#'   Wind speed               \tab V             \tab Data5          \tab Can be converted to a numeric value                                       \cr
+#'   Rain or fog              \tab W             \tab Data1          \tab Must be between 0 and 5 and either a whole number or have decimal value .5\cr
+#'   Horizontal sun           \tab W             \tab Data2          \tab Must be a whole number between 0 and 12                                   \cr
+#'   Vertical sun             \tab W             \tab Data3          \tab Must be a whole number between 0 and 12                                   \cr
+#'   Visibility               \tab W             \tab Data5          \tab Can be converted to a numeric value                                       \cr
+#'   Sighting (mammal)        \tab S, K, M       \tab Data3-7        \tab Can be converted to a numeric value                                       \cr
+#'   Sighting (mammal)        \tab G             \tab Data5-7        \tab Can be converted to a numeric value                                       \cr
+#'   Sighting cue (mammal)    \tab S, K, M       \tab Data3          \tab Must be a whole number between 1 and 6                                    \cr
+#'   Sighting method (mammal) \tab S, K, M, G    \tab Data4          \tab Must be a whole number between 1 and 7                                    \cr
+#'   Bearing (mammal)         \tab S, K, M, G    \tab Data5          \tab Must be a whole number between 0 and 360                                  \cr
+#'   Photos                   \tab A             \tab Data3          \tab Must be one of N, Y, n, y, or NA (blank)                                  \cr
+#'   Birds                    \tab A             \tab Data4          \tab Must be one of N, Y, n, y, or NA (blank)                                  \cr
+#'   Calibration school       \tab S, K, M       \tab Data10         \tab Must be one of N, Y, n, y, or NA (blank)                                  \cr
+#'   Aerial photos taken      \tab S, K, M       \tab Data11         \tab Must be one of N, Y, n, y, or NA (blank)                                  \cr
+#'   Biopsy taken             \tab S, K, M       \tab Data12         \tab Must be one of N, Y, n, y, or NA (blank)                                  \cr
+#'   Species codes            \tab A             \tab Data5-8        \tab If a species codes file is provided, must be one of the provided codes    \cr
+#'   Resight                  \tab s, k          \tab Data2-5        \tab Can be converted to a numeric value                                       \cr
+#'   Turtle species           \tab t             \tab Data2          \tab If a species codes file is provided, must be one of the provided codes    \cr
+#'   Turtle sighting          \tab t             \tab Data3-5, 7     \tab Can be converted to a numeric value                                       \cr
+#'   Turtle JFR               \tab t             \tab Data6          \tab Must be one of F, J, N, R, or NA (blank)                                  \cr
+#'   Fishing vessel           \tab F             \tab Data2-4        \tab Can be converted to a numeric value                                       \cr
+#'   Sighting info            \tab 1-8           \tab Data2-8        \tab Can be converted to a numeric value                                       \cr
+#'   Sighting info            \tab 1-8           \tab Data9          \tab The Data9 column must be NA (blank) for events 1-8
 #' }
+#'
+#' In the table above, 'between' means inclusive.
 #'
 #' Long-term items, and checks that are not performed:
 #' \itemize{
