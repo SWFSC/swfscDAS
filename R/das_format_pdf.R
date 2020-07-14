@@ -1,13 +1,13 @@
 #' DAS format requirements
 #'
-#' Save the pdf document describing the DAS format required by \code{swfscDAS} to a specified file
+#' Save the PDF document describing the DAS format required by \code{swfscDAS} to a specified file
 #'
-#' @param file character, the name of the file where the pdf will be saved
+#' @param file character, the name of the file where the PDF will be saved
 #' @param ... passed on to \code{\link[base:files]{file.copy}}; might included named argument \code{overwrite}
 #'
 #' @details A wrapper function for \code{\link[base:files]{file.copy}}.
-#'   This function saves the pdf document describing the DAS data format requirements by
-#'   copying the pdf document located at \code{system.file("DAS_Format.pdf", package = "swfscDAS")}
+#'   This function saves the PDF document describing the DAS data format requirements by
+#'   copying the PDF document located at \code{system.file("DAS_Format.pdf", package = "swfscDAS")}
 #'   to \code{file}
 #'
 #'   This file can also be downloaded from

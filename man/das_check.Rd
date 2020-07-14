@@ -21,8 +21,7 @@ das_check(
 default is \code{NULL}}
 
 \item{sp.codes}{character; filename of .dat file from which to read
-accepted species codes.
-If \code{NULL}, the species codes will not be checked
+accepted species codes. If \code{NULL}, species codes will not be checked.
 Default is \code{NULL}}
 
 \item{print.cruise.nums}{logical; indicates if a table with all the
@@ -33,19 +32,22 @@ cruise numbers in the \code{x} should be printed using
 A data frame with columns: the file name, line number, cruise number,
 'ID' (columns 4-39 from the DAS file), and description of the issue
 
-If \code{file.out} is not \code{NULL}, then the error log is also
-written to a text file
+If \code{file.out} is not \code{NULL}, then the error log data frame is also
+written to \code{file.out} using \code{\link[utils:write.table]{write.csv}}
 
-A warning is printed if any events are r events
+A warning is printed if any events are r events; see \code{\link{das_process}} for details about r events
 }
 \description{
-Check that DAS file has accepted values
+Check that DAS file has accepted formatting and values
 }
 \details{
-Precursor to a more comprehensive DASCHECK program. Checks that the following is true:
+Precursor to a more comprehensive DASCHECK program.
+This function checks that the following is true:
 \itemize{
   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
-    A, B, C, E, F, k, K, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z.
+    A, B, C, E, F, k, K, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z
+  \item Latitude values are between -90 and 90 (inclusive; NA values are ignored)
+  \item Longitude values are between -180 and 180 (inclusive; NA values are ignored)
   \item The effort dot matches effort determined using B, R, and E events
   \item There are an equal number of R and E events, and they alternate occurrences
   \item A BR event series or R event does not occur while already on effort
@@ -98,16 +100,15 @@ In the table above, 'between' means inclusive.
 
 Long-term items, and checks that are not performed:
 \itemize{
-  \item Add check for sequential date/time
-  \item Add column with cruise number to output
+  \item Check that datetimes are sequential, meaning they
+    1) are the same as or 2) come after the previous event
   \item Check that A events only come immediately after a G/S/K/M event,
     and all G/S/K/M events have an A after them.
     And that each has at least one group size estimate (1:8 event)
-  \item Check that lat/lon values are within [-90, 90] and [-180, 180]
 }
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")
-das_check(y)
+if (interactive()) das_check(y)
 
 }

@@ -2,6 +2,8 @@
 
 * Fixed a bug in `das_check` where multiple files could not be checked at once
 
+* `das_check` now checks for valid longitude and latitude values
+
 * Fixed an issue where the sample stratum file did not overlap with any of the sample data
 
 

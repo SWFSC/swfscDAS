@@ -1,24 +1,26 @@
 #' Check DAS file
 #'
-#' Check that DAS file has accepted values
+#' Check that DAS file has accepted formatting and values
 #'
 #' @param file filename(s) of one or more DAS files
 #' @param skip integer: see \code{\link[readr]{read_fwf}}. Default is 0
 #' @param file.out filename to which to write the error log;
 #'   default is \code{NULL}
 #' @param sp.codes character; filename of .dat file from which to read
-#'   accepted species codes.
-#'   If \code{NULL}, the species codes will not be checked
+#'   accepted species codes. If \code{NULL}, species codes will not be checked.
 #'   Default is \code{NULL}
 #' @param print.cruise.nums logical; indicates if a table with all the
 #'   cruise numbers in the \code{x} should be printed using
 #'   \code{\link[base]{table}}. Default is \code{TRUE}
 #'
 #' @details
-#' Precursor to a more comprehensive DASCHECK program. Checks that the following is true:
+#' Precursor to a more comprehensive DASCHECK program.
+#' This function checks that the following is true:
 #' \itemize{
 #'   \item Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
-#'     A, B, C, E, F, k, K, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z.
+#'     A, B, C, E, F, k, K, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z
+#'   \item Latitude values are between -90 and 90 (inclusive; NA values are ignored)
+#'   \item Longitude values are between -180 and 180 (inclusive; NA values are ignored)
 #'   \item The effort dot matches effort determined using B, R, and E events
 #'   \item There are an equal number of R and E events, and they alternate occurrences
 #'   \item A BR event series or R event does not occur while already on effort
@@ -71,30 +73,35 @@
 #'
 #' Long-term items, and checks that are not performed:
 #' \itemize{
-#'   \item Add check for sequential date/time
-#'   \item Add column with cruise number to output
+#'   \item Check that datetimes are sequential, meaning they
+#'     1) are the same as or 2) come after the previous event
 #'   \item Check that A events only come immediately after a G/S/K/M event,
 #'     and all G/S/K/M events have an A after them.
 #'     And that each has at least one group size estimate (1:8 event)
-#'   \item Check that lat/lon values are within [-90, 90] and [-180, 180]
 #' }
 #'
 #' @return
 #' A data frame with columns: the file name, line number, cruise number,
 #' 'ID' (columns 4-39 from the DAS file), and description of the issue
 #'
-#' If \code{file.out} is not \code{NULL}, then the error log is also
-#' written to a text file
+#' If \code{file.out} is not \code{NULL}, then the error log data frame is also
+#' written to \code{file.out} using \code{\link[utils:write.table]{write.csv}}
 #'
-#' A warning is printed if any events are r events
+#' A warning is printed if any events are r events; see \code{\link{das_process}} for details about r events
 #'
 #' @examples
 #' y <- system.file("das_sample.das", package = "swfscDAS")
-#' das_check(y)
+#' if (interactive()) das_check(y)
 #'
 #' @export
 das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
                       print.cruise.nums = TRUE) {
+
+  if (length(unique(file)) != length(file))
+    warning("Not all files are unique - this likely will cause an error in ",
+            "airdas_check. Please ensure all files are unique.",
+            immediate. = TRUE)
+
   error.out <- data.frame(
     File = NA, LineNum = NA, CruiseNum = NA, ID = NA, Description = NA,
     stringsAsFactors = FALSE
@@ -105,18 +112,23 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   x$idx <- seq_along(x$Event)
   x <- as_das_dfr(x)
 
-  # x.lines.all <- readLines(file)
-  x.lines.all <- do.call(c, lapply(file, readLines))
-  x.lines <- substr(x.lines.all, 4, 39)
-  if (skip > 0) x.lines <- x.lines[-c(1:skip)]
-
-  stopifnot(nrow(x) == length(x.lines))
+  x.lines.list <- lapply(file, function(i) {
+    if (skip > 0) readLines(i)[-c(1:skip)] else readLines(i)
+  })
+  x.lines <- substr(do.call(c, x.lines.list), 4, 39)
 
   message("Processing DAS file")
   x.proc <- suppressWarnings(das_process(x)) %>%
     left_join(select(x, .data$file_das, .data$line_num, .data$idx),
               by = c('file_das', "line_num"))
   x.proc <- as_das_df(x.proc)
+
+
+  if ((nrow(x) != length(x.lines)) | (nrow(x) < nrow(x.proc)))
+    stop("Error reading and processing DAS files. ",
+         "Please try checking only a single file, or contact the developer")
+
+  rm(x.lines.list)
 
 
   #----------------------------------------------------------------------------
@@ -158,6 +170,18 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   if (any(x$Event == "r"))
     warning("The provided file contains 'r' events. Is this on purpose?",
             immediate. = TRUE)
+
+
+  ### Check lat/lon coordinates - NA events are ignored
+  # x.proc.ll <- x.proc %>% filter(!(Event %in% c("?", 1:8)))
+  lat.which <- which(!between(x.proc$Lat, -90, 90))
+  lon.which <- which(!between(x.proc$Lat, -180, 1800))
+
+  error.out <- rbind(
+    error.out,
+    .check_list(x.proc, x.lines, lat.which, "The latitude value is not between -90 and 90"),
+    .check_list(x.proc, x.lines, lon.which, "The longitude value is not between -180 and 180")
+  )
 
 
   #----------------------------------------------------------------------------
@@ -231,21 +255,21 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   ###   and that there is no extra data in these rows
   # * events should have no data - this is checked later
   x.tmp.filt <- data.frame(
-    Event = substr(x.lines.all, 4, 4),
-    Data1 = substr(x.lines.all, 40, 44),
-    Data2 = substr(x.lines.all, 45, 49),
-    Data3 = substr(x.lines.all, 50, 54),
-    Data4 = substr(x.lines.all, 55, 59),
-    Data5 = substr(x.lines.all, 60, 64),
-    Data6 = substr(x.lines.all, 65, 69),
-    Data7 = substr(x.lines.all, 70, 74),
-    Data8 = substr(x.lines.all, 75, 79),
-    Data9 = substr(x.lines.all, 80, 84),
-    Data10 = substr(x.lines.all, 85, 89),
-    Data11 = substr(x.lines.all, 90, 94),
-    Data12 = substr(x.lines.all, 95, 99),
-    Extra_data = substr(x.lines.all, 100, max(nchar(x.lines.all))),
-    idx = seq_along(x.lines.all),
+    Event = substr(x.lines, 4, 4),
+    Data1 = substr(x.lines, 40, 44),
+    Data2 = substr(x.lines, 45, 49),
+    Data3 = substr(x.lines, 50, 54),
+    Data4 = substr(x.lines, 55, 59),
+    Data5 = substr(x.lines, 60, 64),
+    Data6 = substr(x.lines, 65, 69),
+    Data7 = substr(x.lines, 70, 74),
+    Data8 = substr(x.lines, 75, 79),
+    Data9 = substr(x.lines, 80, 84),
+    Data10 = substr(x.lines, 85, 89),
+    Data11 = substr(x.lines, 90, 94),
+    Data12 = substr(x.lines, 95, 99),
+    Extra_data = substr(x.lines, 100, max(nchar(x.lines))),
+    idx = seq_along(x.lines),
     stringsAsFactors = FALSE
   ) %>%
     filter(!(.data$Event %in% c("C", "*", "#"))) %>%

@@ -3,7 +3,8 @@
 #' Process DAS data (the output of \code{\link{das_read}}),
 #'   including extracting state and condition information for each DAS event
 #'
-#' @param x either a \code{das_dfr} object, an object that can be coerced to class \code{das_dfr},
+#' @param x an object of class \code{das_dfr},
+#'   an object that can be coerced to class \code{das_dfr},
 #'   or a character (filepath) which is first passed to \code{\link{das_read}}
 #' @param ... passed to \code{\link{das_read}} if \code{x} is a character.
 #'   Otherwise ignored
@@ -45,6 +46,8 @@
 #'       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N,
 #'       P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z
 #'     \item All '#' events (deleted events) are removed
+#'     \item r events are converted to R events with non-standard effort;
+#'       see \code{\link{das_format_pdf}} for more details
 #'     \item An event is considered 'on effort' if it is 1) an R event,
 #'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
 #'       (not including the E event). The 'EffortDot' column is not used when determining on effort data.
