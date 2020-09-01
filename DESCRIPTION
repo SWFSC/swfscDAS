@@ -4,13 +4,13 @@ Version: 0.5.0.9000
 Authors@R: 
     person("Sam", "Woodman", email = "sam.woodman@noaa.gov", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6071-8186"))
 Description: Process and summarize shipboard 
-    'DAS' <https://swfsc.noaa.gov/publications/TM/SWFSC/NOAA-TM-NMFS-SWFSC-305.PDF> data
+    'DAS' <https://swfsc-publications.fisheries.noaa.gov/publications/TM/SWFSC/NOAA-TM-NMFS-SWFSC-305.PDF> data
     produced by the Southwest Fisheries Science Center (SWFSC) program 'WinCruz' 
-    <https://www.fisheries.noaa.gov/about/marine-mammal-and-turtle-division-southwest-fisheries-science-center>.
+    <https://www.fisheries.noaa.gov/west-coast/science-data/california-current-marine-mammal-assessment-research>.
     This package standardizes and streamlines basic DAS data processing,
     and includes a PDF with the DAS data format requirements.
-URL: https://smwoodman.github.io/swfscDAS, https://github.com/smwoodman/swfscDAS
-BugReports: https://github.com/smwoodman/swfscDAS/issues
+URL: https://smwoodman.github.io/swfscDAS/, https://github.com/smwoodman/swfscDAS/
+BugReports: https://github.com/smwoodman/swfscDAS/issues/
 Depends: R (>= 3.5.0)
 Imports:
     dplyr, 

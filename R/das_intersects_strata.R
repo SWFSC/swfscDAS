@@ -8,7 +8,7 @@
 #'   If \code{x} is a data frame, the user must also specify
 #'   the coordinate columns of \code{x} using \code{x.lon} and \code{x.lat}
 #' @param ... ignored
-#' @param y list of file path(s) of the CSV(s) that contain points defining each stratum.
+#' @param y list of path(s) of the CSV file(s) that contain points defining each stratum.
 #'   The list may be named; see 'Value' section for how these names are used
 #' @param x.lon character; name of the longitude column of \code{x}.
 #'   Ignored if \code{x} is a list; default is "Lon"

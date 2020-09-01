@@ -316,7 +316,7 @@ das_chop_equallength.das_df <- function(x, conditions, seg.km, randpicks.load = 
     seg.lengths <- 0
     pos <- NA
 
-    # TODO: EAB makes a 0.1km segment if it includes a sighting
+    # EAB makes a 0.1km segment if it includes a sighting
     # if (nrow(das.df) > 2) {
     #   seg.0 <- i
     #   if ("S" %in% das.df$Event)

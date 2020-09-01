@@ -21,7 +21,7 @@ the coordinate columns of \code{x} using \code{x.lon} and \code{x.lat}}
 
 \item{...}{ignored}
 
-\item{y}{list of file path(s) of the CSV(s) that contain points defining each stratum.
+\item{y}{list of path(s) of the CSV file(s) that contain points defining each stratum.
 The list may be named; see 'Value' section for how these names are used}
 
 \item{x.lon}{character; name of the longitude column of \code{x}.
