@@ -129,7 +129,7 @@ das_chop_equallength.das_df <- function(x, conditions, seg.km, randpicks.load = 
 
   # Determine continuous effort sections
   if (!("cont_eff_section" %in% names(x))) {
-    x$cont_eff_section <- cumsum(x$Event %in% "R")
+    x$cont_eff_section <- cumsum(x$Event %in% c("R", "strataR"))
   }
 
 
@@ -175,7 +175,7 @@ das_chop_equallength.das_df <- function(x, conditions, seg.km, randpicks.load = 
   #----------------------------------------------------------------------------
   # Check continuous effort sections against randpicks if applicable
   eff.uniq <- unique(x$cont_eff_section)
-  stopifnot(length(eff.uniq) == sum(x$Event == "R"))
+  stopifnot(length(eff.uniq) == sum(x$Event %in% c("R", "strataR")))
   if (exists("r.eff.sect")) {
     if (length(eff.uniq) != length(r.eff.sect)) {
       stop("The provided DAS data (x) does not have the same number of ",
@@ -189,7 +189,7 @@ das_chop_equallength.das_df <- function(x, conditions, seg.km, randpicks.load = 
 
 
   #----------------------------------------------------------------------------
-  # Parallel thorugh each continuous effort section,
+  # Parallel through each continuous effort section,
   #   getting segment lengths and segdata
   call.x <- x
   call.conditions <- conditions
@@ -234,7 +234,7 @@ das_chop_equallength.das_df <- function(x, conditions, seg.km, randpicks.load = 
   #----------------------------------------------------------------------------
   # Extract information from eff.chop.list, and return
 
-  ### Randpicks; including writing to csv if specified
+  ### Randpicks
   randpicks <- data.frame(
     effort_section = eff.uniq,
     randpicks = vapply(eff.chop.list, function(j) j[["pos"]], 1)

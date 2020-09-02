@@ -8,9 +8,16 @@
 \usage{
 das_intersects_strata(x, ...)
 
-\method{das_intersects_strata}{list}(x, y, ...)
+\method{das_intersects_strata}{list}(x, strata.files, ...)
 
-\method{das_intersects_strata}{data.frame}(x, y, x.lon = "Lon", x.lat = "Lat", ...)
+\method{das_intersects_strata}{data.frame}(
+  x,
+  strata.files,
+  x.lon = "Lon",
+  x.lat = "Lat",
+  strata.which = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{a data frame (such as an object of class \code{das_df}) or a list.
@@ -21,7 +28,8 @@ the coordinate columns of \code{x} using \code{x.lon} and \code{x.lat}}
 
 \item{...}{ignored}
 
-\item{y}{list of path(s) of the CSV file(s) that contain points defining each stratum.
+\item{strata.files}{list of path(s) of the CSV file(s) with points defining each stratum.
+The CSV files must contain headers and be a closed polygon.
 The list may be named; see 'Value' section for how these names are used}
 
 \item{x.lon}{character; name of the longitude column of \code{x}.
@@ -29,15 +37,24 @@ Ignored if \code{x} is a list; default is "Lon"}
 
 \item{x.lat}{character; name of the latitude column of \code{x}.
 Ignored if \code{x} is a list; default is "Lat"}
+
+\item{strata.which}{logical; indicates if the numeric column 'strata_which' should
+be included in the output data frame.
+Ignored if \code{x} is a list; default is \code{FALSE}.
+See 'Value' section for more details}
 }
 \value{
-Logical columns are added to \code{x} indicating if each point intersected
-  with the corresponding stratum polygon.
-  The names of these columns are the names of \code{y};
-  the element(s) of \code{y} will have the name InPoly#,
-  where '#' is the index of that stratum polygon in \code{y}.
+If \code{x} is a data frame, then logical columns are added to \code{x}
+  indicating if each point intersected with the corresponding stratum polygon.
+  The names of these columns are the names of \code{strata.files};
+  the element(s) of \code{strata.files} will have the name InPoly#,
+  where '#' is the index of that stratum polygon in \code{strata.files}.
+  If \code{strata.which}, then the column 'strata_which' is added to the end of the data frame.
+  This column contains either a 0 if the point intersects with no strata or
+  2) a numeric indicating the index (in \code{strata.files}) of
+  the (first) strata polygon that the point intersects with.
 
-  If \code{x} is a list (meaning the output of one of the effort functions),
+  Otherwise, i.e. if \code{x} is a list and thus the output of one of the effort functions,
   then the stratum columns are added to both the segdata and sightinfo data frames.
   However, note that the columns added to the sightinfo data frame still indicate
   whether or not the segment midpoint was in the corresponding stratum,

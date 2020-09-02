@@ -36,6 +36,47 @@
 
 
 ###############################################################################
+# Read and coerce y (file path) into an sfc object (polygon)
+.das_pts2poly_vertices <- function(y) {
+  tryCatch({
+    y.df <- read.csv(y)
+    # This is mostly copied from eSDM::pts2poly_vertices
+    stopifnot(
+      inherits(y.df, "data.frame"),
+      ncol(y.df) >= 2,
+      is.numeric(y.df[[1]]) & is.numeric(y.df[[2]]),
+      identical(is.na(y.df[[1]]), is.na(y.df[[2]]))
+    )
+
+    y.df <- y.df %>% select(c(1, 2))
+    names(y.df) <- c("lon", "lat")
+
+    if (anyNA(y.df$lon)) {
+      obj.list <- y.df %>%
+        mutate(na_sum = cumsum(is.na(.data$lon) & is.na(.data$lat))) %>%
+        filter(!is.na(.data$lon) & !is.na(.data$lat)) %>%
+        group_by(.data$na_sum) %>%
+        summarise(temp = list(
+          st_polygon(list(matrix(c(.data$lon, .data$lat), ncol = 2)))
+        ))
+
+      tmp.out <- st_sfc(obj.list$temp, crs = 4326)
+
+    } else {
+      tmp.out <- st_sfc(
+        st_polygon(list(matrix(c(y.df$lon, y.df$lat), ncol = 2))),
+        crs = 4326
+      )
+    }
+
+    suppressWarnings(st_wrap_dateline(tmp.out))
+  }, error = paste("Unable to read and convert elements of y to sf objects.",
+                   "All elements of y must be paths to csv files with the first two",
+                   "columns being longitude and latitude, respectively"))
+}
+
+
+###############################################################################
 # Internals for use in effort-processing functions
 
 #------------------------------------------------------------------------------

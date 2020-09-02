@@ -12,6 +12,10 @@
 #'   e.g. 'Bft', 'SwellHght', etc.
 #'   If \code{method == "condition"}, then these also are the conditions which
 #'   trigger segment chopping when they change.
+#' @param strata.files list of path(s) of the CSV file(s) with points defining each stratum.
+#'   The CSV files must contain headers and be a closed polygon.
+#'   The list should be named; see the Details section.
+#'   If \code{NULL} (the default), then no effort segments are not classified by strata.
 #' @param distance.method character;
 #'   method to use to calculate distance between lat/lon coordinates.
 #'   Can be "greatcircle", "lawofcosines", "haversine", "vincenty",
@@ -50,9 +54,21 @@
 #'   In addition, all on effort events (other than ? and numeric events)
 #'   with \code{NA} DateTime, Lat, or Lon values are verbosely removed.
 #'
+#'   If \code{strata.files} is not \code{NULL}, then the effort lines
+#'   will be split by the user-provided stratum (strata).
+#'   In this case, a column 'stratum' will be added to the end of the segdata
+#'   data frame with the user-provided name of the stratum that the segment was in,
+#'   or \code{NA} if the segment was not in any of the strata.
+#'   If no name was provided for the stratum in \code{strata.files},
+#'   then the value will be "Stratum#",
+#'   where "#" is the index of the applicable stratum in \code{strata.files}.
+#'   While the user can provide as many strata as they want,
+#'   these strata can share boundaries but they cannot overlap.
+#'   See \code{\link{das_effort_strata}} for more details.
+#'
 #'   The following chopping methods are currently available:
 #'   "condition", "equallength", and "section.
-#'   When using the \code{"condition"} method, effort sections are chopped
+#'   When using the "condition" method, effort sections are chopped
 #'   into segments every time a condition changes,
 #'   thereby ensuring that the conditions are consistent across the entire segment.
 #'   See \code{\link{das_chop_condition}} for more details about this method,
@@ -87,7 +103,8 @@
 #' @return List of three data frames:
 #'   \itemize{
 #'     \item segdata: one row for every segment, and columns for information including
-#'       unique segment number, start/end/midpoint coordinates, and conditions (e.g. Beaufort)
+#'       unique segment number, start/end/midpoint coordinates, conditions (e.g. Beaufort),
+#'       and (if applicable) stratum
 #'     \item sightinfo: details for all sightings in \code{x}, including:
 #'       the unique segment number it is associated with, segment mid points (lat/lon),
 #'       the 'included' column described in the 'Details' section,
@@ -106,6 +123,9 @@
 #'   seg.min.km = 0.05, num.cores = 1
 #' )
 #'
+#' # Using "section" method
+#' das_effort(y.proc, method = "section", num.cores = 1)
+#'
 #' \donttest{
 #' # Using "equallength" method
 #' y.rand <- system.file("das_sample_randpicks.csv", package = "swfscDAS")
@@ -114,8 +134,12 @@
 #'   num.cores = 1
 #' )
 #'
-#' # Using "section" method
-#' das_effort(y.proc, method = "section", num.cores = 1)
+#' # Using "section" method and chop by strata
+#' stratum.file <- system.file("das_sample_stratum.csv", package = "swfscDAS")
+#' das_effort(
+#'   y.proc, method = "section", strata.files = list(Poly1 = stratum.file),
+#'   num.cores = 1
+#' )
 #' }
 #'
 #' @export
@@ -132,7 +156,7 @@ das_effort.data.frame <- function(x, ...) {
 #' @name das_effort
 #' @export
 das_effort.das_df <- function(x, method = c("condition", "equallength", "section"),
-                              conditions = NULL,
+                              conditions = NULL, strata.files = NULL,
                               distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
                               seg0.drop = FALSE, comment.drop = FALSE, event.touse = NULL,
                               num.cores = NULL, ...) {
@@ -193,16 +217,28 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
     sum(c(nrow(x.oneff), nrow(x.oneff.tmp))) == nrow(x.oneff.all)
   )
 
+  # Filter for specified events, if applicable
+  if (!is.null(event.touse)) x.oneff <- x.oneff %>% filter(.data$Event %in% event.touse)
+
+
   # Verbosely remove remaining data without Lat/Lon/DateTime info
   if (any(is.na(x.oneff$Lat) | is.na(x.oneff$Lon) | is.na(x.oneff$DateTime))) {
     x.nacheck <- x.oneff %>%
       mutate(ll_dt_na = is.na(.data$Lat) | is.na(.data$Lon) | is.na(.data$DateTime),
+             eff_na = .data$ll_dt_na & (.data$Event %in% c("R", "E")),
              sight_na = .data$ll_dt_na & (.data$Event %in% c("S", "K", "M", "G", "t", "A")))
 
     # Check that no sightings have NA lat/lon/dt info
     if (any(x.nacheck$sight_na))
-      stop("One or more sightings at the following line number(s) ",
-           "have NA Lat/Lon/DateTime values; ",
+      stop("One or more sightings ",
+           "have NA Lat/Lon/DateTime values at the following line number(s); ",
+           "please fix or remove before processing:\n",
+           .print_file_line(x.nacheck$file_das, x.nacheck$line_num, which(x.nacheck$sight_na)))
+
+    # Check that no R/E events have NA lat/lon/dt info
+    if (any(x.nacheck$eff_na))
+      stop("One or more effort events (R/E events)",
+           "have NA Lat/Lon/DateTime values at the following line number(s); ",
            "please fix or remove before processing:\n",
            .print_file_line(x.nacheck$file_das, x.nacheck$line_num, which(x.nacheck$sight_na)))
 
@@ -216,13 +252,29 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
     rm(x.nacheck)
   }
 
-  # For each event, calculate distance to previous event
-  if (!is.null(event.touse)) x.oneff <- x.oneff %>% filter(.data$Event %in% event.touse)
+  # Add in 'events' where effort crosses strata boundary
+  if (!is.null(strata.files)) {
+    # Check names - add as needed
+    if (any(names(strata.files) == "")) {
+      noname <- names(strata.files) == ""
+      names(strata.files)[noname] <- paste0("Stratum", seq_along(strata.files)[noname])
+    } else { #is.null(names(strata.files))
+      names(strata.files) <- paste0("Stratum", seq_along(strata.files))
+    }
 
+    # Call helper, and sanity check
+    x.oneff <- das_effort_strata(x.oneff, strata.files)
+    stopifnot(
+      all(!is.na(x.oneff$Lon[x.oneff$Event == "strata"])),
+      all(!is.na(x.oneff$Lat[x.oneff$Event == "strata"]))
+    )
+  }
+
+  # For each event, calculate distance to previous event
   x.oneff$dist_from_prev <- .dist_from_prev(x.oneff, distance.method)
 
   # Determine continuous effort sections
-  x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
+  x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% c("R", "strataR"))
 
   # If specified, verbosely remove cont eff sections with length 0 and no sighting events
   if (seg0.drop) {
@@ -235,7 +287,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
 
     x.oneff <- x.oneff %>% filter(.data$cont_eff_section %in% ces.keep)
 
-    x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% "R")
+    x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% c("R", "strataR"))
 
     message(paste("There were", nrow(x.ces.summ) - length(ces.keep),
                   "continuous effort sections removed because they have a",
@@ -243,11 +295,10 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
     rm(x.ces.summ, ces.keep)
   }
 
-  if (length(unique(x.oneff$cont_eff_section)) != sum(x.oneff$Event == "R") |
-      max(x.oneff$cont_eff_section) != sum(x.oneff$Event == "R")) {
+  if (length(unique(x.oneff$cont_eff_section)) != sum(x.oneff$Event %in% c("R", "strataR")) |
+      max(x.oneff$cont_eff_section) != sum(x.oneff$Event %in% c("R", "strataR")))
     stop("Error in processing continuous effort sections - ",
          "please report this as an issue")
-  }
 
 
   #----------------------------------------------------------------------------
@@ -270,9 +321,25 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
   segdata <- eff.list[[2]]
   randpicks <- eff.list[[3]]
 
+  # Add strata info to segdata as needed - easiest to do this here
+  if (!is.null(strata.files)) {
+    x.strata.summ <- x.eff %>%
+      group_by(.data$segnum) %>%
+      summarise(strata_which = unique(.data$strata_which),
+                stratum = ifelse(.data$strata_which == 0, NA,
+                                 names(strata.files)[.data$strata_which])) %>%
+      select(.data$segnum, .data$stratum)
+    if (nrow(x.strata.summ) != nrow(segdata))
+      stop("Error processing strata and segdata - please report this as an issue")
+
+    segdata <- segdata %>% left_join(x.strata.summ, by = "segnum")
+    x.eff <- x.eff %>% select(-!!c(names(strata.files), "strata_which"))
+  }
+
   # Check that things are as expected
   x.eff.names <- c(
     names(x), "dist_from_prev", "cont_eff_section", "seg_idx", "segnum"
+    # if (is.null(strata.files)) NULL else c(names(strata.files), "strata_which"),
   )
   if (!identical(names(x.eff), x.eff.names))
     stop("Error in das_effort: names of x.eff. Please report this as an issue")
@@ -284,10 +351,12 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
   # Add back in ? and 1:8 (events.tmp) events
   # Only for sightinfo groupsizes, and thus no segdata info doesn't matter
   x.eff.all <- rbind(x.eff, x.oneff.tmp) %>%
+    bind_rows(x.oneff.tmp) %>%
     arrange(.data$idx_eff) %>%
     select(-.data$idx_eff)
 
 
+  #----------------------------------------------------------------------------
   #----------------------------------------------------------------------------
   # Summarize sightings
   sightinfo <- x.eff.all %>%

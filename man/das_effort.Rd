@@ -14,6 +14,7 @@ das_effort(x, ...)
   x,
   method = c("condition", "equallength", "section"),
   conditions = NULL,
+  strata.files = NULL,
   distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
   seg0.drop = FALSE,
   comment.drop = FALSE,
@@ -38,6 +39,11 @@ These values must be column names from the output of \code{\link{das_process}},
 e.g. 'Bft', 'SwellHght', etc.
 If \code{method == "condition"}, then these also are the conditions which
 trigger segment chopping when they change.}
+
+\item{strata.files}{list of path(s) of the CSV file(s) with points defining each stratum.
+The CSV files must contain headers and be a closed polygon.
+The list should be named; see the Details section.
+If \code{NULL} (the default), then no effort segments are not classified by strata.}
 
 \item{distance.method}{character;
 method to use to calculate distance between lat/lon coordinates.
@@ -68,7 +74,8 @@ Using 1 core likely will be faster for smaller datasets}
 List of three data frames:
   \itemize{
     \item segdata: one row for every segment, and columns for information including
-      unique segment number, start/end/midpoint coordinates, and conditions (e.g. Beaufort)
+      unique segment number, start/end/midpoint coordinates, conditions (e.g. Beaufort),
+      and (if applicable) stratum
     \item sightinfo: details for all sightings in \code{x}, including:
       the unique segment number it is associated with, segment mid points (lat/lon),
       the 'included' column described in the 'Details' section,
@@ -96,9 +103,21 @@ This is the top-level function for chopping processed DAS data
   In addition, all on effort events (other than ? and numeric events)
   with \code{NA} DateTime, Lat, or Lon values are verbosely removed.
 
+  If \code{strata.files} is not \code{NULL}, then the effort lines
+  will be split by the user-provided stratum (strata).
+  In this case, a column 'stratum' will be added to the end of the segdata
+  data frame with the user-provided name of the stratum that the segment was in,
+  or \code{NA} if the segment was not in any of the strata.
+  If no name was provided for the stratum in \code{strata.files},
+  then the value will be "Stratum#",
+  where "#" is the index of the applicable stratum in \code{strata.files}.
+  While the user can provide as many strata as they want,
+  these strata can share boundaries but they cannot overlap.
+  See \code{\link{das_effort_strata}} for more details.
+
   The following chopping methods are currently available:
   "condition", "equallength", and "section.
-  When using the \code{"condition"} method, effort sections are chopped
+  When using the "condition" method, effort sections are chopped
   into segments every time a condition changes,
   thereby ensuring that the conditions are consistent across the entire segment.
   See \code{\link{das_chop_condition}} for more details about this method,
@@ -140,6 +159,9 @@ das_effort(
   seg.min.km = 0.05, num.cores = 1
 )
 
+# Using "section" method
+das_effort(y.proc, method = "section", num.cores = 1)
+
 \donttest{
 # Using "equallength" method
 y.rand <- system.file("das_sample_randpicks.csv", package = "swfscDAS")
@@ -148,8 +170,12 @@ das_effort(
   num.cores = 1
 )
 
-# Using "section" method
-das_effort(y.proc, method = "section", num.cores = 1)
+# Using "section" method and chop by strata
+stratum.file <- system.file("das_sample_stratum.csv", package = "swfscDAS")
+das_effort(
+  y.proc, method = "section", strata.files = list(Poly1 = stratum.file),
+  num.cores = 1
+)
 }
 
 }
