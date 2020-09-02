@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Introduction to swfscDAS • swfscDAS</title>
+<title> • swfscDAS</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to swfscDAS">
+<script src="../pkgdown.js"></script><meta property="og:title" content="">
 <meta property="og:description" content="swfscDAS">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Introduction to swfscDAS</h1>
+      <h1 data-toc-skip></h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/smwoodman/swfscDAS/blob/master/vignettes/swfscDAS.Rmd"><code>vignettes/swfscDAS.Rmd</code></a></small>
@@ -95,6 +95,26 @@
 
     
     
+<table class="table"><tbody>
+<tr class="odd">
+<td>title: “Introduction to swfscDAS”</td>
+</tr>
+<tr class="even">
+<td>output: rmarkdown::html_vignette</td>
+</tr>
+<tr class="odd">
+<td>vignette: &gt;</td>
+</tr>
+<tr class="even">
+<td>%</td>
+</tr>
+<tr class="odd">
+<td>%</td>
+</tr>
+<tr class="even">
+<td>%</td>
+</tr>
+</tbody></table>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">dplyr</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">stringr</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">swfscDAS</span>)</pre></body></html></div>
@@ -395,9 +415,9 @@
 <h2 class="hasAnchor">
 <a href="#effort" class="anchor"></a>Effort</h2>
 <p>In addition, you can chop the effort data into segments, and summarize the conditions and sightings on those segments using <code>das_effort</code> and <code>das_effort_sight</code>. These effort segments can be used for line transect estimates using the Distance software, species distribution modeling, or summarizing the number of sightings of certain species on each segment, among other uses. <code>das_effort</code> chops continuous effort sections (the event sequence from R to E events) into effort segments using one of several different chopping methods: condition (a new effort segment every time a condition changes), equal length (effort segments of equal length), or section (each segment is a full continuous effort section, i.e. it runs from an R event to an E event). <code>das_effort_sight</code> takes the output of <code>das_effort</code> and returns the number of included sightings and animals per segment for specified species codes.</p>
-<p>Both functions return a list of three data frames: segdata, sightinfo, and randpicks. These data frames and the different chopping methodologies are described in depth in the function documentation (<code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_sight.html">?das_effort_sight</a></code>), but briefly segdata contains information about each effort segment, sightinfo contains information about the sightings such as their corresponding segment, and randpicks contains information specific to the ‘equal length’ chopping method. <code>das_effort</code> and <code>das_effort_sight</code> are separate functions to allow the user more control over which sightings should be included in the effort segment summaries (see <code><a href="../reference/das_effort.html">?das_effort</a></code>).</p>
+<p>Both functions return a list of three data frames: segdata, sightinfo, and randpicks. These data frames and the different chopping methodologies are described in depth in the function documentation (<code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_sight.html">?das_effort_sight</a></code>), but briefly segdata contains information about each effort segment, sightinfo contains information about the sightings such as their corresponding segment, and randpicks contains information specific to the ‘equal length’ chopping method. <code>das_effort</code> and <code>das_effort_sight</code> are separate functions to allow the user more control over which sightings should be included in the effort segment summaries (see <code><a href="../reference/das_effort.html">?das_effort</a></code>). See below for how to chop/split effort lines by strata.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="co"># Chop the effort into 10km segments</span>
-<span class="no">y.eff</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span>(
+<span class="no">y.eff.eq</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span>(
   <span class="no">y.proc</span>, <span class="kw">method</span> <span class="kw">=</span> <span class="st">"equallength"</span>, <span class="kw">seg.km</span> <span class="kw">=</span> <span class="fl">10</span>, <span class="kw">dist.method</span> <span class="kw">=</span> <span class="st">"greatcircle"</span>,
   <span class="kw">num.cores</span> <span class="kw">=</span> <span class="fl">1</span>
 )
@@ -445,9 +465,9 @@
 <span class="co">#&gt; $ ANI_076          &lt;dbl&gt; 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
 
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">glimpse</a></span>(<span class="no">y.eff.sight</span>$<span class="no">sightinfo</span>)
-<span class="co">#&gt; Rows: 13</span>
+<span class="co">#&gt; Rows: 15</span>
 <span class="co">#&gt; Columns: 63</span>
-<span class="co">#&gt; $ segnum       &lt;int&gt; 1, 3, 4, 13, 13, 15, 17, 18, 18, 20, 20, 20, 20</span>
+<span class="co">#&gt; $ segnum       &lt;int&gt; 1, 3, 4, 13, 13, 15, 17, 18, 18, 20, 20, 20, 20, 20, 20</span>
 <span class="co">#&gt; $ mlat         &lt;dbl&gt; 39.34377, 39.47435, 39.61433, 40.20895, 40.20895, 40.348…</span>
 <span class="co">#&gt; $ mlon         &lt;dbl&gt; -137.5930, -137.5493, -137.4327, -137.1531, -137.1531, -…</span>
 <span class="co">#&gt; $ Event        &lt;chr&gt; "S", "S", "t", "t", "S", "t", "S", "S", "S", "S", "S", "…</span>
@@ -459,62 +479,63 @@
 <span class="co">#&gt; $ Cruise       &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 10…</span>
 <span class="co">#&gt; $ Mode         &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "…</span>
 <span class="co">#&gt; $ EffType      &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "…</span>
-<span class="co">#&gt; $ ESWsides     &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
-<span class="co">#&gt; $ Course       &lt;dbl&gt; 25, 26, 27, 20, 20, 16, 25, 30, 30, 23, 23, 23, 23</span>
+<span class="co">#&gt; $ ESWsides     &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
+<span class="co">#&gt; $ Course       &lt;dbl&gt; 25, 26, 27, 20, 20, 16, 25, 30, 30, 23, 23, 23, 23, 23, …</span>
 <span class="co">#&gt; $ SpdKt        &lt;dbl&gt; 10.2, 9.7, 9.0, 9.3, 9.3, 8.9, 8.9, 9.5, 9.5, 9.6, 9.6, …</span>
-<span class="co">#&gt; $ Bft          &lt;dbl&gt; 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2</span>
-<span class="co">#&gt; $ SwellHght    &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1</span>
-<span class="co">#&gt; $ WindSpdKt    &lt;dbl&gt; 10, 10, 10, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5</span>
-<span class="co">#&gt; $ RainFog      &lt;dbl&gt; 1, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3</span>
-<span class="co">#&gt; $ HorizSun     &lt;dbl&gt; NA, 2, 2, 8, 8, 9, 8, 8, 8, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ VertSun      &lt;dbl&gt; NA, 2, 2, 1, 1, 1, 2, 2, 2, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ Bft          &lt;dbl&gt; 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
+<span class="co">#&gt; $ SwellHght    &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1, 1, 1</span>
+<span class="co">#&gt; $ WindSpdKt    &lt;dbl&gt; 10, 10, 10, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5, 5, 5</span>
+<span class="co">#&gt; $ RainFog      &lt;dbl&gt; 1, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3</span>
+<span class="co">#&gt; $ HorizSun     &lt;dbl&gt; NA, 2, 2, 8, 8, 9, 8, 8, 8, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ VertSun      &lt;dbl&gt; NA, 2, 2, 1, 1, 1, 2, 2, 2, NA, NA, NA, NA, NA, NA</span>
 <span class="co">#&gt; $ Glare        &lt;lgl&gt; NA, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…</span>
 <span class="co">#&gt; $ Vis          &lt;dbl&gt; 6.0, 5.5, 5.5, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 4.0, 4.0, 4…</span>
 <span class="co">#&gt; $ ObsL         &lt;chr&gt; "208", "125", "001", "280", "280", "125", "149", "126", …</span>
 <span class="co">#&gt; $ Rec          &lt;chr&gt; "280", "208", "126", "001", "001", "208", "125", "149", …</span>
 <span class="co">#&gt; $ ObsR         &lt;chr&gt; "001", "280", "149", "126", "126", "280", "208", "125", …</span>
-<span class="co">#&gt; $ ObsInd       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ ObsInd       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
 <span class="co">#&gt; $ EffortDot    &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TR…</span>
 <span class="co">#&gt; $ EventNum     &lt;chr&gt; "15", "35", "59", "131", "136", "153", "167", "181", "18…</span>
 <span class="co">#&gt; $ file_das     &lt;chr&gt; "das_sample.das", "das_sample.das", "das_sample.das", "d…</span>
 <span class="co">#&gt; $ line_num     &lt;int&gt; 15, 38, 65, 137, 142, 162, 176, 193, 193, 248, 248, 252,…</span>
 <span class="co">#&gt; $ SightNo      &lt;chr&gt; "1406", "1407", NA, NA, "1408", NA, "1409", "1410", "141…</span>
-<span class="co">#&gt; $ Subgroup     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ Subgroup     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
 <span class="co">#&gt; $ SightNoDaily &lt;chr&gt; "20130113_1", "20130113_2", NA, NA, "20130113_3", NA, "2…</span>
 <span class="co">#&gt; $ Obs          &lt;chr&gt; "208", "125", "280", "228", "280", "231", "149", "125", …</span>
 <span class="co">#&gt; $ ObsStd       &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE,…</span>
 <span class="co">#&gt; $ Bearing      &lt;dbl&gt; 309, 326, 120, 300, 270, 45, 344, 70, 70, 359, 359, 38, …</span>
 <span class="co">#&gt; $ Reticle      &lt;dbl&gt; 2.8, 0.4, NA, NA, 14.0, NA, 0.2, 1.4, 1.4, 0.3, 0.3, 0.8…</span>
 <span class="co">#&gt; $ DistNm       &lt;dbl&gt; 1.06, 2.97, 0.03, 0.02, 0.28, 0.05, 3.68, 1.66, 1.66, 3.…</span>
-<span class="co">#&gt; $ Cue          &lt;dbl&gt; 3, 3, NA, NA, 3, NA, 3, 3, 3, 2, 2, 3, 3</span>
-<span class="co">#&gt; $ Method       &lt;dbl&gt; 4, 4, NA, NA, 4, NA, 4, 4, 4, 4, 4, 4, 4</span>
+<span class="co">#&gt; $ Cue          &lt;dbl&gt; 3, 3, NA, NA, 3, NA, 3, 3, 3, 2, 2, 3, 3, 3, 3</span>
+<span class="co">#&gt; $ Method       &lt;dbl&gt; 4, 4, NA, NA, 4, NA, 4, 4, 4, 4, 4, 4, 4, 4, 4</span>
 <span class="co">#&gt; $ Photos       &lt;chr&gt; "N", "Y", NA, NA, "N", NA, "Y", "Y", "Y", "Y", "Y", "Y",…</span>
 <span class="co">#&gt; $ Birds        &lt;chr&gt; "N", "N", NA, NA, "N", NA, "Y", "N", "N", "N", "N", "N",…</span>
-<span class="co">#&gt; $ CalibSchool  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ PhotosAerial &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ Biopsy       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ CalibSchool  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ PhotosAerial &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ Biopsy       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
 <span class="co">#&gt; $ Prob         &lt;lgl&gt; FALSE, FALSE, NA, NA, FALSE, NA, FALSE, FALSE, FALSE, FA…</span>
-<span class="co">#&gt; $ nSp          &lt;int&gt; 1, 1, NA, NA, 1, NA, 1, 2, 2, 2, 2, 2, 2</span>
+<span class="co">#&gt; $ nSp          &lt;int&gt; 1, 1, NA, NA, 1, NA, 1, 2, 2, 2, 2, 2, 2, 2, 2</span>
 <span class="co">#&gt; $ Mixed        &lt;lgl&gt; FALSE, FALSE, NA, NA, FALSE, NA, FALSE, TRUE, TRUE, TRUE…</span>
 <span class="co">#&gt; $ SpCode       &lt;chr&gt; "018", "076", "LV", "DC", "037", "DC", "016", "013", "01…</span>
-<span class="co">#&gt; $ SpCodeProb   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "016", "016"</span>
+<span class="co">#&gt; $ SpCodeProb   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "016", "016"…</span>
 <span class="co">#&gt; $ GsSchoolBest &lt;dbl&gt; NA, 8.00000, 1.00000, 1.00000, 10.66667, 1.00000, 46.666…</span>
 <span class="co">#&gt; $ GsSchoolHigh &lt;dbl&gt; NA, 14.00, NA, NA, 20.00, NA, 79.00, 72.75, 72.75, 249.0…</span>
 <span class="co">#&gt; $ GsSchoolLow  &lt;dbl&gt; 42.333333, 5.666667, NA, NA, 10.666667, NA, 46.666667, 4…</span>
 <span class="co">#&gt; $ GsSpBest     &lt;dbl&gt; NA, 8.00000, 1.00000, 1.00000, 10.66667, 1.00000, 46.666…</span>
 <span class="co">#&gt; $ GsSpHigh     &lt;dbl&gt; NA, 14.000, NA, NA, 20.000, NA, 79.000, 53.165, 19.585, …</span>
 <span class="co">#&gt; $ GsSpLow      &lt;dbl&gt; 42.333333, 5.666667, NA, NA, 10.666667, NA, 46.666667, 3…</span>
-<span class="co">#&gt; $ CourseSchool &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ TurtleJFR    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ TurtleAge    &lt;chr&gt; NA, NA, "A", "J", NA, "A", NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ TurtleCapt   &lt;chr&gt; NA, NA, "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ CourseSchool &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ TurtleJFR    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ TurtleAge    &lt;chr&gt; NA, NA, "A", "J", NA, "A", NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ TurtleCapt   &lt;chr&gt; NA, NA, "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</span>
 <span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.52563078, 3.07580701, 0.04811637, 0.03207758, 0.518560…</span>
 <span class="co">#&gt; $ included     &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FA…</span></pre></body></html></div>
 </div>
 <div id="strata" class="section level2">
 <h2 class="hasAnchor">
 <a href="#strata" class="anchor"></a>Strata</h2>
-<p>This package contains the function <code>das_intersects_strata</code>, which allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. A list must be the output of <code>das_effort</code> or <code>das_effort_sight</code>, and the function will use the segment midpoints to determine if a segment (and associated sighting) intersected each stratum. There currently is no functionality for chopping effort lines by stratum.</p>
+<p>This package contains several functions that allow you to incorporate strata into your DAS data processing. These functions contain a ‘strata.files’ argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.</p>
+<p>First, <code>das_intersects_strata</code> allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. If a list then it must be the output of <code>das_effort</code> or <code>das_effort_sight</code>, and the function will use the segment midpoints to determine if a segment (and associated sightings) intersected each stratum.</p>
 <div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">stratum.file</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"das_sample_stratum.csv"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"swfscDAS"</span>)
 <span class="no">y.eff.sight.strata</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/das_intersects_strata.html">das_intersects_strata</a></span>(<span class="no">y.eff.sight</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">InPoly</span> <span class="kw">=</span> <span class="no">stratum.file</span>))
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
@@ -552,13 +573,63 @@
 <span class="co">#&gt; $ ANI_018          &lt;dbl&gt; 42.33333, 0.00000, 0.00000, 0.00000, 0.00000, 0.0000…</span>
 <span class="co">#&gt; $ nSI_076          &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
 <span class="co">#&gt; $ ANI_076          &lt;dbl&gt; 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
-<span class="co">#&gt; $ InPoly           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></pre></body></html></div>
+<span class="co">#&gt; $ InPoly           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1…</span></pre></body></html></div>
+<p>In addition, you can chop/split effort lines by strata using the ‘strata.files’ argument of <code>das_effort</code>. Effort lines are chopped/split by strata before then being processed using the specified method (condition, equal length, etc.). The ‘segdata’ element of the <code>das_effort</code> output will contain a ‘stratum’ column, which contains the name of the stratum that the segment is in. See <code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_strata.html">?das_effort_strata</a></code> for more details.</p>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">y.eff.strata.section</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span>(
+  <span class="no">y.proc</span>, <span class="kw">method</span> <span class="kw">=</span> <span class="st">"section"</span>, <span class="kw">strata.files</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">stratum.file</span>),
+  <span class="kw">num.cores</span> <span class="kw">=</span> <span class="fl">1</span>
+)
+<span class="co">#&gt; although coordinates are longitude/latitude, st_intersection assumes that they are planar</span>
+<span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+<span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+
+<span class="no">y.eff.strata.condition</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span>(
+  <span class="no">y.proc</span>, <span class="kw">method</span> <span class="kw">=</span> <span class="st">"condition"</span>, <span class="kw">seg.min.km</span> <span class="kw">=</span> <span class="fl">0</span>,
+  <span class="kw">strata.files</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">Poly1</span> <span class="kw">=</span> <span class="no">stratum.file</span>),
+  <span class="kw">num.cores</span> <span class="kw">=</span> <span class="fl">1</span>
+)
+<span class="co">#&gt; although coordinates are longitude/latitude, st_intersection assumes that they are planar</span>
+<span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+<span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
+
+<span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">glimpse</a></span>(<span class="no">y.eff.strata.section</span>$<span class="no">segdata</span>)
+<span class="co">#&gt; Rows: 10</span>
+<span class="co">#&gt; Columns: 29</span>
+<span class="co">#&gt; $ segnum         &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10</span>
+<span class="co">#&gt; $ section_id     &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10</span>
+<span class="co">#&gt; $ section_sub_id &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span>
+<span class="co">#&gt; $ file           &lt;chr&gt; "das_sample.das", "das_sample.das", "das_sample.das", …</span>
+<span class="co">#&gt; $ stlin          &lt;int&gt; 2, 23, 59, 99, 127, 150, 167, 188, 232, 242</span>
+<span class="co">#&gt; $ endlin         &lt;int&gt; 20, 43, 90, 121, 147, 164, 181, 199, 240, 259</span>
+<span class="co">#&gt; $ lat1           &lt;dbl&gt; 39.32033, 39.37617, 39.56800, 39.94517, 40.15217, 40.2…</span>
+<span class="co">#&gt; $ lon1           &lt;dbl&gt; -137.6043, -137.5978, -137.4530, -137.3692, -137.1737,…</span>
+<span class="co">#&gt; $ lat2           &lt;dbl&gt; 39.36716, 39.51933, 39.75433, 40.12745, 40.26617, 40.3…</span>
+<span class="co">#&gt; $ lon2           &lt;dbl&gt; -137.5817, -137.5277, -137.4107, -137.2488, -137.1348,…</span>
+<span class="co">#&gt; $ mlat           &lt;dbl&gt; 39.34377, 39.44767, 39.66117, 40.03679, 40.20895, 40.3…</span>
+<span class="co">#&gt; $ mlon           &lt;dbl&gt; -137.5930, -137.5625, -137.4131, -137.3101, -137.1531,…</span>
+<span class="co">#&gt; $ dist           &lt;dbl&gt; 5.5577, 17.0106, 21.8086, 22.7090, 13.0922, 12.3011, 8…</span>
+<span class="co">#&gt; $ mDateTime      &lt;dttm&gt; 2013-01-13 06:37:02, 2013-01-13 07:27:34, 2013-01-13 …</span>
+<span class="co">#&gt; $ year           &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …</span>
+<span class="co">#&gt; $ month          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span>
+<span class="co">#&gt; $ day            &lt;int&gt; 13, 13, 13, 13, 13, 13, 13, 13, 14, 14</span>
+<span class="co">#&gt; $ mtime          &lt;chr&gt; "06:37:02", "07:27:34", "09:59:20", "12:34:14", "14:14…</span>
+<span class="co">#&gt; $ Cruise         &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, …</span>
+<span class="co">#&gt; $ Mode           &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"</span>
+<span class="co">#&gt; $ EffType        &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"</span>
+<span class="co">#&gt; $ ESWsides       &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
+<span class="co">#&gt; $ avgBft         &lt;dbl&gt; 3.000000, 3.000000, 2.500835, 3.000000, 3.000000, 2.47…</span>
+<span class="co">#&gt; $ avgSwellHght   &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 1, 1</span>
+<span class="co">#&gt; $ avgHorizSun    &lt;dbl&gt; 2.000000, 2.000000, 2.000000, 12.000000, 8.000000, 8.5…</span>
+<span class="co">#&gt; $ avgVertSun     &lt;dbl&gt; 3, 2, 2, 12, 1, 1, 2, 2, NA, NA</span>
+<span class="co">#&gt; $ avgGlare       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, NA, NA</span>
+<span class="co">#&gt; $ avgVis         &lt;dbl&gt; 6.000000, 5.686447, 5.090748, 5.974103, 6.000000, 6.00…</span>
+<span class="co">#&gt; $ stratum        &lt;chr&gt; NA, NA, NA, NA, "Stratum1", "Stratum1", "Stratum1", "S…</span></pre></body></html></div>
 </div>
 <div id="comments" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comments" class="anchor"></a>Comments</h2>
 <p>In addition, you can use <code>das_comments</code> to generate comment strings. This is particularly useful if looking for comments with keywords</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">y.comm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/das_comments.html">das_comments</a></span>(<span class="no">y.proc</span>)
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">y.comm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/das_comments.html">das_comments</a></span>(<span class="no">y.proc</span>)
 <span class="fu"><a href="https://dplyr.tidyverse.org/reference/reexports.html">glimpse</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">y.comm</span>, <span class="no">Event</span>, <span class="no">line_num</span>, <span class="no">comment_str</span>))
 <span class="co">#&gt; Rows: 5</span>
 <span class="co">#&gt; Columns: 3</span>

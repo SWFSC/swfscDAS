@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Check DAS file — das_check" />
-<meta property="og:description" content="Check that DAS file has accepted values" />
+<meta property="og:description" content="Check that DAS file has accepted formatting and values" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -132,7 +132,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Check that DAS file has accepted values</p>
+    <p>Check that DAS file has accepted formatting and values</p>
     </div>
 
     <pre class="usage"><span class='fu'>das_check</span>(
@@ -162,8 +162,7 @@ default is <code>NULL</code></p></td>
     <tr>
       <th>sp.codes</th>
       <td><p>character; filename of .dat file from which to read
-accepted species codes.
-If <code>NULL</code>, the species codes will not be checked
+accepted species codes. If <code>NULL</code>, species codes will not be checked.
 Default is <code>NULL</code></p></td>
     </tr>
     <tr>
@@ -178,14 +177,17 @@ cruise numbers in the <code>x</code> should be printed using
 
     <p>A data frame with columns: the file name, line number, cruise number,
 'ID' (columns 4-39 from the DAS file), and description of the issue</p>
-<p>If <code>file.out</code> is not <code>NULL</code>, then the error log is also
-written to a text file</p>
-<p>A warning is printed if any events are r events</p>
+<p>If <code>file.out</code> is not <code>NULL</code>, then the error log data frame is also
+written to <code>file.out</code> using <code><a href='https://rdrr.io/r/utils/write.table.html'>write.csv</a></code></p>
+<p>A warning is printed if any events are r events; see <code><a href='das_process.html'>das_process</a></code> for details about r events</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Precursor to a more comprehensive DASCHECK program. Checks that the following is true:</p><ul>
+    <p>Precursor to a more comprehensive DASCHECK program.
+This function checks that the following is true:</p><ul>
 <li><p>Event codes are one of the following: #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8,
-    A, B, C, E, F, k, K, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z.</p></li>
+    A, B, C, E, F, k, K, N, P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z</p></li>
+<li><p>Latitude values are between -90 and 90 (inclusive; NA values are ignored)</p></li>
+<li><p>Longitude values are between -180 and 180 (inclusive; NA values are ignored)</p></li>
 <li><p>The effort dot matches effort determined using B, R, and E events</p></li>
 <li><p>There are an equal number of R and E events, and they alternate occurrences</p></li>
 <li><p>A BR event series or R event does not occur while already on effort</p></li>
@@ -237,22 +239,17 @@ written to a text file</p>
 
 <p>In the table above, 'between' means inclusive.</p>
 <p>Long-term items, and checks that are not performed:</p><ul>
-<li><p>Add check for sequential date/time</p></li>
-<li><p>Add column with cruise number to output</p></li>
+<li><p>Check that datetimes are sequential, meaning they
+    1) are the same as or 2) come after the previous event</p></li>
 <li><p>Check that A events only come immediately after a G/S/K/M event,
     and all G/S/K/M events have an A after them.
     And that each has at least one group size estimate (1:8 event)</p></li>
-<li><p>Check that lat/lon values are within [-90, 90] and [-180, 180]</p></li>
 </ul>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
-<span class='fu'>das_check</span>(<span class='no'>y</span>)</div><div class='output co'>#&gt; <span class='message'>Reading DAS file</span></div><div class='output co'>#&gt; <span class='message'>Processing DAS file</span></div><div class='output co'>#&gt; <span class='message'>Checking DAS file</span></div><div class='output co'>#&gt; Cruise numbers: 
-#&gt; 1000 &lt;NA&gt; 
-#&gt;    2    0 </div><div class='output co'>#&gt;   File LineNum CruiseNum ID     Description
-#&gt; 1   NA      NA        NA NA No errors found</div><div class='input'>
-</div></pre>
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) <span class='fu'>das_check</span>(<span class='no'>y</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

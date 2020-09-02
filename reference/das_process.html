@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -161,7 +161,8 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>either a <code>das_dfr</code> object, an object that can be coerced to class <code>das_dfr</code>,
+      <td><p>an object of class <code>das_dfr</code>,
+an object that can be coerced to class <code>das_dfr</code>,
 or a character (filepath) which is first passed to <code><a href='das_read.html'>das_read</a></code></p></td>
     </tr>
     <tr>
@@ -254,6 +255,8 @@ from the corresponding (immediately preceding) A event</p></td>
       #, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N,
       P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z</p></li>
 <li><p>All '#' events (deleted events) are removed</p></li>
+<li><p>r events are converted to R events with non-standard effort;
+      see <code><a href='das_format_pdf.html'>das_format_pdf</a></code> for more details</p></li>
 <li><p>An event is considered 'on effort' if it is 1) an R event,
       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
       (not including the E event). The 'EffortDot' column is not used when determining on effort data.</p></li>
