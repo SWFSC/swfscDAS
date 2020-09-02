@@ -3,10 +3,6 @@
 
 # OS ---------------------------------------------------------------------------
 os: linux
-dist: bionic
-
-# See: https://travis-ci.community/t/in-r-version-4-0-0-library-path-not-writable/9744/9
-bioc_required: false
 
 # meta -------------------------------------------------------------------------
 language: r
