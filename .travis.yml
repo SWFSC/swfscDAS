@@ -1,9 +1,10 @@
-## tic Travis CI template: linux
-## revision date: 2020-05-09
+# tic documentation: https://docs.ropensci.org/tic/dev/
+# tic Travis CI template: linux. revision date: 2020-05-09
+# Copied some over from sf/.travis.yml
 
 # OS ---------------------------------------------------------------------------
 os: linux
-dist: bionic
+# dist: bionic
 
 # meta -------------------------------------------------------------------------
 language: r
@@ -11,8 +12,6 @@ cache:
   - packages
   - ccache
 latex: false
-## tic Travis CI template: linux-matrix-deploy
-## revision date: 2020-05-09
 
 # multiple R versions ----------------------------------------------------------
 matrix:
@@ -25,31 +24,19 @@ matrix:
     # capitalized term. This also might need to be done in tic.R
     - BUILD_PKGDOWN=true
 
-#
-# addons:
-#   # postgresql: "10"
-#   apt:
-#     sources:
-#       - sourceline: 'ppa:opencpu/jq'
-#       - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-#       - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
-#         key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
-#     packages:
-#       - devscripts # checkbashisms
-#       - libprotobuf-dev
-#       - protobuf-compiler
-#       - libv8-3.14-dev
-#       - libjq-dev
-#       - libudunits2-dev
-#       - libproj-dev
-#       - libgeos-dev
-#       - libspatialite-dev
-#       - libgdal-dev
-#       - libjson-c-dev
-#       - libnetcdf-dev
-#       - netcdf-bin
-#       # - postgresql-server-dev-9.6
-#       # - postgis
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:opencpu/jq'
+      - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
+      - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
+        key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
+    packages:
+      - libudunits2-dev
+      - libproj-dev
+      - libgeos-dev
+      - libgdal-dev
+
 
 # Stages -----------------------------------------------------------------------
 
@@ -65,22 +52,15 @@ before_install:
   - R -q -e 'tic::before_install()'
 install:
   - R -q -e 'tic::install()'
-before_script:
-  - R -q -e 'tic::before_script()'
-script:
-  - R -q -e 'tic::script()'
-after_success:
-  - R -q -e 'tic::after_success()'
-after_failure:
-  - R -q -e 'tic::after_failure()'
-before_deploy:
-  - R -q -e 'tic::before_deploy()'
+before_script: R -q -e 'tic::before_script()'
+script: R -q -e 'tic::script()'
+after_success: R -q -e 'tic::after_success()'
+after_failure: R -q -e 'tic::after_failure()'
+before_deploy: R -q -e 'tic::before_deploy()'
 deploy:
   provider: script
   script: R -q -e 'tic::deploy()'
   on:
     all_branches: true
-after_deploy:
-  - R -q -e 'tic::after_deploy()'
-after_script:
-  - R -q -e 'tic::after_script()'
+after_deploy: R -q -e 'tic::after_deploy()'
+after_script: R -q -e 'tic::after_script()'
