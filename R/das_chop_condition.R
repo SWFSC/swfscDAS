@@ -101,7 +101,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
 
   # Determine continuous effort sections
   if (!("cont_eff_section" %in% names(x))) {
-    x$cont_eff_section <- cumsum(x$Event %in% "R")
+    x$cont_eff_section <- cumsum(x$Event %in% c("R", "strataR"))
   }
 
   # Calculate distance between points; checks happen in .dist_from_prev()
@@ -126,7 +126,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   #   3) aggregate small segments as specified by user via seg.min.km
 
   eff.uniq <- unique(x$cont_eff_section)
-  stopifnot(length(eff.uniq) == sum(x$Event == "R"))
+  stopifnot(length(eff.uniq) == sum(x$Event %in% c("R", "strataR")))
 
   # Prep for parallel
   call.x <- x

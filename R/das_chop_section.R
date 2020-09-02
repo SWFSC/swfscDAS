@@ -69,7 +69,7 @@ das_chop_section.das_df <- function(x, conditions, distance.method = NULL,
   #----------------------------------------------------------------------------
   # ID continuous effort sections, make randpicks, and get max section length
   if (!("cont_eff_section" %in% names(x))) {
-    x$cont_eff_section <- cumsum(x$Event %in% c("R"))
+    x$cont_eff_section <- cumsum(x$Event %in% c("R", "strataR"))
     # event.B.preR <- (x$Event == "B") & (c(x$Event[-1], NA) == "R")
     # x$cont_eff_section[event.B.preR] <- x$cont_eff_section[event.B.preR] + 1
   }

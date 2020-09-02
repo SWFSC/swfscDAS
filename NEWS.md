@@ -1,4 +1,8 @@
-# swfscDAS 0.5.0 (in development)
+# swfscDAS 0.5.0 
+
+* Added 'strata.files' argument to `das_effort` to allow users to split effort by strata
+
+* Changed the name of the strata argument of `das_intersects_strata` to 'strata.files' for consistency
 
 * Fixed a bug in `das_check` where multiple files could not be checked at once
 
@@ -11,7 +15,7 @@
 
 * Changed `das_within_strata` to `das_intersects_strata` because it uses the geometric binary predicate `st_intersects` rather than `st_within`
 
-* In `das_effort_sight`, users can now use `gs.columns` tp specify secondary group size columns in case of an `NA` group size value
+* In `das_effort_sight`, users can now use `gs.columns` to specify secondary group size columns in case of an `NA` group size value
 
 
 # swfscDAS 0.3.0

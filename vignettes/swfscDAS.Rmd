@@ -2,15 +2,15 @@
 title: "Introduction to swfscDAS"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{swfscDAS}
+%\VignetteIndexEntry{swfscDAS}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+  ---
   
-```{r, include = FALSE}
+  ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+collapse = TRUE,
+comment = "#>"
 )
 ```
 
@@ -107,11 +107,11 @@ y.sight.sg2 <- das_sight(y.proc) %>% filter(Event %in% c("S", "G"))
 
 In addition, you can chop the effort data into segments, and summarize the conditions and sightings on those segments using `das_effort` and `das_effort_sight`. These effort segments can be used for line transect estimates using the Distance software, species distribution modeling, or summarizing the number of sightings of certain species on each segment, among other uses. `das_effort` chops continuous effort sections (the event sequence from R to E events) into effort segments using one of several different chopping methods: condition (a new effort segment every time a condition changes), equal length (effort segments of equal length), or section (each segment is a full continuous effort section, i.e. it runs from an R event to an E event). `das_effort_sight` takes the output of `das_effort` and returns the number of included sightings and animals per segment for specified species codes. 
 
-Both functions return a list of three data frames: segdata, sightinfo, and randpicks. These data frames and the different chopping methodologies are described in depth in the function documentation (`?das_effort` and `?das_effort_sight`), but briefly segdata contains information about each effort segment, sightinfo contains information about the sightings such as their corresponding segment, and randpicks contains information specific to the 'equal length' chopping method. `das_effort` and `das_effort_sight` are separate functions to allow the user more control over which sightings should be included in the effort segment summaries (see `?das_effort`).
+Both functions return a list of three data frames: segdata, sightinfo, and randpicks. These data frames and the different chopping methodologies are described in depth in the function documentation (`?das_effort` and `?das_effort_sight`), but briefly segdata contains information about each effort segment, sightinfo contains information about the sightings such as their corresponding segment, and randpicks contains information specific to the 'equal length' chopping method. `das_effort` and `das_effort_sight` are separate functions to allow the user more control over which sightings should be included in the effort segment summaries (see `?das_effort`). See below for how to chop/split effort lines by strata.
 
 ```{r eff}
 # Chop the effort into 10km segments
-y.eff <- das_effort(
+y.eff.eq <- das_effort(
   y.proc, method = "equallength", seg.km = 10, dist.method = "greatcircle", 
   num.cores = 1
 )
@@ -131,13 +131,32 @@ glimpse(y.eff.sight$sightinfo)
 
 ## Strata
 
-This package contains the function `das_intersects_strata`, which allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. A list must be the output of `das_effort` or `das_effort_sight`, and the function will use the segment midpoints to determine if a segment (and associated sighting) intersected each stratum. There currently is no functionality for chopping effort lines by stratum.
+This package contains several functions that allow you to incorporate strata into your DAS data processing. These functions contain a 'strata.files' argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.
 
-```{r}
+First, `das_intersects_strata` allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. If a list then it must be the output of `das_effort` or `das_effort_sight`, and the function will use the segment midpoints to determine if a segment (and associated sightings) intersected each stratum.
+
+```{r strata_int}
 stratum.file <- system.file("das_sample_stratum.csv", package = "swfscDAS")
 y.eff.sight.strata <- das_intersects_strata(y.eff.sight, list(InPoly = stratum.file))
 
 glimpse(y.eff.sight.strata$segdata)
+```
+
+In addition, you can chop/split effort lines by strata using the 'strata.files' argument of `das_effort`. Effort lines are chopped/split by strata before then being processed using the specified method (condition, equal length, etc.). The 'segdata' element of the `das_effort` output will contain a 'stratum' column, which contains the name of the stratum that the segment is in. See `?das_effort` and `?das_effort_strata` for more details.
+
+```{r strata_eff}
+y.eff.strata.section <- das_effort(
+  y.proc, method = "section", strata.files = list(stratum.file),
+  num.cores = 1
+)
+
+y.eff.strata.condition <- das_effort(
+  y.proc, method = "condition", seg.min.km = 0, 
+  strata.files = list(Poly1 = stratum.file),
+  num.cores = 1
+)
+
+glimpse(y.eff.strata.section$segdata)
 ```
 
 ## Comments
