@@ -6,7 +6,7 @@ Authors@R:
 Description: Process and summarize shipboard 
     'DAS' <https://swfsc-publications.fisheries.noaa.gov/publications/TM/SWFSC/NOAA-TM-NMFS-SWFSC-305.PDF> data
     produced by the Southwest Fisheries Science Center (SWFSC) program 'WinCruz' 
-    <https://www.fisheries.noaa.gov/west-coast/science-data/california-current-marine-mammal-assessment-research>.
+    <https://www.fisheries.noaa.gov/west-coast/science-data/california-current-marine-mammal-assessment-program>.
     This package standardizes and streamlines basic DAS data processing,
     and includes a PDF with the DAS data format requirements.
 URL: https://smwoodman.github.io/swfscDAS/, https://github.com/smwoodman/swfscDAS/
