@@ -350,7 +350,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
 
   # Add back in ? and 1:8 (events.tmp) events
   # Only for sightinfo groupsizes, and thus no segdata info doesn't matter
-  x.eff.all <- rbind(x.eff, x.oneff.tmp) %>%
+  x.eff.all <- x.eff %>%
     bind_rows(x.oneff.tmp) %>%
     arrange(.data$idx_eff) %>%
     select(-.data$idx_eff)

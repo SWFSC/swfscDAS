@@ -37,7 +37,7 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
   If \code{return.format} is "default", then there is one row for each species of each sighting event;
   if \code{return.format} is "wide", then there is one row for each sighting event;
   if \code{return.format} is "complete", then there is one row for every
-  group size estimate for each sighting event.
+  group size estimate for each sighting event (excluding sperm whale "C" events - see the Details section).
 
   The format-specific columns are described in their respective sections.
   The following sighting information columns are included in all return formats:
@@ -99,7 +99,11 @@ DAS events contain specific information in the 'Data#' columns,
   and fishing vessel sightings (code "F").
   Warnings are printed if all S, K, M, and G events (and only these events) are not
   followed by an A event and at least one numeric event.
-  See \code{\link{das_format_pdf}} for more information about events and event formats,
+  See \code{\link{das_format_pdf}} for more information about events and event formats.
+  Of specific note - sperm whale sightings (species code 046) often contain additional estimates
+  recorded as "C" events immediately following the S, A, and numeric events.
+  Because these estimates are recorded as"C" events, they are NOT included in the
+  \code{das_sight} calculations or output for any \code{return.format}
 
   The \code{return.events} argument simply provides a shortcut for
   filtering the output of \code{das_sight} by event codes

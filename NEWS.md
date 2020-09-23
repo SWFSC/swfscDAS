@@ -10,6 +10,8 @@
 
 * Fixed an issue where the sample stratum file did not overlap with any of the sample data
 
+* Added documentation describing how `das_sight` handles additional sperm whale group size estimates
+
 
 # swfscDAS 0.4.0
 

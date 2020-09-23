@@ -25,7 +25,11 @@
 #'   and fishing vessel sightings (code "F").
 #'   Warnings are printed if all S, K, M, and G events (and only these events) are not
 #'   followed by an A event and at least one numeric event.
-#'   See \code{\link{das_format_pdf}} for more information about events and event formats,
+#'   See \code{\link{das_format_pdf}} for more information about events and event formats.
+#'   Of specific note - sperm whale sightings (species code 046) often contain additional estimates
+#'   recorded as "C" events immediately following the S, A, and numeric events.
+#'   Because these estimates are recorded as"C" events, they are NOT included in the
+#'   \code{das_sight} calculations or output for any \code{return.format}
 #'
 #'   The \code{return.events} argument simply provides a shortcut for
 #'   filtering the output of \code{das_sight} by event codes
@@ -59,7 +63,7 @@
 #'   If \code{return.format} is "default", then there is one row for each species of each sighting event;
 #'   if \code{return.format} is "wide", then there is one row for each sighting event;
 #'   if \code{return.format} is "complete", then there is one row for every
-#'   group size estimate for each sighting event.
+#'   group size estimate for each sighting event (excluding sperm whale "C" events - see the Details section).
 #'
 #'   The format-specific columns are described in their respective sections.
 #'   The following sighting information columns are included in all return formats:
@@ -320,8 +324,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
 
   # Data from numeric events (groupsize and composition estimates)
-  if (return.format == "complete") {
-    sight.info.skmg4 <- sight.df %>%
+  sight.info.skmg4 <- if (return.format == "complete") {
+    sight.df %>%
       filter(.data$Event %in% as.character(1:8)) %>%
       mutate(SpPerc1 = as.numeric(.data$Data5),
              SpPerc2 = as.numeric(.data$Data6),
@@ -335,7 +339,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
              .data$GsSchoolBest, .data$GsSchoolHigh, .data$GsSchoolLow)
 
   } else {
-    sight.info.skmg4 <- sight.df %>%
+    sight.df %>%
       filter(.data$Event %in% as.character(1:8)) %>%
       mutate(Data2 = as.numeric(.data$Data2), Data3 = as.numeric(.data$Data3),
              Data4 = as.numeric(.data$Data4), Data5 = as.numeric(.data$Data5),
@@ -368,6 +372,11 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     warning("Not all S/K/M/G events have corresponding numeric (1:8) events. ",
             "The Gs... values for these events will all be NA in the output")
 
+  stopifnot(
+    sum(duplicated(sight.info.skmg1$sight_cumsum)) == 0,
+    sum(duplicated(sight.info.skmg2$sight_cumsum)) == 0,
+    sum(duplicated(sight.info.skmg3$sight_cumsum)) == 0
+  )
 
   sight.info.skmg <- sight.info.skmg1 %>%
     left_join(sight.info.skmg2, by = "sight_cumsum") %>%
