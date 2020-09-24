@@ -137,7 +137,7 @@
   where each line is data for a specific event</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_read</span>(<span class='no'>file</span>, <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>"UTC"</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>das_read</span>(<span class='kw'>file</span>, skip = <span class='fl'>0</span>, tz = <span class='st'>"UTC"</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -215,8 +215,9 @@
   This function was inspired by <code><a href='https://rdrr.io/pkg/swfscMisc/man/das.read.html'>das.read</a></code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
-<span class='fu'>das_read</span>(<span class='no'>y</span>)</div><div class='output co'>#&gt;     Event EffortDot            DateTime      Lat       Lon Data1 Data2 Data3
+    <pre class="examples"><div class='input'><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, package = <span class='st'>"swfscDAS"</span>)
+<span class='fu'>das_read</span>(<span class='kw'>y</span>)
+</div><div class='output co'>#&gt;     Event EffortDot            DateTime      Lat       Lon Data1 Data2 Data3
 #&gt; 1       B      TRUE 2013-01-13 06:27:39 39.32033 -137.6043  1000     c     5
 #&gt; 2       R      TRUE 2013-01-13 06:27:39 39.32033 -137.6043     S  &lt;NA&gt;  &lt;NA&gt;
 #&gt; 3       P      TRUE 2013-01-13 06:27:39 39.32033 -137.6043   280   001   126
@@ -1012,7 +1013,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

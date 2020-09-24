@@ -135,23 +135,23 @@
     <p>Chop DAS data into effort segments</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_effort</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>das_effort</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_effort</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>das_effort</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for das_df</span>
 <span class='fu'>das_effort</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition"</span>, <span class='st'>"equallength"</span>, <span class='st'>"section"</span>),
-  <span class='kw'>conditions</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>strata.files</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>distance.method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"greatcircle"</span>, <span class='st'>"lawofcosines"</span>, <span class='st'>"haversine"</span>, <span class='st'>"vincenty"</span>),
-  <span class='kw'>seg0.drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>comment.drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>event.touse</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>x</span>,
+  method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition"</span>, <span class='st'>"equallength"</span>, <span class='st'>"section"</span>),
+  conditions = <span class='kw'>NULL</span>,
+  strata.files = <span class='kw'>NULL</span>,
+  distance.method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"greatcircle"</span>, <span class='st'>"lawofcosines"</span>, <span class='st'>"haversine"</span>, <span class='st'>"vincenty"</span>),
+  seg0.drop = <span class='fl'>FALSE</span>,
+  comment.drop = <span class='fl'>FALSE</span>,
+  event.touse = <span class='kw'>NULL</span>,
+  num.cores = <span class='kw'>NULL</span>,
+  <span class='kw'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -297,14 +297,15 @@ Using 1 core likely will be faster for smaller datasets</p></td>
   and in a Beaufort sea state less than or equal to five.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
-<span class='no'>y.proc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='no'>y</span>)
+    <pre class="examples"><div class='input'><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, package = <span class='st'>"swfscDAS"</span>)
+<span class='kw'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='kw'>y</span>)
 
 <span class='co'># Using "condition" method</span>
 <span class='fu'>das_effort</span>(
-  <span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"condition"</span>, <span class='kw'>conditions</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Bft"</span>, <span class='st'>"SwellHght"</span>, <span class='st'>"Vis"</span>),
-  <span class='kw'>seg.min.km</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>
-)</div><div class='output co'>#&gt; $segdata
+  <span class='kw'>y.proc</span>, method = <span class='st'>"condition"</span>, conditions = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Bft"</span>, <span class='st'>"SwellHght"</span>, <span class='st'>"Vis"</span>),
+  seg.min.km = <span class='fl'>0.05</span>, num.cores = <span class='fl'>1</span>
+)
+</div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
 #&gt; 2       2          2              1 das_sample.das    23     33 39.37617
@@ -406,8 +407,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     20 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #&gt; 13     20 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt; 14     20 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 15     20 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 16     20 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt;    OnEffort Cruise Mode EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt
 #&gt; 1      TRUE   1000    C       S        2     25  10.2   3         3        10
 #&gt; 2      TRUE   1000    C       S        2     26   9.7   3         3        10
@@ -423,8 +422,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 13     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 14     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 15     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 16     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt;    RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot EventNum
 #&gt; 1        1       NA      NA    NA 6.0  208 280  001   &lt;NA&gt;      TRUE       15
 #&gt; 2        3        2       2 FALSE 5.5  125 208  280   &lt;NA&gt;      TRUE       35
@@ -440,8 +437,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       18
 #&gt; 13       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt; 14       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 15       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 16       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt;          file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd Bearing
 #&gt; 1  das_sample.das       15    1406     &lt;NA&gt;   20130113_1 208   TRUE     309
 #&gt; 2  das_sample.das       38    1407     &lt;NA&gt;   20130113_2 125   TRUE     326
@@ -457,8 +452,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12 das_sample.das      248    1412     &lt;NA&gt;   20130114_1 149   TRUE     359
 #&gt; 13 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt; 14 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 15 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 16 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt;    Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial Biopsy  Prob
 #&gt; 1      2.8   1.06   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 2      0.4   2.97   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
@@ -474,8 +467,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     0.3   3.28   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 13     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt; 14     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 15     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 16     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt;    nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest
 #&gt; 1    1 FALSE    018       &lt;NA&gt;           NA           NA   42.333333        NA
 #&gt; 2    1 FALSE    076       &lt;NA&gt;      8.00000        14.00    5.666667   8.00000
@@ -491,8 +482,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12   2  TRUE    277       &lt;NA&gt;    151.50000       249.00  151.500000  24.30000
 #&gt; 13   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
 #&gt; 14   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
-#&gt; 15   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
-#&gt; 16   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
 #&gt;    GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm
 #&gt; 1        NA  42.333333           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.52563078
 #&gt; 2    14.000   5.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.07580701
@@ -508,8 +497,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12   41.300  24.300000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 0.10601569
 #&gt; 13   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt; 14    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 15   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 16    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt;    included
 #&gt; 1      TRUE
 #&gt; 2      TRUE
@@ -525,14 +512,13 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     TRUE
 #&gt; 13     TRUE
 #&gt; 14     TRUE
-#&gt; 15     TRUE
-#&gt; 16     TRUE
 #&gt; 
 #&gt; $randpicks
 #&gt; NULL
 #&gt; </div><div class='input'>
 <span class='co'># Using "section" method</span>
-<span class='fu'>das_effort</span>(<span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"section"</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; $segdata
+<span class='fu'>das_effort</span>(<span class='kw'>y.proc</span>, method = <span class='st'>"section"</span>, num.cores = <span class='fl'>1</span>)
+</div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
 #&gt; 2       2          2              1 das_sample.das    23     43 39.37617
@@ -594,8 +580,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     10 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #&gt; 13     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt; 14     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 15     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 16     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt;    OnEffort Cruise Mode EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt
 #&gt; 1      TRUE   1000    C       S        2     25  10.2   3         3        10
 #&gt; 2      TRUE   1000    C       S        2     26   9.7   3         3        10
@@ -611,8 +595,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 13     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 14     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 15     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 16     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt;    RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot EventNum
 #&gt; 1        1       NA      NA    NA 6.0  208 280  001   &lt;NA&gt;      TRUE       15
 #&gt; 2        3        2       2 FALSE 5.5  125 208  280   &lt;NA&gt;      TRUE       35
@@ -628,8 +610,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       18
 #&gt; 13       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt; 14       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 15       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 16       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt;          file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd Bearing
 #&gt; 1  das_sample.das       15    1406     &lt;NA&gt;   20130113_1 208   TRUE     309
 #&gt; 2  das_sample.das       38    1407     &lt;NA&gt;   20130113_2 125   TRUE     326
@@ -645,8 +625,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12 das_sample.das      248    1412     &lt;NA&gt;   20130114_1 149   TRUE     359
 #&gt; 13 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt; 14 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 15 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 16 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt;    Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial Biopsy  Prob
 #&gt; 1      2.8   1.06   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 2      0.4   2.97   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
@@ -662,8 +640,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     0.3   3.28   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 13     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt; 14     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 15     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 16     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt;    nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest
 #&gt; 1    1 FALSE    018       &lt;NA&gt;           NA           NA   42.333333        NA
 #&gt; 2    1 FALSE    076       &lt;NA&gt;      8.00000        14.00    5.666667   8.00000
@@ -679,8 +655,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12   2  TRUE    277       &lt;NA&gt;    151.50000       249.00  151.500000  24.30000
 #&gt; 13   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
 #&gt; 14   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
-#&gt; 15   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
-#&gt; 16   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
 #&gt;    GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm
 #&gt; 1        NA  42.333333           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.52563078
 #&gt; 2    14.000   5.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.07580701
@@ -696,8 +670,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12   41.300  24.300000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 0.10601569
 #&gt; 13   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt; 14    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 15   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 16    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt;    included
 #&gt; 1      TRUE
 #&gt; 2      TRUE
@@ -713,8 +685,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     TRUE
 #&gt; 13     TRUE
 #&gt; 14     TRUE
-#&gt; 15     TRUE
-#&gt; 16     TRUE
 #&gt; 
 #&gt; $randpicks
 #&gt;    effort_section randpicks
@@ -731,11 +701,12 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; </div><div class='input'>
 <span class='co'># \donttest{</span>
 <span class='co'># Using "equallength" method</span>
-<span class='no'>y.rand</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample_randpicks.csv"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
+<span class='kw'>y.rand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample_randpicks.csv"</span>, package = <span class='st'>"swfscDAS"</span>)
 <span class='fu'>das_effort</span>(
-  <span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"equallength"</span>, <span class='kw'>seg.km</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>randpicks.load</span> <span class='kw'>=</span> <span class='no'>y.rand</span>,
-  <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>
-)</div><div class='output co'>#&gt; $segdata
+  <span class='kw'>y.proc</span>, method = <span class='st'>"equallength"</span>, seg.km = <span class='fl'>10</span>, randpicks.load = <span class='kw'>y.rand</span>,
+  num.cores = <span class='fl'>1</span>
+)
+</div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
 #&gt; 2       2          2              1 das_sample.das    23     34 39.37617
@@ -809,8 +780,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     13 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #&gt; 13     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt; 14     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 15     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 16     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt;    OnEffort Cruise Mode EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt
 #&gt; 1      TRUE   1000    C       S        2     25  10.2   3         3        10
 #&gt; 2      TRUE   1000    C       S        2     26   9.7   3         3        10
@@ -826,8 +795,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 13     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 14     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 15     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 16     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt;    RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot EventNum
 #&gt; 1        1       NA      NA    NA 6.0  208 280  001   &lt;NA&gt;      TRUE       15
 #&gt; 2        3        2       2 FALSE 5.5  125 208  280   &lt;NA&gt;      TRUE       35
@@ -843,8 +810,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       18
 #&gt; 13       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt; 14       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 15       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 16       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt;          file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd Bearing
 #&gt; 1  das_sample.das       15    1406     &lt;NA&gt;   20130113_1 208   TRUE     309
 #&gt; 2  das_sample.das       38    1407     &lt;NA&gt;   20130113_2 125   TRUE     326
@@ -860,8 +825,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12 das_sample.das      248    1412     &lt;NA&gt;   20130114_1 149   TRUE     359
 #&gt; 13 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt; 14 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 15 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 16 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt;    Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial Biopsy  Prob
 #&gt; 1      2.8   1.06   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 2      0.4   2.97   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
@@ -877,8 +840,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     0.3   3.28   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 13     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt; 14     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 15     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 16     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt;    nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest
 #&gt; 1    1 FALSE    018       &lt;NA&gt;           NA           NA   42.333333        NA
 #&gt; 2    1 FALSE    076       &lt;NA&gt;      8.00000        14.00    5.666667   8.00000
@@ -894,8 +855,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12   2  TRUE    277       &lt;NA&gt;    151.50000       249.00  151.500000  24.30000
 #&gt; 13   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
 #&gt; 14   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
-#&gt; 15   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
-#&gt; 16   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
 #&gt;    GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm
 #&gt; 1        NA  42.333333           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.52563078
 #&gt; 2    14.000   5.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.07580701
@@ -911,8 +870,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12   41.300  24.300000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 0.10601569
 #&gt; 13   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt; 14    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 15   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 16    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt;    included
 #&gt; 1      TRUE
 #&gt; 2      TRUE
@@ -928,8 +885,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     TRUE
 #&gt; 13     TRUE
 #&gt; 14     TRUE
-#&gt; 15     TRUE
-#&gt; 16     TRUE
 #&gt; 
 #&gt; $randpicks
 #&gt;    effort_section randpicks
@@ -945,11 +900,12 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 10             10        NA
 #&gt; </div><div class='input'>
 <span class='co'># Using "section" method and chop by strata</span>
-<span class='no'>stratum.file</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample_stratum.csv"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
+<span class='kw'>stratum.file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample_stratum.csv"</span>, package = <span class='st'>"swfscDAS"</span>)
 <span class='fu'>das_effort</span>(
-  <span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"section"</span>, <span class='kw'>strata.files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>Poly1</span> <span class='kw'>=</span> <span class='no'>stratum.file</span>),
-  <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>
-)</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; $segdata
+  <span class='kw'>y.proc</span>, method = <span class='st'>"section"</span>, strata.files = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(Poly1 = <span class='kw'>stratum.file</span>),
+  num.cores = <span class='fl'>1</span>
+)
+</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
 #&gt; 2       2          2              1 das_sample.das    23     43 39.37617
@@ -1011,8 +967,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     10 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #&gt; 13     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt; 14     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 15     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 16     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt;    OnEffort Cruise Mode EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt
 #&gt; 1      TRUE   1000    C       S        2     25  10.2   3         3        10
 #&gt; 2      TRUE   1000    C       S        2     26   9.7   3         3        10
@@ -1028,8 +982,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 13     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 14     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 15     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 16     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt;    RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot EventNum
 #&gt; 1        1       NA      NA    NA 6.0  208 280  001   &lt;NA&gt;      TRUE       15
 #&gt; 2        3        2       2 FALSE 5.5  125 208  280   &lt;NA&gt;      TRUE       35
@@ -1045,8 +997,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       18
 #&gt; 13       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt; 14       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 15       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 16       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt;          file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd Bearing
 #&gt; 1  das_sample.das       15    1406     &lt;NA&gt;   20130113_1 208   TRUE     309
 #&gt; 2  das_sample.das       38    1407     &lt;NA&gt;   20130113_2 125   TRUE     326
@@ -1062,8 +1012,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12 das_sample.das      248    1412     &lt;NA&gt;   20130114_1 149   TRUE     359
 #&gt; 13 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt; 14 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 15 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 16 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt;    Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial Biopsy  Prob
 #&gt; 1      2.8   1.06   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 2      0.4   2.97   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
@@ -1079,8 +1027,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     0.3   3.28   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 13     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt; 14     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 15     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 16     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt;    nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest
 #&gt; 1    1 FALSE    018       &lt;NA&gt;           NA           NA   42.333333        NA
 #&gt; 2    1 FALSE    076       &lt;NA&gt;      8.00000        14.00    5.666667   8.00000
@@ -1096,8 +1042,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12   2  TRUE    277       &lt;NA&gt;    151.50000       249.00  151.500000  24.30000
 #&gt; 13   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
 #&gt; 14   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
-#&gt; 15   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
-#&gt; 16   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
 #&gt;    GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm
 #&gt; 1        NA  42.333333           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.52563078
 #&gt; 2    14.000   5.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.07580701
@@ -1113,8 +1057,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12   41.300  24.300000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 0.10601569
 #&gt; 13   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt; 14    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 15   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 16    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt;    included
 #&gt; 1      TRUE
 #&gt; 2      TRUE
@@ -1130,8 +1072,6 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 12     TRUE
 #&gt; 13     TRUE
 #&gt; 14     TRUE
-#&gt; 15     TRUE
-#&gt; 16     TRUE
 #&gt; 
 #&gt; $randpicks
 #&gt;    effort_section randpicks
@@ -1145,7 +1085,7 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 8               8        NA
 #&gt; 9               9        NA
 #&gt; 10             10        NA
-#&gt; </div><div class='input'># }
+#&gt; </div><div class='input'><span class='co'># }</span>
 
 </div></pre>
   </div>
@@ -1163,7 +1103,7 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -135,16 +135,16 @@
     <p>Extract comments from DAS data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_comments</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='fu'>das_comments</span>(<span class='kw'>x</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_comments</span>(<span class='no'>x</span>)
+<span class='fu'>das_comments</span>(<span class='kw'>x</span>)
 
 <span class='co'># S3 method for das_df</span>
-<span class='fu'>das_comments</span>(<span class='no'>x</span>)
+<span class='fu'>das_comments</span>(<span class='kw'>x</span>)
 
 <span class='co'># S3 method for das_dfr</span>
-<span class='fu'>das_comments</span>(<span class='no'>x</span>)</pre>
+<span class='fu'>das_comments</span>(<span class='kw'>x</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,10 +167,11 @@ or a data frame that can be coerced to a <code>das_dfr</code> object</p></td>
   See the examples section for how to search for comments with certain phrases</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
-<span class='no'>y.proc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='no'>y</span>)
+    <pre class="examples"><div class='input'><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, package = <span class='st'>"swfscDAS"</span>)
+<span class='kw'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='kw'>y</span>)
 
-<span class='fu'>das_comments</span>(<span class='no'>y.proc</span>)</div><div class='output co'>#&gt;   Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
+<span class='fu'>das_comments</span>(<span class='kw'>y.proc</span>)
+</div><div class='output co'>#&gt;   Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
 #&gt; 1     C 2013-01-13 10:04:23 39.67300 -137.4083     TRUE   1000    C       S
 #&gt; 2     C 2013-01-13 10:20:43 39.71483 -137.3920     TRUE   1000    C       S
 #&gt; 3     C 2013-01-13 16:55:27 40.51250 -137.0593    FALSE   1000    C       S
@@ -201,8 +202,9 @@ or a data frame that can be coerced to a <code>das_dfr</code> object</p></td>
 #&gt; 4  off effort, first seen by CO while riding bow    
 #&gt; 5                 crossing fishing gear             </div><div class='input'>
 <span class='co'># Extract all comments containing "record" - could also use stringr pacakge</span>
-<span class='no'>y.comm</span> <span class='kw'>&lt;-</span> <span class='fu'>das_comments</span>(<span class='no'>y.proc</span>)
-<span class='no'>y.comm</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span>(<span class='st'>"record"</span>, <span class='no'>y.comm</span>$<span class='no'>comment_str</span>, <span class='kw'>ignore.case</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), ]</div><div class='output co'>#&gt;  [1] Event       DateTime    Lat         Lon         OnEffort    Cruise     
+<span class='kw'>y.comm</span> <span class='op'>&lt;-</span> <span class='fu'>das_comments</span>(<span class='kw'>y.proc</span>)
+<span class='kw'>y.comm</span>[<span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span>(<span class='st'>"record"</span>, <span class='kw'>y.comm</span><span class='op'>$</span><span class='kw'>comment_str</span>, ignore.case = <span class='fl'>TRUE</span>), ]
+</div><div class='output co'>#&gt;  [1] Event       DateTime    Lat         Lon         OnEffort    Cruise     
 #&gt;  [7] Mode        EffType     ESWsides    Course      SpdKt       Bft        
 #&gt; [13] SwellHght   WindSpdKt   RainFog     HorizSun    VertSun     Glare      
 #&gt; [19] Vis         ObsL        Rec         ObsR        ObsInd      Data1      
@@ -211,8 +213,9 @@ or a data frame that can be coerced to a <code>das_dfr</code> object</p></td>
 #&gt; [37] EventNum    file_das    line_num    comment_str
 #&gt; &lt;0 rows&gt; (or 0-length row.names)</div><div class='input'>
 <span class='co'># Join comments with processed data</span>
-<span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span>(<span class='no'>y.proc</span>, <span class='no'>y.comm</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"file_das"</span>, <span class='st'>"line_num"</span>, <span class='st'>"comment_str"</span>)],
-                 <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"file_das"</span>, <span class='st'>"line_num"</span>))</div><div class='output co'>#&gt;     Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
+<span class='kw'>dplyr</span>::<span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span>(<span class='kw'>y.proc</span>, <span class='kw'>y.comm</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"file_das"</span>, <span class='st'>"line_num"</span>, <span class='st'>"comment_str"</span>)],
+                 by = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"file_das"</span>, <span class='st'>"line_num"</span>))
+</div><div class='output co'>#&gt;     Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
 #&gt; 1       B 2013-01-13 06:27:39 39.32033 -137.6043     TRUE   1000    C    &lt;NA&gt;
 #&gt; 2       R 2013-01-13 06:27:39 39.32033 -137.6043     TRUE   1000    C       S
 #&gt; 3       P 2013-01-13 06:27:39 39.32033 -137.6043     TRUE   1000    C       S
@@ -1513,7 +1516,7 @@ or a data frame that can be coerced to a <code>das_dfr</code> object</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

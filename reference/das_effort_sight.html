@@ -136,10 +136,10 @@
     </div>
 
     <pre class="usage"><span class='fu'>das_effort_sight</span>(
-  <span class='no'>x.list</span>,
-  <span class='no'>sp.codes</span>,
-  <span class='kw'>sp.events</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"G"</span>, <span class='st'>"K"</span>, <span class='st'>"M"</span>, <span class='st'>"t"</span>, <span class='st'>"p"</span>),
-  <span class='kw'>gs.columns</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"GsSpBest"</span>, <span class='st'>"GsSpLow"</span>, <span class='st'>"GsSpHigh"</span>)
+  <span class='kw'>x.list</span>,
+  <span class='kw'>sp.codes</span>,
+  sp.events = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"G"</span>, <span class='st'>"K"</span>, <span class='st'>"M"</span>, <span class='st'>"t"</span>, <span class='st'>"p"</span>),
+  gs.columns = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"GsSpBest"</span>, <span class='st'>"GsSpLow"</span>, <span class='st'>"GsSpHigh"</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -202,14 +202,15 @@ See Details section for more information</p></td>
   will be used only if the value from GsSpBest is <code>NA</code></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
-<span class='no'>y.proc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='no'>y</span>)
-<span class='no'>y.eff.cond</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(
-  <span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"condition"</span>, <span class='kw'>conditions</span> <span class='kw'>=</span> <span class='st'>"Bft"</span>, <span class='kw'>seg.min.km</span> <span class='kw'>=</span> <span class='fl'>0.05</span>,
-  <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>
+    <pre class="examples"><div class='input'><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, package = <span class='st'>"swfscDAS"</span>)
+<span class='kw'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='kw'>y</span>)
+<span class='kw'>y.eff.cond</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(
+  <span class='kw'>y.proc</span>, method = <span class='st'>"condition"</span>, conditions = <span class='st'>"Bft"</span>, seg.min.km = <span class='fl'>0.05</span>,
+  num.cores = <span class='fl'>1</span>
 )
 
-<span class='fu'>das_effort_sight</span>(<span class='no'>y.eff.cond</span>, <span class='kw'>sp.codes</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"013"</span>, <span class='st'>"076"</span>, <span class='st'>"DC"</span>), <span class='kw'>sp.events</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"t"</span>))</div><div class='output co'>#&gt; $segdata
+<span class='fu'>das_effort_sight</span>(<span class='kw'>y.eff.cond</span>, sp.codes = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"013"</span>, <span class='st'>"076"</span>, <span class='st'>"DC"</span>), sp.events = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"t"</span>))
+</div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
 #&gt; 2       2          2              1 das_sample.das    23     43 39.37617
@@ -282,8 +283,6 @@ See Details section for more information</p></td>
 #&gt; 11     13 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #&gt; 12     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt; 13     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 14     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#&gt; 15     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #&gt;    OnEffort Cruise Mode EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt
 #&gt; 1      TRUE   1000    C       S        2     25  10.2   3         3        10
 #&gt; 2      TRUE   1000    C       S        2     26   9.7   3         3        10
@@ -298,8 +297,6 @@ See Details section for more information</p></td>
 #&gt; 11     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 12     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt; 13     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 14     TRUE   1000    C       S        2     23   9.6   2         1         5
-#&gt; 15     TRUE   1000    C       S        2     23   9.6   2         1         5
 #&gt;    RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot EventNum
 #&gt; 1        1       NA      NA    NA 6.0  208 280  001   &lt;NA&gt;      TRUE       15
 #&gt; 2        3        2       2 FALSE 5.5  125 208  280   &lt;NA&gt;      TRUE       35
@@ -314,8 +311,6 @@ See Details section for more information</p></td>
 #&gt; 11       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       18
 #&gt; 12       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt; 13       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 14       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
-#&gt; 15       3       NA      NA    NA 4.0  149 125  208   &lt;NA&gt;      TRUE       20
 #&gt;          file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd Bearing
 #&gt; 1  das_sample.das       15    1406     &lt;NA&gt;   20130113_1 208   TRUE     309
 #&gt; 2  das_sample.das       38    1407     &lt;NA&gt;   20130113_2 125   TRUE     326
@@ -330,8 +325,6 @@ See Details section for more information</p></td>
 #&gt; 11 das_sample.das      248    1412     &lt;NA&gt;   20130114_1 149   TRUE     359
 #&gt; 12 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt; 13 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 14 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
-#&gt; 15 das_sample.das      252    1413     &lt;NA&gt;   20130114_2 208   TRUE      38
 #&gt;    Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial Biopsy  Prob
 #&gt; 1      2.8   1.06   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 2      0.4   2.97   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
@@ -346,8 +339,6 @@ See Details section for more information</p></td>
 #&gt; 11     0.3   3.28   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE
 #&gt; 12     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt; 13     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 14     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
-#&gt; 15     0.8   2.23   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE
 #&gt;    nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest
 #&gt; 1    1 FALSE    018       &lt;NA&gt;           NA           NA   42.333333        NA
 #&gt; 2    1 FALSE    076       &lt;NA&gt;      8.00000        14.00    5.666667   8.00000
@@ -362,8 +353,6 @@ See Details section for more information</p></td>
 #&gt; 11   2  TRUE    277       &lt;NA&gt;    151.50000       249.00  151.500000  24.30000
 #&gt; 12   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
 #&gt; 13   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
-#&gt; 14   2  TRUE    016        016     21.25000        37.75   21.250000  16.31000
-#&gt; 15   2  TRUE    277        016     21.25000        37.75   21.250000   4.94000
 #&gt;    GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm
 #&gt; 1        NA  42.333333           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.52563078
 #&gt; 2    14.000   5.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.07580701
@@ -378,8 +367,6 @@ See Details section for more information</p></td>
 #&gt; 11   41.300  24.300000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 0.10601569
 #&gt; 12   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt; 13    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 14   27.935  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
-#&gt; 15    9.815   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.54265727
 #&gt;    included
 #&gt; 1     FALSE
 #&gt; 2      TRUE
@@ -394,8 +381,6 @@ See Details section for more information</p></td>
 #&gt; 11    FALSE
 #&gt; 12    FALSE
 #&gt; 13    FALSE
-#&gt; 14    FALSE
-#&gt; 15    FALSE
 #&gt; 
 #&gt; $randpicks
 #&gt; NULL
@@ -416,7 +401,7 @@ See Details section for more information</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -135,13 +135,13 @@
     <p>Chop DAS data into effort segments by continuous effort section</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_chop_section</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>das_chop_section</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_chop_section</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+<span class='fu'>das_chop_section</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
 
 <span class='co'># S3 method for das_df</span>
-<span class='fu'>das_chop_section</span>(<span class='no'>x</span>, <span class='no'>conditions</span>, <span class='kw'>distance.method</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>das_chop_section</span>(<span class='kw'>x</span>, <span class='kw'>conditions</span>, distance.method = <span class='kw'>NULL</span>, num.cores = <span class='kw'>NULL</span>, <span class='kw'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,12 +185,14 @@ Default is <code>NULL</code> since these distances should have already been calc
   Note that the longest continuous effort section in the sample data is ~22km.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
-<span class='no'>y.proc</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='no'>y</span>)
+    <pre class="examples"><div class='input'><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, package = <span class='st'>"swfscDAS"</span>)
+<span class='kw'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='kw'>y</span>)
 
-<span class='no'>y.eff1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(<span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"equallength"</span>, <span class='kw'>seg.km</span> <span class='kw'>=</span> <span class='fl'>25</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)</div><div class='output co'>#&gt; <span class='message'>No argument was passed via randpicks.load, and thus new randpicks values will be generated</span></div><div class='input'><span class='no'>y.eff2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(<span class='no'>y.proc</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"section"</span>, <span class='kw'>num.cores</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+<span class='kw'>y.eff1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(<span class='kw'>y.proc</span>, method = <span class='st'>"equallength"</span>, seg.km = <span class='fl'>25</span>, num.cores = <span class='fl'>1</span>)
+</div><div class='output co'>#&gt; <span class='message'>No argument was passed via randpicks.load, and thus new randpicks values will be generated</span></div><div class='input'><span class='kw'>y.eff2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_effort.html'>das_effort</a></span>(<span class='kw'>y.proc</span>, method = <span class='st'>"section"</span>, num.cores = <span class='fl'>1</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='no'>y.eff1</span>, <span class='no'>y.eff2</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/all.equal.html'>all.equal</a></span>(<span class='kw'>y.eff1</span>, <span class='kw'>y.eff2</span>)
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -207,7 +209,7 @@ Default is <code>NULL</code> since these distances should have already been calc
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

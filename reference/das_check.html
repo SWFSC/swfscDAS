@@ -136,11 +136,11 @@
     </div>
 
     <pre class="usage"><span class='fu'>das_check</span>(
-  <span class='no'>file</span>,
-  <span class='kw'>skip</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>file.out</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sp.codes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>print.cruise.nums</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>file</span>,
+  skip = <span class='fl'>0</span>,
+  file.out = <span class='kw'>NULL</span>,
+  sp.codes = <span class='kw'>NULL</span>,
+  print.cruise.nums = <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -248,8 +248,10 @@ This function checks that the following is true:</p><ul>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"swfscDAS"</span>)
-<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) <span class='fu'>das_check</span>(<span class='no'>y</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, package = <span class='st'>"swfscDAS"</span>)
+<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) <span class='fu'>das_check</span>(<span class='kw'>y</span>)
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -265,7 +267,7 @@ This function checks that the following is true:</p><ul>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
