@@ -131,7 +131,7 @@ glimpse(y.eff.sight$sightinfo)
 
 ## Strata
 
-This package contains several functions that allow you to incorporate strata into your DAS data processing. These functions contain a 'strata.files' argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.
+This package contains several methods to incorporate strata into your DAS data processing: `das_intersects_strata` for assigning points to strata and `das_effort` for chopping effort lines by strata. These functions contain a 'strata.files' argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.
 
 First, `das_intersects_strata` allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. If a list then it must be the output of `das_effort` or `das_effort_sight`, and the function will use the segment midpoints to determine if a segment (and associated sightings) intersected each stratum.
 
