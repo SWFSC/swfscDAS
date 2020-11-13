@@ -12,7 +12,10 @@
 #'   Default is \code{NULL} since these distances should have already been calculated
 #' @param num.cores see \code{\link{das_effort}}
 #'
-#' @details This function is simply a wrapper for \code{\link{das_chop_equallength}}.
+#' @details WARNING - do not call this function directly!
+#'   It is intended for internal package use only, and is exported for documentation purposes only.
+#'
+#'   This function is simply a wrapper for \code{\link{das_chop_equallength}}.
 #'   It calls \code{\link{das_chop_equallength}}, with \code{seg.km} set to a
 #'   value larger than the longest continuous effort section in \code{x}.
 #'   Thus, the effort is 'chopped' into the continuous effort sections and then summarized.
@@ -30,8 +33,6 @@
 #' y.eff2 <- das_effort(y.proc, method = "section", num.cores = 1)
 #'
 #' all.equal(y.eff1, y.eff2)
-#'
-#' @keywords internal
 #'
 #' @export
 das_chop_section <- function(x, ...) UseMethod("das_chop_section")

@@ -18,7 +18,10 @@
 #'   Default is \code{NULL} since these distances should have already been calculated
 #' @param num.cores see \code{\link{das_effort}}
 #'
-#' @details This function is intended to be called by \code{\link{das_effort}}
+#' @details WARNING - do not call this function directly!
+#'   It is intended for internal package use only, and is exported for documentation purposes only.
+#'
+#'   This function is intended to be called by \code{\link{das_effort}}
 #'   when the "equallength" method is specified.
 #'   Thus, \code{x} must be filtered for events (rows) where either
 #'   the 'OnEffort' column is \code{TRUE} or the 'Event' column is "E";
@@ -84,8 +87,6 @@
 #'   \item randpicks: data frame with record of length allocations
 #'     (see Details section above)
 #' }
-#'
-#' @keywords internal
 #'
 #' @export
 das_chop_equallength <- function(x, ...) UseMethod("das_chop_equallength")

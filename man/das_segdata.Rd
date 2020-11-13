@@ -46,7 +46,10 @@ Data frame with the segdata information described in Details
 Summarize DAS effort data by effort segment, while averaging or getting the max for each condition
 }
 \details{
-This function was designed to be called by one of the das_chop_ functions,
+WARNING - do not call this function directly!
+  It is intended for internal package use only, and is exported for documentation purposes only.
+
+  This function was designed to be called by one of the das_chop_ functions,
   e.g. \code{\link{das_chop_equallength}}, and thus
   users should avoid calling it themselves.
   It loops through the events in \code{x}, chopping \code{x} into modeling segments
@@ -55,13 +58,16 @@ This function was designed to be called by one of the das_chop_ functions,
   a "B" or "R" event and end with the corresponding "E" event.
 
   For each segment, this function reports the segment number,
-  segment ID, cruise number, the start/end/midpoints (lat/lon), segment length,
-  year, month, day, time, mode, effort type,
+  segment ID, cruise number, the start/end/mid coordinates (lat/lon),
+  start/end/mid date/times (DateTime), segment length,
+  year, month, day, midpoint time, mode, effort type,
   effective strip width sides (number of sides searched),
   and average conditions (which are specified by \code{conditions}).
   The segment ID is designated as \code{section.id} _ index of the modeling segment.
   Thus, if \code{section.id} is \code{1}, then the segment ID for
   the second segment from \code{x} is \code{"1_2"}.
+  The start/end coordinates and date/times are interpolated as needed,
+  e.g. when using the 'equallength' method.
 
   When \code{segdata.method} is "avg", the condition values are
   calculated as a weighted average by distance.
@@ -84,4 +90,3 @@ This function was designed to be called by one of the das_chop_ functions,
   are used to calculate the segment start, mid, and end points,
   with \code{method = "vincenty"}.
 }
-\keyword{internal}

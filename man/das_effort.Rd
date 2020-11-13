@@ -74,8 +74,13 @@ Using 1 core likely will be faster for smaller datasets}
 List of three data frames:
   \itemize{
     \item segdata: one row for every segment, and columns for information including
-      unique segment number, start/end/midpoint coordinates, conditions (e.g. Beaufort),
-      and (if applicable) stratum
+      unique segment number (segnum), the corresponding effort section (section_id),
+      the segment index within the corresponding effort section (section_sub_id),
+      the starting and ending line of the segment in the DAS file (stlin, endlin),
+      start/end/midpoint coordinates(lat1/lon1, lat2/lon2, and mlat/mlon, respectively),
+      the start/end/midpoint date/time of the segment (DateTime1, DateTime2, and mDateTime, respectively;
+      mDateTime is the average of DateTime1 and DateTime2), segment length (dist),
+      conditions (e.g. Beaufort), and, if applicable, stratum (InStratumName).
     \item sightinfo: details for all sightings in \code{x}, including:
       the unique segment number it is associated with, segment mid points (lat/lon),
       the 'included' column described in the 'Details' section,
@@ -178,4 +183,9 @@ das_effort(
 )
 }
 
+}
+\seealso{
+Internal functions called by \code{das_effort}:
+  \code{\link{das_chop_condition}}, \code{\link{das_chop_equallength}},
+  \code{\link{das_chop_section}}, \code{\link{das_segdata}}
 }

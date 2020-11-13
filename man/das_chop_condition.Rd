@@ -50,7 +50,10 @@ List of two data frames:
 Chop DAS data into a new effort segment every time a specified condition changes
 }
 \details{
-This function is intended to be called by \code{\link{das_effort}}
+WARNING - do not call this function directly!
+  It is intended for internal package use only, and is exported for documentation purposes only.
+
+  This function is intended to be called by \code{\link{das_effort}}
   when the "condition" method is specified.
   Thus, \code{x} must be filtered for events (rows) where either
   the 'OnEffort' column is \code{TRUE} or the 'Event' column is "E";
@@ -91,4 +94,3 @@ This function is intended to be called by \code{\link{das_effort}}
   If the column \code{dist_from_prev} does not exist, the distance between
   subsequent events is calculated as described in \code{\link{das_effort}}
 }
-\keyword{internal}

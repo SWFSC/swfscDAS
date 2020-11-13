@@ -34,7 +34,10 @@ See \code{\link{das_chop_equallength}}. The randpicks values will all be \code{N
 Chop DAS data into effort segments by continuous effort section
 }
 \details{
-This function is simply a wrapper for \code{\link{das_chop_equallength}}.
+WARNING - do not call this function directly!
+  It is intended for internal package use only, and is exported for documentation purposes only.
+
+  This function is simply a wrapper for \code{\link{das_chop_equallength}}.
   It calls \code{\link{das_chop_equallength}}, with \code{seg.km} set to a
   value larger than the longest continuous effort section in \code{x}.
   Thus, the effort is 'chopped' into the continuous effort sections and then summarized.
@@ -52,4 +55,3 @@ y.eff2 <- das_effort(y.proc, method = "section", num.cores = 1)
 all.equal(y.eff1, y.eff2)
 
 }
-\keyword{internal}
