@@ -58,7 +58,7 @@ Chop DAS data into approximately equal-length effort segments, averaging conditi
 }
 \details{
 WARNING - do not call this function directly!
-  It is intended for internal package use only, and is exported for documentation purposes only.
+  It is exported for documentation purposes, but is intended for internal package use only.
 
   This function is intended to be called by \code{\link{das_effort}}
   when the "equallength" method is specified.

@@ -16,7 +16,7 @@
 #' @param ... ignored
 #'
 #' @details WARNING - do not call this function directly!
-#'   It is intended for internal package use only, and is exported for documentation purposes only.
+#'   It is exported for documentation purposes, but is intended for internal package use only.
 #'
 #'   This function was designed to be called by one of the das_chop_ functions,
 #'   e.g. \code{\link{das_chop_equallength}}, and thus

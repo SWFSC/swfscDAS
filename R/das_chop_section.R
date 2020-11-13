@@ -13,7 +13,7 @@
 #' @param num.cores see \code{\link{das_effort}}
 #'
 #' @details WARNING - do not call this function directly!
-#'   It is intended for internal package use only, and is exported for documentation purposes only.
+#'   It is exported for documentation purposes, but is intended for internal package use only.
 #'
 #'   This function is simply a wrapper for \code{\link{das_chop_equallength}}.
 #'   It calls \code{\link{das_chop_equallength}}, with \code{seg.km} set to a
