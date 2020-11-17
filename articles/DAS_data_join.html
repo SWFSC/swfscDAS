@@ -82,7 +82,8 @@
 
       
 
-      </header><div class="row">
+      </header><script src="DAS_data_join_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="DAS_data_join_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="DAS_data_join_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Joining DAS outputs with external data</h1>
@@ -95,8 +96,8 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>)
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'dplyr'</span>
 <span class="co">#&gt; The following objects are masked from 'package:stats':</span>
@@ -105,47 +106,43 @@
 <span class="co">#&gt; The following objects are masked from 'package:base':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://readr.tidyverse.org">readr</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://smwoodman.github.io/swfscDAS">swfscDAS</a></span>)
-</pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://smwoodman.github.io/swfscDAS/">swfscDAS</a></span><span class="op">)</span></code></pre></div>
 <p>It is common when processing DAS data to use a text-based DAT file to provide additional information. For instance, Ships.dat is used to determine the ship code based on cruise number, while SpCodes.dat is used to match species codes to species names. In this document, we examine how to read in DAT files into R and join them with DAS data. If the exact format of Ships.dat or SpCodes.dat changes in the future, you can change the code introduced in this document to match the new format. Also note that you can use this workflow to join processed DAS data with data from any file type.</p>
 <div id="data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h2>
 <p>First we read in and process the sample DAS data</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"das_sample.das"</span>, package = <span class="st">"swfscDAS"</span>)
-<span class="kw">y.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_process.html">das_process</a></span>(<span class="kw">y</span>)
-<span class="kw">y.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span>(<span class="kw">y.proc</span>, return.format = <span class="st">"default"</span>)
-</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"das_sample.das"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>
+<span class="va">y.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_process.html">das_process</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>
+<span class="va">y.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span></code></pre></div>
 <p>This package includes Ships_sample.dat and SpCodes_sample.dat files, which have the same format as the commonly used Ships.dat and SpCodes.dat files. Because these DAT files are fixed width text files, we use the <code>read_fwf</code> function from the <code>readr</code> package to read the DAT files into data frames. You could also use the <code>read.fwf</code> file from base R. Note that the <code>data.frame</code> call is not necessary if you are comfortable working with tibbles.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw">ships.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="fu"><a href="https://readr.tidyverse.org/reference/read_fwf.html">read_fwf</a></span>(
-  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"Ship_sample.dat"</span>, package = <span class="st">"swfscDAS"</span>), 
-  col_positions = <span class="fu"><a href="https://readr.tidyverse.org/reference/read_fwf.html">fwf_widths</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">6</span>, <span class="fl">NA</span>), col_names = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Cruise"</span>, <span class="st">"Ship"</span>)),
-  col_types = <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span>(Cruise = <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_double</a></span>(), Ship = <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span>()),
-  trim_ws = <span class="fl">TRUE</span>
-), stringsAsFactors = <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ships.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_fwf.html">read_fwf</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"Ship_sample.dat"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>, 
+  col_positions <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_fwf.html">fwf_widths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="cn">NA</span><span class="op">)</span>, col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Cruise"</span>, <span class="st">"Ship"</span><span class="op">)</span><span class="op">)</span>,
+  col_types <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span><span class="op">(</span>Cruise <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_double</a></span><span class="op">(</span><span class="op">)</span>, Ship <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+  trim_ws <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-<span class="kw">spcodes.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="fu"><a href="https://readr.tidyverse.org/reference/read_fwf.html">read_fwf</a></span>(
-  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"SpCodes_sample.dat"</span>, package = <span class="st">"swfscDAS"</span>), 
-  col_positions = <span class="fu"><a href="https://readr.tidyverse.org/reference/read_fwf.html">fwf_widths</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">4</span>, <span class="fl">13</span>, <span class="fl">40</span>, <span class="fl">NA</span>),  col_names = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"SpCode"</span>, <span class="st">"Abbr"</span>, <span class="st">"SciName"</span>, <span class="st">"CommonName"</span>)),
-  col_types = <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span>(.default = <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span>()),
-  trim_ws = <span class="fl">TRUE</span>
-), stringsAsFactors = <span class="fl">FALSE</span>)
-</pre></div>
+<span class="va">spcodes.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_fwf.html">read_fwf</a></span><span class="op">(</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"SpCodes_sample.dat"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>, 
+  col_positions <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_fwf.html">fwf_widths</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">13</span>, <span class="fl">40</span>, <span class="cn">NA</span><span class="op">)</span>,  col_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"SpCode"</span>, <span class="st">"Abbr"</span>, <span class="st">"SciName"</span>, <span class="st">"CommonName"</span><span class="op">)</span><span class="op">)</span>,
+  col_types <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span><span class="op">(</span>.default <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_atomic.html">col_character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
+  trim_ws <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span>, stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="join-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#join-data" class="anchor"></a>Join data</h2>
 <p>Now that we have both the DAS data and external data in data frames, we can use the the dplyr package, and specifically the <code>left_join</code> function, to combine the data</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co"># Ship </span>
-<span class="kw">y.proc.ship</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span>(<span class="kw">y.proc</span>, <span class="kw">ships.df</span>, by = <span class="st">"Cruise"</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Ship </span>
+<span class="va">y.proc.ship</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">y.proc</span>, <span class="va">ships.df</span>, by <span class="op">=</span> <span class="st">"Cruise"</span><span class="op">)</span>
 
 <span class="co"># Species code</span>
-<span class="kw">y.sight.spcodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span>(<span class="kw">y.sight</span>, <span class="kw">spcodes.df</span>, by = <span class="st">"SpCode"</span>)
-</pre></div>
+<span class="va">y.sight.spcodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">y.sight</span>, <span class="va">spcodes.df</span>, by <span class="op">=</span> <span class="st">"SpCode"</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 

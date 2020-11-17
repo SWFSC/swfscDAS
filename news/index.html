@@ -129,31 +129,33 @@
       <small>Source: <a href='https://github.com/smwoodman/swfscDAS/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="swfscdas-0-5-0" class="section level1">
+    <div id="swfscdas-050" class="section level1">
 <h1 class="page-header" data-toc-text="0.5.0">
-<a href="#swfscdas-0-5-0" class="anchor"></a>swfscDAS 0.5.0<small> Unreleased </small>
+<a href="#swfscdas-050" class="anchor"></a>swfscDAS 0.5.0<small> Unreleased </small>
 </h1>
 <ul>
 <li><p>Added ‘strata.files’ argument to <code>das_effort</code> to allow users to split effort by strata</p></li>
+<li><p>The ‘segdata’ output of <code>das_effort</code> now includes DateTime1 and DateTime2, the date/time of the start and end points of each segment. The column order of the segdata data frame was also slightly changed for consistency</p></li>
 <li><p>Changed the name of the strata argument of <code>das_intersects_strata</code> to ‘strata.files’ for consistency</p></li>
 <li><p>Fixed a bug in <code>das_check</code> where multiple files could not be checked at once</p></li>
 <li><p><code>das_check</code> now checks for valid longitude and latitude values</p></li>
 <li><p>Fixed an issue where the sample stratum file did not overlap with any of the sample data</p></li>
 <li><p>Added documentation describing how <code>das_sight</code> handles additional sperm whale group size estimates</p></li>
+<li><p><code>das_chop_condition</code>, <code>das_chop_equallength</code>, <code>das_chop_section</code>, and <code>das_segdata</code> are now exported for documentation purposes only</p></li>
 </ul>
 </div>
-    <div id="swfscdas-0-4-0" class="section level1">
+    <div id="swfscdas-040" class="section level1">
 <h1 class="page-header" data-toc-text="0.4.0">
-<a href="#swfscdas-0-4-0" class="anchor"></a>swfscDAS 0.4.0<small> 2020-06-30 </small>
+<a href="#swfscdas-040" class="anchor"></a>swfscDAS 0.4.0<small> 2020-06-30 </small>
 </h1>
 <ul>
 <li><p>Changed <code>das_within_strata</code> to <code>das_intersects_strata</code> because it uses the geometric binary predicate <code>st_intersects</code> rather than <code>st_within</code></p></li>
 <li><p>In <code>das_effort_sight</code>, users can now use <code>gs.columns</code> to specify secondary group size columns in case of an <code>NA</code> group size value</p></li>
 </ul>
 </div>
-    <div id="swfscdas-0-3-0" class="section level1">
+    <div id="swfscdas-030" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.0">
-<a href="#swfscdas-0-3-0" class="anchor"></a>swfscDAS 0.3.0<small> Unreleased </small>
+<a href="#swfscdas-030" class="anchor"></a>swfscDAS 0.3.0<small> Unreleased </small>
 </h1>
 <ul>
 <li><p><code>das_process</code> now lets the user add the DateTime, Lat, and Lon information to “?” and numeric (1:8) events using the ‘add.dtll.sight’ argument. This enables the user to filter the processed DAS data by date/time or coordinates, if desired</p></li>
@@ -166,9 +168,9 @@
 <li><p>Where applicable, error, warning, and informational messages now report both the file name and line number. This makes the messages more useful when working with concatenated DAS objects with multiple DAS files.</p></li>
 </ul>
 </div>
-    <div id="swfscdas-0-2-0" class="section level1">
+    <div id="swfscdas-020" class="section level1">
 <h1 class="page-header" data-toc-text="0.2.0">
-<a href="#swfscdas-0-2-0" class="anchor"></a>swfscDAS 0.2.0<small> Unreleased </small>
+<a href="#swfscdas-020" class="anchor"></a>swfscDAS 0.2.0<small> Unreleased </small>
 </h1>
 <div id="general" class="section level2">
 <h2 class="hasAnchor">
@@ -176,7 +178,7 @@
 <ul>
 <li><p>Added ‘Data9’, ‘Data10’, and ‘Data12’ columns to the output of <code>das_read</code> and <code>das_process</code> to account for all recorded sighting information. These data are now extracted as ‘CalibSchool’, ‘PhotosAerial’, and ‘Biopsy’ from “S” events in <code>das_sight</code>, and checked in <code>das_check</code></p></li>
 <li><p>Added ‘SpdKt’ (ship speed in knots) and ‘WindSpdKt’ (wind speed in knots) to the output of <code>das_process</code>. The sources for these data are also checked in <code>das_check</code></p></li>
-<li><p>Renamed items in effort list output of <code>das_effort</code> and <code>das_effort_sight</code>: ‘siteinfo’ is now ‘sightinfo’, and segdata columns indicating the number of sightings or animals on a segment are now formatted as ‘description’_‘species code’, e.g. “nSI_075”</p></li>
+<li><p>Renamed items in effort list output of <code>das_effort</code> and <code>das_effort_sight</code>: ‘siteinfo’ is now ‘sightinfo’, and segdata columns indicating the number of sightings or animals on a segment are now formatted as ‘description’_‘species code’, e.g. “nSI_075”</p></li>
 </ul>
 </div>
 <div id="das_sight-changes" class="section level2">
@@ -191,9 +193,9 @@
 </ul>
 </div>
 </div>
-    <div id="swfscdas-0-1-0" class="section level1">
+    <div id="swfscdas-010" class="section level1">
 <h1 class="page-header" data-toc-text="0.1.0">
-<a href="#swfscdas-0-1-0" class="anchor"></a>swfscDAS 0.1.0<small> Unreleased </small>
+<a href="#swfscdas-010" class="anchor"></a>swfscDAS 0.1.0<small> Unreleased </small>
 </h1>
 <ul>
 <li>Initial version, presented to NMFS users</li>

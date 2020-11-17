@@ -139,36 +139,36 @@ They implement functionality that is used when processing both
 DAS and AirDAS data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.chop_condition_eff</span>(<span class='kw'>i</span>, <span class='kw'>call.x</span>, <span class='kw'>call.conditions</span>, <span class='kw'>call.seg.min.km</span>, <span class='kw'>call.func1</span>)
+    <pre class="usage"><span class='fu'>.chop_condition_eff</span><span class='op'>(</span><span class='va'>i</span>, <span class='va'>call.x</span>, <span class='va'>call.conditions</span>, <span class='va'>call.seg.min.km</span>, <span class='va'>call.func1</span><span class='op'>)</span>
 
-<span class='fu'>.chop_equallength_eff</span>(
-  <span class='kw'>i</span>,
-  <span class='kw'>call.x</span>,
-  <span class='kw'>call.conditions</span>,
-  <span class='kw'>call.seg.km</span>,
-  <span class='kw'>call.r.pos</span>,
-  <span class='kw'>call.func1</span>
-)
+<span class='fu'>.chop_equallength_eff</span><span class='op'>(</span>
+  <span class='va'>i</span>,
+  <span class='va'>call.x</span>,
+  <span class='va'>call.conditions</span>,
+  <span class='va'>call.seg.km</span>,
+  <span class='va'>call.r.pos</span>,
+  <span class='va'>call.func1</span>
+<span class='op'>)</span>
 
-<span class='fu'>.process_num</span>(<span class='kw'>init.val</span>, <span class='kw'>das.df</span>, <span class='kw'>col.name</span>, <span class='kw'>event.curr</span>, <span class='kw'>event.na</span>)
+<span class='fu'>.process_num</span><span class='op'>(</span><span class='va'>init.val</span>, <span class='va'>das.df</span>, <span class='va'>col.name</span>, <span class='va'>event.curr</span>, <span class='va'>event.na</span><span class='op'>)</span>
 
-<span class='fu'>.process_chr</span>(<span class='kw'>init.val</span>, <span class='kw'>das.df</span>, <span class='kw'>col.name</span>, <span class='kw'>event.curr</span>, <span class='kw'>event.na</span>)
+<span class='fu'>.process_chr</span><span class='op'>(</span><span class='va'>init.val</span>, <span class='va'>das.df</span>, <span class='va'>col.name</span>, <span class='va'>event.curr</span>, <span class='va'>event.na</span><span class='op'>)</span>
 
-<span class='fu'>.segdata_proc</span>(
-  <span class='kw'>das.df</span>,
-  <span class='kw'>conditions</span>,
-  <span class='kw'>segdata.method</span>,
-  <span class='kw'>seg.lengths</span>,
-  <span class='kw'>section.id</span>,
-  <span class='kw'>df.out1</span>
-)
+<span class='fu'>.segdata_proc</span><span class='op'>(</span>
+  <span class='va'>das.df</span>,
+  <span class='va'>conditions</span>,
+  <span class='va'>segdata.method</span>,
+  <span class='va'>seg.lengths</span>,
+  <span class='va'>section.id</span>,
+  <span class='va'>df.out1</span>
+<span class='op'>)</span>
 
-<span class='fu'>.segdata_aggr</span>(<span class='kw'>data.list</span>, <span class='kw'>curr.df</span>, <span class='kw'>idx</span>, <span class='kw'>dist.perc</span>)
+<span class='fu'>.segdata_aggr</span><span class='op'>(</span><span class='va'>data.list</span>, <span class='va'>curr.df</span>, <span class='va'>idx</span>, <span class='va'>dist.perc</span><span class='op'>)</span>
 
-<span class='fu'>.dist_from_prev</span>(
-  <span class='kw'>z</span>,
-  z.distance.method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"greatcircle"</span>, <span class='st'>"lawofcosines"</span>, <span class='st'>"haversine"</span>, <span class='st'>"vincenty"</span>)
-)</pre>
+<span class='fu'>.dist_from_prev</span><span class='op'>(</span>
+  <span class='va'>z</span>,
+  z.distance.method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"greatcircle"</span>, <span class='st'>"lawofcosines"</span>, <span class='st'>"haversine"</span>, <span class='st'>"vincenty"</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

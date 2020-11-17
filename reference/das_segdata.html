@@ -135,20 +135,20 @@
     <p>Summarize DAS effort data by effort segment, while averaging or getting the max for each condition</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_segdata</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>das_segdata</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_segdata</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>das_segdata</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for das_df</span>
-<span class='fu'>das_segdata</span>(
-  <span class='kw'>x</span>,
-  <span class='kw'>conditions</span>,
-  segdata.method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"avg"</span>, <span class='st'>"maxdist"</span>),
-  <span class='kw'>seg.lengths</span>,
-  <span class='kw'>section.id</span>,
-  <span class='kw'>...</span>
-)</pre>
+<span class='fu'>das_segdata</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>conditions</span>,
+  segdata.method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"avg"</span>, <span class='st'>"maxdist"</span><span class='op'>)</span>,
+  <span class='va'>seg.lengths</span>,
+  <span class='va'>section.id</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,7 +191,9 @@ into which <code>x</code> will be chopped</p></td>
   and in <code><a href='das_effort.html'>das_effort</a></code></p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function was designed to be called by one of the das_chop_ functions,
+    <p>WARNING - do not call this function directly!
+  It is exported for documentation purposes, but is intended for internal package use only.</p>
+<p>This function was designed to be called by one of the das_chop_ functions,
   e.g. <code><a href='das_chop_equallength.html'>das_chop_equallength</a></code>, and thus
   users should avoid calling it themselves.
   It loops through the events in <code>x</code>, chopping <code>x</code> into modeling segments
@@ -199,13 +201,16 @@ into which <code>x</code> will be chopped</p></td>
   Because <code>x</code> is a continuous effort section, it must begin with
   a "B" or "R" event and end with the corresponding "E" event.</p>
 <p>For each segment, this function reports the segment number,
-  segment ID, cruise number, the start/end/midpoints (lat/lon), segment length,
-  year, month, day, time, mode, effort type,
+  segment ID, cruise number, the start/end/mid coordinates (lat/lon),
+  start/end/mid date/times (DateTime), segment length,
+  year, month, day, midpoint time, mode, effort type,
   effective strip width sides (number of sides searched),
   and average conditions (which are specified by <code>conditions</code>).
   The segment ID is designated as <code>section.id</code> _ index of the modeling segment.
   Thus, if <code>section.id</code> is <code>1</code>, then the segment ID for
-  the second segment from <code>x</code> is <code>"1_2"</code>.</p>
+  the second segment from <code>x</code> is <code>"1_2"</code>.
+  The start/end coordinates and date/times are interpolated as needed,
+  e.g. when using the 'equallength' method.</p>
 <p>When <code>segdata.method</code> is "avg", the condition values are
   calculated as a weighted average by distance.
   The reported value for logical columns (e.g. Glare) is the percentage

@@ -82,7 +82,8 @@
 
       
 
-      </header><div class="row">
+      </header><script src="swfscDAS_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="swfscDAS_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="swfscDAS_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to swfscDAS</h1>
@@ -95,44 +96,41 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://stringr.tidyverse.org">stringr</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://smwoodman.github.io/swfscDAS">swfscDAS</a></span>)
-</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://smwoodman.github.io/swfscDAS/">swfscDAS</a></span><span class="op">)</span></code></pre></div>
 <p>This document introduces you to the swfscDAS package, and specifically its functionality and workflow. This package is intended to standardize and streamline processing of shipboard DAS data collected using the WinCruz program from the Southwest Fisheries Science Center. In DAS data, an event is only recorded when something changes or happens, which can complicate processing. Thus, the main theme of this package is enabling analyses and downstream processing by 1) determining associated state and condition information for each event and 2) pulling out event-specific information from the Data (Field) columns.</p>
 <div id="data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data" class="anchor"></a>Data</h2>
 <p>This package includes a sample DAS file, which we will use in this document</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"das_sample.das"</span>, package = <span class="st">"swfscDAS"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span>(<span class="kw">y</span>))
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"das_sample.das"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "1  B.062739 011313 N39:19.22 W137:36.26 1000    c    5    Y                              "</span>
 <span class="co">#&gt; [2] "2  R.062739 011313 N39:19.22 W137:36.26    S                                             "</span>
 <span class="co">#&gt; [3] "3  P.062739 011313 N39:19.22 W137:36.26  280  001  126                                   "</span>
 <span class="co">#&gt; [4] "4  V.062739 011313 N39:19.22 W137:36.26    3   03  230      10.0                         "</span>
 <span class="co">#&gt; [5] "5  N.062739 011313 N39:19.22 W137:36.26  023 09.8                                        "</span>
-<span class="co">#&gt; [6] "6  W.062739 011313 N39:19.22 W137:36.26    1            250  6.0                         "</span>
-</pre></div>
+<span class="co">#&gt; [6] "6  W.062739 011313 N39:19.22 W137:36.26    1            250  6.0                         "</span></code></pre></div>
 </div>
 <div id="check-data-format" class="section level2">
 <h2 class="hasAnchor">
 <a href="#check-data-format" class="anchor"></a>Check data format</h2>
 <p>The first step in processing DAS data is to ensure that the DAS file has expected formatting and values. This package contains the <code>das_check</code> function, which performs some basic checks. This function is a precursor to a more comprehensive DASCHECK program, which is currently in development. The checks performed by this function are detailed in the function documentation, which can be accessed by running <code><a href="../reference/das_check.html">?das_check</a></code>. You can find the PDF with the expected DAS data format at <a href="https://smwoodman.github.io/swfscDAS/" class="uri">https://smwoodman.github.io/swfscDAS/</a>, or see <code><a href="../reference/das_format_pdf.html">?das_format_pdf</a></code> for how to access a local copy. To check for valid species codes using this function, you can pass the function an SpCodes.dat file</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co"># Code not run</span>
-<span class="kw">y.check</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_check.html">das_check</a></span>(<span class="kw">y</span>, skip = <span class="fl">0</span>, print.cruise.nums = <span class="fl">TRUE</span>)
-</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Code not run</span>
+<span class="va">y.check</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_check.html">das_check</a></span><span class="op">(</span><span class="va">y</span>, skip <span class="op">=</span> <span class="fl">0</span>, print.cruise.nums <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="read-and-process-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#read-and-process-data" class="anchor"></a>Read and process data</h2>
 <p>Once QA/QC is complete and you have fixed any data entry errors, you can begin to process the DAS data. The backbone of this package is the reading and processing steps: 1) the data from the DAS file are read into the columns of a data frame and 2) state and condition information are extracted for each event. This means that after processing, you can simply look at any event (row) and determine the Beaufort, viewing conditions, etc., at the time of the event. All other functions in the package depend on the DAS data being in this processed state.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co"># Read </span>
-<span class="kw">y.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span>(<span class="kw">y</span>, skip = <span class="fl">0</span>)
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>(<span class="kw">y.read</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Read </span>
+<span class="va">y.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="va">y</span>, skip <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.read</span><span class="op">)</span>
 <span class="co">#&gt; Registered S3 method overwritten by 'cli':</span>
 <span class="co">#&gt;   method     from    </span>
 <span class="co">#&gt;   print.boxx spatstat</span>
@@ -160,8 +158,8 @@
 <span class="co">#&gt; $ line_num  &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …</span>
 
 <span class="co"># Process</span>
-<span class="kw">y.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_process.html">das_process</a></span>(<span class="kw">y</span>)
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>(<span class="kw">y.proc</span>)
+<span class="va">y.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_process.html">das_process</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 256</span>
 <span class="co">#&gt; Columns: 39</span>
 <span class="co">#&gt; $ Event     &lt;chr&gt; "B", "R", "P", "V", "N", "W", "V", "W", "W", "*", "P", "V",…</span>
@@ -205,45 +203,43 @@
 <span class="co">#&gt; $ line_num  &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …</span>
 
 <span class="co"># Note that das_read can read multiple files at once</span>
-<span class="kw">y2.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">y</span>, <span class="kw">y</span>))
-</pre></div>
+<span class="va">y2.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Once you have processed the DAS data, you can easily access a variety of information. For instance, you can look at the different events or Beaufort values that occurred in the data, or filter for specific events to get the beginning and ending points of each effort section.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co"># The number of each event</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="kw">y.proc</span><span class="op">$</span><span class="kw">Event</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># The number of each event</span>
+<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">$</span><span class="va">Event</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  ?  *  1  2  3  4  A  B  C  E  F  N  P  R  s  S  t  V  W </span>
 <span class="co">#&gt;  1 90  8  7  6  2  8  2  5 10  1 19 18 10  7  8  6 22 26</span>
 
 <span class="co"># The number of events per Beaufort value</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="kw">y.proc</span><span class="op">$</span><span class="kw">Bft</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">$</span><span class="va">Bft</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   2   3 </span>
 <span class="co">#&gt;  94 120</span>
 
 <span class="co"># Filter for T/R and O/E events to extract lat/lon points</span>
-<span class="kw">y.proc</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">Event</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"R"</span>, <span class="st">"E"</span>)) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">Event</span>, <span class="kw">Lat</span>, <span class="kw">Lon</span>, <span class="kw">Cruise</span>, <span class="kw">Mode</span>, <span class="kw">EffType</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>()
+<span class="va">y.proc</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Event</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"E"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">Lat</span>, <span class="va">Lon</span>, <span class="va">Cruise</span>, <span class="va">Mode</span>, <span class="va">EffType</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;   Event      Lat       Lon Cruise Mode EffType</span>
 <span class="co">#&gt; 1     R 39.32033 -137.6043   1000    C       S</span>
 <span class="co">#&gt; 2     E 39.36717 -137.5817   1000    C       S</span>
 <span class="co">#&gt; 3     R 39.37617 -137.5978   1000    C       S</span>
 <span class="co">#&gt; 4     E 39.51933 -137.5277   1000    C       S</span>
 <span class="co">#&gt; 5     R 39.56800 -137.4530   1000    C       S</span>
-<span class="co">#&gt; 6     E 39.75433 -137.4107   1000    C       S</span>
-</pre></div>
+<span class="co">#&gt; 6     E 39.75433 -137.4107   1000    C       S</span></code></pre></div>
 </div>
 <div id="sightings" class="section level2">
 <h2 class="hasAnchor">
 <a href="#sightings" class="anchor"></a>Sightings</h2>
 <p>The <code>swfscDAS</code> package does contain specific functions for extracting and/or summarizing particular information from the processed data. First is <code>das_sight</code>, a function that returns a data frame with pertinent sighting data pulled out to their own columns. Due to the different data collected for each type of sighting and the different needs of end-users, this function offers several different return formats. For the “default” format there is one row for each species of each sighting, for the “wide” format, there is one row for each sighting event, and for the “complete” format there is one row for every group size estimate for each sighting. See <code><a href="../reference/das_sight.html">?das_sight</a></code> for more details. The “complete” format is intended for users looking to do observer corrections, or to combine estimates using a different method than the arithmetic mean (e.g. the geometric mean)</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">y.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span>(<span class="kw">y.proc</span>, return.format = <span class="st">"default"</span>)
-<span class="kw">y.sight</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">Event</span>, <span class="kw">SightNo</span><span class="op">:</span><span class="kw">PerpDistKm</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>()
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">y.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span>
+<span class="va">y.sight</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 25</span>
 <span class="co">#&gt; Columns: 32</span>
 <span class="co">#&gt; $ Event        &lt;chr&gt; "S", "S", "s", "s", "s", "s", "s", "s", "t", "t", "t", "…</span>
@@ -279,10 +275,10 @@
 <span class="co">#&gt; $ TurtleCapt   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "N", "N", "N", NA, NA, N…</span>
 <span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.525631e+00, 3.075807e+00, 4.593917e-01, 1.452712e-01, …</span>
 
-<span class="kw">y.sight.wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span>(<span class="kw">y.proc</span>, return.format = <span class="st">"wide"</span>)
-<span class="kw">y.sight.wide</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">Event</span>, <span class="kw">SightNo</span><span class="op">:</span><span class="kw">PerpDistKm</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>()
+<span class="va">y.sight.wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span>
+<span class="va">y.sight.wide</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 22</span>
 <span class="co">#&gt; Columns: 58</span>
 <span class="co">#&gt; $ Event        &lt;chr&gt; "S", "S", "s", "s", "s", "s", "s", "s", "t", "t", "t", "…</span>
@@ -344,10 +340,10 @@
 <span class="co">#&gt; $ BoatGs       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
 <span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.525631e+00, 3.075807e+00, 4.593917e-01, 1.452712e-01, …</span>
 
-<span class="kw">y.sight.complete</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span>(<span class="kw">y.proc</span>, return.format = <span class="st">"complete"</span>)
-<span class="kw">y.sight.complete</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">Event</span>, <span class="kw">SightNo</span><span class="op">:</span><span class="kw">PerpDistKm</span>) <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>()
+<span class="va">y.sight.complete</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span>
+<span class="va">y.sight.complete</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 37</span>
 <span class="co">#&gt; Columns: 46</span>
 <span class="co">#&gt; $ Event        &lt;chr&gt; "S", "S", "S", "S", "S", "S", "s", "s", "s", "s", "s", "…</span>
@@ -395,40 +391,38 @@
 <span class="co">#&gt; $ PinnipedGs   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
 <span class="co">#&gt; $ BoatType     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
 <span class="co">#&gt; $ BoatGs       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.52563078, 1.52563078, 1.52563078, 3.07580701, 3.075807…</span>
-</pre></div>
+<span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.52563078, 1.52563078, 1.52563078, 3.07580701, 3.075807…</span></code></pre></div>
 <p>You can also easily filter or subset the sighting data for the desired event code(s)</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="kw">y.sight.sg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span>(<span class="kw">y.proc</span>, return.events = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"S"</span>, <span class="st">"G"</span>))
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">y.sight.sg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Note that this is equivalent to:</span>
-<span class="kw">y.sight.sg2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span>(<span class="kw">y.proc</span>) <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(<span class="kw">Event</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"S"</span>, <span class="st">"G"</span>))
-</pre></div>
+<span class="va">y.sight.sg2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Event</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="effort" class="section level2">
 <h2 class="hasAnchor">
 <a href="#effort" class="anchor"></a>Effort</h2>
 <p>In addition, you can chop the effort data into segments, and summarize the conditions and sightings on those segments using <code>das_effort</code> and <code>das_effort_sight</code>. These effort segments can be used for line transect estimates using the Distance software, species distribution modeling, or summarizing the number of sightings of certain species on each segment, among other uses. <code>das_effort</code> chops continuous effort sections (the event sequence from R to E events) into effort segments using one of several different chopping methods: condition (a new effort segment every time a condition changes), equal length (effort segments of equal length), or section (each segment is a full continuous effort section, i.e. it runs from an R event to an E event). <code>das_effort_sight</code> takes the output of <code>das_effort</code> and returns the number of included sightings and animals per segment for specified species codes.</p>
 <p>Both functions return a list of three data frames: segdata, sightinfo, and randpicks. These data frames and the different chopping methodologies are described in depth in the function documentation (<code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_sight.html">?das_effort_sight</a></code>), but briefly segdata contains information about each effort segment, sightinfo contains information about the sightings such as their corresponding segment, and randpicks contains information specific to the ‘equal length’ chopping method. <code>das_effort</code> and <code>das_effort_sight</code> are separate functions to allow the user more control over which sightings should be included in the effort segment summaries (see <code><a href="../reference/das_effort.html">?das_effort</a></code>). See below for how to chop/split effort lines by strata.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="co"># Chop the effort into 10km segments</span>
-<span class="kw">y.eff.eq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span>(
-  <span class="kw">y.proc</span>, method = <span class="st">"equallength"</span>, seg.km = <span class="fl">10</span>, dist.method = <span class="st">"greatcircle"</span>, 
-  num.cores = <span class="fl">1</span>
-)
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Chop the effort into 10km segments</span>
+<span class="va">y.eff.eq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
+  <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"equallength"</span>, seg.km <span class="op">=</span> <span class="fl">10</span>, dist.method <span class="op">=</span> <span class="st">"greatcircle"</span>, 
+  num.cores <span class="op">=</span> <span class="fl">1</span>
+<span class="op">)</span>
 <span class="co">#&gt; No argument was passed via randpicks.load, and thus new randpicks values will be generated</span>
 
 <span class="co"># Chop the effort every time a condition changes</span>
-<span class="kw">y.eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span>(
-  <span class="kw">y.proc</span>, method = <span class="st">"condition"</span>, seg.min.km = <span class="fl">0</span>, 
-  dist.method = <span class="st">"greatcircle"</span>, conditions = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Bft"</span>, <span class="st">"SwellHght"</span>, <span class="st">"Vis"</span>), 
-  num.cores = <span class="fl">1</span>
-)
-<span class="kw">y.eff.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort_sight.html">das_effort_sight</a></span>(<span class="kw">y.eff</span>, sp.codes = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"018"</span>, <span class="st">"076"</span>))
+<span class="va">y.eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
+  <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"condition"</span>, seg.min.km <span class="op">=</span> <span class="fl">0</span>, 
+  dist.method <span class="op">=</span> <span class="st">"greatcircle"</span>, conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Bft"</span>, <span class="st">"SwellHght"</span>, <span class="st">"Vis"</span><span class="op">)</span>, 
+  num.cores <span class="op">=</span> <span class="fl">1</span>
+<span class="op">)</span>
+<span class="va">y.eff.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort_sight.html">das_effort_sight</a></span><span class="op">(</span><span class="va">y.eff</span>, sp.codes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"018"</span>, <span class="st">"076"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>(<span class="kw">y.eff.sight</span><span class="op">$</span><span class="kw">segdata</span>)
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 20</span>
-<span class="co">#&gt; Columns: 29</span>
+<span class="co">#&gt; Columns: 31</span>
 <span class="co">#&gt; $ segnum           &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1…</span>
 <span class="co">#&gt; $ section_id       &lt;int&gt; 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 6, 6, 7, 7, 8…</span>
 <span class="co">#&gt; $ section_sub_id   &lt;dbl&gt; 1, 1, 2, 1, 2, 3, 4, 5, 6, 7, 1, 2, 1, 1, 2, 1, 2, 1…</span>
@@ -437,16 +431,18 @@
 <span class="co">#&gt; $ endlin           &lt;int&gt; 20, 33, 43, 69, 70, 75, 78, 84, 85, 90, 108, 121, 14…</span>
 <span class="co">#&gt; $ lat1             &lt;dbl&gt; 39.32033, 39.37617, 39.42950, 39.56800, 39.66082, 39…</span>
 <span class="co">#&gt; $ lon1             &lt;dbl&gt; -137.6043, -137.5978, -137.5715, -137.4530, -137.413…</span>
+<span class="co">#&gt; $ DateTime1        &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:58:04, NA, 2013-…</span>
 <span class="co">#&gt; $ lat2             &lt;dbl&gt; 39.36716, 39.42950, 39.51933, 39.66082, 39.66133, 39…</span>
 <span class="co">#&gt; $ lon2             &lt;dbl&gt; -137.5817, -137.5715, -137.5277, -137.4132, -137.413…</span>
+<span class="co">#&gt; $ DateTime2        &lt;dttm&gt; 2013-01-13 06:46:25, NA, 2013-01-13 07:57:05, 2013-…</span>
 <span class="co">#&gt; $ mlat             &lt;dbl&gt; 39.34377, 39.40288, 39.47435, 39.61433, 39.66108, 39…</span>
 <span class="co">#&gt; $ mlon             &lt;dbl&gt; -137.5930, -137.5848, -137.5493, -137.4327, -137.413…</span>
+<span class="co">#&gt; $ mDateTime        &lt;dttm&gt; 2013-01-13 06:37:02, NA, NA, 2013-01-13 09:40:55, 2…</span>
 <span class="co">#&gt; $ dist             &lt;dbl&gt; 5.5577, 6.3431, 10.6674, 10.8651, 0.0574, 1.4189, 1.…</span>
-<span class="co">#&gt; $ mDateTime        &lt;dttm&gt; 2013-01-13 06:37:02, 2013-01-13 07:09:03, 2013-01-1…</span>
-<span class="co">#&gt; $ year             &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013…</span>
-<span class="co">#&gt; $ month            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span>
-<span class="co">#&gt; $ day              &lt;int&gt; 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, …</span>
-<span class="co">#&gt; $ mtime            &lt;chr&gt; "06:37:02", "07:09:03", "07:38:33", "09:40:55", "09:…</span>
+<span class="co">#&gt; $ year             &lt;dbl&gt; 2013, NA, NA, 2013, 2013, NA, NA, 2013, 2013, 2013, …</span>
+<span class="co">#&gt; $ month            &lt;dbl&gt; 1, NA, NA, 1, 1, NA, NA, 1, 1, 1, NA, NA, 1, NA, NA,…</span>
+<span class="co">#&gt; $ day              &lt;int&gt; 13, NA, NA, 13, 13, NA, NA, 13, 13, 13, NA, NA, 13, …</span>
+<span class="co">#&gt; $ mtime            &lt;chr&gt; "06:37:02", NA, NA, "09:40:55", "09:59:44", NA, NA, …</span>
 <span class="co">#&gt; $ Cruise           &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000…</span>
 <span class="co">#&gt; $ Mode             &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C…</span>
 <span class="co">#&gt; $ EffType          &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S…</span>
@@ -459,7 +455,7 @@
 <span class="co">#&gt; $ nSI_076          &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
 <span class="co">#&gt; $ ANI_076          &lt;dbl&gt; 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
 
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>(<span class="kw">y.eff.sight</span><span class="op">$</span><span class="kw">sightinfo</span>)
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight</span><span class="op">$</span><span class="va">sightinfo</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 13</span>
 <span class="co">#&gt; Columns: 63</span>
 <span class="co">#&gt; $ segnum       &lt;int&gt; 1, 3, 4, 13, 13, 15, 17, 18, 18, 20, 20, 20, 20</span>
@@ -524,23 +520,22 @@
 <span class="co">#&gt; $ TurtleAge    &lt;chr&gt; NA, NA, "A", "J", NA, "A", NA, NA, NA, NA, NA, NA, NA</span>
 <span class="co">#&gt; $ TurtleCapt   &lt;chr&gt; NA, NA, "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
 <span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.52563078, 3.07580701, 0.04811637, 0.03207758, 0.518560…</span>
-<span class="co">#&gt; $ included     &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FA…</span>
-</pre></div>
+<span class="co">#&gt; $ included     &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FA…</span></code></pre></div>
 </div>
 <div id="strata" class="section level2">
 <h2 class="hasAnchor">
 <a href="#strata" class="anchor"></a>Strata</h2>
-<p>This package contains several functions that allow you to incorporate strata into your DAS data processing. These functions contain a ‘strata.files’ argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.</p>
+<p>This package contains several methods to incorporate strata into your DAS data processing: <code>das_intersects_strata</code> for assigning points to strata and <code>das_effort</code> for chopping effort lines by strata. These functions contain a ‘strata.files’ argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.</p>
 <p>First, <code>das_intersects_strata</code> allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. If a list then it must be the output of <code>das_effort</code> or <code>das_effort_sight</code>, and the function will use the segment midpoints to determine if a segment (and associated sightings) intersected each stratum.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="kw">stratum.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"das_sample_stratum.csv"</span>, package = <span class="st">"swfscDAS"</span>)
-<span class="kw">y.eff.sight.strata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_intersects_strata.html">das_intersects_strata</a></span>(<span class="kw">y.eff.sight</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(InPoly = <span class="kw">stratum.file</span>))
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">stratum.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"das_sample_stratum.csv"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>
+<span class="va">y.eff.sight.strata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_intersects_strata.html">das_intersects_strata</a></span><span class="op">(</span><span class="va">y.eff.sight</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>InPoly <span class="op">=</span> <span class="va">stratum.file</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>(<span class="kw">y.eff.sight.strata</span><span class="op">$</span><span class="kw">segdata</span>)
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight.strata</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 20</span>
-<span class="co">#&gt; Columns: 30</span>
+<span class="co">#&gt; Columns: 32</span>
 <span class="co">#&gt; $ segnum           &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1…</span>
 <span class="co">#&gt; $ section_id       &lt;int&gt; 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 6, 6, 7, 7, 8…</span>
 <span class="co">#&gt; $ section_sub_id   &lt;dbl&gt; 1, 1, 2, 1, 2, 3, 4, 5, 6, 7, 1, 2, 1, 1, 2, 1, 2, 1…</span>
@@ -549,16 +544,18 @@
 <span class="co">#&gt; $ endlin           &lt;int&gt; 20, 33, 43, 69, 70, 75, 78, 84, 85, 90, 108, 121, 14…</span>
 <span class="co">#&gt; $ lat1             &lt;dbl&gt; 39.32033, 39.37617, 39.42950, 39.56800, 39.66082, 39…</span>
 <span class="co">#&gt; $ lon1             &lt;dbl&gt; -137.6043, -137.5978, -137.5715, -137.4530, -137.413…</span>
+<span class="co">#&gt; $ DateTime1        &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:58:04, NA, 2013-…</span>
 <span class="co">#&gt; $ lat2             &lt;dbl&gt; 39.36716, 39.42950, 39.51933, 39.66082, 39.66133, 39…</span>
 <span class="co">#&gt; $ lon2             &lt;dbl&gt; -137.5817, -137.5715, -137.5277, -137.4132, -137.413…</span>
+<span class="co">#&gt; $ DateTime2        &lt;dttm&gt; 2013-01-13 06:46:25, NA, 2013-01-13 07:57:05, 2013-…</span>
 <span class="co">#&gt; $ mlat             &lt;dbl&gt; 39.34377, 39.40288, 39.47435, 39.61433, 39.66108, 39…</span>
 <span class="co">#&gt; $ mlon             &lt;dbl&gt; -137.5930, -137.5848, -137.5493, -137.4327, -137.413…</span>
+<span class="co">#&gt; $ mDateTime        &lt;dttm&gt; 2013-01-13 06:37:02, NA, NA, 2013-01-13 09:40:55, 2…</span>
 <span class="co">#&gt; $ dist             &lt;dbl&gt; 5.5577, 6.3431, 10.6674, 10.8651, 0.0574, 1.4189, 1.…</span>
-<span class="co">#&gt; $ mDateTime        &lt;dttm&gt; 2013-01-13 06:37:02, 2013-01-13 07:09:03, 2013-01-1…</span>
-<span class="co">#&gt; $ year             &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013…</span>
-<span class="co">#&gt; $ month            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span>
-<span class="co">#&gt; $ day              &lt;int&gt; 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, …</span>
-<span class="co">#&gt; $ mtime            &lt;chr&gt; "06:37:02", "07:09:03", "07:38:33", "09:40:55", "09:…</span>
+<span class="co">#&gt; $ year             &lt;dbl&gt; 2013, NA, NA, 2013, 2013, NA, NA, 2013, 2013, 2013, …</span>
+<span class="co">#&gt; $ month            &lt;dbl&gt; 1, NA, NA, 1, 1, NA, NA, 1, 1, 1, NA, NA, 1, NA, NA,…</span>
+<span class="co">#&gt; $ day              &lt;int&gt; 13, NA, NA, 13, 13, NA, NA, 13, 13, 13, NA, NA, 13, …</span>
+<span class="co">#&gt; $ mtime            &lt;chr&gt; "06:37:02", NA, NA, "09:40:55", "09:59:44", NA, NA, …</span>
 <span class="co">#&gt; $ Cruise           &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000…</span>
 <span class="co">#&gt; $ Mode             &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C…</span>
 <span class="co">#&gt; $ EffType          &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S…</span>
@@ -570,30 +567,29 @@
 <span class="co">#&gt; $ ANI_018          &lt;dbl&gt; 42.33333, 0.00000, 0.00000, 0.00000, 0.00000, 0.0000…</span>
 <span class="co">#&gt; $ nSI_076          &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
 <span class="co">#&gt; $ ANI_076          &lt;dbl&gt; 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…</span>
-<span class="co">#&gt; $ InPoly           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1…</span>
-</pre></div>
+<span class="co">#&gt; $ InPoly           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1…</span></code></pre></div>
 <p>In addition, you can chop/split effort lines by strata using the ‘strata.files’ argument of <code>das_effort</code>. Effort lines are chopped/split by strata before then being processed using the specified method (condition, equal length, etc.). The ‘segdata’ element of the <code>das_effort</code> output will contain a ‘stratum’ column, which contains the name of the stratum that the segment is in. See <code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_strata.html">?das_effort_strata</a></code> for more details.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="kw">y.eff.strata.section</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span>(
-  <span class="kw">y.proc</span>, method = <span class="st">"section"</span>, strata.files = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="kw">stratum.file</span>),
-  num.cores = <span class="fl">1</span>
-)
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">y.eff.strata.section</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
+  <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"section"</span>, strata.files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">stratum.file</span><span class="op">)</span>,
+  num.cores <span class="op">=</span> <span class="fl">1</span>
+<span class="op">)</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersection assumes that they are planar</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 
-<span class="kw">y.eff.strata.condition</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span>(
-  <span class="kw">y.proc</span>, method = <span class="st">"condition"</span>, seg.min.km = <span class="fl">0</span>, 
-  strata.files = <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(Poly1 = <span class="kw">stratum.file</span>),
-  num.cores = <span class="fl">1</span>
-)
+<span class="va">y.eff.strata.condition</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
+  <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"condition"</span>, seg.min.km <span class="op">=</span> <span class="fl">0</span>, 
+  strata.files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Poly1 <span class="op">=</span> <span class="va">stratum.file</span><span class="op">)</span>,
+  num.cores <span class="op">=</span> <span class="fl">1</span>
+<span class="op">)</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersection assumes that they are planar</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersects assumes that they are planar</span>
 
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>(<span class="kw">y.eff.strata.section</span><span class="op">$</span><span class="kw">segdata</span>)
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.strata.section</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 10</span>
-<span class="co">#&gt; Columns: 29</span>
+<span class="co">#&gt; Columns: 31</span>
 <span class="co">#&gt; $ segnum         &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10</span>
 <span class="co">#&gt; $ section_id     &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10</span>
 <span class="co">#&gt; $ section_sub_id &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span>
@@ -602,15 +598,17 @@
 <span class="co">#&gt; $ endlin         &lt;int&gt; 20, 43, 90, 121, 147, 164, 181, 199, 240, 259</span>
 <span class="co">#&gt; $ lat1           &lt;dbl&gt; 39.32033, 39.37617, 39.56800, 39.94517, 40.15217, 40.2…</span>
 <span class="co">#&gt; $ lon1           &lt;dbl&gt; -137.6043, -137.5978, -137.4530, -137.3692, -137.1737,…</span>
+<span class="co">#&gt; $ DateTime1      &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:58:04, 2013-01-13 …</span>
 <span class="co">#&gt; $ lat2           &lt;dbl&gt; 39.36716, 39.51933, 39.75433, 40.12745, 40.26617, 40.3…</span>
 <span class="co">#&gt; $ lon2           &lt;dbl&gt; -137.5817, -137.5277, -137.4107, -137.2488, -137.1348,…</span>
+<span class="co">#&gt; $ DateTime2      &lt;dttm&gt; 2013-01-13 06:46:25, 2013-01-13 07:57:05, 2013-01-13 …</span>
 <span class="co">#&gt; $ mlat           &lt;dbl&gt; 39.34377, 39.44767, 39.66117, 40.03679, 40.20895, 40.3…</span>
 <span class="co">#&gt; $ mlon           &lt;dbl&gt; -137.5930, -137.5625, -137.4131, -137.3101, -137.1531,…</span>
-<span class="co">#&gt; $ dist           &lt;dbl&gt; 5.5577, 17.0106, 21.8086, 22.7090, 13.0922, 12.3011, 8…</span>
 <span class="co">#&gt; $ mDateTime      &lt;dttm&gt; 2013-01-13 06:37:02, 2013-01-13 07:27:34, 2013-01-13 …</span>
-<span class="co">#&gt; $ year           &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …</span>
-<span class="co">#&gt; $ month          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span>
-<span class="co">#&gt; $ day            &lt;int&gt; 13, 13, 13, 13, 13, 13, 13, 13, 14, 14</span>
+<span class="co">#&gt; $ dist           &lt;dbl&gt; 5.5577, 17.0106, 21.8086, 22.7090, 13.0922, 12.3011, 8…</span>
+<span class="co">#&gt; $ year           &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, NA, 2013, 2013, 20…</span>
+<span class="co">#&gt; $ month          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, NA, 1, 1, 1</span>
+<span class="co">#&gt; $ day            &lt;int&gt; 13, 13, 13, 13, 13, 13, NA, 13, 14, 14</span>
 <span class="co">#&gt; $ mtime          &lt;chr&gt; "06:37:02", "07:27:34", "09:59:20", "12:34:14", "14:14…</span>
 <span class="co">#&gt; $ Cruise         &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, …</span>
 <span class="co">#&gt; $ Mode           &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"</span>
@@ -622,23 +620,22 @@
 <span class="co">#&gt; $ avgVertSun     &lt;dbl&gt; 3, 2, 2, 12, 1, 1, 2, 2, NA, NA</span>
 <span class="co">#&gt; $ avgGlare       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, NA, NA</span>
 <span class="co">#&gt; $ avgVis         &lt;dbl&gt; 6.000000, 5.686447, 5.090748, 5.974103, 6.000000, 6.00…</span>
-<span class="co">#&gt; $ stratum        &lt;chr&gt; NA, NA, NA, NA, "Stratum1", "Stratum1", "Stratum1", "S…</span>
-</pre></div>
+<span class="co">#&gt; $ stratum        &lt;chr&gt; NA, NA, NA, NA, "Stratum1", "Stratum1", "Stratum1", "S…</span></code></pre></div>
 </div>
 <div id="comments" class="section level2">
 <h2 class="hasAnchor">
 <a href="#comments" class="anchor"></a>Comments</h2>
 <p>In addition, you can use <code>das_comments</code> to generate comment strings. This is particularly useful if looking for comments with keywords</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="kw">y.comm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_comments.html">das_comments</a></span>(<span class="kw">y.proc</span>)
-<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span>(<span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="kw">y.comm</span>, <span class="kw">Event</span>, <span class="kw">line_num</span>, <span class="kw">comment_str</span>))
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">y.comm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_comments.html">das_comments</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span>
+<span class="fu"><a href="https://tibble.tidyverse.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">y.comm</span>, <span class="va">Event</span>, <span class="va">line_num</span>, <span class="va">comment_str</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 5</span>
 <span class="co">#&gt; Columns: 3</span>
 <span class="co">#&gt; $ Event       &lt;chr&gt; "C", "C", "C", "C", "C"</span>
 <span class="co">#&gt; $ line_num    &lt;int&gt; 71, 81, 186, 218, 241</span>
 <span class="co">#&gt; $ comment_str &lt;chr&gt; " Well?              ", " going left to avoid          ",…</span>
 
-<span class="kw">y.comm</span>[<span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span>(<span class="kw">y.comm</span><span class="op">$</span><span class="kw">comment_str</span>, <span class="st">"gear"</span>), ] <span class="co">#Could also use grepl() here</span>
+<span class="va">y.comm</span><span class="op">[</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">y.comm</span><span class="op">$</span><span class="va">comment_str</span>, <span class="st">"gear"</span><span class="op">)</span>, <span class="op">]</span> <span class="co">#Could also use grepl() here</span>
 <span class="co">#&gt;   Event            DateTime    Lat      Lon OnEffort Cruise Mode EffType</span>
 <span class="co">#&gt; 5     C 2013-01-14 11:37:27 41.016 -135.578    FALSE   1000    C       S</span>
 <span class="co">#&gt;   ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun VertSun Glare</span>
@@ -648,8 +645,7 @@
 <span class="co">#&gt;        Data9 Data10 Data11 Data12 EffortDot EventNum       file_das line_num</span>
 <span class="co">#&gt; 5              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE       11 das_sample.das      241</span>
 <span class="co">#&gt;                           comment_str</span>
-<span class="co">#&gt; 5  crossing fishing gear</span>
-</pre></div>
+<span class="co">#&gt; 5  crossing fishing gear</span></code></pre></div>
 </div>
   </div>
 

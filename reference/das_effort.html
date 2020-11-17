@@ -135,24 +135,24 @@
     <p>Chop DAS data into effort segments</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_effort</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>das_effort</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_effort</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>das_effort</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for das_df</span>
-<span class='fu'>das_effort</span>(
-  <span class='kw'>x</span>,
-  method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition"</span>, <span class='st'>"equallength"</span>, <span class='st'>"section"</span>),
-  conditions = <span class='kw'>NULL</span>,
-  strata.files = <span class='kw'>NULL</span>,
-  distance.method = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"greatcircle"</span>, <span class='st'>"lawofcosines"</span>, <span class='st'>"haversine"</span>, <span class='st'>"vincenty"</span>),
-  seg0.drop = <span class='fl'>FALSE</span>,
-  comment.drop = <span class='fl'>FALSE</span>,
-  event.touse = <span class='kw'>NULL</span>,
-  num.cores = <span class='kw'>NULL</span>,
-  <span class='kw'>...</span>
-)</pre>
+<span class='fu'>das_effort</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"condition"</span>, <span class='st'>"equallength"</span>, <span class='st'>"section"</span><span class='op'>)</span>,
+  conditions <span class='op'>=</span> <span class='cn'>NULL</span>,
+  strata.files <span class='op'>=</span> <span class='cn'>NULL</span>,
+  distance.method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"greatcircle"</span>, <span class='st'>"lawofcosines"</span>, <span class='st'>"haversine"</span>, <span class='st'>"vincenty"</span><span class='op'>)</span>,
+  seg0.drop <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  comment.drop <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  event.touse <span class='op'>=</span> <span class='cn'>NULL</span>,
+  num.cores <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -229,8 +229,13 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 
     <p>List of three data frames:</p><ul>
 <li><p>segdata: one row for every segment, and columns for information including
-      unique segment number, start/end/midpoint coordinates, conditions (e.g. Beaufort),
-      and (if applicable) stratum</p></li>
+      unique segment number (segnum), the corresponding effort section (section_id),
+      the segment index within the corresponding effort section (section_sub_id),
+      the starting and ending line of the segment in the DAS file (stlin, endlin),
+      start/end/midpoint coordinates(lat1/lon1, lat2/lon2, and mlat/mlon, respectively),
+      the start/end/midpoint date/time of the segment (DateTime1, DateTime2, and mDateTime, respectively;
+      mDateTime is the average of DateTime1 and DateTime2), segment length (dist),
+      conditions (e.g. Beaufort), and, if applicable, stratum (InStratumName).</p></li>
 <li><p>sightinfo: details for all sightings in <code>x</code>, including:
       the unique segment number it is associated with, segment mid points (lat/lon),
       the 'included' column described in the 'Details' section,
@@ -295,16 +300,21 @@ Using 1 core likely will be faster for smaller datasets</p></td>
   the sighting was made when on effort,
   by a standard observer (see <code><a href='das_sight.html'>das_sight</a></code>),
   and in a Beaufort sea state less than or equal to five.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Internal functions called by <code>das_effort</code>:
+  <code><a href='das_chop_condition.html'>das_chop_condition</a></code>, <code><a href='das_chop_equallength.html'>das_chop_equallength</a></code>,
+  <code><a href='das_chop_section.html'>das_chop_section</a></code>, <code><a href='das_segdata.html'>das_segdata</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, package = <span class='st'>"swfscDAS"</span>)
-<span class='kw'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='kw'>y</span>)
+    <pre class="examples"><div class='input'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"das_sample.das"</span>, package <span class='op'>=</span> <span class='st'>"swfscDAS"</span><span class='op'>)</span>
+<span class='va'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
 
 <span class='co'># Using "condition" method</span>
-<span class='fu'>das_effort</span>(
-  <span class='kw'>y.proc</span>, method = <span class='st'>"condition"</span>, conditions = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Bft"</span>, <span class='st'>"SwellHght"</span>, <span class='st'>"Vis"</span>),
-  seg.min.km = <span class='fl'>0.05</span>, num.cores = <span class='fl'>1</span>
-)
+<span class='fu'>das_effort</span><span class='op'>(</span>
+  <span class='va'>y.proc</span>, method <span class='op'>=</span> <span class='st'>"condition"</span>, conditions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Bft"</span>, <span class='st'>"SwellHght"</span>, <span class='st'>"Vis"</span><span class='op'>)</span>,
+  seg.min.km <span class='op'>=</span> <span class='fl'>0.05</span>, num.cores <span class='op'>=</span> <span class='fl'>1</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
@@ -327,69 +337,69 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 18     18          8              1 das_sample.das   188    199 40.52200
 #&gt; 19     19          9              1 das_sample.das   232    240 40.98717
 #&gt; 20     20         10              1 das_sample.das   242    259 41.02383
-#&gt;         lon1     lat2      lon2     mlat      mlon    dist           mDateTime
-#&gt; 1  -137.6043 39.36716 -137.5817 39.34377 -137.5930  5.5577 2013-01-13 06:37:02
-#&gt; 2  -137.5978 39.42950 -137.5715 39.40288 -137.5848  6.3431 2013-01-13 07:09:03
-#&gt; 3  -137.5715 39.51933 -137.5277 39.47435 -137.5493 10.6674 2013-01-13 07:38:33
-#&gt; 4  -137.4530 39.66082 -137.4132 39.61433 -137.4327 10.8651 2013-01-13 09:40:55
-#&gt; 5  -137.4132 39.66133 -137.4130 39.66108 -137.4131  0.0574 2013-01-13 09:59:44
-#&gt; 6  -137.4130 39.67350 -137.4080 39.66744 -137.4106  1.4189 2013-01-13 10:02:12
-#&gt; 7  -137.4080 39.69050 -137.4010 39.68200 -137.4045  1.9817 2013-01-13 10:07:52
-#&gt; 8  -137.4010 39.73915 -137.4031 39.71506 -137.3921  5.6822 2013-01-13 10:20:48
-#&gt; 9  -137.4031 39.75114 -137.4091 39.74517 -137.4062  1.4286 2013-01-13 10:32:51
-#&gt; 10 -137.4091 39.75433 -137.4107 39.75274 -137.4100  0.3747 2013-01-13 10:35:50
-#&gt; 11 -137.3692 39.96900 -137.3542 39.95710 -137.3617  2.9404 2013-01-13 11:57:10
-#&gt; 12 -137.3542 40.12745 -137.2488 40.04864 -137.3024 19.7686 2013-01-13 12:39:33
-#&gt; 13 -137.1737 40.26617 -137.1348 40.20895 -137.1531 13.0922 2013-01-13 14:14:10
-#&gt; 14 -137.1268 40.32033 -137.1108 40.29448 -137.1187  5.8993 2013-01-13 15:09:52
-#&gt; 15 -137.1108 40.37596 -137.0915 40.34833 -137.1019  6.4018 2013-01-13 15:31:47
-#&gt; 16 -137.0977 40.42965 -137.0745 40.40618 -137.0864  5.5964 2013-01-13 16:09:21
-#&gt; 17 -137.0745 40.45133 -137.0628 40.44053 -137.0687  2.6020 2013-01-13 16:24:56
-#&gt; 18 -137.0533 40.52533 -137.0515 40.52365 -137.0524  0.4016 2013-01-13 17:00:37
-#&gt; 19 -135.5980 41.01582 -135.5782 41.00151 -135.5881  3.5940 2013-01-14 11:30:58
-#&gt; 20 -135.5743 41.04599 -135.5595 41.03500 -135.5671  2.7600 2013-01-14 11:45:33
-#&gt;    year month day    mtime Cruise Mode EffType ESWsides maxdistBft
-#&gt; 1  2013     1  13 06:37:02   1000    C       S        2          3
-#&gt; 2  2013     1  13 07:09:03   1000    C       S        2          3
-#&gt; 3  2013     1  13 07:38:33   1000    C       S        2          3
-#&gt; 4  2013     1  13 09:40:55   1000    C       S        2          3
-#&gt; 5  2013     1  13 09:59:44   1000    C       S        2          3
-#&gt; 6  2013     1  13 10:02:12   1000    C       S        2          2
-#&gt; 7  2013     1  13 10:07:52   1000    C       S        2          2
-#&gt; 8  2013     1  13 10:20:48   1000    C       S        2          2
-#&gt; 9  2013     1  13 10:32:51   1000    C       S        2          2
-#&gt; 10 2013     1  13 10:35:50   1000    C       S        2          2
-#&gt; 11 2013     1  13 11:57:10   1000    C       S        2          3
-#&gt; 12 2013     1  13 12:39:33   1000    C       S        2          3
-#&gt; 13 2013     1  13 14:14:10   1000    C       S        2          3
-#&gt; 14 2013     1  13 15:09:52   1000    C       S        2          3
-#&gt; 15 2013     1  13 15:31:47   1000    C       S        2          2
-#&gt; 16 2013     1  13 16:09:21   1000    C       S        2          3
-#&gt; 17 2013     1  13 16:24:56   1000    C       S        2          2
-#&gt; 18 2013     1  13 17:00:37   1000    C       S        2          2
-#&gt; 19 2013     1  14 11:30:58   1000    C       S        2          2
-#&gt; 20 2013     1  14 11:45:33   1000    C       S        2          2
-#&gt;    maxdistSwellHght maxdistVis
-#&gt; 1                 3        6.0
-#&gt; 2                 3        6.0
-#&gt; 3                 3        5.5
-#&gt; 4                 3        5.5
-#&gt; 5                 3        6.0
-#&gt; 6                 3        6.0
-#&gt; 7                 3        5.5
-#&gt; 8                 3        4.5
-#&gt; 9                 3        3.5
-#&gt; 10                3        2.5
-#&gt; 11                3        5.8
-#&gt; 12                3        6.0
-#&gt; 13                3        6.0
-#&gt; 14                3        6.0
-#&gt; 15                3        6.0
-#&gt; 16                3        6.0
-#&gt; 17                3        6.0
-#&gt; 18                3        6.0
-#&gt; 19                1        4.0
-#&gt; 20                1        4.0
+#&gt;         lon1           DateTime1     lat2      lon2           DateTime2
+#&gt; 1  -137.6043 2013-01-13 06:27:39 39.36716 -137.5817 2013-01-13 06:46:25
+#&gt; 2  -137.5978 2013-01-13 06:58:04 39.42950 -137.5715                &lt;NA&gt;
+#&gt; 3  -137.5715                &lt;NA&gt; 39.51933 -137.5277 2013-01-13 07:57:05
+#&gt; 4  -137.4530 2013-01-13 09:22:13 39.66082 -137.4132 2013-01-13 09:59:38
+#&gt; 5  -137.4132 2013-01-13 09:59:38 39.66133 -137.4130 2013-01-13 09:59:50
+#&gt; 6  -137.4130 2013-01-13 09:59:50 39.67350 -137.4080                &lt;NA&gt;
+#&gt; 7  -137.4080                &lt;NA&gt; 39.69050 -137.4010 2013-01-13 10:11:09
+#&gt; 8  -137.4010 2013-01-13 10:11:09 39.73915 -137.4031 2013-01-13 10:30:28
+#&gt; 9  -137.4031 2013-01-13 10:30:28 39.75114 -137.4091 2013-01-13 10:35:14
+#&gt; 10 -137.4091 2013-01-13 10:35:14 39.75433 -137.4107 2013-01-13 10:36:27
+#&gt; 11 -137.3692 2013-01-13 11:51:51 39.96900 -137.3542                &lt;NA&gt;
+#&gt; 12 -137.3542                &lt;NA&gt; 40.12745 -137.2488 2013-01-13 13:16:38
+#&gt; 13 -137.1737 2013-01-13 13:50:07 40.26617 -137.1348 2013-01-13 14:38:13
+#&gt; 14 -137.1268 2013-01-13 14:59:19 40.32033 -137.1108                &lt;NA&gt;
+#&gt; 15 -137.1108                &lt;NA&gt; 40.37596 -137.0915 2013-01-13 15:43:08
+#&gt; 16 -137.0977 2013-01-13 15:58:41 40.42965 -137.0745 2013-01-13 16:20:02
+#&gt; 17 -137.0745 2013-01-13 16:20:02 40.45133 -137.0628                &lt;NA&gt;
+#&gt; 18 -137.0533 2013-01-13 16:59:54 40.52533 -137.0515 2013-01-13 17:01:21
+#&gt; 19 -135.5980 2013-01-14 11:24:32 41.01582 -135.5782 2013-01-14 11:37:24
+#&gt; 20 -135.5743 2013-01-14 11:40:38 41.04599 -135.5595 2013-01-14 11:50:29
+#&gt;        mlat      mlon           mDateTime    dist year month day    mtime
+#&gt; 1  39.34377 -137.5930 2013-01-13 06:37:02  5.5577 2013     1  13 06:37:02
+#&gt; 2  39.40288 -137.5848                &lt;NA&gt;  6.3431   NA    NA  NA     &lt;NA&gt;
+#&gt; 3  39.47435 -137.5493                &lt;NA&gt; 10.6674   NA    NA  NA     &lt;NA&gt;
+#&gt; 4  39.61433 -137.4327 2013-01-13 09:40:55 10.8651 2013     1  13 09:40:55
+#&gt; 5  39.66108 -137.4131 2013-01-13 09:59:44  0.0574 2013     1  13 09:59:44
+#&gt; 6  39.66744 -137.4106                &lt;NA&gt;  1.4189   NA    NA  NA     &lt;NA&gt;
+#&gt; 7  39.68200 -137.4045                &lt;NA&gt;  1.9817   NA    NA  NA     &lt;NA&gt;
+#&gt; 8  39.71506 -137.3921 2013-01-13 10:20:48  5.6822 2013     1  13 10:20:48
+#&gt; 9  39.74517 -137.4062 2013-01-13 10:32:51  1.4286 2013     1  13 10:32:51
+#&gt; 10 39.75274 -137.4100 2013-01-13 10:35:50  0.3747 2013     1  13 10:35:50
+#&gt; 11 39.95710 -137.3617                &lt;NA&gt;  2.9404   NA    NA  NA     &lt;NA&gt;
+#&gt; 12 40.04864 -137.3024                &lt;NA&gt; 19.7686   NA    NA  NA     &lt;NA&gt;
+#&gt; 13 40.20895 -137.1531 2013-01-13 14:14:10 13.0922 2013     1  13 14:14:10
+#&gt; 14 40.29448 -137.1187                &lt;NA&gt;  5.8993   NA    NA  NA     &lt;NA&gt;
+#&gt; 15 40.34833 -137.1019                &lt;NA&gt;  6.4018   NA    NA  NA     &lt;NA&gt;
+#&gt; 16 40.40618 -137.0864 2013-01-13 16:09:21  5.5964 2013     1  13 16:09:21
+#&gt; 17 40.44053 -137.0687                &lt;NA&gt;  2.6020   NA    NA  NA     &lt;NA&gt;
+#&gt; 18 40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
+#&gt; 19 41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
+#&gt; 20 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
+#&gt;    Cruise Mode EffType ESWsides maxdistBft maxdistSwellHght maxdistVis
+#&gt; 1    1000    C       S        2          3                3        6.0
+#&gt; 2    1000    C       S        2          3                3        6.0
+#&gt; 3    1000    C       S        2          3                3        5.5
+#&gt; 4    1000    C       S        2          3                3        5.5
+#&gt; 5    1000    C       S        2          3                3        6.0
+#&gt; 6    1000    C       S        2          2                3        6.0
+#&gt; 7    1000    C       S        2          2                3        5.5
+#&gt; 8    1000    C       S        2          2                3        4.5
+#&gt; 9    1000    C       S        2          2                3        3.5
+#&gt; 10   1000    C       S        2          2                3        2.5
+#&gt; 11   1000    C       S        2          3                3        5.8
+#&gt; 12   1000    C       S        2          3                3        6.0
+#&gt; 13   1000    C       S        2          3                3        6.0
+#&gt; 14   1000    C       S        2          3                3        6.0
+#&gt; 15   1000    C       S        2          2                3        6.0
+#&gt; 16   1000    C       S        2          3                3        6.0
+#&gt; 17   1000    C       S        2          2                3        6.0
+#&gt; 18   1000    C       S        2          2                3        6.0
+#&gt; 19   1000    C       S        2          2                1        4.0
+#&gt; 20   1000    C       S        2          2                1        4.0
 #&gt; 
 #&gt; $sightinfo
 #&gt;    segnum     mlat      mlon Event            DateTime year      Lat       Lon
@@ -517,7 +527,7 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; NULL
 #&gt; </div><div class='input'>
 <span class='co'># Using "section" method</span>
-<span class='fu'>das_effort</span>(<span class='kw'>y.proc</span>, method = <span class='st'>"section"</span>, num.cores = <span class='fl'>1</span>)
+<span class='fu'>das_effort</span><span class='op'>(</span><span class='va'>y.proc</span>, method <span class='op'>=</span> <span class='st'>"section"</span>, num.cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
@@ -530,39 +540,50 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 8       8          8              1 das_sample.das   188    199 40.52200
 #&gt; 9       9          9              1 das_sample.das   232    240 40.98717
 #&gt; 10     10         10              1 das_sample.das   242    259 41.02383
-#&gt;         lon1     lat2      lon2     mlat      mlon    dist           mDateTime
-#&gt; 1  -137.6043 39.36716 -137.5817 39.34377 -137.5930  5.5577 2013-01-13 06:37:02
-#&gt; 2  -137.5978 39.51933 -137.5277 39.44767 -137.5625 17.0106 2013-01-13 07:27:34
-#&gt; 3  -137.4530 39.75433 -137.4107 39.66117 -137.4131 21.8086 2013-01-13 09:59:20
-#&gt; 4  -137.3692 40.12745 -137.2488 40.03679 -137.3101 22.7090 2013-01-13 12:34:14
-#&gt; 5  -137.1737 40.26617 -137.1348 40.20895 -137.1531 13.0922 2013-01-13 14:14:10
-#&gt; 6  -137.1268 40.37596 -137.0915 40.32254 -137.1102 12.3011 2013-01-13 15:21:13
-#&gt; 7  -137.0977 40.45133 -137.0628 40.41714 -137.0810  8.1984 2013-01-13 16:14:15
-#&gt; 8  -137.0533 40.52533 -137.0515 40.52365 -137.0524  0.4016 2013-01-13 17:00:37
-#&gt; 9  -135.5980 41.01582 -135.5782 41.00151 -135.5881  3.5940 2013-01-14 11:30:58
-#&gt; 10 -135.5743 41.04599 -135.5595 41.03500 -135.5671  2.7600 2013-01-14 11:45:33
-#&gt;    year month day    mtime Cruise Mode EffType ESWsides   avgBft avgSwellHght
-#&gt; 1  2013     1  13 06:37:02   1000    C       S        2 3.000000            3
-#&gt; 2  2013     1  13 07:27:34   1000    C       S        2 3.000000            3
-#&gt; 3  2013     1  13 09:59:20   1000    C       S        2 2.500835            3
-#&gt; 4  2013     1  13 12:34:14   1000    C       S        2 3.000000            3
-#&gt; 5  2013     1  13 14:14:10   1000    C       S        2 3.000000            3
-#&gt; 6  2013     1  13 15:21:13   1000    C       S        2 2.479576            3
-#&gt; 7  2013     1  13 16:14:15   1000    C       S        2 2.682617            3
-#&gt; 8  2013     1  13 17:00:37   1000    C       S        2 2.000000            3
-#&gt; 9  2013     1  14 11:30:58   1000    C       S        2 2.000000            1
-#&gt; 10 2013     1  14 11:45:33   1000    C       S        2 2.000000            1
-#&gt;    avgHorizSun avgVertSun avgGlare   avgVis
-#&gt; 1     2.000000          3        0 6.000000
-#&gt; 2     2.000000          2        0 5.686447
-#&gt; 3     2.000000          2        0 5.090748
-#&gt; 4    12.000000         12        0 5.974103
-#&gt; 5     8.000000          1        0 6.000000
-#&gt; 6     8.520424          1        0 6.000000
-#&gt; 7     8.000000          2        0 6.000000
-#&gt; 8     8.000000          2        0 6.000000
-#&gt; 9           NA         NA       NA 4.000000
-#&gt; 10          NA         NA       NA 4.000000
+#&gt;         lon1           DateTime1     lat2      lon2           DateTime2
+#&gt; 1  -137.6043 2013-01-13 06:27:39 39.36716 -137.5817 2013-01-13 06:46:25
+#&gt; 2  -137.5978 2013-01-13 06:58:04 39.51933 -137.5277 2013-01-13 07:57:05
+#&gt; 3  -137.4530 2013-01-13 09:22:13 39.75433 -137.4107 2013-01-13 10:36:27
+#&gt; 4  -137.3692 2013-01-13 11:51:51 40.12745 -137.2488 2013-01-13 13:16:38
+#&gt; 5  -137.1737 2013-01-13 13:50:07 40.26617 -137.1348 2013-01-13 14:38:13
+#&gt; 6  -137.1268 2013-01-13 14:59:19 40.37596 -137.0915 2013-01-13 15:43:08
+#&gt; 7  -137.0977 2013-01-13 15:58:41 40.45133 -137.0628                &lt;NA&gt;
+#&gt; 8  -137.0533 2013-01-13 16:59:54 40.52533 -137.0515 2013-01-13 17:01:21
+#&gt; 9  -135.5980 2013-01-14 11:24:32 41.01582 -135.5782 2013-01-14 11:37:24
+#&gt; 10 -135.5743 2013-01-14 11:40:38 41.04599 -135.5595 2013-01-14 11:50:29
+#&gt;        mlat      mlon           mDateTime    dist year month day    mtime
+#&gt; 1  39.34377 -137.5930 2013-01-13 06:37:02  5.5577 2013     1  13 06:37:02
+#&gt; 2  39.44767 -137.5625 2013-01-13 07:27:34 17.0106 2013     1  13 07:27:34
+#&gt; 3  39.66117 -137.4131 2013-01-13 09:59:20 21.8086 2013     1  13 09:59:20
+#&gt; 4  40.03679 -137.3101 2013-01-13 12:34:14 22.7090 2013     1  13 12:34:14
+#&gt; 5  40.20895 -137.1531 2013-01-13 14:14:10 13.0922 2013     1  13 14:14:10
+#&gt; 6  40.32254 -137.1102 2013-01-13 15:21:13 12.3011 2013     1  13 15:21:13
+#&gt; 7  40.41714 -137.0810                &lt;NA&gt;  8.1984   NA    NA  NA     &lt;NA&gt;
+#&gt; 8  40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
+#&gt; 9  41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
+#&gt; 10 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
+#&gt;    Cruise Mode EffType ESWsides   avgBft avgSwellHght avgHorizSun avgVertSun
+#&gt; 1    1000    C       S        2 3.000000            3    2.000000          3
+#&gt; 2    1000    C       S        2 3.000000            3    2.000000          2
+#&gt; 3    1000    C       S        2 2.500835            3    2.000000          2
+#&gt; 4    1000    C       S        2 3.000000            3   12.000000         12
+#&gt; 5    1000    C       S        2 3.000000            3    8.000000          1
+#&gt; 6    1000    C       S        2 2.479576            3    8.520424          1
+#&gt; 7    1000    C       S        2 2.682617            3    8.000000          2
+#&gt; 8    1000    C       S        2 2.000000            3    8.000000          2
+#&gt; 9    1000    C       S        2 2.000000            1          NA         NA
+#&gt; 10   1000    C       S        2 2.000000            1          NA         NA
+#&gt;    avgGlare   avgVis
+#&gt; 1         0 6.000000
+#&gt; 2         0 5.686447
+#&gt; 3         0 5.090748
+#&gt; 4         0 5.974103
+#&gt; 5         0 6.000000
+#&gt; 6         0 6.000000
+#&gt; 7         0 6.000000
+#&gt; 8         0 6.000000
+#&gt; 9        NA 4.000000
+#&gt; 10       NA 4.000000
 #&gt; 
 #&gt; $sightinfo
 #&gt;    segnum     mlat      mlon Event            DateTime year      Lat       Lon
@@ -701,11 +722,11 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; </div><div class='input'>
 <span class='co'># \donttest{</span>
 <span class='co'># Using "equallength" method</span>
-<span class='kw'>y.rand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample_randpicks.csv"</span>, package = <span class='st'>"swfscDAS"</span>)
-<span class='fu'>das_effort</span>(
-  <span class='kw'>y.proc</span>, method = <span class='st'>"equallength"</span>, seg.km = <span class='fl'>10</span>, randpicks.load = <span class='kw'>y.rand</span>,
-  num.cores = <span class='fl'>1</span>
-)
+<span class='va'>y.rand</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"das_sample_randpicks.csv"</span>, package <span class='op'>=</span> <span class='st'>"swfscDAS"</span><span class='op'>)</span>
+<span class='fu'>das_effort</span><span class='op'>(</span>
+  <span class='va'>y.proc</span>, method <span class='op'>=</span> <span class='st'>"equallength"</span>, seg.km <span class='op'>=</span> <span class='fl'>10</span>, randpicks.load <span class='op'>=</span> <span class='va'>y.rand</span>,
+  num.cores <span class='op'>=</span> <span class='fl'>1</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
@@ -721,48 +742,62 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 11     11          8              1 das_sample.das   188    199 40.52200
 #&gt; 12     12          9              1 das_sample.das   232    240 40.98717
 #&gt; 13     13         10              1 das_sample.das   242    259 41.02383
-#&gt;         lon1     lat2      lon2     mlat      mlon    dist           mDateTime
-#&gt; 1  -137.6043 39.36716 -137.5817 39.34377 -137.5930  5.5577 2013-01-13 06:37:02
-#&gt; 2  -137.5978 39.43510 -137.5687 39.40568 -137.5834  7.0106 2013-01-13 07:12:44
-#&gt; 3  -137.5687 39.51933 -137.5277 39.47716 -137.5480 10.0000 2013-01-13 07:42:15
-#&gt; 4  -137.4530 39.65336 -137.4163 39.61063 -137.4343 10.0000 2013-01-13 09:39:49
-#&gt; 5  -137.4163 39.75433 -137.4107 39.70406 -137.3954 11.8086 2013-01-13 10:16:56
-#&gt; 6  -137.3692 40.02582 -137.3171 39.98555 -137.3433 10.0000 2013-01-13 12:14:38
-#&gt; 7  -137.3171 40.12745 -137.2488 40.07696 -137.2836 12.7090 2013-01-13 12:57:01
-#&gt; 8  -137.1737 40.26617 -137.1348 40.20895 -137.1531 13.0922 2013-01-13 14:14:10
-#&gt; 9  -137.1268 40.37596 -137.0915 40.32254 -137.1102 12.3011 2013-01-13 15:21:13
-#&gt; 10 -137.0977 40.45133 -137.0628 40.41714 -137.0810  8.1984 2013-01-13 16:14:15
-#&gt; 11 -137.0533 40.52533 -137.0515 40.52365 -137.0524  0.4016 2013-01-13 17:00:37
-#&gt; 12 -135.5980 41.01582 -135.5782 41.00151 -135.5881  3.5940 2013-01-14 11:30:58
-#&gt; 13 -135.5743 41.04599 -135.5595 41.03500 -135.5671  2.7600 2013-01-14 11:45:33
-#&gt;    year month day    mtime Cruise Mode EffType ESWsides   avgBft avgSwellHght
-#&gt; 1  2013     1  13 06:37:02   1000    C       S        2 3.000000            3
-#&gt; 2  2013     1  13 07:12:44   1000    C       S        2 3.000000            3
-#&gt; 3  2013     1  13 07:42:15   1000    C       S        2 3.000000            3
-#&gt; 4  2013     1  13 09:39:49   1000    C       S        2 3.000000            3
-#&gt; 5  2013     1  13 10:16:56   1000    C       S        2 2.078121            3
-#&gt; 6  2013     1  13 12:14:38   1000    C       S        2 3.000000            3
-#&gt; 7  2013     1  13 12:57:01   1000    C       S        2 3.000000            3
-#&gt; 8  2013     1  13 14:14:10   1000    C       S        2 3.000000            3
-#&gt; 9  2013     1  13 15:21:13   1000    C       S        2 2.479576            3
-#&gt; 10 2013     1  13 16:14:15   1000    C       S        2 2.682617            3
-#&gt; 11 2013     1  13 17:00:37   1000    C       S        2 2.000000            3
-#&gt; 12 2013     1  14 11:30:58   1000    C       S        2 2.000000            1
-#&gt; 13 2013     1  14 11:45:33   1000    C       S        2 2.000000            1
-#&gt;    avgHorizSun avgVertSun avgGlare   avgVis
-#&gt; 1     2.000000          3        0 6.000000
-#&gt; 2           NA         NA       NA 5.952398
-#&gt; 3     2.000000          2        0 5.500000
-#&gt; 4     2.000000          2        0 5.500000
-#&gt; 5     2.000000          2        0 4.744176
-#&gt; 6    12.000000         12        0 5.941191
-#&gt; 7    12.000000         12        0 6.000000
-#&gt; 8     8.000000          1        0 6.000000
-#&gt; 9     8.520424          1        0 6.000000
-#&gt; 10    8.000000          2        0 6.000000
-#&gt; 11    8.000000          2        0 6.000000
-#&gt; 12          NA         NA       NA 4.000000
-#&gt; 13          NA         NA       NA 4.000000
+#&gt;         lon1           DateTime1     lat2      lon2           DateTime2
+#&gt; 1  -137.6043 2013-01-13 06:27:39 39.36716 -137.5817 2013-01-13 06:46:25
+#&gt; 2  -137.5978 2013-01-13 06:58:04 39.43510 -137.5687 2013-01-13 07:22:21
+#&gt; 3  -137.5687 2013-01-13 07:22:21 39.51933 -137.5277 2013-01-13 07:57:05
+#&gt; 4  -137.4530 2013-01-13 09:22:13 39.65336 -137.4163 2013-01-13 09:56:43
+#&gt; 5  -137.4163 2013-01-13 09:56:43 39.75433 -137.4107 2013-01-13 10:36:27
+#&gt; 6  -137.3692 2013-01-13 11:51:51 40.02582 -137.3171 2013-01-13 12:29:17
+#&gt; 7  -137.3171 2013-01-13 12:29:17 40.12745 -137.2488 2013-01-13 13:16:38
+#&gt; 8  -137.1737 2013-01-13 13:50:07 40.26617 -137.1348 2013-01-13 14:38:13
+#&gt; 9  -137.1268 2013-01-13 14:59:19 40.37596 -137.0915 2013-01-13 15:43:08
+#&gt; 10 -137.0977 2013-01-13 15:58:41 40.45133 -137.0628                &lt;NA&gt;
+#&gt; 11 -137.0533 2013-01-13 16:59:54 40.52533 -137.0515 2013-01-13 17:01:21
+#&gt; 12 -135.5980 2013-01-14 11:24:32 41.01582 -135.5782 2013-01-14 11:37:24
+#&gt; 13 -135.5743 2013-01-14 11:40:38 41.04599 -135.5595 2013-01-14 11:50:29
+#&gt;        mlat      mlon           mDateTime    dist year month day    mtime
+#&gt; 1  39.34377 -137.5930 2013-01-13 06:37:02  5.5577 2013     1  13 06:37:02
+#&gt; 2  39.40568 -137.5834 2013-01-13 07:10:12  7.0106 2013     1  13 07:10:12
+#&gt; 3  39.47716 -137.5480 2013-01-13 07:39:43 10.0000 2013     1  13 07:39:43
+#&gt; 4  39.61063 -137.4343 2013-01-13 09:39:28 10.0000 2013     1  13 09:39:28
+#&gt; 5  39.70406 -137.3954 2013-01-13 10:16:35 11.8086 2013     1  13 10:16:35
+#&gt; 6  39.98555 -137.3433 2013-01-13 12:10:34 10.0000 2013     1  13 12:10:34
+#&gt; 7  40.07696 -137.2836 2013-01-13 12:52:57 12.7090 2013     1  13 12:52:57
+#&gt; 8  40.20895 -137.1531 2013-01-13 14:14:10 13.0922 2013     1  13 14:14:10
+#&gt; 9  40.32254 -137.1102 2013-01-13 15:21:13 12.3011 2013     1  13 15:21:13
+#&gt; 10 40.41714 -137.0810                &lt;NA&gt;  8.1984   NA    NA  NA     &lt;NA&gt;
+#&gt; 11 40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
+#&gt; 12 41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
+#&gt; 13 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
+#&gt;    Cruise Mode EffType ESWsides   avgBft avgSwellHght avgHorizSun avgVertSun
+#&gt; 1    1000    C       S        2 3.000000            3    2.000000          3
+#&gt; 2    1000    C       S        2 3.000000            3          NA         NA
+#&gt; 3    1000    C       S        2 3.000000            3    2.000000          2
+#&gt; 4    1000    C       S        2 3.000000            3    2.000000          2
+#&gt; 5    1000    C       S        2 2.078121            3    2.000000          2
+#&gt; 6    1000    C       S        2 3.000000            3   12.000000         12
+#&gt; 7    1000    C       S        2 3.000000            3   12.000000         12
+#&gt; 8    1000    C       S        2 3.000000            3    8.000000          1
+#&gt; 9    1000    C       S        2 2.479576            3    8.520424          1
+#&gt; 10   1000    C       S        2 2.682617            3    8.000000          2
+#&gt; 11   1000    C       S        2 2.000000            3    8.000000          2
+#&gt; 12   1000    C       S        2 2.000000            1          NA         NA
+#&gt; 13   1000    C       S        2 2.000000            1          NA         NA
+#&gt;    avgGlare   avgVis
+#&gt; 1         0 6.000000
+#&gt; 2        NA 5.952398
+#&gt; 3         0 5.500000
+#&gt; 4         0 5.500000
+#&gt; 5         0 4.744176
+#&gt; 6         0 5.941191
+#&gt; 7         0 6.000000
+#&gt; 8         0 6.000000
+#&gt; 9         0 6.000000
+#&gt; 10        0 6.000000
+#&gt; 11        0 6.000000
+#&gt; 12       NA 4.000000
+#&gt; 13       NA 4.000000
 #&gt; 
 #&gt; $sightinfo
 #&gt;    segnum     mlat      mlon Event            DateTime year      Lat       Lon
@@ -900,11 +935,11 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 10             10        NA
 #&gt; </div><div class='input'>
 <span class='co'># Using "section" method and chop by strata</span>
-<span class='kw'>stratum.file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample_stratum.csv"</span>, package = <span class='st'>"swfscDAS"</span>)
-<span class='fu'>das_effort</span>(
-  <span class='kw'>y.proc</span>, method = <span class='st'>"section"</span>, strata.files = <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(Poly1 = <span class='kw'>stratum.file</span>),
-  num.cores = <span class='fl'>1</span>
-)
+<span class='va'>stratum.file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"das_sample_stratum.csv"</span>, package <span class='op'>=</span> <span class='st'>"swfscDAS"</span><span class='op'>)</span>
+<span class='fu'>das_effort</span><span class='op'>(</span>
+  <span class='va'>y.proc</span>, method <span class='op'>=</span> <span class='st'>"section"</span>, strata.files <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>Poly1 <span class='op'>=</span> <span class='va'>stratum.file</span><span class='op'>)</span>,
+  num.cores <span class='op'>=</span> <span class='fl'>1</span>
+<span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersection assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; $segdata
 #&gt;    segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; 1       1          1              1 das_sample.das     2     20 39.32033
@@ -917,39 +952,50 @@ Using 1 core likely will be faster for smaller datasets</p></td>
 #&gt; 8       8          8              1 das_sample.das   188    199 40.52200
 #&gt; 9       9          9              1 das_sample.das   232    240 40.98717
 #&gt; 10     10         10              1 das_sample.das   242    259 41.02383
-#&gt;         lon1     lat2      lon2     mlat      mlon    dist           mDateTime
-#&gt; 1  -137.6043 39.36716 -137.5817 39.34377 -137.5930  5.5577 2013-01-13 06:37:02
-#&gt; 2  -137.5978 39.51933 -137.5277 39.44767 -137.5625 17.0106 2013-01-13 07:27:34
-#&gt; 3  -137.4530 39.75433 -137.4107 39.66117 -137.4131 21.8086 2013-01-13 09:59:20
-#&gt; 4  -137.3692 40.12745 -137.2488 40.03679 -137.3101 22.7090 2013-01-13 12:34:14
-#&gt; 5  -137.1737 40.26617 -137.1348 40.20895 -137.1531 13.0922 2013-01-13 14:14:10
-#&gt; 6  -137.1268 40.37596 -137.0915 40.32254 -137.1102 12.3011 2013-01-13 15:21:13
-#&gt; 7  -137.0977 40.45133 -137.0628 40.41714 -137.0810  8.1984 2013-01-13 16:14:15
-#&gt; 8  -137.0533 40.52533 -137.0515 40.52365 -137.0524  0.4016 2013-01-13 17:00:37
-#&gt; 9  -135.5980 41.01582 -135.5782 41.00151 -135.5881  3.5940 2013-01-14 11:30:58
-#&gt; 10 -135.5743 41.04599 -135.5595 41.03500 -135.5671  2.7600 2013-01-14 11:45:33
-#&gt;    year month day    mtime Cruise Mode EffType ESWsides   avgBft avgSwellHght
-#&gt; 1  2013     1  13 06:37:02   1000    C       S        2 3.000000            3
-#&gt; 2  2013     1  13 07:27:34   1000    C       S        2 3.000000            3
-#&gt; 3  2013     1  13 09:59:20   1000    C       S        2 2.500835            3
-#&gt; 4  2013     1  13 12:34:14   1000    C       S        2 3.000000            3
-#&gt; 5  2013     1  13 14:14:10   1000    C       S        2 3.000000            3
-#&gt; 6  2013     1  13 15:21:13   1000    C       S        2 2.479576            3
-#&gt; 7  2013     1  13 16:14:15   1000    C       S        2 2.682617            3
-#&gt; 8  2013     1  13 17:00:37   1000    C       S        2 2.000000            3
-#&gt; 9  2013     1  14 11:30:58   1000    C       S        2 2.000000            1
-#&gt; 10 2013     1  14 11:45:33   1000    C       S        2 2.000000            1
-#&gt;    avgHorizSun avgVertSun avgGlare   avgVis  stratum
-#&gt; 1     2.000000          3        0 6.000000     &lt;NA&gt;
-#&gt; 2     2.000000          2        0 5.686447     &lt;NA&gt;
-#&gt; 3     2.000000          2        0 5.090748     &lt;NA&gt;
-#&gt; 4    12.000000         12        0 5.974103     &lt;NA&gt;
-#&gt; 5     8.000000          1        0 6.000000 Stratum1
-#&gt; 6     8.520424          1        0 6.000000 Stratum1
-#&gt; 7     8.000000          2        0 6.000000 Stratum1
-#&gt; 8     8.000000          2        0 6.000000 Stratum1
-#&gt; 9           NA         NA       NA 4.000000 Stratum1
-#&gt; 10          NA         NA       NA 4.000000 Stratum1
+#&gt;         lon1           DateTime1     lat2      lon2           DateTime2
+#&gt; 1  -137.6043 2013-01-13 06:27:39 39.36716 -137.5817 2013-01-13 06:46:25
+#&gt; 2  -137.5978 2013-01-13 06:58:04 39.51933 -137.5277 2013-01-13 07:57:05
+#&gt; 3  -137.4530 2013-01-13 09:22:13 39.75433 -137.4107 2013-01-13 10:36:27
+#&gt; 4  -137.3692 2013-01-13 11:51:51 40.12745 -137.2488 2013-01-13 13:16:38
+#&gt; 5  -137.1737 2013-01-13 13:50:07 40.26617 -137.1348 2013-01-13 14:38:13
+#&gt; 6  -137.1268 2013-01-13 14:59:19 40.37596 -137.0915 2013-01-13 15:43:08
+#&gt; 7  -137.0977 2013-01-13 15:58:41 40.45133 -137.0628                &lt;NA&gt;
+#&gt; 8  -137.0533 2013-01-13 16:59:54 40.52533 -137.0515 2013-01-13 17:01:21
+#&gt; 9  -135.5980 2013-01-14 11:24:32 41.01582 -135.5782 2013-01-14 11:37:24
+#&gt; 10 -135.5743 2013-01-14 11:40:38 41.04599 -135.5595 2013-01-14 11:50:29
+#&gt;        mlat      mlon           mDateTime    dist year month day    mtime
+#&gt; 1  39.34377 -137.5930 2013-01-13 06:37:02  5.5577 2013     1  13 06:37:02
+#&gt; 2  39.44767 -137.5625 2013-01-13 07:27:34 17.0106 2013     1  13 07:27:34
+#&gt; 3  39.66117 -137.4131 2013-01-13 09:59:20 21.8086 2013     1  13 09:59:20
+#&gt; 4  40.03679 -137.3101 2013-01-13 12:34:14 22.7090 2013     1  13 12:34:14
+#&gt; 5  40.20895 -137.1531 2013-01-13 14:14:10 13.0922 2013     1  13 14:14:10
+#&gt; 6  40.32254 -137.1102 2013-01-13 15:21:13 12.3011 2013     1  13 15:21:13
+#&gt; 7  40.41714 -137.0810                &lt;NA&gt;  8.1984   NA    NA  NA     &lt;NA&gt;
+#&gt; 8  40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
+#&gt; 9  41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
+#&gt; 10 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
+#&gt;    Cruise Mode EffType ESWsides   avgBft avgSwellHght avgHorizSun avgVertSun
+#&gt; 1    1000    C       S        2 3.000000            3    2.000000          3
+#&gt; 2    1000    C       S        2 3.000000            3    2.000000          2
+#&gt; 3    1000    C       S        2 2.500835            3    2.000000          2
+#&gt; 4    1000    C       S        2 3.000000            3   12.000000         12
+#&gt; 5    1000    C       S        2 3.000000            3    8.000000          1
+#&gt; 6    1000    C       S        2 2.479576            3    8.520424          1
+#&gt; 7    1000    C       S        2 2.682617            3    8.000000          2
+#&gt; 8    1000    C       S        2 2.000000            3    8.000000          2
+#&gt; 9    1000    C       S        2 2.000000            1          NA         NA
+#&gt; 10   1000    C       S        2 2.000000            1          NA         NA
+#&gt;    avgGlare   avgVis  stratum
+#&gt; 1         0 6.000000     &lt;NA&gt;
+#&gt; 2         0 5.686447     &lt;NA&gt;
+#&gt; 3         0 5.090748     &lt;NA&gt;
+#&gt; 4         0 5.974103     &lt;NA&gt;
+#&gt; 5         0 6.000000 Stratum1
+#&gt; 6         0 6.000000 Stratum1
+#&gt; 7         0 6.000000 Stratum1
+#&gt; 8         0 6.000000 Stratum1
+#&gt; 9        NA 4.000000 Stratum1
+#&gt; 10       NA 4.000000 Stratum1
 #&gt; 
 #&gt; $sightinfo
 #&gt;    segnum     mlat      mlon Event            DateTime year      Lat       Lon

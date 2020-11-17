@@ -135,18 +135,18 @@
     <p>Extract sightings and associated information from processed DAS data</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_sight</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>das_sight</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_sight</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>das_sight</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for das_df</span>
-<span class='fu'>das_sight</span>(
-  <span class='kw'>x</span>,
-  return.format = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"default"</span>, <span class='st'>"wide"</span>, <span class='st'>"complete"</span>),
-  return.events = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"S"</span>, <span class='st'>"K"</span>, <span class='st'>"M"</span>, <span class='st'>"G"</span>, <span class='st'>"s"</span>, <span class='st'>"k"</span>, <span class='st'>"m"</span>, <span class='st'>"g"</span>, <span class='st'>"t"</span>, <span class='st'>"p"</span>, <span class='st'>"F"</span>),
-  <span class='kw'>...</span>
-)</pre>
+<span class='fu'>das_sight</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  return.format <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"default"</span>, <span class='st'>"wide"</span>, <span class='st'>"complete"</span><span class='op'>)</span>,
+  return.events <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"S"</span>, <span class='st'>"K"</span>, <span class='st'>"M"</span>, <span class='st'>"G"</span>, <span class='st'>"s"</span>, <span class='st'>"k"</span>, <span class='st'>"m"</span>, <span class='st'>"g"</span>, <span class='st'>"t"</span>, <span class='st'>"p"</span>, <span class='st'>"F"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -333,10 +333,10 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
   These numbers, 1 to 4, correspond to the order of the data as it appears in the DAS file</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"das_sample.das"</span>, package = <span class='st'>"swfscDAS"</span>)
-<span class='kw'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span>(<span class='kw'>y</span>)
+    <pre class="examples"><div class='input'><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"das_sample.das"</span>, package <span class='op'>=</span> <span class='st'>"swfscDAS"</span><span class='op'>)</span>
+<span class='va'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
 
-<span class='fu'>das_sight</span>(<span class='kw'>y.proc</span>)
+<span class='fu'>das_sight</span><span class='op'>(</span><span class='va'>y.proc</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
 #&gt; 1      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C       S
 #&gt; 2      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C       S
@@ -518,7 +518,7 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 #&gt; 22           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01
 #&gt; 23           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01
 #&gt; 24           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00
-#&gt; 25           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00</div><div class='input'><span class='fu'>das_sight</span>(<span class='kw'>y.proc</span>, return.format = <span class='st'>"complete"</span>)
+#&gt; 25           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00</div><div class='input'><span class='fu'>das_sight</span><span class='op'>(</span><span class='va'>y.proc</span>, return.format <span class='op'>=</span> <span class='st'>"complete"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;    Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
 #&gt; 1      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C       S
 #&gt; 2      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C       S

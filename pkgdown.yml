@@ -1,8 +1,8 @@
-pandoc: '2.2'
+pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   DAS_data_join: DAS_data_join.html
   swfscDAS: swfscDAS.html
-last_built: 2020-09-24T00:11Z
+last_built: 2020-11-17T03:22Z
 

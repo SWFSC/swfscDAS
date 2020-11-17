@@ -135,13 +135,13 @@
     <p>Split DAS effort where it intersects with a stratum boundary</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_effort_strata</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>das_effort_strata</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_effort_strata</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>das_effort_strata</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for das_df</span>
-<span class='fu'>das_effort_strata</span>(<span class='kw'>x</span>, <span class='kw'>strata.files</span>, <span class='kw'>...</span>)</pre>
+<span class='fu'>das_effort_strata</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>strata.files</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -186,7 +186,7 @@ see <code><a href='das_effort.html'>das_effort</a></code></p></td>
   i.e. it should not be called by users in their personal scripts.
   Practically speaking, this functions splits the effort line wherever it crosses a stratum line.
   This point of intersection is interpolated;
-  specifically, it is determined using <code><a href='https://rdrr.io/pkg/sf/man/geos_binary_ops.html'>st_intersection</a></code>.
+  specifically, it is determined using <code><a href='https://r-spatial.github.io/sf/reference/geos_binary_ops.html'>st_intersection</a></code>.
   Thus, any effort will be first split at these effort-stratum boundary intersection points,
   and then using the specified method (e.g. condition).</p>
 

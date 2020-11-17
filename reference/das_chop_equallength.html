@@ -135,21 +135,21 @@
     <p>Chop DAS data into approximately equal-length effort segments, averaging conditions by segment</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_chop_equallength</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+    <pre class="usage"><span class='fu'>das_chop_equallength</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'>das_chop_equallength</span>(<span class='kw'>x</span>, <span class='kw'>...</span>)
+<span class='fu'>das_chop_equallength</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for das_df</span>
-<span class='fu'>das_chop_equallength</span>(
-  <span class='kw'>x</span>,
-  <span class='kw'>conditions</span>,
-  <span class='kw'>seg.km</span>,
-  randpicks.load = <span class='kw'>NULL</span>,
-  distance.method = <span class='kw'>NULL</span>,
-  num.cores = <span class='kw'>NULL</span>,
-  <span class='kw'>...</span>
-)</pre>
+<span class='fu'>das_chop_equallength</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>conditions</span>,
+  <span class='va'>seg.km</span>,
+  randpicks.load <span class='op'>=</span> <span class='cn'>NULL</span>,
+  distance.method <span class='op'>=</span> <span class='cn'>NULL</span>,
+  num.cores <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -204,7 +204,9 @@ Default is <code>NULL</code> since these distances should have already been calc
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is intended to be called by <code><a href='das_effort.html'>das_effort</a></code>
+    <p>WARNING - do not call this function directly!
+  It is exported for documentation purposes, but is intended for internal package use only.</p>
+<p>This function is intended to be called by <code><a href='das_effort.html'>das_effort</a></code>
   when the "equallength" method is specified.
   Thus, <code>x</code> must be filtered for events (rows) where either
   the 'OnEffort' column is <code>TRUE</code> or the 'Event' column is "E";
