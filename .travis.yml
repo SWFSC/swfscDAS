@@ -26,19 +26,6 @@ matrix:
     - BUILD_PKGDOWN=true
 
 
-addons:
-  apt:
-    sources:
-      - sourceline: 'ppa:opencpu/jq'
-      - sourceline: 'ppa:ubuntugis/ubuntugis-unstable'
-      - sourceline: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
-        key_url: 'https://www.postgresql.org/media/keys/ACCC4CF8.asc'
-    packages:
-      - libudunits2-dev
-      - libproj-dev
-      - libgeos-dev
-      - libgdal-dev
-
 # Stages -----------------------------------------------------------------------
 
 before_install:
@@ -51,6 +38,9 @@ before_install:
   - R -q -e 'if (getRversion() < "3.2" && !requireNamespace("curl")) install.packages("curl")'
   - R -q -e 'remotes::install_github("ropensci/tic", upgrade = "always"); print(tic::dsl_load()); tic::prepare_all_stages()'
   - R -q -e 'tic::before_install()'
+  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
+  - sudo apt-get --yes --force-yes update -qq
+  - sudo apt-get install --yes libproj-dev libgeos-dev libgdal-dev libudunits2-dev
 install:
   - R -q -e 'tic::install()'
 before_script:
