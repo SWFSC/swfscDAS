@@ -1,17 +1,11 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 # From https://github.com/edzer/sf_dep/blob/master/.travis.yml
 
-language: r
+r:
+  - oldrel
+  - release
+  - devel
 cache: packages
-sudo: required
-dist: bionic
-
-# multiple R versions ----------------------------------------------------------
-matrix:
-  include:
-  - r: devel
-  - r: oldrel
-  - r: release
 
 
 before_install:
