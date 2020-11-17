@@ -9,8 +9,7 @@
 version](http://www.r-pkg.org/badges/version/swfscDAS)](https://cran.r-project.org/package=swfscDAS)
 [![Travis build
 status](https://travis-ci.com/smwoodman/swfscDAS.svg?branch=master)](https://travis-ci.com/smwoodman/swfscDAS)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/smwoodman/swfscDAS?branch=master&svg=true)](https://ci.appveyor.com/project/smwoodman/swfscDAS)
+<!-- [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/smwoodman/swfscDAS?branch=master&svg=true)](https://ci.appveyor.com/project/smwoodman/swfscDAS) -->
 <!-- badges: end -->
 
 This package contains functions designed for processing and analyzing

@@ -4,7 +4,15 @@
 language: r
 cache: packages
 sudo: required
-dist: trusty
+dist: bionic
+
+# multiple R versions ----------------------------------------------------------
+matrix:
+  include:
+  - r: devel
+  - r: oldrel
+  - r: release
+
 
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
