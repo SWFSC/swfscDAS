@@ -25,7 +25,7 @@
 #' @importFrom stats na.omit runif
 #' @importFrom swfscMisc bearing destination distance setupClusters
 #' @importFrom tidyr gather
-#' @importFrom utils head read.csv write.csv
+#' @importFrom utils head read.csv tail write.csv
 #'
 #' @keywords package
 NULL
