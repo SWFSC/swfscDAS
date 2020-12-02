@@ -151,6 +151,9 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
                           seg.lengths, section.id, df.out1) {
   #----------------------------------------------------------------------------
   ### Prep
+  # print(paste0(section.id, " | ", das.df$stlin[1]))
+  # if (section.id == 6) browser()
+
   # Conditions list
   conditions.list.init <- lapply(seq_along(conditions), function(i) {
     data.frame(val = NA, dist = 0, stringsAsFactors = FALSE)
@@ -180,7 +183,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
   conditions.list <- conditions.list.init
 
   if (!(nrow(das.df) >= 2))
-    stop("x must have at least 2 rows; please report this as an issue")
+    stop("Segdata - section ", section.id,
+         " - das.df must have at least 2 rows; please report this as an issue")
 
 
   #----------------------------------------------------------------------------
@@ -194,16 +198,23 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
             warning("The continuous effort section with section_id ",
                     section.id, " has a distance of 0, ",
                     "and multiple values for condition ", k,
-                    ". Only the first element will be output")
+                    ". Only the first element will be output",
+                    immediate. = TRUE)
           if (length(val.out) == 0) NA else val.out
         }, das.df = das.df)
       )
       names(conditions.list.df) <- conditions.names
 
-      if (!identical(startdt.curr, das.df$DateTime[2]))
-        warning("Segdata - 0 length segment, DateTimes are not identical. ",
-                "Please report this as an issue",
-                immediate. = TRUE)
+      enddt.curr <- tail(das.df$DateTime, 1)
+
+      # ### Message printed in das_chop_equallength, outside of parallel calls
+      # dt.test <- identical(startdt.curr, enddt.curr) |
+      #   (abs(difftime(enddt.curr, startdt.curr, units = "sec")) < 10)
+      # if (!dt.test)
+      #   warning("Segdata - section ", section.id, " - this segment is a 0 length segment, ",
+      #           "but spans more than 10 seconds. ",
+      #           "It is strongly recommended that you review this effort section in the DAS file",
+      #           immediate. = TRUE)
 
       segdata.all <- data.frame(
         seg_idx = paste(section.id, 1, sep = "_"),
@@ -211,8 +222,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
         section_sub_id = 1,
         stlin = min(das.df$line_num), endlin = max(das.df$line_num),
         lat1 = startpt.curr[1], lon1 = startpt.curr[2], DateTime1 = startdt.curr,
-        lat2 = startpt.curr[1], lon2 = startpt.curr[2], DateTime1 = startdt.curr,
-        mlat = startpt.curr[1], mlon = startpt.curr[2], mDateTime = startdt.curr,
+        lat2 = startpt.curr[1], lon2 = startpt.curr[2], DateTime2 = enddt.curr,
+        mlat = startpt.curr[1], mlon = startpt.curr[2], mDateTime = mean(c(startdt.curr, enddt.curr)),
         dist = 0,
         stringsAsFactors = FALSE
       ) %>%
@@ -279,7 +290,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
           )
 
           ### Get end datetime
-          dt.rat <- d / das.df$dist_from_prev[j]
+          dt.rat <- if (.equal(das.df$dist_from_prev[j], 0)) 1 else d / das.df$dist_from_prev[j]
           dt.difftime <- difftime(das.df$DateTime[j], das.df$DateTime[j-1], units = "secs")
           enddt.curr <- das.df$DateTime[j-1] + (dt.rat * dt.difftime)
           rm(dt.rat, dt.difftime)

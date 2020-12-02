@@ -266,6 +266,25 @@ das_chop_equallength.das_df <- function(x, conditions, seg.km, randpicks.load = 
             paste(segs.message, collapse = ", "))
 
 
+  ### Message about segments with length 0 and time diff > 10s
+  ###   Must be outside b/c no messages come out of parallel
+  segs.message.10s <- vapply(eff.chop.list, function(i) {
+    c1 <- isTRUE(.equal(i[["das.df.segdata"]][["dist"]], 0))
+    i.das.dt <- i[["das.df"]][["DateTime"]]
+    c2 <- abs(difftime(i.das.dt[1], tail(i.das.dt, 1), units = "sec")) > 10
+    c1 && c2
+  }, as.logical(1))
+
+  if (sum(segs.message.10s) > 0)
+    warning("The following continuous effort section(s) had a length of zero ",
+            "and events between the start and end points. ",
+            ifelse(sum(segs.message.10s) > 1,
+                   "It is strongly recommended that you review these effort sections in the DAS file: ",
+                   "It is strongly recommended that you review this effort section in the DAS file: "),
+            paste(which(segs.message.10s), collapse = ", "))
+
+
+
   #----------------------------------------------------------------------------
   # Return
   list(as_das_df(x.eff), segdata, randpicks)
@@ -308,6 +327,7 @@ das_chop_equallength.das_df <- function(x, conditions, seg.km, randpicks.load = 
   seg.dist.mod <- seg.dist %% call.seg.km
 
   seg.0 <- NA
+  seg.0.10s <- NA
 
   # Determine segment lengths
   if (.equal(seg.dist, 0)) {

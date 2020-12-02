@@ -68,8 +68,13 @@ WARNING - do not call this function directly!
 
   Changes in the one of the conditions specified in the \code{conditions}
   argument triggers a new segment.
-  The main exception is when multiple condition changes happen at
-  the same location, such as a "RPVNW" series of events at the beginning of the effort section.
+  One exception is if the event at which this condition change occurs is part of an event series,
+  meaning one of several events in a row at the same lat/lon points (such as a PVNW event series).
+  In this situation, the final event of the event series is considered the last event
+  of the current effort segment, and thus also the start of the next effort segment.
+
+  Related, when multiple condition changes happen at the same lat/lon points,
+  such as a "RPVNW" series of events at the beginning of the effort section.
   When this happens, no segments of length zero are created;
   rather, a single segment is created that includes all of the condition changes
   (i.e. all of the events in the event series) that happened during

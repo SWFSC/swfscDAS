@@ -4,6 +4,8 @@
 
 * The 'segdata' output of `das_effort` now includes DateTime1 and DateTime2, the date/time of the start and end points of each segment. The column order of the segdata data frame was also slightly changed for consistency
 
+* Using the 'continuous' method of `das_effort`, effort can now also be chopped using 'Course' and 'SptKt'
+
 * Changed the name of the strata argument of `das_intersects_strata` to 'strata.files' for consistency
 
 * Fixed a bug in `das_check` where multiple files could not be checked at once

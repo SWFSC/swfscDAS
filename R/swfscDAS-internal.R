@@ -139,14 +139,16 @@
   stopifnot(x.method %in% c("condition", "equallength", "section"))
 
   conditions.acc <- c(
-    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis"
+    "Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
+    "Course", "SpdKt"
   )
 
   if (is.null(x)) {
     x <- if (x.method == "condition") {
-      c("Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis")
+      conditions.acc #c("Bft", "SwellHght", "RainFog", "HorizSun", "VertSun", "Glare", "Vis")
     } else {
-      c("Bft", "SwellHght", "HorizSun", "VertSun", "Glare", "Vis")
+      setdiff(conditions.acc, "RainFog")
+      #c("Bft", "SwellHght", "HorizSun", "VertSun", "Glare", "Vis")
     }
 
   } else {
@@ -154,9 +156,9 @@
       stop("Please ensure that all 'conditions' are ",
            "one of the following accepted values:\n",
            paste(conditions.acc, collapse  = ", "))
-
-    if (!("Bft" %in% x))  stop("The conditions argument must include 'Bft'")
   }
+
+  if (!("Bft" %in% x))  stop("The conditions argument must include 'Bft'")
 
   x
 }
