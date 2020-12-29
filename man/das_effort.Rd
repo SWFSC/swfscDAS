@@ -85,7 +85,7 @@ List of three data frames:
     \item sightinfo: details for all sightings in \code{x}, including:
       the unique segment number it is associated with, segment mid points (lat/lon),
       the 'included' column described in the 'Details' section,
-      and the output information described in \code{\link{das_sight}}
+      and the output information described in \code{\link{das_sight}} for \code{return.format} is "default"
     \item randpicks: see \code{\link{das_chop_equallength}};
       \code{NULL} if using "condition" method
   }
