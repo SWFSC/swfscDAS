@@ -30,5 +30,5 @@
 #' @keywords package
 NULL
 
-setOldClass("das_dfr")
-setOldClass("das_df")
+methods::setOldClass("das_dfr")
+methods::setOldClass("das_df")

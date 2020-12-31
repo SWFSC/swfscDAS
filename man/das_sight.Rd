@@ -133,8 +133,10 @@ DAS events contain specific information in the 'Data#' columns,
 }
 \section{The "default" format output}{
 
-  One row for each species of each sighting event, with group size estimates
-  calculated via an arithmetic mean across observer estimates
+  This output data frame contains 'long' sighting data, meaning there is one row for each species of each sighting event.
+  The GsSp... columns are calculated as follows:
+  for each species and for each observer estimate, the best/high/low school size estimate is multiplied by the applicable species percent estimate.
+  The values are grouped by species and then averaged to get single GsSpBest, GsSpHigh, and GsSpLow values for each species.
   (using \code{\link[base]{mean}} with \code{na.rm = TRUE})
 
   Sighting information columns/formats present specifically in the "default" format output:
@@ -143,11 +145,11 @@ DAS events contain specific information in the 'Data#' columns,
     Species code          \tab SpCode \tab Boat type or mammal, turtle, or pinniped species codes\cr
     Probable species code \tab SpCodeProb \tab Probable mammal species codes; \code{NA} if none or not applicable\cr
     Group size of species - best estimate \tab GsSpBest \tab
-      Arithmetic mean of the product of GsSchoolBest and the corresponding species percentage \cr
+      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolBest and the corresponding species percentage\cr
     Group size of species - high estimate \tab GsSpHigh \tab
-      Arithmetic mean of the product of GsSchoolHigh and the corresponding species percentage \cr
+      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolHigh and the corresponding species percentage\cr
     Group size of species - low estimate \tab GsSpLow \tab
-      Arithmetic mean of the product of GsSchoolLow and the corresponding species percentage \cr
+      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolLow and the corresponding species percentage\cr
   }
 }
 
