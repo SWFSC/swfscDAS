@@ -271,16 +271,18 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 
     
 
-<p>One row for each species of each sighting event, with group size estimates
-  calculated via an arithmetic mean across observer estimates
+<p>This output data frame contains 'long' sighting data, meaning there is one row for each species of each sighting event.
+  The GsSp... columns are calculated as follows:
+  for each species and for each observer estimate, the best/high/low school size estimate is multiplied by the applicable species percent estimate.
+  The values are grouped by species and then averaged to get single GsSpBest, GsSpHigh, and GsSpLow values for each species.
   (using <code><a href='https://rdrr.io/r/base/mean.html'>mean</a></code> with <code>na.rm = TRUE</code>)</p>
 <p>Sighting information columns/formats present specifically in the "default" format output:</p><table class='table'>
 <tr><td><em>Sighting information</em></td><td><em>Column name</em></td><td><em>Notes</em></td></tr>
 <tr><td>Species code</td><td>SpCode</td><td>Boat type or mammal, turtle, or pinniped species codes</td></tr>
 <tr><td>Probable species code</td><td>SpCodeProb</td><td>Probable mammal species codes; <code>NA</code> if none or not applicable</td></tr>
-<tr><td>Group size of species - best estimate</td><td>GsSpBest</td><td>Arithmetic mean of the product of GsSchoolBest and the corresponding species percentage</td></tr>
-<tr><td>Group size of species - high estimate</td><td>GsSpHigh</td><td>Arithmetic mean of the product of GsSchoolHigh and the corresponding species percentage</td></tr>
-<tr><td>Group size of species - low estimate</td><td>GsSpLow</td><td>Arithmetic mean of the product of GsSchoolLow and the corresponding species percentage</td></tr>
+<tr><td>Group size of species - best estimate</td><td>GsSpBest</td><td>Arithmetic mean, across observer estimates, of the product(s) of GsSchoolBest and the corresponding species percentage</td></tr>
+<tr><td>Group size of species - high estimate</td><td>GsSpHigh</td><td>Arithmetic mean, across observer estimates, of the product(s) of GsSchoolHigh and the corresponding species percentage</td></tr>
+<tr><td>Group size of species - low estimate</td><td>GsSpLow</td><td>Arithmetic mean, across observer estimates, of the product(s) of GsSchoolLow and the corresponding species percentage</td></tr>
 </table>
 
 
