@@ -171,36 +171,36 @@ or a data frame that can be coerced to a <code>das_dfr</code> object</p></td>
 <span class='va'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
 
 <span class='fu'>das_comments</span><span class='op'>(</span><span class='va'>y.proc</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
-#&gt; 1     C 2013-01-13 10:04:23 39.67300 -137.4083     TRUE   1000    C       S
-#&gt; 2     C 2013-01-13 10:20:43 39.71483 -137.3920     TRUE   1000    C       S
-#&gt; 3     C 2013-01-13 16:55:27 40.51250 -137.0593    FALSE   1000    C       S
-#&gt; 4     C 2013-01-14 09:18:04 40.75283 -135.7742    FALSE   1000 &lt;NA&gt;    &lt;NA&gt;
-#&gt; 5     C 2013-01-14 11:37:27 41.01600 -135.5780    FALSE   1000    C       S
-#&gt;   ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun VertSun Glare
-#&gt; 1        2     27   9.0   2         3         8       1        2       2 FALSE
-#&gt; 2        2    352   9.3   2         3         6       3       NA      NA    NA
-#&gt; 3        2     25   8.9   2         3         6       1        8       2 FALSE
-#&gt; 4       NA     NA    NA  NA        NA        NA      NA       NA      NA    NA
-#&gt; 5        2     35   9.5   2         1         5       3       NA      NA    NA
-#&gt;   Vis ObsL  Rec ObsR ObsInd Data1 Data2 Data3 Data4 Data5 Data6 Data7 Data8
-#&gt; 1 6.0  001  126  149   &lt;NA&gt;  Well ?      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 2 4.5  280  001  126   &lt;NA&gt;  goin g lef t to  avoid  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 3 6.0  149  125  208   &lt;NA&gt;  off  effor t aft er th e sig hting  &lt;NA&gt;  &lt;NA&gt;
-#&gt; 4  NA &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;  off  effor t, fi rst s een b y CO  while  ridi
-#&gt; 5 4.0  149  125  208   &lt;NA&gt;  cros sing  fishi ng ge ar     &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
-#&gt;        Data9 Data10 Data11 Data12 EffortDot EventNum       file_das line_num
-#&gt; 1              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;      TRUE       65 das_sample.das       71
-#&gt; 2              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;      TRUE       75 das_sample.das       81
-#&gt; 3              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      174 das_sample.das      186
-#&gt; 4 ng bow       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das      218
-#&gt; 5              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE       11 das_sample.das      241
-#&gt;                                          comment_str
-#&gt; 1                                Well?              
-#&gt; 2                      going left to avoid          
-#&gt; 3            off effort after the sighting          
-#&gt; 4  off effort, first seen by CO while riding bow    
-#&gt; 5                 crossing fishing gear             </div><div class='input'>
+</div><div class='output co'>#&gt;     Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
+#&gt; 71      C 2013-01-13 10:04:23 39.67300 -137.4083     TRUE   1000    C       S
+#&gt; 81      C 2013-01-13 10:20:43 39.71483 -137.3920     TRUE   1000    C       S
+#&gt; 184     C 2013-01-13 16:55:27 40.51250 -137.0593    FALSE   1000    C       S
+#&gt; 215     C 2013-01-14 09:18:04 40.75283 -135.7742    FALSE   1000 &lt;NA&gt;    &lt;NA&gt;
+#&gt; 238     C 2013-01-14 11:37:27 41.01600 -135.5780    FALSE   1000    C       S
+#&gt;     ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun VertSun
+#&gt; 71         2     27   9.0   2         3         8       1        2       2
+#&gt; 81         2    352   9.3   2         3         6       3       NA      NA
+#&gt; 184        2     25   8.9   2         3         6       1        8       2
+#&gt; 215       NA     NA    NA  NA        NA        NA      NA       NA      NA
+#&gt; 238        2     35   9.5   2         1         5       3       NA      NA
+#&gt;     Glare Vis ObsL  Rec ObsR ObsInd Data1 Data2 Data3 Data4 Data5 Data6 Data7
+#&gt; 71  FALSE 6.0  001  126  149   &lt;NA&gt;  Well ?      &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 81     NA 4.5  280  001  126   &lt;NA&gt;  goin g lef t to  avoid  &lt;NA&gt;  &lt;NA&gt;  &lt;NA&gt;
+#&gt; 184 FALSE 6.0  149  125  208   &lt;NA&gt;  off  effor t aft er th e sig hting  &lt;NA&gt;
+#&gt; 215    NA  NA &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;  off  effor t, fi rst s een b y CO  while
+#&gt; 238    NA 4.0  149  125  208   &lt;NA&gt;  cros sing  fishi ng ge ar     &lt;NA&gt;  &lt;NA&gt;
+#&gt;     Data8      Data9 Data10 Data11 Data12 EffortDot EventNum       file_das
+#&gt; 71   &lt;NA&gt;              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;      TRUE       65 das_sample.das
+#&gt; 81   &lt;NA&gt;              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;      TRUE       75 das_sample.das
+#&gt; 184  &lt;NA&gt;              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      174 das_sample.das
+#&gt; 215  ridi ng bow       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
+#&gt; 238  &lt;NA&gt;              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE       11 das_sample.das
+#&gt;     line_num                                        comment_str
+#&gt; 71        71                                Well?              
+#&gt; 81        81                      going left to avoid          
+#&gt; 184      186            off effort after the sighting          
+#&gt; 215      218  off effort, first seen by CO while riding bow    
+#&gt; 238      241                 crossing fishing gear             </div><div class='input'>
 <span class='co'># Extract all comments containing "record" - could also use stringr pacakge</span>
 <span class='va'>y.comm</span> <span class='op'>&lt;-</span> <span class='fu'>das_comments</span><span class='op'>(</span><span class='va'>y.proc</span><span class='op'>)</span>
 <span class='va'>y.comm</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/grep.html'>grepl</a></span><span class='op'>(</span><span class='st'>"record"</span>, <span class='va'>y.comm</span><span class='op'>$</span><span class='va'>comment_str</span>, ignore.case <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='op'>]</span>
