@@ -1,3 +1,10 @@
+# swfscDAS 0.5.1
+
+* Link fixes - no functionality changes
+
+* swfscDAS now depends on R >= 4.0.0 for consistency across package dependencies
+
+
 # swfscDAS 0.5.0 
 
 * Added 'strata.files' argument to `das_effort` to allow users to split effort by strata

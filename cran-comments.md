@@ -1,14 +1,15 @@
 ## Release summary
-Bug fixes and feature additions. I have also addressed the notes in the CRAN checks
+Addressing the broken links listed in the CRAN checks
 
-## Test environments
-* Windows 10, R 4.0.3 (local)
-* win-builder (devel and release)
-* OS X, R 4.0.3 (local)
-* ubuntu 16.04 (on travis-ci.com, R devel, oldrel, and release)
+## Test environments (R-release = v4.0.5)
+* Windows 10, R-release (local)
+* win-builder (devel)
+* Microsoft Windows Server 2019 10.0.17763 (on github actions) R-release
+* mac OS 10.15.7 (on github actions) R-release
+* ubuntu 16.04 (on github actions) R-devel and release
 
 ## R CMD check results
-There were no ERRORs, WARNINGs, or NOTEs
+There were no ERRORs, WARNINGs, or NOTES
 
 ## Downstream dependencies
 I have also run R CMD check on downstream dependencies of swfscDAS.

@@ -70,8 +70,7 @@ Reads/parses DAS data into columns of a data frame.
   }
 
   See \code{\link{das_format_pdf}} for more information about DAS format requirements, and
-  note that 'Data#' columns may be referred to as 'Field#' columns in other documentation
-  This function was inspired by \code{\link[swfscMisc]{das.read}}
+  note that 'Data#' columns may be referred to as 'Field#' columns in other documentation.
 }
 \examples{
 y <- system.file("das_sample.das", package = "swfscDAS")

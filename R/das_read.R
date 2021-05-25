@@ -36,8 +36,7 @@
 #'   }
 #'
 #'   See \code{\link{das_format_pdf}} for more information about DAS format requirements, and
-#'   note that 'Data#' columns may be referred to as 'Field#' columns in other documentation
-#'   This function was inspired by \code{\link[swfscMisc]{das.read}}
+#'   note that 'Data#' columns may be referred to as 'Field#' columns in other documentation.
 #'
 #' @return A \code{das_dfr} object, which is also a data frame, with DAS data read into columns.
 #'   The data are read into the data frame as characters as described in 'Details',
