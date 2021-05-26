@@ -3,14 +3,14 @@
 #' Subsetting \code{das_dfr} or \code{das_df} objects
 #'
 #' @param x object of class \code{das_dfr} or \code{das_df}
-#' @param i,j,... elements to extract or replace, see \link{[.data.frame}
-#' @param drop logical, see \link{[.data.frame}
-#' @param name A literal character string or ..., see \link{[.data.frame}
-#' @param value A suitable replacement value, see \link{[.data.frame}
+#' @param i,j,... elements to extract or replace, see \code{\link[base]{[.data.frame}}
+#' @param drop logical, see \code{\link[base]{[.data.frame}}
+#' @param name A literal character string or ..., see \code{\link[base]{[.data.frame}}
+#' @param value A suitable replacement value, see \code{\link[base]{[.data.frame}}
 #'
 #' @details
 #' When subsetting a \code{das_dfr} or \code{das_df} object, henceforth a \code{das_} object,
-#' using any of the functions described in \link{[.data.frame},
+#' using any of the functions described in \code{\link[base]{[.data.frame}},
 #' then then the \code{das_} class is simply dropped and the object is of class \code{data.frame}.
 #' This is because of the strict format requirements of \code{das_} objects;
 #' it is likely that a subsetted \code{das_} object will not have

@@ -31,20 +31,20 @@
 \arguments{
 \item{x}{object of class \code{das_dfr} or \code{das_df}}
 
-\item{i, j, ...}{elements to extract or replace, see \link{[.data.frame}}
+\item{i, j, ...}{elements to extract or replace, see \code{\link[base]{[.data.frame}}}
 
-\item{drop}{logical, see \link{[.data.frame}}
+\item{drop}{logical, see \code{\link[base]{[.data.frame}}}
 
-\item{name}{A literal character string or ..., see \link{[.data.frame}}
+\item{name}{A literal character string or ..., see \code{\link[base]{[.data.frame}}}
 
-\item{value}{A suitable replacement value, see \link{[.data.frame}}
+\item{value}{A suitable replacement value, see \code{\link[base]{[.data.frame}}}
 }
 \description{
 Subsetting \code{das_dfr} or \code{das_df} objects
 }
 \details{
 When subsetting a \code{das_dfr} or \code{das_df} object, henceforth a \code{das_} object,
-using any of the functions described in \link{[.data.frame},
+using any of the functions described in \code{\link[base]{[.data.frame}},
 then then the \code{das_} class is simply dropped and the object is of class \code{data.frame}.
 This is because of the strict format requirements of \code{das_} objects;
 it is likely that a subsetted \code{das_} object will not have
