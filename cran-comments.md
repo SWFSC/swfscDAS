@@ -1,7 +1,7 @@
 ## Release summary
 Addressing the broken links listed in the CRAN checks
 
-## Test environments (R-release = v4.0.5)
+## Test environments (R-release = v4.1.0)
 * Windows 10, R-release (local)
 * win-builder (devel)
 * Microsoft Windows Server 2019 10.0.17763 (on github actions) R-release
