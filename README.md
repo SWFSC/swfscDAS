@@ -40,8 +40,8 @@ remotes::install_github("smwoodman/swfscDAS")
 
 Before installing swfscDAS, you must have
 [R](https://www.r-project.org/),
-[RStudio](https://rstudio.com/products/rstudio/download/#download), and
-the appropriate version of
+[RStudio](https://www.rstudio.com/products/rstudio/download/), and the
+appropriate version of
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed. When
 installing the developmental version, it is best practice to install
 after closing all instances of R and RStudio, and then running the

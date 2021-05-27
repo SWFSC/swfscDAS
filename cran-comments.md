@@ -1,3 +1,6 @@
+## Resubmission
+This is a resubmission. In this version I have fixed an invalid url in README.md
+
 ## Release summary
 Addressing the broken links listed in the CRAN checks
 
