@@ -73,7 +73,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2.9000</span>
       </span>
     </div>
 
@@ -259,7 +259,8 @@ from the corresponding (immediately preceding) A event</p></td>
       see <code><a href='das_format_pdf.html'>das_format_pdf</a></code> for more details</p></li>
 <li><p>An event is considered 'on effort' if it is 1) an R event,
       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
-      (not including the E event). The 'EffortDot' column is not used when determining on effort data.</p></li>
+      (not including the E event). The 'EffortDot' column is not used when determining on effort data.
+      Note that effort is reset to 'off effort' at the beginning of a new day.</p></li>
 <li><p>All state/condition information is reset at the beginning of each cruise.
       New cruises are identified using <code>days.gap</code>.</p></li>
 <li><p>All state/condition information relating to B, R, P, V, N, and W events
@@ -1271,7 +1272,7 @@ from the corresponding (immediately preceding) A event</p></td>
 #&gt; 212   018       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      199 das_sample.das
 #&gt; 213  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      200 das_sample.das
 #&gt; 214  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE     &lt;NA&gt; das_sample.das
-#&gt; 215  ridi ng bow       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
+#&gt; 215  ridi ng bow      w       &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
 #&gt; 216  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      202 das_sample.das
 #&gt; 217  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      203 das_sample.das
 #&gt; 218  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      204 das_sample.das
@@ -2558,7 +2559,7 @@ from the corresponding (immediately preceding) A event</p></td>
 #&gt; 212   018       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      199 das_sample.das
 #&gt; 213  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      200 das_sample.das
 #&gt; 214  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE     &lt;NA&gt; das_sample.das
-#&gt; 215  ridi ng bow       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
+#&gt; 215  ridi ng bow      w       &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
 #&gt; 216  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      202 das_sample.das
 #&gt; 217  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      203 das_sample.das
 #&gt; 218  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      204 das_sample.das
@@ -3843,7 +3844,7 @@ from the corresponding (immediately preceding) A event</p></td>
 #&gt; 212   018       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      199 das_sample.das
 #&gt; 213  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      200 das_sample.das
 #&gt; 214  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE     &lt;NA&gt; das_sample.das
-#&gt; 215  ridi ng bow       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
+#&gt; 215  ridi ng bow      w       &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
 #&gt; 216  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      202 das_sample.das
 #&gt; 217  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      203 das_sample.das
 #&gt; 218  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      204 das_sample.das

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2.9000</span>
       </span>
     </div>
 
@@ -227,7 +227,7 @@ See 'Value' section for more details</p></td>
 
 <span class='va'>stratum.file</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"das_sample_stratum.csv"</span>, package <span class='op'>=</span> <span class='st'>"swfscDAS"</span><span class='op'>)</span>
 <span class='fu'>das_intersects_strata</span><span class='op'>(</span><span class='va'>y.eff</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>InPoly <span class='op'>=</span> <span class='va'>stratum.file</span><span class='op'>)</span>, x.lon <span class='op'>=</span> <span class='st'>"Lon"</span>, x.lat <span class='op'>=</span> <span class='st'>"Lat"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; $segdata
+</div><div class='output co'>#&gt; $segdata
 #&gt;      segnum section_id section_sub_id           file stlin endlin     lat1
 #&gt; lat       1          1              1 das_sample.das     2     20 39.32033
 #&gt; lat1      2          2              1 das_sample.das    23     43 39.37617
@@ -420,7 +420,7 @@ See 'Value' section for more details</p></td>
 #&gt; 10             10        NA
 #&gt; </div><div class='input'>
 <span class='fu'>das_intersects_strata</span><span class='op'>(</span><span class='va'>y.proc</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='va'>stratum.file</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt;     Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
+</div><div class='output co'>#&gt;     Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
 #&gt; 1       B 2013-01-13 06:27:39 39.32033 -137.6043     TRUE   1000    C    &lt;NA&gt;
 #&gt; 2       R 2013-01-13 06:27:39 39.32033 -137.6043     TRUE   1000    C       S
 #&gt; 3       P 2013-01-13 06:27:39 39.32033 -137.6043     TRUE   1000    C       S
@@ -1406,7 +1406,7 @@ See 'Value' section for more details</p></td>
 #&gt; 212   018       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      199 das_sample.das
 #&gt; 213  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      200 das_sample.das
 #&gt; 214  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE     &lt;NA&gt; das_sample.das
-#&gt; 215  ridi ng bow       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
+#&gt; 215  ridi ng bow      w       &lt;NA&gt;   &lt;NA&gt;     FALSE      201 das_sample.das
 #&gt; 216  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      202 das_sample.das
 #&gt; 217  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      203 das_sample.das
 #&gt; 218  &lt;NA&gt;       &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE      204 das_sample.das
@@ -1708,7 +1708,7 @@ See 'Value' section for more details</p></td>
 <span class='co'># Visualize effort midpoints and stratum polygon</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://r-spatial.github.io/sf/'>sf</a></span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: sf</span></div><div class='output co'>#&gt; <span class='message'>Linking to GEOS 3.8.1, GDAL 3.2.1, PROJ 7.2.1</span></div><div class='input'><span class='va'>y.eff.strata</span> <span class='op'>&lt;-</span> <span class='fu'>das_intersects_strata</span><span class='op'>(</span><span class='va'>y.eff</span>, <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>InPoly <span class='op'>=</span> <span class='va'>stratum.file</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='output co'>#&gt; <span class='message'>although coordinates are longitude/latitude, st_intersects assumes that they are planar</span></div><div class='input'><span class='va'>segdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='va'>y.eff.strata</span><span class='op'>$</span><span class='va'>segdata</span>, coords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mlon"</span>, <span class='st'>"mlat"</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
+<span class='va'>segdata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://r-spatial.github.io/sf/reference/st_as_sf.html'>st_as_sf</a></span><span class='op'>(</span><span class='va'>y.eff.strata</span><span class='op'>$</span><span class='va'>segdata</span>, coords <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"mlon"</span>, <span class='st'>"mlat"</span><span class='op'>)</span>, crs <span class='op'>=</span> <span class='fl'>4326</span><span class='op'>)</span>
 
 <span class='co'># Make stratum polygon</span>
 <span class='va'>stratum.df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.csv</a></span><span class='op'>(</span><span class='va'>stratum.file</span><span class='op'>)</span>
