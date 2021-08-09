@@ -57,6 +57,13 @@ glimpse(y.proc)
 y2.read <- das_read(c(y, y))
 ```
 
+One other note is that `das_read` contains a 'tz' argument that specifies the time zone of the date/times in the DAS file. This argument can generally be ignored if data was collected in the local time zone, as the time zone is not used in any other swfscDAS functions. However, if data was collected in a time zone that causes effort to span multiple days, then 'OnEffort' values will be incorrect because `das_process` resets the event sequence to off effort at the beginning of a new day. To fix this, convert the date/times to the local time zone after running `das_read` and before running `das_process`. For instance, if data was collected in UTC but local time is GMT-10, then you could do the following:
+
+```{r readproc tz}
+y.read.dt <- das_read(y, skip = 0, tz = "UTC") %>% 
+  mutate(DateTime = lubridate::with_tz(DateTime, "Etc/GMT-10"))
+```
+
 Once you have processed the DAS data, you can easily access a variety of information. For instance, you can look at the different events or Beaufort values that occurred in the data, or filter for specific events to get the beginning and ending points of each effort section. 
 
 ```{r readprocother}
@@ -66,7 +73,7 @@ table(y.proc$Event)
 # The number of events per Beaufort value
 table(y.proc$Bft)
 
-# Filter for T/R and O/E events to extract lat/lon points
+# Filter for R and E events to extract lat/lon points
 y.proc %>% 
   filter(Event %in% c("R", "E")) %>% 
   select(Event, Lat, Lon, Cruise, Mode, EffType) %>% 

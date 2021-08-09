@@ -51,6 +51,7 @@
 #'     \item An event is considered 'on effort' if it is 1) an R event,
 #'       2) a B event immediately preceding an R event, or 3) between corresponding R and E events
 #'       (not including the E event). The 'EffortDot' column is not used when determining on effort data.
+#'       Note that effort is reset to 'off effort' at the beginning of a new day.
 #'     \item All state/condition information is reset at the beginning of each cruise.
 #'       New cruises are identified using \code{days.gap}.
 #'     \item All state/condition information relating to B, R, P, V, N, and W events

@@ -1,3 +1,10 @@
+# swfscDAS 0.5.2 (in development)
+
+* Fix `das_check` index math error (#5)
+
+* Added an example to the vignette of converting between time zones
+
+
 # swfscDAS 0.5.1
 
 * Link fixes - no functionality changes

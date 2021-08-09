@@ -226,28 +226,31 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
 
   }
 
-  # 2) All R events occur while off effort, or after a B event that occurs while off effort
-  idx.proc.r <- which(x.proc$Event == "R")
-  x.proc.preR <- x.proc[idx.proc.r - 1, ]
-  r.which <- x.proc.preR$idx[x.proc.preR$OnEffort & x.proc.preR$Event != "B"] + 1
+  # Create data frame with prev_columns
+  x.proc.prev <- x.proc %>%
+    mutate(Event_prev = lag(.data$Event),
+           OnEffort_prev = lag(.data$OnEffort))
 
-  idx.proc.b.preR <- x.proc.preR$idx[x.proc.preR$Event == "B"]
-  x.proc.preBR <- x[idx.proc.b.preR - 1, ]
-  br.which <- x.proc.preBR$idx[x.proc.preBR$OnEffort] + 1
+  # 2) All R events occur while off effort, or after a B event that occurs while off effort
+  br.r.which <- x.proc.prev %>%
+    filter((.data$Event == "R" & .data$OnEffort_prev & .data$Event_prev != "B") |
+             (.data$Event == "B" & .data$OnEffort_prev)) %>%
+    select(.data$idx) %>% unlist() %>% unname()
 
   # 3) All E events occur while on effort
-  idx.proc.e <- which(x.proc$Event =="E")
-  x.proc.preE <- x.proc[idx.proc.e - 1, ]
-  e.which <- x.proc.preE$idx[!x.proc.preE$OnEffort] + 1
+  e.which <- x.proc.prev %>%
+    filter(.data$Event == "E" & !.data$OnEffort_prev) %>%
+    select(.data$idx) %>% unlist() %>% unname()
+
 
   error.out <- rbind(
     error.out,
-    .check_list(x.proc, x.lines, sort(unique(c(r.which, br.which))),
+    .check_list(x.proc, x.lines, br.r.which,
                 "There is an R event (or BR event series) while already on effort"),
     .check_list(x.proc, x.lines, e.which,
                 "There is an E event while already off effort")
   )
-  rm(x.proc.preE, x.proc.preR, x.proc.preBR)
+  rm(x.proc.prev)
 
 
   #----------------------------------------------------------------------------

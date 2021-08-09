@@ -211,7 +211,10 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
   # Don't use Event == "E" in case there are rogue E events
   x.oneff.which <- sort(unique(c(which(x$OnEffort), which(x$OnEffort) + 1)))
   x.oneff.which <- x.oneff.which[!(x.oneff.which %in% x.B.preEff)]
-  stopifnot(all(between(x.oneff.which, 1, nrow(x))))
+  if (!all(between(x.oneff.which, 1, nrow(x))))
+    stop("Error processing index values. ",
+         "Please make sure there are no issues flagged by das_check, ",
+         "and then report this as an issue.")
   rm(x.B.preEff)
 
   x.oneff.all <- x[x.oneff.which, ]
@@ -222,10 +225,16 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
     mutate(cont_eff_section = NA, dist_from_prev = NA, seg_idx = NA, segnum = NA)
 
   rownames(x.oneff) <- rownames(x.oneff.tmp) <- NULL
-  stopifnot(
-    all(x.oneff[!x.oneff$OnEffort, "Event"] == "E"),
-    sum(c(nrow(x.oneff), nrow(x.oneff.tmp))) == nrow(x.oneff.all)
-  )
+
+  if (!all(x.oneff[!x.oneff$OnEffort, "Event"] == "E"))
+    stop("Within the continuous effort sections, ",
+         "some events other than 'E' events are off effort. ",
+         "This may because of time/time zone issues, ",
+         "e.g. if continuous effort sections span multiple days ",
+         "and das_process was run with 'reset.day = TRUE'")
+
+  if (sum(c(nrow(x.oneff), nrow(x.oneff.tmp))) != nrow(x.oneff.all))
+    stop("Error in row numbers - please report this as an issue")
 
   # Filter for specified events, if applicable
   if (!is.null(event.touse)) x.oneff <- x.oneff %>% filter(.data$Event %in% event.touse)
