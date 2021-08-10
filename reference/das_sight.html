@@ -339,530 +339,530 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 <span class='va'>y.proc</span> <span class='op'>&lt;-</span> <span class='fu'><a href='das_process.html'>das_process</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span>
 
 <span class='fu'>das_sight</span><span class='op'>(</span><span class='va'>y.proc</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
-#&gt; 1      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C       S
-#&gt; 2      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C       S
-#&gt; 3      s 2013-01-13 08:06:00 39.54217 -137.5263    FALSE   1000    C       S
-#&gt; 4      s 2013-01-13 08:08:58 39.55000 -137.5255    FALSE   1000    C       S
-#&gt; 5      s 2013-01-13 08:15:32 39.56000 -137.5218    FALSE   1000    C       S
-#&gt; 6      s 2013-01-13 08:17:28 39.56233 -137.5210    FALSE   1000    C       S
-#&gt; 7      s 2013-01-13 08:19:39 39.56483 -137.5197    FALSE   1000    C       S
-#&gt; 8      s 2013-01-13 08:26:45 39.56400 -137.5140    FALSE   1000    C       S
-#&gt; 9      t 2013-01-13 09:34:27 39.59733 -137.4400     TRUE   1000    C       S
-#&gt; 10     t 2013-01-13 13:35:18 40.14000 -137.2048    FALSE   1000    C       S
-#&gt; 11     t 2013-01-13 14:02:55 40.18283 -137.1622     TRUE   1000    C       S
-#&gt; 12     S 2013-01-13 14:37:56 40.26567 -137.1350     TRUE   1000    C       S
-#&gt; 13     t 2013-01-13 15:36:47 40.36050 -137.0978     TRUE   1000    C       S
-#&gt; 14     S 2013-01-13 16:29:50 40.45133 -137.0628     TRUE   1000    C       S
-#&gt; 15     s 2013-01-13 16:36:34 40.46667 -137.0570    FALSE   1000    C       S
-#&gt; 16     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C       S
-#&gt; 17     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C       S
-#&gt; 18     t 2013-01-13 17:08:11 40.52083 -137.0383    FALSE   1000    C       S
-#&gt; 19     t 2013-01-13 17:45:10 40.50450 -137.0437    FALSE   1000    C       S
-#&gt; 20     S 2013-01-14 09:17:21 40.75183 -135.7748    FALSE   1000 &lt;NA&gt;    &lt;NA&gt;
-#&gt; 21     F 2013-01-14 11:25:32 40.98950 -135.5965     TRUE   1000    C       S
-#&gt; 22     S 2013-01-14 11:47:51 41.04017 -135.5635     TRUE   1000    C       S
-#&gt; 23     S 2013-01-14 11:47:51 41.04017 -135.5635     TRUE   1000    C       S
-#&gt; 24     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C       S
-#&gt; 25     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C       S
-#&gt;    ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun VertSun Glare
-#&gt; 1         2     25  10.2   3         3        10       1       NA      NA    NA
-#&gt; 2         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 3         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 4         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 5         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 6         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 7         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 8         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 9         2     27   9.0   3         3        10       1        2       2 FALSE
-#&gt; 10        2     35   9.2   3         3         9       1       12      12 FALSE
-#&gt; 11        2     20   9.3   3         3         6       1        8       1 FALSE
-#&gt; 12        2     20   9.3   3         3         6       1        8       1 FALSE
-#&gt; 13        2     16   8.9   2         3         6       1        9       1 FALSE
-#&gt; 14        2     25   8.9   2         3         6       1        8       2 FALSE
-#&gt; 15        2     25   8.9   2         3         6       1        8       2 FALSE
-#&gt; 16        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 17        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 18        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 19        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 20       NA     NA    NA  NA        NA        NA      NA       NA      NA    NA
-#&gt; 21        2     35   9.5   2         1         5       3       NA      NA    NA
-#&gt; 22        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt; 23        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt; 24        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt; 25        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt;    Vis ObsL  Rec ObsR ObsInd EffortDot EventNum       file_das line_num SightNo
-#&gt; 1  6.0  208  280  001   &lt;NA&gt;      TRUE       15 das_sample.das       15    1406
-#&gt; 2  5.5  125  208  280   &lt;NA&gt;      TRUE       35 das_sample.das       38    1407
-#&gt; 3  5.5  125  208  280   &lt;NA&gt;     FALSE       39 das_sample.das       45    1407
-#&gt; 4  5.5  125  208  280   &lt;NA&gt;     FALSE       41 das_sample.das       47    1407
-#&gt; 5  5.5  125  208  280   &lt;NA&gt;     FALSE       42 das_sample.das       48    1407
-#&gt; 6  5.5  125  208  280   &lt;NA&gt;     FALSE       44 das_sample.das       50    1407
-#&gt; 7  5.5  125  208  280   &lt;NA&gt;     FALSE       45 das_sample.das       51    1407
-#&gt; 8  5.5  125  208  280   &lt;NA&gt;     FALSE       46 das_sample.das       52    1407
-#&gt; 9  5.5  001  126  149   &lt;NA&gt;      TRUE       59 das_sample.das       65    &lt;NA&gt;
-#&gt; 10 6.0  126  149  125   &lt;NA&gt;     FALSE      118 das_sample.das      124    &lt;NA&gt;
-#&gt; 11 6.0  280  001  126   &lt;NA&gt;      TRUE      131 das_sample.das      137    &lt;NA&gt;
-#&gt; 12 6.0  280  001  126   &lt;NA&gt;      TRUE      136 das_sample.das      142    1408
-#&gt; 13 6.0  125  208  280   &lt;NA&gt;      TRUE      153 das_sample.das      162    &lt;NA&gt;
-#&gt; 14 6.0  149  125  208   &lt;NA&gt;      TRUE      167 das_sample.das      176    1409
-#&gt; 15 6.0  149  125  208   &lt;NA&gt;     FALSE      170 das_sample.das      182    1409
-#&gt; 16 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das      193    1410
-#&gt; 17 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das      193    1410
-#&gt; 18 6.0  126  149  125   &lt;NA&gt;     FALSE      186 das_sample.das      202    &lt;NA&gt;
-#&gt; 19 6.0  126  149  125   &lt;NA&gt;     FALSE      190 das_sample.das      206    &lt;NA&gt;
-#&gt; 20  NA &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;     FALSE      199 das_sample.das      215    1411
-#&gt; 21 4.0  149  125  208   &lt;NA&gt;      TRUE        8 das_sample.das      238    &lt;NA&gt;
-#&gt; 22 4.0  149  125  208   &lt;NA&gt;      TRUE       18 das_sample.das      248    1412
-#&gt; 23 4.0  149  125  208   &lt;NA&gt;      TRUE       18 das_sample.das      248    1412
-#&gt; 24 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das      252    1413
-#&gt; 25 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das      252    1413
-#&gt;    Subgroup SightNoDaily  Obs ObsStd Bearing Reticle DistNm Cue Method Photos
-#&gt; 1      &lt;NA&gt;   20130113_1  208   TRUE     309     2.8   1.06   3      4      N
-#&gt; 2      &lt;NA&gt;   20130113_2  125   TRUE     326     0.4   2.97   3      4      Y
-#&gt; 3      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      11     2.0   1.30  NA     NA   &lt;NA&gt;
-#&gt; 4      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE       5     3.5   0.90  NA     NA   &lt;NA&gt;
-#&gt; 5      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      50      NA   0.50  NA     NA   &lt;NA&gt;
-#&gt; 6      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      71     4.5   0.70  NA     NA   &lt;NA&gt;
-#&gt; 7      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE     104     4.5   0.70  NA     NA   &lt;NA&gt;
-#&gt; 8      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE       2     2.2   1.30  NA     NA   &lt;NA&gt;
-#&gt; 9      &lt;NA&gt;         &lt;NA&gt;  280  FALSE     120      NA   0.03  NA     NA   &lt;NA&gt;
-#&gt; 10     &lt;NA&gt;         &lt;NA&gt;  149   TRUE     270      NA   0.03  NA     NA   &lt;NA&gt;
-#&gt; 11     &lt;NA&gt;         &lt;NA&gt;  228  FALSE     300      NA   0.02  NA     NA   &lt;NA&gt;
-#&gt; 12     &lt;NA&gt;   20130113_3  280   TRUE     270    14.0   0.28   3      4      N
-#&gt; 13     &lt;NA&gt;         &lt;NA&gt;  231  FALSE      45      NA   0.05  NA     NA   &lt;NA&gt;
-#&gt; 14     &lt;NA&gt;   20130113_4  149   TRUE     344     0.2   3.68   3      4      Y
-#&gt; 15     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE     356     0.4   3.00  NA     NA   &lt;NA&gt;
-#&gt; 16     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66   3      4      Y
-#&gt; 17     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66   3      4      Y
-#&gt; 18     &lt;NA&gt;         &lt;NA&gt;  280  FALSE      42    17.0   0.23  NA     NA   &lt;NA&gt;
-#&gt; 19     &lt;NA&gt;         &lt;NA&gt;  099  FALSE     180      NA   0.01  NA     NA   &lt;NA&gt;
-#&gt; 20     &lt;NA&gt;   20130114_1  280  FALSE       0      NA   0.00   3      1      N
-#&gt; 21     &lt;NA&gt;         &lt;NA&gt;  149   TRUE     309     1.7   1.47  NA     NA   &lt;NA&gt;
-#&gt; 22     &lt;NA&gt;   20130114_2  149   TRUE     359     0.3   3.28   2      4      Y
-#&gt; 23     &lt;NA&gt;   20130114_2  149   TRUE     359     0.3   3.28   2      4      Y
-#&gt; 24     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23   3      4      Y
-#&gt; 25     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23   3      4      Y
-#&gt;    Birds CalibSchool PhotosAerial Biopsy  Prob nSp Mixed SpCode SpCodeProb
-#&gt; 1      N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE    018       &lt;NA&gt;
-#&gt; 2      N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE    076       &lt;NA&gt;
-#&gt; 3   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA   &lt;NA&gt;       &lt;NA&gt;
-#&gt; 4   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA   &lt;NA&gt;       &lt;NA&gt;
-#&gt; 5   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA   &lt;NA&gt;       &lt;NA&gt;
-#&gt; 6   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA   &lt;NA&gt;       &lt;NA&gt;
-#&gt; 7   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA   &lt;NA&gt;       &lt;NA&gt;
-#&gt; 8   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA   &lt;NA&gt;       &lt;NA&gt;
-#&gt; 9   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA     LV       &lt;NA&gt;
-#&gt; 10  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA     DC       &lt;NA&gt;
-#&gt; 11  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA     DC       &lt;NA&gt;
-#&gt; 12     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE    037       &lt;NA&gt;
-#&gt; 13  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA     DC       &lt;NA&gt;
-#&gt; 14     Y        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE    016       &lt;NA&gt;
-#&gt; 15  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA   &lt;NA&gt;       &lt;NA&gt;
-#&gt; 16     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE    013       &lt;NA&gt;
-#&gt; 17     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE    016       &lt;NA&gt;
-#&gt; 18  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA     DC       &lt;NA&gt;
-#&gt; 19  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA     LV       &lt;NA&gt;
-#&gt; 20     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE    075       &lt;NA&gt;
-#&gt; 21  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA   &lt;NA&gt;       &lt;NA&gt;
-#&gt; 22     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE    018       &lt;NA&gt;
-#&gt; 23     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE    277       &lt;NA&gt;
-#&gt; 24     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE    016        016
-#&gt; 25     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE    277        016
-#&gt;    GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest GsSpHigh    GsSpLow
-#&gt; 1            NA           NA   42.333333        NA       NA  42.333333
-#&gt; 2       8.00000        14.00    5.666667   8.00000   14.000   5.666667
-#&gt; 3            NA           NA          NA        NA       NA         NA
-#&gt; 4            NA           NA          NA        NA       NA         NA
-#&gt; 5            NA           NA          NA        NA       NA         NA
-#&gt; 6            NA           NA          NA        NA       NA         NA
-#&gt; 7            NA           NA          NA        NA       NA         NA
-#&gt; 8            NA           NA          NA        NA       NA         NA
-#&gt; 9       1.00000           NA          NA   1.00000       NA         NA
-#&gt; 10      2.00000           NA          NA   2.00000       NA         NA
-#&gt; 11      1.00000           NA          NA   1.00000       NA         NA
-#&gt; 12     10.66667        20.00   10.666667  10.66667   20.000  10.666667
-#&gt; 13      1.00000           NA          NA   1.00000       NA         NA
-#&gt; 14     46.66667        79.00   46.666667  46.66667   79.000  46.666667
-#&gt; 15           NA           NA          NA        NA       NA         NA
-#&gt; 16     41.75000        72.75   41.750000  30.76500   53.165  30.765000
-#&gt; 17     41.75000        72.75   41.750000  10.98500   19.585  10.985000
-#&gt; 18      2.00000           NA          NA   2.00000       NA         NA
-#&gt; 19      1.00000           NA          NA   1.00000       NA         NA
-#&gt; 20           NA           NA          NA        NA       NA         NA
-#&gt; 21           NA           NA          NA        NA       NA         NA
-#&gt; 22    151.50000       249.00  151.500000 127.20000  207.700 127.200000
-#&gt; 23    151.50000       249.00  151.500000  24.30000   41.300  24.300000
-#&gt; 24     21.25000        37.75   21.250000  16.31000   27.935  16.310000
-#&gt; 25     21.25000        37.75   21.250000   4.94000    9.815   4.940000
-#&gt;    CourseSchool TurtleJFR TurtleAge TurtleCapt   PerpDistKm
-#&gt; 1            NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.525631e+00
-#&gt; 2            NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.075807e+00
-#&gt; 3            NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 4.593917e-01
-#&gt; 4            NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.452712e-01
-#&gt; 5            NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 7.093572e-01
-#&gt; 6           100      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.225770e+00
-#&gt; 7           100      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.257891e+00
-#&gt; 8            NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 8.402403e-02
-#&gt; 9            NA      &lt;NA&gt;         A          N 4.811637e-02
-#&gt; 10           NA      &lt;NA&gt;         A          N 5.556000e-02
-#&gt; 11           NA      &lt;NA&gt;         J          N 3.207758e-02
-#&gt; 12           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 5.185600e-01
-#&gt; 13           NA      &lt;NA&gt;         A       &lt;NA&gt; 6.547809e-02
-#&gt; 14           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.878568e+00
-#&gt; 15           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.875670e-01
-#&gt; 16           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.888916e+00
-#&gt; 17           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.888916e+00
-#&gt; 18           NA         F         A          Y 2.850229e-01
-#&gt; 19           NA      &lt;NA&gt;         A          N 2.268046e-18
-#&gt; 20           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 0.000000e+00
-#&gt; 21           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.115733e+00
-#&gt; 22           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01
-#&gt; 23           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01
-#&gt; 24           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00
-#&gt; 25           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00</div><div class='input'><span class='fu'>das_sight</span><span class='op'>(</span><span class='va'>y.proc</span>, return.format <span class='op'>=</span> <span class='st'>"complete"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    Event            DateTime      Lat       Lon OnEffort Cruise Mode EffType
-#&gt; 1      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C       S
-#&gt; 2      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C       S
-#&gt; 3      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C       S
-#&gt; 4      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C       S
-#&gt; 5      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C       S
-#&gt; 6      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C       S
-#&gt; 7      s 2013-01-13 08:06:00 39.54217 -137.5263    FALSE   1000    C       S
-#&gt; 8      s 2013-01-13 08:08:58 39.55000 -137.5255    FALSE   1000    C       S
-#&gt; 9      s 2013-01-13 08:15:32 39.56000 -137.5218    FALSE   1000    C       S
-#&gt; 10     s 2013-01-13 08:17:28 39.56233 -137.5210    FALSE   1000    C       S
-#&gt; 11     s 2013-01-13 08:19:39 39.56483 -137.5197    FALSE   1000    C       S
-#&gt; 12     s 2013-01-13 08:26:45 39.56400 -137.5140    FALSE   1000    C       S
-#&gt; 13     t 2013-01-13 09:34:27 39.59733 -137.4400     TRUE   1000    C       S
-#&gt; 14     t 2013-01-13 13:35:18 40.14000 -137.2048    FALSE   1000    C       S
-#&gt; 15     t 2013-01-13 14:02:55 40.18283 -137.1622     TRUE   1000    C       S
-#&gt; 16     S 2013-01-13 14:37:56 40.26567 -137.1350     TRUE   1000    C       S
-#&gt; 17     S 2013-01-13 14:37:56 40.26567 -137.1350     TRUE   1000    C       S
-#&gt; 18     S 2013-01-13 14:37:56 40.26567 -137.1350     TRUE   1000    C       S
-#&gt; 19     t 2013-01-13 15:36:47 40.36050 -137.0978     TRUE   1000    C       S
-#&gt; 20     S 2013-01-13 16:29:50 40.45133 -137.0628     TRUE   1000    C       S
-#&gt; 21     S 2013-01-13 16:29:50 40.45133 -137.0628     TRUE   1000    C       S
-#&gt; 22     S 2013-01-13 16:29:50 40.45133 -137.0628     TRUE   1000    C       S
-#&gt; 23     s 2013-01-13 16:36:34 40.46667 -137.0570    FALSE   1000    C       S
-#&gt; 24     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C       S
-#&gt; 25     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C       S
-#&gt; 26     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C       S
-#&gt; 27     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C       S
-#&gt; 28     t 2013-01-13 17:08:11 40.52083 -137.0383    FALSE   1000    C       S
-#&gt; 29     t 2013-01-13 17:45:10 40.50450 -137.0437    FALSE   1000    C       S
-#&gt; 30     S 2013-01-14 09:17:21 40.75183 -135.7748    FALSE   1000 &lt;NA&gt;    &lt;NA&gt;
-#&gt; 31     F 2013-01-14 11:25:32 40.98950 -135.5965     TRUE   1000    C       S
-#&gt; 32     S 2013-01-14 11:47:51 41.04017 -135.5635     TRUE   1000    C       S
-#&gt; 33     S 2013-01-14 11:47:51 41.04017 -135.5635     TRUE   1000    C       S
-#&gt; 34     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C       S
-#&gt; 35     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C       S
-#&gt; 36     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C       S
-#&gt; 37     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C       S
-#&gt;    ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun VertSun Glare
-#&gt; 1         2     25  10.2   3         3        10       1       NA      NA    NA
-#&gt; 2         2     25  10.2   3         3        10       1       NA      NA    NA
-#&gt; 3         2     25  10.2   3         3        10       1       NA      NA    NA
-#&gt; 4         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 5         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 6         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 7         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 8         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 9         2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 10        2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 11        2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 12        2     26   9.7   3         3        10       3        2       2 FALSE
-#&gt; 13        2     27   9.0   3         3        10       1        2       2 FALSE
-#&gt; 14        2     35   9.2   3         3         9       1       12      12 FALSE
-#&gt; 15        2     20   9.3   3         3         6       1        8       1 FALSE
-#&gt; 16        2     20   9.3   3         3         6       1        8       1 FALSE
-#&gt; 17        2     20   9.3   3         3         6       1        8       1 FALSE
-#&gt; 18        2     20   9.3   3         3         6       1        8       1 FALSE
-#&gt; 19        2     16   8.9   2         3         6       1        9       1 FALSE
-#&gt; 20        2     25   8.9   2         3         6       1        8       2 FALSE
-#&gt; 21        2     25   8.9   2         3         6       1        8       2 FALSE
-#&gt; 22        2     25   8.9   2         3         6       1        8       2 FALSE
-#&gt; 23        2     25   8.9   2         3         6       1        8       2 FALSE
-#&gt; 24        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 25        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 26        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 27        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 28        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 29        2     30   9.5   2         3         6       1        8       2 FALSE
-#&gt; 30       NA     NA    NA  NA        NA        NA      NA       NA      NA    NA
-#&gt; 31        2     35   9.5   2         1         5       3       NA      NA    NA
-#&gt; 32        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt; 33        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt; 34        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt; 35        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt; 36        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt; 37        2     23   9.6   2         1         5       3       NA      NA    NA
-#&gt;    Vis ObsL  Rec ObsR ObsInd EffortDot EventNum       file_das line_num SightNo
-#&gt; 1  6.0  208  280  001   &lt;NA&gt;      TRUE       15 das_sample.das       15    1406
-#&gt; 2  6.0  208  280  001   &lt;NA&gt;      TRUE       15 das_sample.das       15    1406
-#&gt; 3  6.0  208  280  001   &lt;NA&gt;      TRUE       15 das_sample.das       15    1406
-#&gt; 4  5.5  125  208  280   &lt;NA&gt;      TRUE       35 das_sample.das       38    1407
-#&gt; 5  5.5  125  208  280   &lt;NA&gt;      TRUE       35 das_sample.das       38    1407
-#&gt; 6  5.5  125  208  280   &lt;NA&gt;      TRUE       35 das_sample.das       38    1407
-#&gt; 7  5.5  125  208  280   &lt;NA&gt;     FALSE       39 das_sample.das       45    1407
-#&gt; 8  5.5  125  208  280   &lt;NA&gt;     FALSE       41 das_sample.das       47    1407
-#&gt; 9  5.5  125  208  280   &lt;NA&gt;     FALSE       42 das_sample.das       48    1407
-#&gt; 10 5.5  125  208  280   &lt;NA&gt;     FALSE       44 das_sample.das       50    1407
-#&gt; 11 5.5  125  208  280   &lt;NA&gt;     FALSE       45 das_sample.das       51    1407
-#&gt; 12 5.5  125  208  280   &lt;NA&gt;     FALSE       46 das_sample.das       52    1407
-#&gt; 13 5.5  001  126  149   &lt;NA&gt;      TRUE       59 das_sample.das       65    &lt;NA&gt;
-#&gt; 14 6.0  126  149  125   &lt;NA&gt;     FALSE      118 das_sample.das      124    &lt;NA&gt;
-#&gt; 15 6.0  280  001  126   &lt;NA&gt;      TRUE      131 das_sample.das      137    &lt;NA&gt;
-#&gt; 16 6.0  280  001  126   &lt;NA&gt;      TRUE      136 das_sample.das      142    1408
-#&gt; 17 6.0  280  001  126   &lt;NA&gt;      TRUE      136 das_sample.das      142    1408
-#&gt; 18 6.0  280  001  126   &lt;NA&gt;      TRUE      136 das_sample.das      142    1408
-#&gt; 19 6.0  125  208  280   &lt;NA&gt;      TRUE      153 das_sample.das      162    &lt;NA&gt;
-#&gt; 20 6.0  149  125  208   &lt;NA&gt;      TRUE      167 das_sample.das      176    1409
-#&gt; 21 6.0  149  125  208   &lt;NA&gt;      TRUE      167 das_sample.das      176    1409
-#&gt; 22 6.0  149  125  208   &lt;NA&gt;      TRUE      167 das_sample.das      176    1409
-#&gt; 23 6.0  149  125  208   &lt;NA&gt;     FALSE      170 das_sample.das      182    1409
-#&gt; 24 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das      193    1410
-#&gt; 25 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das      193    1410
-#&gt; 26 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das      193    1410
-#&gt; 27 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das      193    1410
-#&gt; 28 6.0  126  149  125   &lt;NA&gt;     FALSE      186 das_sample.das      202    &lt;NA&gt;
-#&gt; 29 6.0  126  149  125   &lt;NA&gt;     FALSE      190 das_sample.das      206    &lt;NA&gt;
-#&gt; 30  NA &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;     FALSE      199 das_sample.das      215    1411
-#&gt; 31 4.0  149  125  208   &lt;NA&gt;      TRUE        8 das_sample.das      238    &lt;NA&gt;
-#&gt; 32 4.0  149  125  208   &lt;NA&gt;      TRUE       18 das_sample.das      248    1412
-#&gt; 33 4.0  149  125  208   &lt;NA&gt;      TRUE       18 das_sample.das      248    1412
-#&gt; 34 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das      252    1413
-#&gt; 35 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das      252    1413
-#&gt; 36 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das      252    1413
-#&gt; 37 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das      252    1413
-#&gt;    Subgroup SightNoDaily  Obs ObsStd Bearing Reticle DistNm Cue Method Photos
-#&gt; 1      &lt;NA&gt;   20130113_1  208   TRUE     309     2.8   1.06   3      4      N
-#&gt; 2      &lt;NA&gt;   20130113_1  208   TRUE     309     2.8   1.06   3      4      N
-#&gt; 3      &lt;NA&gt;   20130113_1  208   TRUE     309     2.8   1.06   3      4      N
-#&gt; 4      &lt;NA&gt;   20130113_2  125   TRUE     326     0.4   2.97   3      4      Y
-#&gt; 5      &lt;NA&gt;   20130113_2  125   TRUE     326     0.4   2.97   3      4      Y
-#&gt; 6      &lt;NA&gt;   20130113_2  125   TRUE     326     0.4   2.97   3      4      Y
-#&gt; 7      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      11     2.0   1.30  NA     NA   &lt;NA&gt;
-#&gt; 8      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE       5     3.5   0.90  NA     NA   &lt;NA&gt;
-#&gt; 9      &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      50      NA   0.50  NA     NA   &lt;NA&gt;
-#&gt; 10     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      71     4.5   0.70  NA     NA   &lt;NA&gt;
-#&gt; 11     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE     104     4.5   0.70  NA     NA   &lt;NA&gt;
-#&gt; 12     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE       2     2.2   1.30  NA     NA   &lt;NA&gt;
-#&gt; 13     &lt;NA&gt;         &lt;NA&gt;  280  FALSE     120      NA   0.03  NA     NA   &lt;NA&gt;
-#&gt; 14     &lt;NA&gt;         &lt;NA&gt;  149   TRUE     270      NA   0.03  NA     NA   &lt;NA&gt;
-#&gt; 15     &lt;NA&gt;         &lt;NA&gt;  228  FALSE     300      NA   0.02  NA     NA   &lt;NA&gt;
-#&gt; 16     &lt;NA&gt;   20130113_3  280   TRUE     270    14.0   0.28   3      4      N
-#&gt; 17     &lt;NA&gt;   20130113_3  280   TRUE     270    14.0   0.28   3      4      N
-#&gt; 18     &lt;NA&gt;   20130113_3  280   TRUE     270    14.0   0.28   3      4      N
-#&gt; 19     &lt;NA&gt;         &lt;NA&gt;  231  FALSE      45      NA   0.05  NA     NA   &lt;NA&gt;
-#&gt; 20     &lt;NA&gt;   20130113_4  149   TRUE     344     0.2   3.68   3      4      Y
-#&gt; 21     &lt;NA&gt;   20130113_4  149   TRUE     344     0.2   3.68   3      4      Y
-#&gt; 22     &lt;NA&gt;   20130113_4  149   TRUE     344     0.2   3.68   3      4      Y
-#&gt; 23     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE     356     0.4   3.00  NA     NA   &lt;NA&gt;
-#&gt; 24     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66   3      4      Y
-#&gt; 25     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66   3      4      Y
-#&gt; 26     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66   3      4      Y
-#&gt; 27     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66   3      4      Y
-#&gt; 28     &lt;NA&gt;         &lt;NA&gt;  280  FALSE      42    17.0   0.23  NA     NA   &lt;NA&gt;
-#&gt; 29     &lt;NA&gt;         &lt;NA&gt;  099  FALSE     180      NA   0.01  NA     NA   &lt;NA&gt;
-#&gt; 30     &lt;NA&gt;   20130114_1  280  FALSE       0      NA   0.00   3      1      N
-#&gt; 31     &lt;NA&gt;         &lt;NA&gt;  149   TRUE     309     1.7   1.47  NA     NA   &lt;NA&gt;
-#&gt; 32     &lt;NA&gt;   20130114_2  149   TRUE     359     0.3   3.28   2      4      Y
-#&gt; 33     &lt;NA&gt;   20130114_2  149   TRUE     359     0.3   3.28   2      4      Y
-#&gt; 34     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23   3      4      Y
-#&gt; 35     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23   3      4      Y
-#&gt; 36     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23   3      4      Y
-#&gt; 37     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23   3      4      Y
-#&gt;    Birds CalibSchool PhotosAerial Biopsy  Prob nSp Mixed ObsEstimate SpCode1
-#&gt; 1      N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         280     018
-#&gt; 2      N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         001     018
-#&gt; 3      N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         208     018
-#&gt; 4      N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         280     076
-#&gt; 5      N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         001     076
-#&gt; 6      N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         125     076
-#&gt; 7   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 8   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 9   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 10  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 11  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 12  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 13  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 14  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 15  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 16     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         280     037
-#&gt; 17     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         001     037
-#&gt; 18     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         126     037
-#&gt; 19  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 20     Y        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         125     016
-#&gt; 21     Y        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         149     016
-#&gt; 22     Y        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         208     016
-#&gt; 23  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 24     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE         280     013
-#&gt; 25     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE         125     013
-#&gt; 26     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE         149     013
-#&gt; 27     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE         126     013
-#&gt; 28  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 29  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 30     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE         280     075
-#&gt; 31  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA        &lt;NA&gt;    &lt;NA&gt;
-#&gt; 32     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE         149     018
-#&gt; 33     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE         126     018
-#&gt; 34     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE         125     016
-#&gt; 35     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE         208     016
-#&gt; 36     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE         149     016
-#&gt; 37     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE         126     016
-#&gt;    SpCode2 SpCode3 SpCode4 SpCodeProb1 SpCodeProb2 SpCodeProb3 SpCodeProb4
-#&gt; 1     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 2     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 3     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 4     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 5     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 6     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 7     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 8     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 9     &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 10    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 11    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 12    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 13    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 14    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 15    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 16    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 17    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 18    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 19    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 20    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 21    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 22    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 23    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 24     016    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 25     016    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 26     016    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 27     016    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 28    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 29    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 30    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 31    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 32     277    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 33     277    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 34     277    &lt;NA&gt;    &lt;NA&gt;         016         016        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 35     277    &lt;NA&gt;    &lt;NA&gt;         016         016        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 36     277    &lt;NA&gt;    &lt;NA&gt;         016         016        &lt;NA&gt;        &lt;NA&gt;
-#&gt; 37     277    &lt;NA&gt;    &lt;NA&gt;         016         016        &lt;NA&gt;        &lt;NA&gt;
-#&gt;    SpPerc1 SpPerc2 SpPerc3 SpPerc4 GsSchoolBest GsSchoolHigh GsSchoolLow
-#&gt; 1      100      NA      NA      NA           NA           NA          43
-#&gt; 2      100      NA      NA      NA           NA           NA          36
-#&gt; 3      100      NA      NA      NA           NA           NA          48
-#&gt; 4      100      NA      NA      NA            6           10           6
-#&gt; 5      100      NA      NA      NA            9           10           2
-#&gt; 6      100      NA      NA      NA            9           22           9
-#&gt; 7       NA      NA      NA      NA           NA           NA          NA
-#&gt; 8       NA      NA      NA      NA           NA           NA          NA
-#&gt; 9       NA      NA      NA      NA           NA           NA          NA
-#&gt; 10      NA      NA      NA      NA           NA           NA          NA
-#&gt; 11      NA      NA      NA      NA           NA           NA          NA
-#&gt; 12      NA      NA      NA      NA           NA           NA          NA
-#&gt; 13      NA      NA      NA      NA           NA           NA          NA
-#&gt; 14      NA      NA      NA      NA           NA           NA          NA
-#&gt; 15      NA      NA      NA      NA           NA           NA          NA
-#&gt; 16     100      NA      NA      NA           11           24          11
-#&gt; 17     100      NA      NA      NA           12           23          12
-#&gt; 18     100      NA      NA      NA            9           13           9
-#&gt; 19      NA      NA      NA      NA           NA           NA          NA
-#&gt; 20     100      NA      NA      NA           46           90          46
-#&gt; 21     100      NA      NA      NA           28           65          28
-#&gt; 22     100      NA      NA      NA           66           82          66
-#&gt; 23      NA      NA      NA      NA           NA           NA          NA
-#&gt; 24      68      32      NA      NA           37           72          37
-#&gt; 25      75      25      NA      NA           35           74          35
-#&gt; 26      65      35      NA      NA           29           52          29
-#&gt; 27      80      20      NA      NA           66           93          66
-#&gt; 28      NA      NA      NA      NA           NA           NA          NA
-#&gt; 29      NA      NA      NA      NA           NA           NA          NA
-#&gt; 30     100      NA      NA      NA           NA           NA          NA
-#&gt; 31      NA      NA      NA      NA           NA           NA          NA
-#&gt; 32      80      20      NA      NA          183          328         183
-#&gt; 33      90      10      NA      NA          120          170         120
-#&gt; 34      60      40      NA      NA           21           60          21
-#&gt; 35      56      44      NA      NA           16           20          16
-#&gt; 36      70      30      NA      NA           12           18          12
-#&gt; 37      98       2      NA      NA           36           53          36
-#&gt;    CourseSchool TurtleSp TurtleGs TurtleJFR TurtleAge TurtleCapt PinnipedSp
-#&gt; 1            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 2            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 3            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 4            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 5            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 6            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 7            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 8            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 9            NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 10          100     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 11          100     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 12           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 13           NA       LV        1      &lt;NA&gt;         A          N       &lt;NA&gt;
-#&gt; 14           NA       DC        2      &lt;NA&gt;         A          N       &lt;NA&gt;
-#&gt; 15           NA       DC        1      &lt;NA&gt;         J          N       &lt;NA&gt;
-#&gt; 16           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 17           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 18           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 19           NA       DC        1      &lt;NA&gt;         A       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 20           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 21           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 22           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 23           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 24           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 25           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 26           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 27           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 28           NA       DC        2         F         A          Y       &lt;NA&gt;
-#&gt; 29           NA       LV        1      &lt;NA&gt;         A          N       &lt;NA&gt;
-#&gt; 30           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 31           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 32           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 33           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 34           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 35           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 36           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt; 37           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;
-#&gt;    PinnipedGs BoatType BoatGs   PerpDistKm
-#&gt; 1          NA     &lt;NA&gt;     NA 1.525631e+00
-#&gt; 2          NA     &lt;NA&gt;     NA 1.525631e+00
-#&gt; 3          NA     &lt;NA&gt;     NA 1.525631e+00
-#&gt; 4          NA     &lt;NA&gt;     NA 3.075807e+00
-#&gt; 5          NA     &lt;NA&gt;     NA 3.075807e+00
-#&gt; 6          NA     &lt;NA&gt;     NA 3.075807e+00
-#&gt; 7          NA     &lt;NA&gt;     NA 4.593917e-01
-#&gt; 8          NA     &lt;NA&gt;     NA 1.452712e-01
-#&gt; 9          NA     &lt;NA&gt;     NA 7.093572e-01
-#&gt; 10         NA     &lt;NA&gt;     NA 1.225770e+00
-#&gt; 11         NA     &lt;NA&gt;     NA 1.257891e+00
-#&gt; 12         NA     &lt;NA&gt;     NA 8.402403e-02
-#&gt; 13         NA     &lt;NA&gt;     NA 4.811637e-02
-#&gt; 14         NA     &lt;NA&gt;     NA 5.556000e-02
-#&gt; 15         NA     &lt;NA&gt;     NA 3.207758e-02
-#&gt; 16         NA     &lt;NA&gt;     NA 5.185600e-01
-#&gt; 17         NA     &lt;NA&gt;     NA 5.185600e-01
-#&gt; 18         NA     &lt;NA&gt;     NA 5.185600e-01
-#&gt; 19         NA     &lt;NA&gt;     NA 6.547809e-02
-#&gt; 20         NA     &lt;NA&gt;     NA 1.878568e+00
-#&gt; 21         NA     &lt;NA&gt;     NA 1.878568e+00
-#&gt; 22         NA     &lt;NA&gt;     NA 1.878568e+00
-#&gt; 23         NA     &lt;NA&gt;     NA 3.875670e-01
-#&gt; 24         NA     &lt;NA&gt;     NA 2.888916e+00
-#&gt; 25         NA     &lt;NA&gt;     NA 2.888916e+00
-#&gt; 26         NA     &lt;NA&gt;     NA 2.888916e+00
-#&gt; 27         NA     &lt;NA&gt;     NA 2.888916e+00
-#&gt; 28         NA     &lt;NA&gt;     NA 2.850229e-01
-#&gt; 29         NA     &lt;NA&gt;     NA 2.268046e-18
-#&gt; 30         NA     &lt;NA&gt;     NA 0.000000e+00
-#&gt; 31         NA     &lt;NA&gt;     NA 2.115733e+00
-#&gt; 32         NA     &lt;NA&gt;     NA 1.060157e-01
-#&gt; 33         NA     &lt;NA&gt;     NA 1.060157e-01
-#&gt; 34         NA     &lt;NA&gt;     NA 2.542657e+00
-#&gt; 35         NA     &lt;NA&gt;     NA 2.542657e+00
-#&gt; 36         NA     &lt;NA&gt;     NA 2.542657e+00
-#&gt; 37         NA     &lt;NA&gt;     NA 2.542657e+00</div><div class='input'>
+</div><div class='output co'>#&gt;    Event            DateTime      Lat       Lon OnEffort Cruise Mode OffsetGMT
+#&gt; 1      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C         5
+#&gt; 2      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C         5
+#&gt; 3      s 2013-01-13 08:06:00 39.54217 -137.5263    FALSE   1000    C         5
+#&gt; 4      s 2013-01-13 08:08:58 39.55000 -137.5255    FALSE   1000    C         5
+#&gt; 5      s 2013-01-13 08:15:32 39.56000 -137.5218    FALSE   1000    C         5
+#&gt; 6      s 2013-01-13 08:17:28 39.56233 -137.5210    FALSE   1000    C         5
+#&gt; 7      s 2013-01-13 08:19:39 39.56483 -137.5197    FALSE   1000    C         5
+#&gt; 8      s 2013-01-13 08:26:45 39.56400 -137.5140    FALSE   1000    C         5
+#&gt; 9      t 2013-01-13 09:34:27 39.59733 -137.4400     TRUE   1000    C         5
+#&gt; 10     t 2013-01-13 13:35:18 40.14000 -137.2048    FALSE   1000    C         5
+#&gt; 11     t 2013-01-13 14:02:55 40.18283 -137.1622     TRUE   1000    C         5
+#&gt; 12     S 2013-01-13 14:37:56 40.26567 -137.1350     TRUE   1000    C         5
+#&gt; 13     t 2013-01-13 15:36:47 40.36050 -137.0978     TRUE   1000    C         5
+#&gt; 14     S 2013-01-13 16:29:50 40.45133 -137.0628     TRUE   1000    C         5
+#&gt; 15     s 2013-01-13 16:36:34 40.46667 -137.0570    FALSE   1000    C         5
+#&gt; 16     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C         5
+#&gt; 17     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C         5
+#&gt; 18     t 2013-01-13 17:08:11 40.52083 -137.0383    FALSE   1000    C         5
+#&gt; 19     t 2013-01-13 17:45:10 40.50450 -137.0437    FALSE   1000    C         5
+#&gt; 20     S 2013-01-14 09:17:21 40.75183 -135.7748    FALSE   1000 &lt;NA&gt;         5
+#&gt; 21     F 2013-01-14 11:25:32 40.98950 -135.5965     TRUE   1000    C         5
+#&gt; 22     S 2013-01-14 11:47:51 41.04017 -135.5635     TRUE   1000    C         5
+#&gt; 23     S 2013-01-14 11:47:51 41.04017 -135.5635     TRUE   1000    C         5
+#&gt; 24     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C         5
+#&gt; 25     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C         5
+#&gt;    EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun
+#&gt; 1        S        2     25  10.2   3         3        10       1       NA
+#&gt; 2        S        2     26   9.7   3         3        10       3        2
+#&gt; 3        S        2     26   9.7   3         3        10       3        2
+#&gt; 4        S        2     26   9.7   3         3        10       3        2
+#&gt; 5        S        2     26   9.7   3         3        10       3        2
+#&gt; 6        S        2     26   9.7   3         3        10       3        2
+#&gt; 7        S        2     26   9.7   3         3        10       3        2
+#&gt; 8        S        2     26   9.7   3         3        10       3        2
+#&gt; 9        S        2     27   9.0   3         3        10       1        2
+#&gt; 10       S        2     35   9.2   3         3         9       1       12
+#&gt; 11       S        2     20   9.3   3         3         6       1        8
+#&gt; 12       S        2     20   9.3   3         3         6       1        8
+#&gt; 13       S        2     16   8.9   2         3         6       1        9
+#&gt; 14       S        2     25   8.9   2         3         6       1        8
+#&gt; 15       S        2     25   8.9   2         3         6       1        8
+#&gt; 16       S        2     30   9.5   2         3         6       1        8
+#&gt; 17       S        2     30   9.5   2         3         6       1        8
+#&gt; 18       S        2     30   9.5   2         3         6       1        8
+#&gt; 19       S        2     30   9.5   2         3         6       1        8
+#&gt; 20    &lt;NA&gt;       NA     NA    NA  NA        NA        NA      NA       NA
+#&gt; 21       S        2     35   9.5   2         1         5       3       NA
+#&gt; 22       S        2     23   9.6   2         1         5       3       NA
+#&gt; 23       S        2     23   9.6   2         1         5       3       NA
+#&gt; 24       S        2     23   9.6   2         1         5       3       NA
+#&gt; 25       S        2     23   9.6   2         1         5       3       NA
+#&gt;    VertSun Glare Vis ObsL  Rec ObsR ObsInd EffortDot EventNum       file_das
+#&gt; 1       NA    NA 6.0  208  280  001   &lt;NA&gt;      TRUE       15 das_sample.das
+#&gt; 2        2 FALSE 5.5  125  208  280   &lt;NA&gt;      TRUE       35 das_sample.das
+#&gt; 3        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       39 das_sample.das
+#&gt; 4        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       41 das_sample.das
+#&gt; 5        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       42 das_sample.das
+#&gt; 6        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       44 das_sample.das
+#&gt; 7        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       45 das_sample.das
+#&gt; 8        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       46 das_sample.das
+#&gt; 9        2 FALSE 5.5  001  126  149   &lt;NA&gt;      TRUE       59 das_sample.das
+#&gt; 10      12 FALSE 6.0  126  149  125   &lt;NA&gt;     FALSE      118 das_sample.das
+#&gt; 11       1 FALSE 6.0  280  001  126   &lt;NA&gt;      TRUE      131 das_sample.das
+#&gt; 12       1 FALSE 6.0  280  001  126   &lt;NA&gt;      TRUE      136 das_sample.das
+#&gt; 13       1 FALSE 6.0  125  208  280   &lt;NA&gt;      TRUE      153 das_sample.das
+#&gt; 14       2 FALSE 6.0  149  125  208   &lt;NA&gt;      TRUE      167 das_sample.das
+#&gt; 15       2 FALSE 6.0  149  125  208   &lt;NA&gt;     FALSE      170 das_sample.das
+#&gt; 16       2 FALSE 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das
+#&gt; 17       2 FALSE 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das
+#&gt; 18       2 FALSE 6.0  126  149  125   &lt;NA&gt;     FALSE      186 das_sample.das
+#&gt; 19       2 FALSE 6.0  126  149  125   &lt;NA&gt;     FALSE      190 das_sample.das
+#&gt; 20      NA    NA  NA &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;     FALSE      199 das_sample.das
+#&gt; 21      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE        8 das_sample.das
+#&gt; 22      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       18 das_sample.das
+#&gt; 23      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       18 das_sample.das
+#&gt; 24      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das
+#&gt; 25      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das
+#&gt;    line_num SightNo Subgroup SightNoDaily  Obs ObsStd Bearing Reticle DistNm
+#&gt; 1        15    1406     &lt;NA&gt;   20130113_1  208   TRUE     309     2.8   1.06
+#&gt; 2        38    1407     &lt;NA&gt;   20130113_2  125   TRUE     326     0.4   2.97
+#&gt; 3        45    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      11     2.0   1.30
+#&gt; 4        47    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE       5     3.5   0.90
+#&gt; 5        48    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      50      NA   0.50
+#&gt; 6        50    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      71     4.5   0.70
+#&gt; 7        51    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE     104     4.5   0.70
+#&gt; 8        52    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE       2     2.2   1.30
+#&gt; 9        65    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  280  FALSE     120      NA   0.03
+#&gt; 10      124    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  149   TRUE     270      NA   0.03
+#&gt; 11      137    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  228  FALSE     300      NA   0.02
+#&gt; 12      142    1408     &lt;NA&gt;   20130113_3  280   TRUE     270    14.0   0.28
+#&gt; 13      162    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  231  FALSE      45      NA   0.05
+#&gt; 14      176    1409     &lt;NA&gt;   20130113_4  149   TRUE     344     0.2   3.68
+#&gt; 15      182    1409     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE     356     0.4   3.00
+#&gt; 16      193    1410     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66
+#&gt; 17      193    1410     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66
+#&gt; 18      202    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  280  FALSE      42    17.0   0.23
+#&gt; 19      206    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  099  FALSE     180      NA   0.01
+#&gt; 20      215    1411     &lt;NA&gt;   20130114_1  280  FALSE       0      NA   0.00
+#&gt; 21      238    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  149   TRUE     309     1.7   1.47
+#&gt; 22      248    1412     &lt;NA&gt;   20130114_2  149   TRUE     359     0.3   3.28
+#&gt; 23      248    1412     &lt;NA&gt;   20130114_2  149   TRUE     359     0.3   3.28
+#&gt; 24      252    1413     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23
+#&gt; 25      252    1413     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23
+#&gt;    Cue Method Photos Birds CalibSchool PhotosAerial Biopsy  Prob nSp Mixed
+#&gt; 1    3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 2    3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 3   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 4   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 5   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 6   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 7   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 8   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 9   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 10  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 11  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 12   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 13  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 14   3      4      Y     Y        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 15  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 16   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 17   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 18  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 19  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 20   3      1      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 21  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 22   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 23   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 24   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE
+#&gt; 25   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE
+#&gt;    SpCode SpCodeProb GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest GsSpHigh
+#&gt; 1     018       &lt;NA&gt;           NA           NA   42.333333        NA       NA
+#&gt; 2     076       &lt;NA&gt;      8.00000        14.00    5.666667   8.00000   14.000
+#&gt; 3    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 4    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 5    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 6    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 7    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 8    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 9      LV       &lt;NA&gt;      1.00000           NA          NA   1.00000       NA
+#&gt; 10     DC       &lt;NA&gt;      2.00000           NA          NA   2.00000       NA
+#&gt; 11     DC       &lt;NA&gt;      1.00000           NA          NA   1.00000       NA
+#&gt; 12    037       &lt;NA&gt;     10.66667        20.00   10.666667  10.66667   20.000
+#&gt; 13     DC       &lt;NA&gt;      1.00000           NA          NA   1.00000       NA
+#&gt; 14    016       &lt;NA&gt;     46.66667        79.00   46.666667  46.66667   79.000
+#&gt; 15   &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 16    013       &lt;NA&gt;     41.75000        72.75   41.750000  30.76500   53.165
+#&gt; 17    016       &lt;NA&gt;     41.75000        72.75   41.750000  10.98500   19.585
+#&gt; 18     DC       &lt;NA&gt;      2.00000           NA          NA   2.00000       NA
+#&gt; 19     LV       &lt;NA&gt;      1.00000           NA          NA   1.00000       NA
+#&gt; 20    075       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 21   &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA
+#&gt; 22    018       &lt;NA&gt;    151.50000       249.00  151.500000 127.20000  207.700
+#&gt; 23    277       &lt;NA&gt;    151.50000       249.00  151.500000  24.30000   41.300
+#&gt; 24    016        016     21.25000        37.75   21.250000  16.31000   27.935
+#&gt; 25    277        016     21.25000        37.75   21.250000   4.94000    9.815
+#&gt;       GsSpLow CourseSchool TurtleJFR TurtleAge TurtleCapt   PerpDistKm
+#&gt; 1   42.333333           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.525631e+00
+#&gt; 2    5.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.075807e+00
+#&gt; 3          NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 4.593917e-01
+#&gt; 4          NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.452712e-01
+#&gt; 5          NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 7.093572e-01
+#&gt; 6          NA          100      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.225770e+00
+#&gt; 7          NA          100      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.257891e+00
+#&gt; 8          NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 8.402403e-02
+#&gt; 9          NA           NA      &lt;NA&gt;         A          N 4.811637e-02
+#&gt; 10         NA           NA      &lt;NA&gt;         A          N 5.556000e-02
+#&gt; 11         NA           NA      &lt;NA&gt;         J          N 3.207758e-02
+#&gt; 12  10.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 5.185600e-01
+#&gt; 13         NA           NA      &lt;NA&gt;         A       &lt;NA&gt; 6.547809e-02
+#&gt; 14  46.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.878568e+00
+#&gt; 15         NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.875670e-01
+#&gt; 16  30.765000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.888916e+00
+#&gt; 17  10.985000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.888916e+00
+#&gt; 18         NA           NA         F         A          Y 2.850229e-01
+#&gt; 19         NA           NA      &lt;NA&gt;         A          N 2.268046e-18
+#&gt; 20         NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 0.000000e+00
+#&gt; 21         NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.115733e+00
+#&gt; 22 127.200000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01
+#&gt; 23  24.300000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01
+#&gt; 24  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00
+#&gt; 25   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00</div><div class='input'><span class='fu'>das_sight</span><span class='op'>(</span><span class='va'>y.proc</span>, return.format <span class='op'>=</span> <span class='st'>"complete"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    Event            DateTime      Lat       Lon OnEffort Cruise Mode OffsetGMT
+#&gt; 1      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C         5
+#&gt; 2      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C         5
+#&gt; 3      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C         5
+#&gt; 4      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C         5
+#&gt; 5      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C         5
+#&gt; 6      S 2013-01-13 07:56:22 39.51767 -137.5285     TRUE   1000    C         5
+#&gt; 7      s 2013-01-13 08:06:00 39.54217 -137.5263    FALSE   1000    C         5
+#&gt; 8      s 2013-01-13 08:08:58 39.55000 -137.5255    FALSE   1000    C         5
+#&gt; 9      s 2013-01-13 08:15:32 39.56000 -137.5218    FALSE   1000    C         5
+#&gt; 10     s 2013-01-13 08:17:28 39.56233 -137.5210    FALSE   1000    C         5
+#&gt; 11     s 2013-01-13 08:19:39 39.56483 -137.5197    FALSE   1000    C         5
+#&gt; 12     s 2013-01-13 08:26:45 39.56400 -137.5140    FALSE   1000    C         5
+#&gt; 13     t 2013-01-13 09:34:27 39.59733 -137.4400     TRUE   1000    C         5
+#&gt; 14     t 2013-01-13 13:35:18 40.14000 -137.2048    FALSE   1000    C         5
+#&gt; 15     t 2013-01-13 14:02:55 40.18283 -137.1622     TRUE   1000    C         5
+#&gt; 16     S 2013-01-13 14:37:56 40.26567 -137.1350     TRUE   1000    C         5
+#&gt; 17     S 2013-01-13 14:37:56 40.26567 -137.1350     TRUE   1000    C         5
+#&gt; 18     S 2013-01-13 14:37:56 40.26567 -137.1350     TRUE   1000    C         5
+#&gt; 19     t 2013-01-13 15:36:47 40.36050 -137.0978     TRUE   1000    C         5
+#&gt; 20     S 2013-01-13 16:29:50 40.45133 -137.0628     TRUE   1000    C         5
+#&gt; 21     S 2013-01-13 16:29:50 40.45133 -137.0628     TRUE   1000    C         5
+#&gt; 22     S 2013-01-13 16:29:50 40.45133 -137.0628     TRUE   1000    C         5
+#&gt; 23     s 2013-01-13 16:36:34 40.46667 -137.0570    FALSE   1000    C         5
+#&gt; 24     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C         5
+#&gt; 25     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C         5
+#&gt; 26     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C         5
+#&gt; 27     S 2013-01-13 17:00:45 40.52400 -137.0522     TRUE   1000    C         5
+#&gt; 28     t 2013-01-13 17:08:11 40.52083 -137.0383    FALSE   1000    C         5
+#&gt; 29     t 2013-01-13 17:45:10 40.50450 -137.0437    FALSE   1000    C         5
+#&gt; 30     S 2013-01-14 09:17:21 40.75183 -135.7748    FALSE   1000 &lt;NA&gt;         5
+#&gt; 31     F 2013-01-14 11:25:32 40.98950 -135.5965     TRUE   1000    C         5
+#&gt; 32     S 2013-01-14 11:47:51 41.04017 -135.5635     TRUE   1000    C         5
+#&gt; 33     S 2013-01-14 11:47:51 41.04017 -135.5635     TRUE   1000    C         5
+#&gt; 34     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C         5
+#&gt; 35     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C         5
+#&gt; 36     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C         5
+#&gt; 37     S 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C         5
+#&gt;    EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun
+#&gt; 1        S        2     25  10.2   3         3        10       1       NA
+#&gt; 2        S        2     25  10.2   3         3        10       1       NA
+#&gt; 3        S        2     25  10.2   3         3        10       1       NA
+#&gt; 4        S        2     26   9.7   3         3        10       3        2
+#&gt; 5        S        2     26   9.7   3         3        10       3        2
+#&gt; 6        S        2     26   9.7   3         3        10       3        2
+#&gt; 7        S        2     26   9.7   3         3        10       3        2
+#&gt; 8        S        2     26   9.7   3         3        10       3        2
+#&gt; 9        S        2     26   9.7   3         3        10       3        2
+#&gt; 10       S        2     26   9.7   3         3        10       3        2
+#&gt; 11       S        2     26   9.7   3         3        10       3        2
+#&gt; 12       S        2     26   9.7   3         3        10       3        2
+#&gt; 13       S        2     27   9.0   3         3        10       1        2
+#&gt; 14       S        2     35   9.2   3         3         9       1       12
+#&gt; 15       S        2     20   9.3   3         3         6       1        8
+#&gt; 16       S        2     20   9.3   3         3         6       1        8
+#&gt; 17       S        2     20   9.3   3         3         6       1        8
+#&gt; 18       S        2     20   9.3   3         3         6       1        8
+#&gt; 19       S        2     16   8.9   2         3         6       1        9
+#&gt; 20       S        2     25   8.9   2         3         6       1        8
+#&gt; 21       S        2     25   8.9   2         3         6       1        8
+#&gt; 22       S        2     25   8.9   2         3         6       1        8
+#&gt; 23       S        2     25   8.9   2         3         6       1        8
+#&gt; 24       S        2     30   9.5   2         3         6       1        8
+#&gt; 25       S        2     30   9.5   2         3         6       1        8
+#&gt; 26       S        2     30   9.5   2         3         6       1        8
+#&gt; 27       S        2     30   9.5   2         3         6       1        8
+#&gt; 28       S        2     30   9.5   2         3         6       1        8
+#&gt; 29       S        2     30   9.5   2         3         6       1        8
+#&gt; 30    &lt;NA&gt;       NA     NA    NA  NA        NA        NA      NA       NA
+#&gt; 31       S        2     35   9.5   2         1         5       3       NA
+#&gt; 32       S        2     23   9.6   2         1         5       3       NA
+#&gt; 33       S        2     23   9.6   2         1         5       3       NA
+#&gt; 34       S        2     23   9.6   2         1         5       3       NA
+#&gt; 35       S        2     23   9.6   2         1         5       3       NA
+#&gt; 36       S        2     23   9.6   2         1         5       3       NA
+#&gt; 37       S        2     23   9.6   2         1         5       3       NA
+#&gt;    VertSun Glare Vis ObsL  Rec ObsR ObsInd EffortDot EventNum       file_das
+#&gt; 1       NA    NA 6.0  208  280  001   &lt;NA&gt;      TRUE       15 das_sample.das
+#&gt; 2       NA    NA 6.0  208  280  001   &lt;NA&gt;      TRUE       15 das_sample.das
+#&gt; 3       NA    NA 6.0  208  280  001   &lt;NA&gt;      TRUE       15 das_sample.das
+#&gt; 4        2 FALSE 5.5  125  208  280   &lt;NA&gt;      TRUE       35 das_sample.das
+#&gt; 5        2 FALSE 5.5  125  208  280   &lt;NA&gt;      TRUE       35 das_sample.das
+#&gt; 6        2 FALSE 5.5  125  208  280   &lt;NA&gt;      TRUE       35 das_sample.das
+#&gt; 7        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       39 das_sample.das
+#&gt; 8        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       41 das_sample.das
+#&gt; 9        2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       42 das_sample.das
+#&gt; 10       2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       44 das_sample.das
+#&gt; 11       2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       45 das_sample.das
+#&gt; 12       2 FALSE 5.5  125  208  280   &lt;NA&gt;     FALSE       46 das_sample.das
+#&gt; 13       2 FALSE 5.5  001  126  149   &lt;NA&gt;      TRUE       59 das_sample.das
+#&gt; 14      12 FALSE 6.0  126  149  125   &lt;NA&gt;     FALSE      118 das_sample.das
+#&gt; 15       1 FALSE 6.0  280  001  126   &lt;NA&gt;      TRUE      131 das_sample.das
+#&gt; 16       1 FALSE 6.0  280  001  126   &lt;NA&gt;      TRUE      136 das_sample.das
+#&gt; 17       1 FALSE 6.0  280  001  126   &lt;NA&gt;      TRUE      136 das_sample.das
+#&gt; 18       1 FALSE 6.0  280  001  126   &lt;NA&gt;      TRUE      136 das_sample.das
+#&gt; 19       1 FALSE 6.0  125  208  280   &lt;NA&gt;      TRUE      153 das_sample.das
+#&gt; 20       2 FALSE 6.0  149  125  208   &lt;NA&gt;      TRUE      167 das_sample.das
+#&gt; 21       2 FALSE 6.0  149  125  208   &lt;NA&gt;      TRUE      167 das_sample.das
+#&gt; 22       2 FALSE 6.0  149  125  208   &lt;NA&gt;      TRUE      167 das_sample.das
+#&gt; 23       2 FALSE 6.0  149  125  208   &lt;NA&gt;     FALSE      170 das_sample.das
+#&gt; 24       2 FALSE 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das
+#&gt; 25       2 FALSE 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das
+#&gt; 26       2 FALSE 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das
+#&gt; 27       2 FALSE 6.0  126  149  125   &lt;NA&gt;      TRUE      181 das_sample.das
+#&gt; 28       2 FALSE 6.0  126  149  125   &lt;NA&gt;     FALSE      186 das_sample.das
+#&gt; 29       2 FALSE 6.0  126  149  125   &lt;NA&gt;     FALSE      190 das_sample.das
+#&gt; 30      NA    NA  NA &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;     FALSE      199 das_sample.das
+#&gt; 31      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE        8 das_sample.das
+#&gt; 32      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       18 das_sample.das
+#&gt; 33      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       18 das_sample.das
+#&gt; 34      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das
+#&gt; 35      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das
+#&gt; 36      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das
+#&gt; 37      NA    NA 4.0  149  125  208   &lt;NA&gt;      TRUE       20 das_sample.das
+#&gt;    line_num SightNo Subgroup SightNoDaily  Obs ObsStd Bearing Reticle DistNm
+#&gt; 1        15    1406     &lt;NA&gt;   20130113_1  208   TRUE     309     2.8   1.06
+#&gt; 2        15    1406     &lt;NA&gt;   20130113_1  208   TRUE     309     2.8   1.06
+#&gt; 3        15    1406     &lt;NA&gt;   20130113_1  208   TRUE     309     2.8   1.06
+#&gt; 4        38    1407     &lt;NA&gt;   20130113_2  125   TRUE     326     0.4   2.97
+#&gt; 5        38    1407     &lt;NA&gt;   20130113_2  125   TRUE     326     0.4   2.97
+#&gt; 6        38    1407     &lt;NA&gt;   20130113_2  125   TRUE     326     0.4   2.97
+#&gt; 7        45    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      11     2.0   1.30
+#&gt; 8        47    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE       5     3.5   0.90
+#&gt; 9        48    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      50      NA   0.50
+#&gt; 10       50    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE      71     4.5   0.70
+#&gt; 11       51    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE     104     4.5   0.70
+#&gt; 12       52    1407     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE       2     2.2   1.30
+#&gt; 13       65    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  280  FALSE     120      NA   0.03
+#&gt; 14      124    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  149   TRUE     270      NA   0.03
+#&gt; 15      137    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  228  FALSE     300      NA   0.02
+#&gt; 16      142    1408     &lt;NA&gt;   20130113_3  280   TRUE     270    14.0   0.28
+#&gt; 17      142    1408     &lt;NA&gt;   20130113_3  280   TRUE     270    14.0   0.28
+#&gt; 18      142    1408     &lt;NA&gt;   20130113_3  280   TRUE     270    14.0   0.28
+#&gt; 19      162    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  231  FALSE      45      NA   0.05
+#&gt; 20      176    1409     &lt;NA&gt;   20130113_4  149   TRUE     344     0.2   3.68
+#&gt; 21      176    1409     &lt;NA&gt;   20130113_4  149   TRUE     344     0.2   3.68
+#&gt; 22      176    1409     &lt;NA&gt;   20130113_4  149   TRUE     344     0.2   3.68
+#&gt; 23      182    1409     &lt;NA&gt;         &lt;NA&gt; &lt;NA&gt;  FALSE     356     0.4   3.00
+#&gt; 24      193    1410     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66
+#&gt; 25      193    1410     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66
+#&gt; 26      193    1410     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66
+#&gt; 27      193    1410     &lt;NA&gt;   20130113_5  125   TRUE      70     1.4   1.66
+#&gt; 28      202    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  280  FALSE      42    17.0   0.23
+#&gt; 29      206    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  099  FALSE     180      NA   0.01
+#&gt; 30      215    1411     &lt;NA&gt;   20130114_1  280  FALSE       0      NA   0.00
+#&gt; 31      238    &lt;NA&gt;     &lt;NA&gt;         &lt;NA&gt;  149   TRUE     309     1.7   1.47
+#&gt; 32      248    1412     &lt;NA&gt;   20130114_2  149   TRUE     359     0.3   3.28
+#&gt; 33      248    1412     &lt;NA&gt;   20130114_2  149   TRUE     359     0.3   3.28
+#&gt; 34      252    1413     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23
+#&gt; 35      252    1413     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23
+#&gt; 36      252    1413     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23
+#&gt; 37      252    1413     &lt;NA&gt;   20130114_3  208   TRUE      38     0.8   2.23
+#&gt;    Cue Method Photos Birds CalibSchool PhotosAerial Biopsy  Prob nSp Mixed
+#&gt; 1    3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 2    3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 3    3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 4    3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 5    3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 6    3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 7   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 8   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 9   NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 10  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 11  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 12  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 13  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 14  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 15  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 16   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 17   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 18   3      4      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 19  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 20   3      4      Y     Y        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 21   3      4      Y     Y        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 22   3      4      Y     Y        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 23  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 24   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 25   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 26   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 27   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 28  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 29  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 30   3      1      N     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   1 FALSE
+#&gt; 31  NA     NA   &lt;NA&gt;  &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;    NA  NA    NA
+#&gt; 32   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 33   2      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt; FALSE   2  TRUE
+#&gt; 34   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE
+#&gt; 35   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE
+#&gt; 36   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE
+#&gt; 37   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE
+#&gt;    ObsEstimate SpCode1 SpCode2 SpCode3 SpCode4 SpCodeProb1 SpCodeProb2
+#&gt; 1          280     018    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 2          001     018    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 3          208     018    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 4          280     076    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 5          001     076    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 6          125     076    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 7         &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 8         &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 9         &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 10        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 11        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 12        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 13        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 14        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 15        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 16         280     037    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 17         001     037    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 18         126     037    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 19        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 20         125     016    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 21         149     016    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 22         208     016    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 23        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 24         280     013     016    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 25         125     013     016    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 26         149     013     016    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 27         126     013     016    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 28        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 29        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 30         280     075    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 31        &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 32         149     018     277    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 33         126     018     277    &lt;NA&gt;    &lt;NA&gt;        &lt;NA&gt;        &lt;NA&gt;
+#&gt; 34         125     016     277    &lt;NA&gt;    &lt;NA&gt;         016         016
+#&gt; 35         208     016     277    &lt;NA&gt;    &lt;NA&gt;         016         016
+#&gt; 36         149     016     277    &lt;NA&gt;    &lt;NA&gt;         016         016
+#&gt; 37         126     016     277    &lt;NA&gt;    &lt;NA&gt;         016         016
+#&gt;    SpCodeProb3 SpCodeProb4 SpPerc1 SpPerc2 SpPerc3 SpPerc4 GsSchoolBest
+#&gt; 1         &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           NA
+#&gt; 2         &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           NA
+#&gt; 3         &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           NA
+#&gt; 4         &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA            6
+#&gt; 5         &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA            9
+#&gt; 6         &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA            9
+#&gt; 7         &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 8         &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 9         &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 10        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 11        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 12        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 13        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 14        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 15        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 16        &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           11
+#&gt; 17        &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           12
+#&gt; 18        &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA            9
+#&gt; 19        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 20        &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           46
+#&gt; 21        &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           28
+#&gt; 22        &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           66
+#&gt; 23        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 24        &lt;NA&gt;        &lt;NA&gt;      68      32      NA      NA           37
+#&gt; 25        &lt;NA&gt;        &lt;NA&gt;      75      25      NA      NA           35
+#&gt; 26        &lt;NA&gt;        &lt;NA&gt;      65      35      NA      NA           29
+#&gt; 27        &lt;NA&gt;        &lt;NA&gt;      80      20      NA      NA           66
+#&gt; 28        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 29        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 30        &lt;NA&gt;        &lt;NA&gt;     100      NA      NA      NA           NA
+#&gt; 31        &lt;NA&gt;        &lt;NA&gt;      NA      NA      NA      NA           NA
+#&gt; 32        &lt;NA&gt;        &lt;NA&gt;      80      20      NA      NA          183
+#&gt; 33        &lt;NA&gt;        &lt;NA&gt;      90      10      NA      NA          120
+#&gt; 34        &lt;NA&gt;        &lt;NA&gt;      60      40      NA      NA           21
+#&gt; 35        &lt;NA&gt;        &lt;NA&gt;      56      44      NA      NA           16
+#&gt; 36        &lt;NA&gt;        &lt;NA&gt;      70      30      NA      NA           12
+#&gt; 37        &lt;NA&gt;        &lt;NA&gt;      98       2      NA      NA           36
+#&gt;    GsSchoolHigh GsSchoolLow CourseSchool TurtleSp TurtleGs TurtleJFR TurtleAge
+#&gt; 1            NA          43           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 2            NA          36           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 3            NA          48           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 4            10           6           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 5            10           2           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 6            22           9           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 7            NA          NA           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 8            NA          NA           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 9            NA          NA           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 10           NA          NA          100     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 11           NA          NA          100     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 12           NA          NA           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 13           NA          NA           NA       LV        1      &lt;NA&gt;         A
+#&gt; 14           NA          NA           NA       DC        2      &lt;NA&gt;         A
+#&gt; 15           NA          NA           NA       DC        1      &lt;NA&gt;         J
+#&gt; 16           24          11           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 17           23          12           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 18           13           9           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 19           NA          NA           NA       DC        1      &lt;NA&gt;         A
+#&gt; 20           90          46           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 21           65          28           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 22           82          66           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 23           NA          NA           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 24           72          37           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 25           74          35           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 26           52          29           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 27           93          66           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 28           NA          NA           NA       DC        2         F         A
+#&gt; 29           NA          NA           NA       LV        1      &lt;NA&gt;         A
+#&gt; 30           NA          NA           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 31           NA          NA           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 32          328         183           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 33          170         120           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 34           60          21           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 35           20          16           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 36           18          12           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt; 37           53          36           NA     &lt;NA&gt;       NA      &lt;NA&gt;      &lt;NA&gt;
+#&gt;    TurtleCapt PinnipedSp PinnipedGs BoatType BoatGs   PerpDistKm
+#&gt; 1        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.525631e+00
+#&gt; 2        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.525631e+00
+#&gt; 3        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.525631e+00
+#&gt; 4        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 3.075807e+00
+#&gt; 5        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 3.075807e+00
+#&gt; 6        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 3.075807e+00
+#&gt; 7        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 4.593917e-01
+#&gt; 8        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.452712e-01
+#&gt; 9        &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 7.093572e-01
+#&gt; 10       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.225770e+00
+#&gt; 11       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.257891e+00
+#&gt; 12       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 8.402403e-02
+#&gt; 13          N       &lt;NA&gt;         NA     &lt;NA&gt;     NA 4.811637e-02
+#&gt; 14          N       &lt;NA&gt;         NA     &lt;NA&gt;     NA 5.556000e-02
+#&gt; 15          N       &lt;NA&gt;         NA     &lt;NA&gt;     NA 3.207758e-02
+#&gt; 16       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 5.185600e-01
+#&gt; 17       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 5.185600e-01
+#&gt; 18       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 5.185600e-01
+#&gt; 19       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 6.547809e-02
+#&gt; 20       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.878568e+00
+#&gt; 21       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.878568e+00
+#&gt; 22       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.878568e+00
+#&gt; 23       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 3.875670e-01
+#&gt; 24       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.888916e+00
+#&gt; 25       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.888916e+00
+#&gt; 26       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.888916e+00
+#&gt; 27       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.888916e+00
+#&gt; 28          Y       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.850229e-01
+#&gt; 29          N       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.268046e-18
+#&gt; 30       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 0.000000e+00
+#&gt; 31       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.115733e+00
+#&gt; 32       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.060157e-01
+#&gt; 33       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 1.060157e-01
+#&gt; 34       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.542657e+00
+#&gt; 35       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.542657e+00
+#&gt; 36       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.542657e+00
+#&gt; 37       &lt;NA&gt;       &lt;NA&gt;         NA     &lt;NA&gt;     NA 2.542657e+00</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

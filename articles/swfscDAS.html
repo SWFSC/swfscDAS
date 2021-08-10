@@ -126,6 +126,7 @@
 <h2 class="hasAnchor">
 <a href="#read-and-process-data" class="anchor"></a>Read and process data</h2>
 <p>Once QA/QC is complete and you have fixed any data entry errors, you can begin to process the DAS data. The backbone of this package is the reading and processing steps: 1) the data from the DAS file are read into the columns of a data frame and 2) state and condition information are extracted for each event. This means that after processing, you can simply look at any event (row) and determine the Beaufort, viewing conditions, etc., at the time of the event. All other functions in the package depend on the DAS data being in this processed state.</p>
+<p>One other processing note is that the ‘DateTime’ column in the <code>das_read</code> output has a time zone of “UTC” - this value is meaningless and only present because POSIXct vectors must have exactly one time zone. If you need to do conversions based on time zone, then use the ‘OffsetGMT’ column and <code>force_tz</code> and <code>with_tz</code> from the <code>lubridate</code> package. One reason to do such conversions would be if data was collected in a time zone that causes effort to span multiple days, since then ‘OnEffort’ values will be incorrect because <code>das_process</code> resets the event sequence to off effort at the beginning of a new day.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read </span>
 <span class="va">y.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="va">y</span>, skip <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
@@ -157,7 +158,7 @@
 <span class="va">y.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_process.html">das_process</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>
 <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 256</span>
-<span class="co">#&gt; Columns: 39</span>
+<span class="co">#&gt; Columns: 40</span>
 <span class="co">#&gt; $ Event     &lt;chr&gt; "B", "R", "P", "V", "N", "W", "V", "W", "W", "*", "P", "V", …</span>
 <span class="co">#&gt; $ DateTime  &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:27:39, 2013-01-13 06:27:…</span>
 <span class="co">#&gt; $ Lat       &lt;dbl&gt; 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, …</span>
@@ -165,6 +166,7 @@
 <span class="co">#&gt; $ OnEffort  &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, …</span>
 <span class="co">#&gt; $ Cruise    &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, …</span>
 <span class="co">#&gt; $ Mode      &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", …</span>
+<span class="co">#&gt; $ OffsetGMT &lt;int&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, …</span>
 <span class="co">#&gt; $ EffType   &lt;chr&gt; NA, "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "…</span>
 <span class="co">#&gt; $ ESWsides  &lt;dbl&gt; NA, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
 <span class="co">#&gt; $ Course    &lt;dbl&gt; NA, NA, NA, NA, 23, 23, 23, 23, 23, 23, 23, 23, 25, 25, 25, …</span>
@@ -200,12 +202,8 @@
 
 <span class="co"># Note that das_read can read multiple files at once</span>
 <span class="va">y2.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>One other note is that <code>das_read</code> contains a ‘tz’ argument that specifies the time zone of the date/times in the DAS file. This argument can generally be ignored if data was collected in the local time zone, as the time zone is not used in any other swfscDAS functions. However, if data was collected in a time zone that causes effort to span multiple days, then ‘OnEffort’ values will be incorrect because <code>das_process</code> resets the event sequence to off effort at the beginning of a new day. To fix this, convert the date/times to the local time zone after running <code>das_read</code> and before running <code>das_process</code>. For instance, if data was collected in UTC but local time is GMT-10, then you could do the following:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y.read.dt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="va">y</span>, skip <span class="op">=</span> <span class="fl">0</span>, tz <span class="op">=</span> <span class="st">"UTC"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>DateTime <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="http://lubridate.tidyverse.org/reference/with_tz.html">with_tz</a></span><span class="op">(</span><span class="va">DateTime</span>, <span class="st">"Etc/GMT-10"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Once you have processed the DAS data, you can easily access a variety of information. For instance, you can look at the different events or Beaufort values that occurred in the data, or filter for specific events to get the beginning and ending points of each effort section.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># The number of each event</span>
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">$</span><span class="va">Event</span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -235,7 +233,7 @@
 <h2 class="hasAnchor">
 <a href="#sightings" class="anchor"></a>Sightings</h2>
 <p>The <code>swfscDAS</code> package does contain specific functions for extracting and/or summarizing particular information from the processed data. First is <code>das_sight</code>, a function that returns a data frame with pertinent sighting data pulled out to their own columns. Due to the different data collected for each type of sighting and the different needs of end-users, this function offers several different return formats. For the “default” format there is one row for each species of each sighting, for the “wide” format, there is one row for each sighting event, and for the “complete” format there is one row for every group size estimate for each sighting. See <code><a href="../reference/das_sight.html">?das_sight</a></code> for more details. The “complete” format is intended for users looking to do observer corrections, or to combine estimates using a different method than the arithmetic mean (e.g. the geometric mean)</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span>
 <span class="va">y.sight</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -393,7 +391,7 @@
 <span class="co">#&gt; $ BoatGs       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
 <span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.52563078, 1.52563078, 1.52563078, 3.07580701, 3.0758070…</span></code></pre></div>
 <p>You can also easily filter or subset the sighting data for the desired event code(s)</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y.sight.sg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Note that this is equivalent to:</span>
@@ -404,7 +402,7 @@
 <a href="#effort" class="anchor"></a>Effort</h2>
 <p>In addition, you can chop the effort data into segments, and summarize the conditions and sightings on those segments using <code>das_effort</code> and <code>das_effort_sight</code>. These effort segments can be used for line transect estimates using the Distance software, species distribution modeling, or summarizing the number of sightings of certain species on each segment, among other uses. <code>das_effort</code> chops continuous effort sections (the event sequence from R to E events) into effort segments using one of several different chopping methods: condition (a new effort segment every time a condition changes), equal length (effort segments of equal length), or section (each segment is a full continuous effort section, i.e. it runs from an R event to an E event). <code>das_effort_sight</code> takes the output of <code>das_effort</code> and returns the number of included sightings and animals per segment for specified species codes.</p>
 <p>Both functions return a list of three data frames: segdata, sightinfo, and randpicks. These data frames and the different chopping methodologies are described in depth in the function documentation (<code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_sight.html">?das_effort_sight</a></code>), but briefly segdata contains information about each effort segment, sightinfo contains information about the sightings such as their corresponding segment, and randpicks contains information specific to the ‘equal length’ chopping method. <code>das_effort</code> and <code>das_effort_sight</code> are separate functions to allow the user more control over which sightings should be included in the effort segment summaries (see <code><a href="../reference/das_effort.html">?das_effort</a></code>). See below for how to chop/split effort lines by strata.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Chop the effort into 10km segments</span>
 <span class="va">y.eff.eq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
   <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"equallength"</span>, seg.km <span class="op">=</span> <span class="fl">10</span>, dist.method <span class="op">=</span> <span class="st">"greatcircle"</span>, 
@@ -457,7 +455,7 @@
 
 <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight</span><span class="op">$</span><span class="va">sightinfo</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 13</span>
-<span class="co">#&gt; Columns: 63</span>
+<span class="co">#&gt; Columns: 64</span>
 <span class="co">#&gt; $ segnum       &lt;int&gt; 1, 3, 4, 13, 13, 15, 17, 18, 18, 20, 20, 20, 20</span>
 <span class="co">#&gt; $ mlat         &lt;dbl&gt; 39.34377, 39.47435, 39.61433, 40.20895, 40.20895, 40.3483…</span>
 <span class="co">#&gt; $ mlon         &lt;dbl&gt; -137.5930, -137.5493, -137.4327, -137.1531, -137.1531, -1…</span>
@@ -469,6 +467,7 @@
 <span class="co">#&gt; $ OnEffort     &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…</span>
 <span class="co">#&gt; $ Cruise       &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 100…</span>
 <span class="co">#&gt; $ Mode         &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C…</span>
+<span class="co">#&gt; $ OffsetGMT    &lt;int&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</span>
 <span class="co">#&gt; $ EffType      &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S…</span>
 <span class="co">#&gt; $ ESWsides     &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
 <span class="co">#&gt; $ Course       &lt;dbl&gt; 25, 26, 27, 20, 20, 16, 25, 30, 30, 23, 23, 23, 23</span>
@@ -527,7 +526,7 @@
 <a href="#strata" class="anchor"></a>Strata</h2>
 <p>This package contains several methods to incorporate strata into your DAS data processing: <code>das_intersects_strata</code> for assigning points to strata and <code>das_effort</code> for chopping effort lines by strata. These functions contain a ‘strata.files’ argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.</p>
 <p>First, <code>das_intersects_strata</code> allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. If a list then it must be the output of <code>das_effort</code> or <code>das_effort_sight</code>, and the function will use the segment midpoints to determine if a segment (and associated sightings) intersected each stratum.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">stratum.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"das_sample_stratum.csv"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>
 <span class="va">y.eff.sight.strata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_intersects_strata.html">das_intersects_strata</a></span><span class="op">(</span><span class="va">y.eff.sight</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>InPoly <span class="op">=</span> <span class="va">stratum.file</span><span class="op">)</span><span class="op">)</span>
 
@@ -567,7 +566,7 @@
 <span class="co">#&gt; $ ANI_076          &lt;dbl&gt; 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
 <span class="co">#&gt; $ InPoly           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,…</span></code></pre></div>
 <p>In addition, you can chop/split effort lines by strata using the ‘strata.files’ argument of <code>das_effort</code>. Effort lines are chopped/split by strata before then being processed using the specified method (condition, equal length, etc.). The ‘segdata’ element of the <code>das_effort</code> output will contain a ‘stratum’ column, which contains the name of the stratum that the segment is in. See <code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_strata.html">?das_effort_strata</a></code> for more details.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y.eff.strata.section</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
   <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"section"</span>, strata.files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">stratum.file</span><span class="op">)</span>,
   num.cores <span class="op">=</span> <span class="fl">1</span>
@@ -622,7 +621,7 @@
 <h2 class="hasAnchor">
 <a href="#comments" class="anchor"></a>Comments</h2>
 <p>In addition, you can use <code>das_comments</code> to generate comment strings. This is particularly useful if looking for comments with keywords</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y.comm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_comments.html">das_comments</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span>
 <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">y.comm</span>, <span class="va">Event</span>, <span class="va">line_num</span>, <span class="va">comment_str</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 5</span>
@@ -632,16 +631,16 @@
 <span class="co">#&gt; $ comment_str &lt;chr&gt; " Well?              ", " going left to avoid          ", …</span>
 
 <span class="va">y.comm</span><span class="op">[</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">y.comm</span><span class="op">$</span><span class="va">comment_str</span>, <span class="st">"gear"</span><span class="op">)</span>, <span class="op">]</span> <span class="co">#Could also use grepl() here</span>
-<span class="co">#&gt;     Event            DateTime    Lat      Lon OnEffort Cruise Mode EffType</span>
-<span class="co">#&gt; 238     C 2013-01-14 11:37:27 41.016 -135.578    FALSE   1000    C       S</span>
-<span class="co">#&gt;     ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun VertSun</span>
-<span class="co">#&gt; 238        2     35   9.5   2         1         5       3       NA      NA</span>
-<span class="co">#&gt;     Glare Vis ObsL Rec ObsR ObsInd Data1 Data2 Data3 Data4 Data5 Data6 Data7</span>
-<span class="co">#&gt; 238    NA   4  149 125  208   &lt;NA&gt;  cros sing  fishi ng ge ar     &lt;NA&gt;  &lt;NA&gt;</span>
-<span class="co">#&gt;     Data8      Data9 Data10 Data11 Data12 EffortDot EventNum       file_das</span>
-<span class="co">#&gt; 238  &lt;NA&gt;              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE       11 das_sample.das</span>
-<span class="co">#&gt;     line_num                         comment_str</span>
-<span class="co">#&gt; 238      241  crossing fishing gear</span></code></pre></div>
+<span class="co">#&gt;     Event            DateTime    Lat      Lon OnEffort Cruise Mode OffsetGMT</span>
+<span class="co">#&gt; 238     C 2013-01-14 11:37:27 41.016 -135.578    FALSE   1000    C         5</span>
+<span class="co">#&gt;     EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun</span>
+<span class="co">#&gt; 238       S        2     35   9.5   2         1         5       3       NA</span>
+<span class="co">#&gt;     VertSun Glare Vis ObsL Rec ObsR ObsInd Data1 Data2 Data3 Data4 Data5 Data6</span>
+<span class="co">#&gt; 238      NA    NA   4  149 125  208   &lt;NA&gt;  cros sing  fishi ng ge ar     &lt;NA&gt;</span>
+<span class="co">#&gt;     Data7 Data8      Data9 Data10 Data11 Data12 EffortDot EventNum</span>
+<span class="co">#&gt; 238  &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE       11</span>
+<span class="co">#&gt;           file_das line_num                         comment_str</span>
+<span class="co">#&gt; 238 das_sample.das      241  crossing fishing gear</span></code></pre></div>
 </div>
   </div>
 

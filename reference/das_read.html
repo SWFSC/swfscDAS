@@ -137,7 +137,7 @@
   where each line is data for a specific event</p>
     </div>
 
-    <pre class="usage"><span class='fu'>das_read</span><span class='op'>(</span><span class='va'>file</span>, skip <span class='op'>=</span> <span class='fl'>0</span>, tz <span class='op'>=</span> <span class='st'>"UTC"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>das_read</span><span class='op'>(</span><span class='va'>file</span>, skip <span class='op'>=</span> <span class='fl'>0</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,10 +149,6 @@
     <tr>
       <th>skip</th>
       <td><p>integer; see <code><a href='https://readr.tidyverse.org/reference/read_fwf.html'>read_fwf</a></code>. Default is 0</p></td>
-    </tr>
-    <tr>
-      <th>tz</th>
-      <td><p>character; see <a href='https://rdrr.io/r/base/strptime.html'>strptime</a>. Default is "UTC"</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -167,7 +163,7 @@
   with the following exceptions:</p><table class='table'>
 <tr><td><em>Name</em></td><td><em>Class</em></td><td><em>Details</em></td></tr>
 <tr><td>EffortDot</td><td>logical</td><td><code>TRUE</code> if "." was present, and <code>FALSE</code> otherwise</td></tr>
-<tr><td>DateTime</td><td>POSIXct</td><td>combination of 'Date' and 'Time' columns with time zone <code>tz</code></td></tr>
+<tr><td>DateTime</td><td>POSIXct</td><td>combination of 'Date' and 'Time' columns</td></tr>
 <tr><td>Lat</td><td>numeric</td><td>'Latitude' column converted to decimal degrees in range [-90, 90]</td></tr>
 <tr><td>Lon</td><td>numeric</td><td>'Longitude' column converted to decimal degrees in range [-180, 180]</td></tr>
 <tr><td>Data#</td><td>character</td><td>leading/trailing whitespace trimmed for non-comment events (i.e. where 'Event' is not "C")</td></tr>
@@ -177,6 +173,9 @@
 </table>
 
 
+<p>DateTime values have a (meaningless) time zone value of "UTC".
+  See the OffsetGMT column from <code><a href='das_process.html'>das_process</a></code>
+  for relevant time zone information</p>
 <p>Warnings are printed if any unexpected events have <code>NA</code> DateTime/Lat/Lon values,
   or if any Lat/Lon values cannot be converted to numeric values.
   Events that are 'expected' to have <code>NA</code> DateTime/Lat/Lon values are:
