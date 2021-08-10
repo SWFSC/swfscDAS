@@ -31,6 +31,7 @@ as_das_df.data.frame <- function(x) {
     OnEffort = "logical",
     Cruise = "numeric",
     Mode = "character",
+    OffsetGMT = "integer",
     EffType = "character",
     ESWsides = "numeric",
     Course = "numeric",

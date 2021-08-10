@@ -4,14 +4,12 @@
 \alias{das_read}
 \title{Read DAS file(s)}
 \usage{
-das_read(file, skip = 0, tz = "UTC", ...)
+das_read(file, skip = 0, ...)
 }
 \arguments{
 \item{file}{filename(s) of one or more DAS files}
 
 \item{skip}{integer; see \code{\link[readr]{read_fwf}}. Default is 0}
-
-\item{tz}{character; see \link[base]{strptime}. Default is "UTC"}
 
 \item{...}{ignored}
 }
@@ -22,7 +20,7 @@ A \code{das_dfr} object, which is also a data frame, with DAS data read into col
   \tabular{lll}{
     \emph{Name} \tab \emph{Class} \tab \emph{Details}\cr
     EffortDot \tab logical   \tab \code{TRUE} if "." was present, and \code{FALSE} otherwise\cr
-    DateTime  \tab POSIXct   \tab combination of 'Date' and 'Time' columns with time zone \code{tz}\cr
+    DateTime  \tab POSIXct   \tab combination of 'Date' and 'Time' columns\cr
     Lat       \tab numeric   \tab 'Latitude' column converted to decimal degrees in range [-90, 90]\cr
     Lon       \tab numeric   \tab 'Longitude' column converted to decimal degrees in range [-180, 180]\cr
     Data#     \tab character \tab leading/trailing whitespace trimmed for non-comment events (i.e. where 'Event' is not "C")\cr
@@ -30,6 +28,10 @@ A \code{das_dfr} object, which is also a data frame, with DAS data read into col
     file_das  \tab character \tab base filename, extracted from the \code{file} argument\cr
     line_num  \tab integer   \tab line number of each data row\cr
   }
+
+  DateTime values have a (meaningless) time zone value of "UTC".
+  See the OffsetGMT column from \code{\link{das_process}}
+  for relevant time zone information
 
   Warnings are printed if any unexpected events have \code{NA} DateTime/Lat/Lon values,
   or if any Lat/Lon values cannot be converted to numeric values.

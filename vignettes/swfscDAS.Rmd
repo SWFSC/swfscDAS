@@ -44,6 +44,8 @@ y.check <- das_check(y, skip = 0, print.cruise.nums = TRUE)
 
 Once QA/QC is complete and you have fixed any data entry errors, you can begin to process the DAS data. The backbone of this package is the reading and processing steps: 1) the data from the DAS file are read into the columns of a data frame and 2) state and condition information are extracted for each event. This means that after processing, you can simply look at any event (row) and determine the Beaufort, viewing conditions, etc., at the time of the event. All other functions in the package depend on the DAS data being in this processed state.
 
+One other processing note is that the 'DateTime' column in the `das_read` output has a time zone of "UTC" - this value is meaningless and only present because POSIXct vectors must have exactly one time zone. If you need to do conversions based on time zone, then use the 'OffsetGMT' column and `force_tz` and `with_tz` from the `lubridate` package. One reason to do such  conversions would be if data was collected in a time zone that causes effort to span multiple days, since then 'OnEffort' values will be incorrect because `das_process` resets the event sequence to off effort at the beginning of a new day.
+
 ```{r readproc}
 # Read 
 y.read <- das_read(y, skip = 0)
@@ -55,13 +57,6 @@ glimpse(y.proc)
 
 # Note that das_read can read multiple files at once
 y2.read <- das_read(c(y, y))
-```
-
-One other note is that `das_read` contains a 'tz' argument that specifies the time zone of the date/times in the DAS file. This argument can generally be ignored if data was collected in the local time zone, as the time zone is not used in any other swfscDAS functions. However, if data was collected in a time zone that causes effort to span multiple days, then 'OnEffort' values will be incorrect because `das_process` resets the event sequence to off effort at the beginning of a new day. To fix this, convert the date/times to the local time zone after running `das_read` and before running `das_process`. For instance, if data was collected in UTC but local time is GMT-10, then you could do the following:
-
-```{r readproc tz}
-y.read.dt <- das_read(y, skip = 0, tz = "UTC") %>% 
-  mutate(DateTime = lubridate::with_tz(DateTime, "Etc/GMT-10"))
 ```
 
 Once you have processed the DAS data, you can easily access a variety of information. For instance, you can look at the different events or Beaufort values that occurred in the data, or filter for specific events to get the beginning and ending points of each effort section. 

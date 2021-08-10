@@ -2,7 +2,7 @@
 
 * Fix `das_check` index math error (#5)
 
-* Added an example to the vignette of converting between time zones
+* Removed the tz argument from `das_read`, and added 'OffsetGMT' to the output of `das_process`
 
 
 # swfscDAS 0.5.1

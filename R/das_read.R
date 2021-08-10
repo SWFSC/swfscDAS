@@ -4,7 +4,6 @@
 #'   where each line is data for a specific event
 #' @param file filename(s) of one or more DAS files
 #' @param skip integer; see \code{\link[readr]{read_fwf}}. Default is 0
-#' @param tz character; see \link[base]{strptime}. Default is "UTC"
 #' @param ... ignored
 #'
 #' @details Reads/parses DAS data into columns of a data frame.
@@ -44,7 +43,7 @@
 #'   \tabular{lll}{
 #'     \emph{Name} \tab \emph{Class} \tab \emph{Details}\cr
 #'     EffortDot \tab logical   \tab \code{TRUE} if "." was present, and \code{FALSE} otherwise\cr
-#'     DateTime  \tab POSIXct   \tab combination of 'Date' and 'Time' columns with time zone \code{tz}\cr
+#'     DateTime  \tab POSIXct   \tab combination of 'Date' and 'Time' columns\cr
 #'     Lat       \tab numeric   \tab 'Latitude' column converted to decimal degrees in range [-90, 90]\cr
 #'     Lon       \tab numeric   \tab 'Longitude' column converted to decimal degrees in range [-180, 180]\cr
 #'     Data#     \tab character \tab leading/trailing whitespace trimmed for non-comment events (i.e. where 'Event' is not "C")\cr
@@ -52,6 +51,10 @@
 #'     file_das  \tab character \tab base filename, extracted from the \code{file} argument\cr
 #'     line_num  \tab integer   \tab line number of each data row\cr
 #'   }
+#'
+#'   DateTime values have a (meaningless) time zone value of "UTC".
+#'   See the OffsetGMT column from \code{\link{das_process}}
+#'   for relevant time zone information
 #'
 #'   Warnings are printed if any unexpected events have \code{NA} DateTime/Lat/Lon values,
 #'   or if any Lat/Lon values cannot be converted to numeric values.
@@ -63,7 +66,7 @@
 #' das_read(y)
 #'
 #' @export
-das_read <- function(file, skip = 0, tz = "UTC", ...) {
+das_read <- function(file, skip = 0, ...) {
   stopifnot(inherits(file, "character"))
 
   if (length(file) < 1)
@@ -74,11 +77,11 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
          "an existing file(s), ",
          "aka file.exists(file) is FALSE")
 
-  do.call(rbind, lapply(file, .das_read, skip = skip, tz = tz))
+  do.call(rbind, lapply(file, .das_read, skip = skip))
 }
 
 
-.das_read <- function(file, skip, tz) {
+.das_read <- function(file, skip) {
   #--------------------------------------------------------
   # Input checks
   stopifnot(inherits(file, "character"))
@@ -148,9 +151,9 @@ das_read <- function(file, skip = 0, tz = "UTC", ...) {
 
   #--------------------------------------------------------
   # Extract date/time
-  DateTime <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M%S", tz)
+  DateTime <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M%S", "UTC")
   dt.na <- is.na(DateTime)
-  DateTime[dt.na] <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M", tz)[dt.na]
+  DateTime[dt.na] <- strptime(paste(x$Date, x$Time), "%m%d%y %H%M", "UTC")[dt.na]
   dt.na <- is.na(DateTime)
 
   # Datetime NA check
