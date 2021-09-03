@@ -1,4 +1,4 @@
-# swfscDAS 0.5.2 (in development)
+# swfscDAS 0.6.0
 
 * Fix `das_check` index math error (#5)
 
