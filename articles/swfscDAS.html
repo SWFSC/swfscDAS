@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.2.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -126,7 +126,7 @@
 <h2 class="hasAnchor">
 <a href="#read-and-process-data" class="anchor"></a>Read and process data</h2>
 <p>Once QA/QC is complete and you have fixed any data entry errors, you can begin to process the DAS data. The backbone of this package is the reading and processing steps: 1) the data from the DAS file are read into the columns of a data frame and 2) state and condition information are extracted for each event. This means that after processing, you can simply look at any event (row) and determine the Beaufort, viewing conditions, etc., at the time of the event. All other functions in the package depend on the DAS data being in this processed state.</p>
-<p>One other processing note is that the ‘DateTime’ column in the <code>das_read</code> output has a time zone of “UTC” - this value is meaningless and only present because POSIXct vectors must have exactly one time zone. If you need to do conversions based on time zone, then use the ‘OffsetGMT’ column and <code>force_tz</code> and <code>with_tz</code> from the <code>lubridate</code> package. One reason to do such conversions would be if data was collected in a time zone that causes effort to span multiple days, since then ‘OnEffort’ values will be incorrect because <code>das_process</code> resets the event sequence to off effort at the beginning of a new day.</p>
+<p>One other processing note is that the ‘DateTime’ column in the <code>das_read</code> output has a time zone of “UTC” - this default time zone value is meaningless and only present because POSIXct vectors must have exactly one time zone. If you need to do conversions based on time zone, then use the ‘OffsetGMT’ column and <code>force_tz</code> and <code>with_tz</code> from the <code>lubridate</code> package. One reason to do such conversions would be if data was collected in a non-local time zone that causes the daily recorded effort to span more than one day, since then ‘OnEffort’ values will be incorrect because <code>das_process</code> resets the event sequence to off effort at the beginning of a new day.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read </span>
 <span class="va">y.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="va">y</span>, skip <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
