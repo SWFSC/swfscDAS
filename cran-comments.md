@@ -1,15 +1,12 @@
-## Resubmission
-This is a resubmission. In this version I have fixed an invalid url in README.md
-
 ## Release summary
-Addressing the broken links listed in the CRAN checks
+Bug fixes, fix NOTEs from CRAN checks
 
 ## Test environments (R-release = v4.1.0)
 * Windows 10, R-release (local)
 * win-builder (devel)
-* Microsoft Windows Server 2019 10.0.17763 (on github actions) R-release
-* mac OS 10.15.7 (on github actions) R-release
-* ubuntu 16.04 (on github actions) R-devel and release
+* windows-latest (Microsoft Windows Server 2019, on github actions) R-release
+* macOS-latest (on github actions) R-release
+* ubuntu 20.04 (on github actions) R-devel and release
 
 ## R CMD check results
 There were no ERRORs, WARNINGs, or NOTES
