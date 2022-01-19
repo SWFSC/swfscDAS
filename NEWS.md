@@ -1,3 +1,8 @@
+# swfscDAS 0.6.1.9000
+
+* Fix bug in `das_sight` and `das_effort` when the DAS file contains no sightings
+
+
 # swfscDAS 0.6.0
 
 * Fix `das_check` index math error (#5)

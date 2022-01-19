@@ -1,6 +1,6 @@
 Package: swfscDAS
 Title: Southwest Fisheries Science Center Shipboard DAS Data Processing
-Version: 0.6.0
+Version: 0.6.1.9000
 Authors@R: 
     person("Sam", "Woodman", email = "sam.woodman@noaa.gov", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6071-8186"))
 Description: Process and summarize shipboard 
@@ -31,5 +31,5 @@ Suggests:
     testthat (>= 2.1.0)
 License: GPL-3
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr

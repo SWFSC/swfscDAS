@@ -211,6 +211,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     filter(.data$Event %in% c(event.sight, event.sight.info)) %>%
     mutate(sight_cumsum = cumsum(.data$Event %in% event.sight))
 
+
+  #-----------------------------------------------------------------------------
   # Check that all GSKM events are followed by an A event
   idx.skmg <- which(x$Event %in% c("S", "K", "M", "G"))
   idx.a <- which(x$Event %in% c("A"))
@@ -233,7 +235,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   rm(idx.skmg, idx.a, skmga.check1a, skmga.check1b, skmga.check2)
 
 
-  #----------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
   # Get applicable data for each type of sighting event
 
   #--------------------------------------------------------
@@ -282,8 +284,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     mutate(SightNoDaily = paste(base::format(.data$DateTime, "%Y%m%d"),
                                 cumsum(.data$Event %in% c("S", "K", "M", "G")),
                                 sep = "_"),
-           SightNoDaily = ifelse(.data$Event %in% c("S", "K", "M", "G"),
-                                 .data$SightNoDaily, NA)) %>%
+           SightNoDaily = if_else(.data$Event %in% c("S", "K", "M", "G"),
+                                  .data$SightNoDaily, NA_character_)) %>%
     ungroup() %>%
     select(.data$sight_cumsum, .data$SightNo, .data$Subgroup, .data$SightNoDaily,
            .data$Obs, .data$ObsStd, .data$Bearing, .data$Reticle, .data$DistNm)
@@ -293,7 +295,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   ### Marine mammal (+subgroup) sightings; Events S, K, M, G
   sight.info.skmg1 <- sight.df %>%
     filter(.data$Event %in% c("S", "K", "M", "G")) %>%
-    mutate(Cue = ifelse(.data$Event == "G", NA, as.numeric(.data$Data3)),
+    mutate(Cue = if_else(.data$Event == "G", NA_real_, as.numeric(.data$Data3)),
            Method = as.numeric(.data$Data4),
            CalibSchool = toupper(.data$Data10),
            PhotosAerial = toupper(.data$Data11),
@@ -307,10 +309,10 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     mutate(Photos = toupper(.data$Data3),
            Birds = toupper(.data$Data4),
            nSp = unlist(
-             pmap(list(.data$Data5, .data$Data6, .data$Data7, .data$Data8),
-                  function(d5, d6, d7, d8) {
-                    sum(!is.na(c(d5, d6, d7, d8)))
-                  })),
+             pmap_int(list(.data$Data5, .data$Data6, .data$Data7, .data$Data8),
+                      function(d5, d6, d7, d8) {
+                        sum(!is.na(c(d5, d6, d7, d8)))
+                      })),
            Mixed = .data$nSp > 1) %>%
     select(.data$sight_cumsum, .data$Photos, .data$Birds, .data$nSp, .data$Mixed,
            SpCode1 = .data$Data5, SpCode2 = .data$Data6,
@@ -511,12 +513,15 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
       mutate(SpCode = case_when(.data$Event %in% c("S", "K", "M", "G") ~ .data$SpCode,
                                 .data$Event == "t" ~ .data$TurtleSp,
                                 .data$Event == "p" ~ .data$PinnipedSp,
-                                .data$Event == "F" ~ .data$BoatType),
+                                .data$Event == "F" ~ .data$BoatType,
+                                TRUE ~ NA_character_),
              GsSchoolBest = case_when(.data$Event %in% c("S", "K", "M", "G") ~ .data$GsSchoolBest,
                                       .data$Event == "t" ~ .data$TurtleGs,
                                       .data$Event == "p" ~ .data$PinnipedGs,
-                                      .data$Event == "F" ~ .data$BoatGs),
-             GsSpBest = ifelse(.data$Event %in% c("t", "p", "F"), .data$GsSchoolBest, .data$GsSpBest)) %>%
+                                      .data$Event == "F" ~ .data$BoatGs,
+                                      TRUE ~ NA_real_),
+             GsSpBest = if_else(.data$Event %in% c("t", "p", "F"),
+                                .data$GsSchoolBest, .data$GsSpBest)) %>%
       select(-.data$TurtleSp, -.data$TurtleGs, -.data$PinnipedSp,
              -.data$PinnipedGs, -.data$BoatType, -.data$BoatGs)
   }

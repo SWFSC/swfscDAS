@@ -367,10 +367,11 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
     stop("Error in das_effort(): creating and processing segement numbers. ",
          "Please report this as an issue")
 
-  # Add back in ? and 1:8 (events.tmp) events
+  # Add back in ? and 1:8 (events.tmp) events, if necessary
   # Only for sightinfo groupsizes, and thus no segdata info doesn't matter
+  if (nrow(x.oneff.tmp) > 0) x.eff <- bind_rows(x.eff, x.oneff.tmp)
+
   x.eff.all <- x.eff %>%
-    bind_rows(x.oneff.tmp) %>%
     arrange(.data$idx_eff) %>%
     select(-.data$idx_eff)
 
