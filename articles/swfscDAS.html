@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">swfscDAS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.1.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/swfscDAS.html">Get started</a>
 </li>
@@ -67,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/smwoodman/swfscDAS/">
+  <a href="https://github.com/smwoodman/swfscDAS/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,7 +84,7 @@
       <h1 data-toc-skip>Introduction to swfscDAS</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/smwoodman/swfscDAS/blob/master/vignettes/swfscDAS.Rmd"><code>vignettes/swfscDAS.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/smwoodman/swfscDAS/blob/HEAD/vignettes/swfscDAS.Rmd" class="external-link"><code>vignettes/swfscDAS.Rmd</code></a></small>
       <div class="hidden name"><code>swfscDAS.Rmd</code></div>
 
     </div>
@@ -96,17 +92,17 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org">stringr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://smwoodman.github.io/swfscDAS/">swfscDAS</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://stringr.tidyverse.org" class="external-link">stringr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://smwoodman.github.io/swfscDAS/" class="external-link">swfscDAS</a></span><span class="op">)</span></code></pre></div>
 <p>This document introduces you to the swfscDAS package, and specifically its functionality and workflow. This package is intended to standardize and streamline processing of shipboard DAS data collected using the WinCruz program from the Southwest Fisheries Science Center. In DAS data, an event is only recorded when something changes or happens, which can complicate processing. Thus, the main theme of this package is enabling analyses and downstream processing by 1) determining associated state and condition information for each event and 2) pulling out event-specific information from the Data (Field) columns.</p>
-<div id="data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data" class="anchor"></a>Data</h2>
+<div class="section level2">
+<h2 id="data">Data<a class="anchor" aria-label="anchor" href="#data"></a>
+</h2>
 <p>This package includes a sample DAS file, which we will use in this document</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"das_sample.das"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html">readLines</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"das_sample.das"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] "1  B.062739 011313 N39:19.22 W137:36.26 1000    c    5    Y                              "</span>
 <span class="co">#&gt; [2] "2  R.062739 011313 N39:19.22 W137:36.26    S                                             "</span>
 <span class="co">#&gt; [3] "3  P.062739 011313 N39:19.22 W137:36.26  280  001  126                                   "</span>
@@ -114,113 +110,113 @@
 <span class="co">#&gt; [5] "5  N.062739 011313 N39:19.22 W137:36.26  023 09.8                                        "</span>
 <span class="co">#&gt; [6] "6  W.062739 011313 N39:19.22 W137:36.26    1            250  6.0                         "</span></code></pre></div>
 </div>
-<div id="check-data-format" class="section level2">
-<h2 class="hasAnchor">
-<a href="#check-data-format" class="anchor"></a>Check data format</h2>
-<p>The first step in processing DAS data is to ensure that the DAS file has expected formatting and values. This package contains the <code>das_check</code> function, which performs some basic checks. This function is a precursor to a more comprehensive DASCHECK program, which is currently in development. The checks performed by this function are detailed in the function documentation, which can be accessed by running <code><a href="../reference/das_check.html">?das_check</a></code>. You can find the PDF with the expected DAS data format at <a href="https://smwoodman.github.io/swfscDAS/" class="uri">https://smwoodman.github.io/swfscDAS/</a>, or see <code><a href="../reference/das_format_pdf.html">?das_format_pdf</a></code> for how to access a local copy. To check for valid species codes using this function, you can pass the function an SpCodes.dat file</p>
+<div class="section level2">
+<h2 id="check-data-format">Check data format<a class="anchor" aria-label="anchor" href="#check-data-format"></a>
+</h2>
+<p>The first step in processing DAS data is to ensure that the DAS file has expected formatting and values. This package contains the <code>das_check</code> function, which performs some basic checks. This function is a precursor to a more comprehensive DASCHECK program, which is currently in development. The checks performed by this function are detailed in the function documentation, which can be accessed by running <code><a href="../reference/das_check.html">?das_check</a></code>. You can find the PDF with the expected DAS data format at <a href="https://smwoodman.github.io/swfscDAS/" class="external-link uri">https://smwoodman.github.io/swfscDAS/</a>, or see <code><a href="../reference/das_format_pdf.html">?das_format_pdf</a></code> for how to access a local copy. To check for valid species codes using this function, you can pass the function an SpCodes.dat file</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Code not run</span>
 <span class="va">y.check</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_check.html">das_check</a></span><span class="op">(</span><span class="va">y</span>, skip <span class="op">=</span> <span class="fl">0</span>, print.cruise.nums <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="read-and-process-data" class="section level2">
-<h2 class="hasAnchor">
-<a href="#read-and-process-data" class="anchor"></a>Read and process data</h2>
+<div class="section level2">
+<h2 id="read-and-process-data">Read and process data<a class="anchor" aria-label="anchor" href="#read-and-process-data"></a>
+</h2>
 <p>Once QA/QC is complete and you have fixed any data entry errors, you can begin to process the DAS data. The backbone of this package is the reading and processing steps: 1) the data from the DAS file are read into the columns of a data frame and 2) state and condition information are extracted for each event. This means that after processing, you can simply look at any event (row) and determine the Beaufort, viewing conditions, etc., at the time of the event. All other functions in the package depend on the DAS data being in this processed state.</p>
 <p>One other processing note is that the ‘DateTime’ column in the <code>das_read</code> output has a time zone of “UTC” - this default time zone value is meaningless and only present because POSIXct vectors must have exactly one time zone. If you need to do conversions based on time zone, then use the ‘OffsetGMT’ column and <code>force_tz</code> and <code>with_tz</code> from the <code>lubridate</code> package. One reason to do such conversions would be if data was collected in a non-local time zone that causes the daily recorded effort to span more than one day, since then ‘OnEffort’ values will be incorrect because <code>das_process</code> resets the event sequence to off effort at the beginning of a new day.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Read </span>
 <span class="va">y.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="va">y</span>, skip <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.read</span><span class="op">)</span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">y.read</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 259</span>
 <span class="co">#&gt; Columns: 20</span>
-<span class="co">#&gt; $ Event     &lt;chr&gt; "B", "R", "P", "V", "N", "W", "V", "W", "W", "*", "P", "V", …</span>
-<span class="co">#&gt; $ EffortDot &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, …</span>
-<span class="co">#&gt; $ DateTime  &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:27:39, 2013-01-13 06:27:…</span>
-<span class="co">#&gt; $ Lat       &lt;dbl&gt; 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, …</span>
-<span class="co">#&gt; $ Lon       &lt;dbl&gt; -137.6043, -137.6043, -137.6043, -137.6043, -137.6043, -137.…</span>
-<span class="co">#&gt; $ Data1     &lt;chr&gt; "1000", "S", "280", "3", "023", "1", "3", "1", "1", NA, "208…</span>
-<span class="co">#&gt; $ Data2     &lt;chr&gt; "c", NA, "001", "03", "09.8", NA, "03", "02", NA, NA, "280",…</span>
-<span class="co">#&gt; $ Data3     &lt;chr&gt; "5", NA, "126", "230", NA, NA, "230", "03", NA, NA, "001", "…</span>
-<span class="co">#&gt; $ Data4     &lt;chr&gt; "Y", NA, NA, NA, NA, "250", NA, "257", "257", NA, NA, NA, NA…</span>
-<span class="co">#&gt; $ Data5     &lt;chr&gt; NA, NA, NA, "10.0", NA, "6.0", "10.0", "6.0", "6.0", NA, NA,…</span>
-<span class="co">#&gt; $ Data6     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "2.8…</span>
-<span class="co">#&gt; $ Data7     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "1.0…</span>
-<span class="co">#&gt; $ Data8     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "013…</span>
-<span class="co">#&gt; $ Data9     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ Data10    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ Data11    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ Data12    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ EventNum  &lt;chr&gt; "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12…</span>
-<span class="co">#&gt; $ file_das  &lt;chr&gt; "das_sample.das", "das_sample.das", "das_sample.das", "das_s…</span>
-<span class="co">#&gt; $ line_num  &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…</span>
+<span class="co">#&gt; $ Event     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "B", "R", "P", "V", "N", "W", "V", "W", "W", "*", "P", "V", …</span>
+<span class="co">#&gt; $ EffortDot <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, …</span>
+<span class="co">#&gt; $ DateTime  <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:27:39, 2013-01-13 06:27:39, 2013-01-13 06:27:…</span>
+<span class="co">#&gt; $ Lat       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, …</span>
+<span class="co">#&gt; $ Lon       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.6043, -137.6043, -137.6043, -137.6043, -137.6043, -137.…</span>
+<span class="co">#&gt; $ Data1     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1000", "S", "280", "3", "023", "1", "3", "1", "1", NA, "208…</span>
+<span class="co">#&gt; $ Data2     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "c", NA, "001", "03", "09.8", NA, "03", "02", NA, NA, "280",…</span>
+<span class="co">#&gt; $ Data3     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "5", NA, "126", "230", NA, NA, "230", "03", NA, NA, "001", "…</span>
+<span class="co">#&gt; $ Data4     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Y", NA, NA, NA, NA, "250", NA, "257", "257", NA, NA, NA, NA…</span>
+<span class="co">#&gt; $ Data5     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, "10.0", NA, "6.0", "10.0", "6.0", "6.0", NA, NA,…</span>
+<span class="co">#&gt; $ Data6     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "2.8…</span>
+<span class="co">#&gt; $ Data7     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "1.0…</span>
+<span class="co">#&gt; $ Data8     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "013…</span>
+<span class="co">#&gt; $ Data9     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ Data10    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ Data11    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ Data12    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ EventNum  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12…</span>
+<span class="co">#&gt; $ file_das  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "das_sample.das", "das_sample.das", "das_sample.das", "das_s…</span>
+<span class="co">#&gt; $ line_num  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…</span>
 
 <span class="co"># Process</span>
 <span class="va">y.proc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_process.html">das_process</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span>
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 256</span>
 <span class="co">#&gt; Columns: 40</span>
-<span class="co">#&gt; $ Event     &lt;chr&gt; "B", "R", "P", "V", "N", "W", "V", "W", "W", "*", "P", "V", …</span>
-<span class="co">#&gt; $ DateTime  &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:27:39, 2013-01-13 06:27:…</span>
-<span class="co">#&gt; $ Lat       &lt;dbl&gt; 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, …</span>
-<span class="co">#&gt; $ Lon       &lt;dbl&gt; -137.6043, -137.6043, -137.6043, -137.6043, -137.6043, -137.…</span>
-<span class="co">#&gt; $ OnEffort  &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, …</span>
-<span class="co">#&gt; $ Cruise    &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, …</span>
-<span class="co">#&gt; $ Mode      &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", …</span>
-<span class="co">#&gt; $ OffsetGMT &lt;int&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, …</span>
-<span class="co">#&gt; $ EffType   &lt;chr&gt; NA, "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "…</span>
-<span class="co">#&gt; $ ESWsides  &lt;dbl&gt; NA, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
-<span class="co">#&gt; $ Course    &lt;dbl&gt; NA, NA, NA, NA, 23, 23, 23, 23, 23, 23, 23, 23, 25, 25, 25, …</span>
-<span class="co">#&gt; $ SpdKt     &lt;dbl&gt; NA, NA, NA, NA, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 10.2…</span>
-<span class="co">#&gt; $ Bft       &lt;dbl&gt; NA, NA, NA, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …</span>
-<span class="co">#&gt; $ SwellHght &lt;dbl&gt; NA, NA, NA, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …</span>
-<span class="co">#&gt; $ WindSpdKt &lt;dbl&gt; NA, NA, NA, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, …</span>
-<span class="co">#&gt; $ RainFog   &lt;dbl&gt; NA, NA, NA, NA, NA, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span>
-<span class="co">#&gt; $ HorizSun  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, 2, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ VertSun   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, 3, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Glare     &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, FALSE, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Vis       &lt;dbl&gt; NA, NA, NA, NA, NA, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6…</span>
-<span class="co">#&gt; $ ObsL      &lt;chr&gt; NA, NA, "280", "280", "280", "280", "280", "280", "280", "28…</span>
-<span class="co">#&gt; $ Rec       &lt;chr&gt; NA, NA, "001", "001", "001", "001", "001", "001", "001", "00…</span>
-<span class="co">#&gt; $ ObsR      &lt;chr&gt; NA, NA, "126", "126", "126", "126", "126", "126", "126", "12…</span>
-<span class="co">#&gt; $ ObsInd    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ Data1     &lt;chr&gt; "1000", "S", "280", "3", "023", "1", "3", "1", "1", NA, "208…</span>
-<span class="co">#&gt; $ Data2     &lt;chr&gt; "c", NA, "001", "03", "09.8", NA, "03", "02", NA, NA, "280",…</span>
-<span class="co">#&gt; $ Data3     &lt;chr&gt; "5", NA, "126", "230", NA, NA, "230", "03", NA, NA, "001", "…</span>
-<span class="co">#&gt; $ Data4     &lt;chr&gt; "Y", NA, NA, NA, NA, "250", NA, "257", "257", NA, NA, NA, NA…</span>
-<span class="co">#&gt; $ Data5     &lt;chr&gt; NA, NA, NA, "10.0", NA, "6.0", "10.0", "6.0", "6.0", NA, NA,…</span>
-<span class="co">#&gt; $ Data6     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "2.8…</span>
-<span class="co">#&gt; $ Data7     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "1.0…</span>
-<span class="co">#&gt; $ Data8     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "013…</span>
-<span class="co">#&gt; $ Data9     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ Data10    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ Data11    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ Data12    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ EffortDot &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, …</span>
-<span class="co">#&gt; $ EventNum  &lt;chr&gt; "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12…</span>
-<span class="co">#&gt; $ file_das  &lt;chr&gt; "das_sample.das", "das_sample.das", "das_sample.das", "das_s…</span>
-<span class="co">#&gt; $ line_num  &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…</span>
+<span class="co">#&gt; $ Event     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "B", "R", "P", "V", "N", "W", "V", "W", "W", "*", "P", "V", …</span>
+<span class="co">#&gt; $ DateTime  <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:27:39, 2013-01-13 06:27:39, 2013-01-13 06:27:…</span>
+<span class="co">#&gt; $ Lat       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, …</span>
+<span class="co">#&gt; $ Lon       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.6043, -137.6043, -137.6043, -137.6043, -137.6043, -137.…</span>
+<span class="co">#&gt; $ OnEffort  <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, …</span>
+<span class="co">#&gt; $ Cruise    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, …</span>
+<span class="co">#&gt; $ Mode      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", …</span>
+<span class="co">#&gt; $ OffsetGMT <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, …</span>
+<span class="co">#&gt; $ EffType   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "…</span>
+<span class="co">#&gt; $ ESWsides  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
+<span class="co">#&gt; $ Course    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, 23, 23, 23, 23, 23, 23, 23, 23, 25, 25, 25, …</span>
+<span class="co">#&gt; $ SpdKt     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 10.2…</span>
+<span class="co">#&gt; $ Bft       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …</span>
+<span class="co">#&gt; $ SwellHght <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …</span>
+<span class="co">#&gt; $ WindSpdKt <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, …</span>
+<span class="co">#&gt; $ RainFog   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span>
+<span class="co">#&gt; $ HorizSun  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, 2, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ VertSun   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, 3, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Glare     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> NA, NA, NA, NA, NA, NA, NA, FALSE, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Vis       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6…</span>
+<span class="co">#&gt; $ ObsL      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "280", "280", "280", "280", "280", "280", "280", "28…</span>
+<span class="co">#&gt; $ Rec       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "001", "001", "001", "001", "001", "001", "001", "00…</span>
+<span class="co">#&gt; $ ObsR      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "126", "126", "126", "126", "126", "126", "126", "12…</span>
+<span class="co">#&gt; $ ObsInd    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ Data1     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1000", "S", "280", "3", "023", "1", "3", "1", "1", NA, "208…</span>
+<span class="co">#&gt; $ Data2     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "c", NA, "001", "03", "09.8", NA, "03", "02", NA, NA, "280",…</span>
+<span class="co">#&gt; $ Data3     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "5", NA, "126", "230", NA, NA, "230", "03", NA, NA, "001", "…</span>
+<span class="co">#&gt; $ Data4     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Y", NA, NA, NA, NA, "250", NA, "257", "257", NA, NA, NA, NA…</span>
+<span class="co">#&gt; $ Data5     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, "10.0", NA, "6.0", "10.0", "6.0", "6.0", NA, NA,…</span>
+<span class="co">#&gt; $ Data6     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "2.8…</span>
+<span class="co">#&gt; $ Data7     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "1.0…</span>
+<span class="co">#&gt; $ Data8     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "013…</span>
+<span class="co">#&gt; $ Data9     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ Data10    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ Data11    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ Data12    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ EffortDot <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, …</span>
+<span class="co">#&gt; $ EventNum  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12…</span>
+<span class="co">#&gt; $ file_das  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "das_sample.das", "das_sample.das", "das_sample.das", "das_s…</span>
+<span class="co">#&gt; $ line_num  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…</span>
 
 <span class="co"># Note that das_read can read multiple files at once</span>
-<span class="va">y2.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">y2.read</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_read.html">das_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Once you have processed the DAS data, you can easily access a variety of information. For instance, you can look at the different events or Beaufort values that occurred in the data, or filter for specific events to get the beginning and ending points of each effort section.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># The number of each event</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">$</span><span class="va">Event</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">$</span><span class="va">Event</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  ?  *  1  2  3  4  A  B  C  E  F  N  P  R  s  S  t  V  W </span>
 <span class="co">#&gt;  1 90  8  7  6  2  8  2  5 10  1 19 18 10  7  8  6 22 26</span>
 
 <span class="co"># The number of events per Beaufort value</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">$</span><span class="va">Bft</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">$</span><span class="va">Bft</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   2   3 </span>
 <span class="co">#&gt;  94 120</span>
 
 <span class="co"># Filter for R and E events to extract lat/lon points</span>
-<span class="va">y.proc</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Event</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"E"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">Lat</span>, <span class="va">Lon</span>, <span class="va">Cruise</span>, <span class="va">Mode</span>, <span class="va">EffType</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">y.proc</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Event</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"R"</span>, <span class="st">"E"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">Lat</span>, <span class="va">Lon</span>, <span class="va">Cruise</span>, <span class="va">Mode</span>, <span class="va">EffType</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt;   Event      Lat       Lon Cruise Mode EffType</span>
 <span class="co">#&gt; 1     R 39.32033 -137.6043   1000    C       S</span>
 <span class="co">#&gt; 2     E 39.36717 -137.5817   1000    C       S</span>
@@ -229,177 +225,177 @@
 <span class="co">#&gt; 5     R 39.56800 -137.4530   1000    C       S</span>
 <span class="co">#&gt; 6     E 39.75433 -137.4107   1000    C       S</span></code></pre></div>
 </div>
-<div id="sightings" class="section level2">
-<h2 class="hasAnchor">
-<a href="#sightings" class="anchor"></a>Sightings</h2>
+<div class="section level2">
+<h2 id="sightings">Sightings<a class="anchor" aria-label="anchor" href="#sightings"></a>
+</h2>
 <p>The <code>swfscDAS</code> package does contain specific functions for extracting and/or summarizing particular information from the processed data. First is <code>das_sight</code>, a function that returns a data frame with pertinent sighting data pulled out to their own columns. Due to the different data collected for each type of sighting and the different needs of end-users, this function offers several different return formats. For the “default” format there is one row for each species of each sighting, for the “wide” format, there is one row for each sighting event, and for the “complete” format there is one row for every group size estimate for each sighting. See <code><a href="../reference/das_sight.html">?das_sight</a></code> for more details. The “complete” format is intended for users looking to do observer corrections, or to combine estimates using a different method than the arithmetic mean (e.g. the geometric mean)</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"default"</span><span class="op">)</span>
-<span class="va">y.sight</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">y.sight</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 25</span>
 <span class="co">#&gt; Columns: 32</span>
-<span class="co">#&gt; $ Event        &lt;chr&gt; "S", "S", "s", "s", "s", "s", "s", "s", "t", "t", "t", "S…</span>
-<span class="co">#&gt; $ SightNo      &lt;chr&gt; "1406", "1407", "1407", "1407", "1407", "1407", "1407", "…</span>
-<span class="co">#&gt; $ Subgroup     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SightNoDaily &lt;chr&gt; "20130113_1", "20130113_2", NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Obs          &lt;chr&gt; "208", "125", NA, NA, NA, NA, NA, NA, "280", "149", "228"…</span>
-<span class="co">#&gt; $ ObsStd       &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…</span>
-<span class="co">#&gt; $ Bearing      &lt;dbl&gt; 309, 326, 11, 5, 50, 71, 104, 2, 120, 270, 300, 270, 45, …</span>
-<span class="co">#&gt; $ Reticle      &lt;dbl&gt; 2.8, 0.4, 2.0, 3.5, NA, 4.5, 4.5, 2.2, NA, NA, NA, 14.0, …</span>
-<span class="co">#&gt; $ DistNm       &lt;dbl&gt; 1.06, 2.97, 1.30, 0.90, 0.50, 0.70, 0.70, 1.30, 0.03, 0.0…</span>
-<span class="co">#&gt; $ Cue          &lt;dbl&gt; 3, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, 3, NA, 3, NA, 3…</span>
-<span class="co">#&gt; $ Method       &lt;dbl&gt; 4, 4, NA, NA, NA, NA, NA, NA, NA, NA, NA, 4, NA, 4, NA, 4…</span>
-<span class="co">#&gt; $ Photos       &lt;chr&gt; "N", "Y", NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", NA, "Y…</span>
-<span class="co">#&gt; $ Birds        &lt;chr&gt; "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", NA, "Y…</span>
-<span class="co">#&gt; $ CalibSchool  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ PhotosAerial &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Biopsy       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Prob         &lt;lgl&gt; FALSE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, FALSE, …</span>
-<span class="co">#&gt; $ nSp          &lt;int&gt; 1, 1, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, NA, 1, NA, 2…</span>
-<span class="co">#&gt; $ Mixed        &lt;lgl&gt; FALSE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, FALSE, …</span>
-<span class="co">#&gt; $ SpCode       &lt;chr&gt; "018", "076", NA, NA, NA, NA, NA, NA, "LV", "DC", "DC", "…</span>
-<span class="co">#&gt; $ SpCodeProb   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSchoolBest &lt;dbl&gt; NA, 8.00000, NA, NA, NA, NA, NA, NA, 1.00000, 2.00000, 1.…</span>
-<span class="co">#&gt; $ GsSchoolHigh &lt;dbl&gt; NA, 14.00, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20.00, NA,…</span>
-<span class="co">#&gt; $ GsSchoolLow  &lt;dbl&gt; 42.333333, 5.666667, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ GsSpBest     &lt;dbl&gt; NA, 8.00000, NA, NA, NA, NA, NA, NA, 1.00000, 2.00000, 1.…</span>
-<span class="co">#&gt; $ GsSpHigh     &lt;dbl&gt; NA, 14.000, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20.000, N…</span>
-<span class="co">#&gt; $ GsSpLow      &lt;dbl&gt; 42.333333, 5.666667, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ CourseSchool &lt;dbl&gt; NA, NA, NA, NA, NA, 100, 100, NA, NA, NA, NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ TurtleJFR    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ TurtleAge    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "A", "A", "J", NA, "A", N…</span>
-<span class="co">#&gt; $ TurtleCapt   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "N", "N", "N", NA, NA, NA…</span>
-<span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.525631e+00, 3.075807e+00, 4.593917e-01, 1.452712e-01, 7…</span>
+<span class="co">#&gt; $ Event        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "S", "S", "s", "s", "s", "s", "s", "s", "t", "t", "t", "S…</span>
+<span class="co">#&gt; $ SightNo      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1406", "1407", "1407", "1407", "1407", "1407", "1407", "…</span>
+<span class="co">#&gt; $ Subgroup     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SightNoDaily <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "20130113_1", "20130113_2", NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Obs          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "208", "125", NA, NA, NA, NA, NA, NA, "280", "149", "228"…</span>
+<span class="co">#&gt; $ ObsStd       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…</span>
+<span class="co">#&gt; $ Bearing      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 309, 326, 11, 5, 50, 71, 104, 2, 120, 270, 300, 270, 45, …</span>
+<span class="co">#&gt; $ Reticle      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.8, 0.4, 2.0, 3.5, NA, 4.5, 4.5, 2.2, NA, NA, NA, 14.0, …</span>
+<span class="co">#&gt; $ DistNm       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.06, 2.97, 1.30, 0.90, 0.50, 0.70, 0.70, 1.30, 0.03, 0.0…</span>
+<span class="co">#&gt; $ Cue          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, 3, NA, 3, NA, 3…</span>
+<span class="co">#&gt; $ Method       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 4, 4, NA, NA, NA, NA, NA, NA, NA, NA, NA, 4, NA, 4, NA, 4…</span>
+<span class="co">#&gt; $ Photos       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "N", "Y", NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", NA, "Y…</span>
+<span class="co">#&gt; $ Birds        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", NA, "Y…</span>
+<span class="co">#&gt; $ CalibSchool  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ PhotosAerial <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Biopsy       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Prob         <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, FALSE, …</span>
+<span class="co">#&gt; $ nSp          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, NA, 1, NA, 2…</span>
+<span class="co">#&gt; $ Mixed        <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, FALSE, …</span>
+<span class="co">#&gt; $ SpCode       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "018", "076", NA, NA, NA, NA, NA, NA, "LV", "DC", "DC", "…</span>
+<span class="co">#&gt; $ SpCodeProb   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSchoolBest <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 8.00000, NA, NA, NA, NA, NA, NA, 1.00000, 2.00000, 1.…</span>
+<span class="co">#&gt; $ GsSchoolHigh <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 14.00, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20.00, NA,…</span>
+<span class="co">#&gt; $ GsSchoolLow  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 42.333333, 5.666667, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ GsSpBest     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 8.00000, NA, NA, NA, NA, NA, NA, 1.00000, 2.00000, 1.…</span>
+<span class="co">#&gt; $ GsSpHigh     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 14.000, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20.000, N…</span>
+<span class="co">#&gt; $ GsSpLow      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 42.333333, 5.666667, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ CourseSchool <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, 100, 100, NA, NA, NA, NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ TurtleJFR    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ TurtleAge    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, "A", "A", "J", NA, "A", N…</span>
+<span class="co">#&gt; $ TurtleCapt   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, "N", "N", "N", NA, NA, NA…</span>
+<span class="co">#&gt; $ PerpDistKm   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.525631e+00, 3.075807e+00, 4.593917e-01, 1.452712e-01, 7…</span>
 
 <span class="va">y.sight.wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span>
-<span class="va">y.sight.wide</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">y.sight.wide</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 22</span>
 <span class="co">#&gt; Columns: 58</span>
-<span class="co">#&gt; $ Event        &lt;chr&gt; "S", "S", "s", "s", "s", "s", "s", "s", "t", "t", "t", "S…</span>
-<span class="co">#&gt; $ SightNo      &lt;chr&gt; "1406", "1407", "1407", "1407", "1407", "1407", "1407", "…</span>
-<span class="co">#&gt; $ Subgroup     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SightNoDaily &lt;chr&gt; "20130113_1", "20130113_2", NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Obs          &lt;chr&gt; "208", "125", NA, NA, NA, NA, NA, NA, "280", "149", "228"…</span>
-<span class="co">#&gt; $ ObsStd       &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…</span>
-<span class="co">#&gt; $ Bearing      &lt;dbl&gt; 309, 326, 11, 5, 50, 71, 104, 2, 120, 270, 300, 270, 45, …</span>
-<span class="co">#&gt; $ Reticle      &lt;dbl&gt; 2.8, 0.4, 2.0, 3.5, NA, 4.5, 4.5, 2.2, NA, NA, NA, 14.0, …</span>
-<span class="co">#&gt; $ DistNm       &lt;dbl&gt; 1.06, 2.97, 1.30, 0.90, 0.50, 0.70, 0.70, 1.30, 0.03, 0.0…</span>
-<span class="co">#&gt; $ Cue          &lt;dbl&gt; 3, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, 3, NA, 3, NA, 3…</span>
-<span class="co">#&gt; $ Method       &lt;dbl&gt; 4, 4, NA, NA, NA, NA, NA, NA, NA, NA, NA, 4, NA, 4, NA, 4…</span>
-<span class="co">#&gt; $ Photos       &lt;chr&gt; "N", "Y", NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", NA, "Y…</span>
-<span class="co">#&gt; $ Birds        &lt;chr&gt; "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", NA, "Y…</span>
-<span class="co">#&gt; $ CalibSchool  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ PhotosAerial &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Biopsy       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Prob         &lt;lgl&gt; FALSE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, FALSE, …</span>
-<span class="co">#&gt; $ nSp          &lt;int&gt; 1, 1, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, NA, 1, NA, 2…</span>
-<span class="co">#&gt; $ Mixed        &lt;lgl&gt; FALSE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, FALSE, …</span>
-<span class="co">#&gt; $ ObsEstimate  &lt;list&gt; &lt;"280", "001", "208"&gt;, &lt;"280", "001", "125"&gt;, &lt;NULL&gt;, &lt;N…</span>
-<span class="co">#&gt; $ SpCode1      &lt;chr&gt; "018", "076", NA, NA, NA, NA, NA, NA, NA, NA, NA, "037", …</span>
-<span class="co">#&gt; $ SpCode2      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCode3      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCode4      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCodeProb1  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCodeProb2  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCodeProb3  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCodeProb4  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpPerc1      &lt;dbl&gt; 100, 100, NA, NA, NA, NA, NA, NA, NA, NA, NA, 100, NA, 10…</span>
-<span class="co">#&gt; $ SpPerc2      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpPerc3      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpPerc4      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSchoolBest &lt;dbl&gt; NA, 8.00000, NA, NA, NA, NA, NA, NA, NA, NA, NA, 10.66667…</span>
-<span class="co">#&gt; $ GsSchoolHigh &lt;dbl&gt; NA, 14.00, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20.00, NA,…</span>
-<span class="co">#&gt; $ GsSchoolLow  &lt;dbl&gt; 42.333333, 5.666667, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ GsSpBest1    &lt;dbl&gt; NA, 8.00000, NA, NA, NA, NA, NA, NA, NA, NA, NA, 10.66667…</span>
-<span class="co">#&gt; $ GsSpBest2    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSpBest3    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSpBest4    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSpHigh1    &lt;dbl&gt; NA, 14.000, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20.000, N…</span>
-<span class="co">#&gt; $ GsSpHigh2    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSpHigh3    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSpHigh4    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSpLow1     &lt;dbl&gt; 42.333333, 5.666667, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ GsSpLow2     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSpLow3     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSpLow4     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ CourseSchool &lt;dbl&gt; NA, NA, NA, NA, NA, 100, 100, NA, NA, NA, NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ TurtleSp     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "LV", "DC", "DC", NA, "DC…</span>
-<span class="co">#&gt; $ TurtleGs     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, 1, 2, 1, NA, 1, NA, NA, N…</span>
-<span class="co">#&gt; $ TurtleJFR    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ TurtleAge    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "A", "A", "J", NA, "A", N…</span>
-<span class="co">#&gt; $ TurtleCapt   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "N", "N", "N", NA, NA, NA…</span>
-<span class="co">#&gt; $ PinnipedSp   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ PinnipedGs   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ BoatType     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ BoatGs       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.525631e+00, 3.075807e+00, 4.593917e-01, 1.452712e-01, 7…</span>
+<span class="co">#&gt; $ Event        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "S", "S", "s", "s", "s", "s", "s", "s", "t", "t", "t", "S…</span>
+<span class="co">#&gt; $ SightNo      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1406", "1407", "1407", "1407", "1407", "1407", "1407", "…</span>
+<span class="co">#&gt; $ Subgroup     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SightNoDaily <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "20130113_1", "20130113_2", NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Obs          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "208", "125", NA, NA, NA, NA, NA, NA, "280", "149", "228"…</span>
+<span class="co">#&gt; $ ObsStd       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…</span>
+<span class="co">#&gt; $ Bearing      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 309, 326, 11, 5, 50, 71, 104, 2, 120, 270, 300, 270, 45, …</span>
+<span class="co">#&gt; $ Reticle      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.8, 0.4, 2.0, 3.5, NA, 4.5, 4.5, 2.2, NA, NA, NA, 14.0, …</span>
+<span class="co">#&gt; $ DistNm       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.06, 2.97, 1.30, 0.90, 0.50, 0.70, 0.70, 1.30, 0.03, 0.0…</span>
+<span class="co">#&gt; $ Cue          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, 3, NA, 3, NA, 3…</span>
+<span class="co">#&gt; $ Method       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 4, 4, NA, NA, NA, NA, NA, NA, NA, NA, NA, 4, NA, 4, NA, 4…</span>
+<span class="co">#&gt; $ Photos       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "N", "Y", NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", NA, "Y…</span>
+<span class="co">#&gt; $ Birds        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", NA, "Y…</span>
+<span class="co">#&gt; $ CalibSchool  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ PhotosAerial <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Biopsy       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Prob         <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, FALSE, …</span>
+<span class="co">#&gt; $ nSp          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, NA, 1, NA, 2…</span>
+<span class="co">#&gt; $ Mixed        <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, NA, NA, NA, NA, NA, NA, NA, NA, NA, FALSE, …</span>
+<span class="co">#&gt; $ ObsEstimate  <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> &lt;"280", "001", "208"&gt;, &lt;"280", "001", "125"&gt;, &lt;NULL&gt;, &lt;N…</span>
+<span class="co">#&gt; $ SpCode1      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "018", "076", NA, NA, NA, NA, NA, NA, NA, NA, NA, "037", …</span>
+<span class="co">#&gt; $ SpCode2      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCode3      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCode4      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCodeProb1  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCodeProb2  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCodeProb3  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCodeProb4  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpPerc1      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 100, 100, NA, NA, NA, NA, NA, NA, NA, NA, NA, 100, NA, 10…</span>
+<span class="co">#&gt; $ SpPerc2      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpPerc3      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpPerc4      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSchoolBest <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 8.00000, NA, NA, NA, NA, NA, NA, NA, NA, NA, 10.66667…</span>
+<span class="co">#&gt; $ GsSchoolHigh <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 14.00, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20.00, NA,…</span>
+<span class="co">#&gt; $ GsSchoolLow  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 42.333333, 5.666667, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ GsSpBest1    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 8.00000, NA, NA, NA, NA, NA, NA, NA, NA, NA, 10.66667…</span>
+<span class="co">#&gt; $ GsSpBest2    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSpBest3    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSpBest4    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSpHigh1    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 14.000, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20.000, N…</span>
+<span class="co">#&gt; $ GsSpHigh2    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSpHigh3    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSpHigh4    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSpLow1     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 42.333333, 5.666667, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ GsSpLow2     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSpLow3     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSpLow4     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ CourseSchool <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, 100, 100, NA, NA, NA, NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ TurtleSp     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, "LV", "DC", "DC", NA, "DC…</span>
+<span class="co">#&gt; $ TurtleGs     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, 1, 2, 1, NA, 1, NA, NA, N…</span>
+<span class="co">#&gt; $ TurtleJFR    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ TurtleAge    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, "A", "A", "J", NA, "A", N…</span>
+<span class="co">#&gt; $ TurtleCapt   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, "N", "N", "N", NA, NA, NA…</span>
+<span class="co">#&gt; $ PinnipedSp   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ PinnipedGs   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ BoatType     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ BoatGs       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ PerpDistKm   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.525631e+00, 3.075807e+00, 4.593917e-01, 1.452712e-01, 7…</span>
 
 <span class="va">y.sight.complete</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span>
-<span class="va">y.sight.complete</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">y.sight.complete</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Event</span>, <span class="va">SightNo</span><span class="op">:</span><span class="va">PerpDistKm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 37</span>
 <span class="co">#&gt; Columns: 46</span>
-<span class="co">#&gt; $ Event        &lt;chr&gt; "S", "S", "S", "S", "S", "S", "s", "s", "s", "s", "s", "s…</span>
-<span class="co">#&gt; $ SightNo      &lt;chr&gt; "1406", "1406", "1406", "1407", "1407", "1407", "1407", "…</span>
-<span class="co">#&gt; $ Subgroup     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SightNoDaily &lt;chr&gt; "20130113_1", "20130113_1", "20130113_1", "20130113_2", "…</span>
-<span class="co">#&gt; $ Obs          &lt;chr&gt; "208", "208", "208", "125", "125", "125", NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ ObsStd       &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, …</span>
-<span class="co">#&gt; $ Bearing      &lt;dbl&gt; 309, 309, 309, 326, 326, 326, 11, 5, 50, 71, 104, 2, 120,…</span>
-<span class="co">#&gt; $ Reticle      &lt;dbl&gt; 2.8, 2.8, 2.8, 0.4, 0.4, 0.4, 2.0, 3.5, NA, 4.5, 4.5, 2.2…</span>
-<span class="co">#&gt; $ DistNm       &lt;dbl&gt; 1.06, 1.06, 1.06, 2.97, 2.97, 2.97, 1.30, 0.90, 0.50, 0.7…</span>
-<span class="co">#&gt; $ Cue          &lt;dbl&gt; 3, 3, 3, 3, 3, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, 3, …</span>
-<span class="co">#&gt; $ Method       &lt;dbl&gt; 4, 4, 4, 4, 4, 4, NA, NA, NA, NA, NA, NA, NA, NA, NA, 4, …</span>
-<span class="co">#&gt; $ Photos       &lt;chr&gt; "N", "N", "N", "Y", "Y", "Y", NA, NA, NA, NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ Birds        &lt;chr&gt; "N", "N", "N", "N", "N", "N", NA, NA, NA, NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ CalibSchool  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ PhotosAerial &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Biopsy       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ Prob         &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ nSp          &lt;int&gt; 1, 1, 1, 1, 1, 1, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, …</span>
-<span class="co">#&gt; $ Mixed        &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ ObsEstimate  &lt;chr&gt; "280", "001", "208", "280", "001", "125", NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ SpCode1      &lt;chr&gt; "018", "018", "018", "076", "076", "076", NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ SpCode2      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCode3      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCode4      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCodeProb1  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCodeProb2  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCodeProb3  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpCodeProb4  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpPerc1      &lt;dbl&gt; 100, 100, 100, 100, 100, 100, NA, NA, NA, NA, NA, NA, NA,…</span>
-<span class="co">#&gt; $ SpPerc2      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpPerc3      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ SpPerc4      &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSchoolBest &lt;dbl&gt; NA, NA, NA, 6, 9, 9, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ GsSchoolHigh &lt;dbl&gt; NA, NA, NA, 10, 10, 22, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ GsSchoolLow  &lt;dbl&gt; 43, 36, 48, 6, 2, 9, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
-<span class="co">#&gt; $ CourseSchool &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, 100, 100, NA, NA, NA,…</span>
-<span class="co">#&gt; $ TurtleSp     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "LV", "DC…</span>
-<span class="co">#&gt; $ TurtleGs     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, 2, 1, …</span>
-<span class="co">#&gt; $ TurtleJFR    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ TurtleAge    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "A", "A",…</span>
-<span class="co">#&gt; $ TurtleCapt   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", "N",…</span>
-<span class="co">#&gt; $ PinnipedSp   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ PinnipedGs   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ BoatType     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ BoatGs       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
-<span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.52563078, 1.52563078, 1.52563078, 3.07580701, 3.0758070…</span></code></pre></div>
+<span class="co">#&gt; $ Event        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "S", "S", "S", "S", "S", "S", "s", "s", "s", "s", "s", "s…</span>
+<span class="co">#&gt; $ SightNo      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1406", "1406", "1406", "1407", "1407", "1407", "1407", "…</span>
+<span class="co">#&gt; $ Subgroup     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SightNoDaily <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "20130113_1", "20130113_1", "20130113_1", "20130113_2", "…</span>
+<span class="co">#&gt; $ Obs          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "208", "208", "208", "125", "125", "125", NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ ObsStd       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, …</span>
+<span class="co">#&gt; $ Bearing      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 309, 309, 309, 326, 326, 326, 11, 5, 50, 71, 104, 2, 120,…</span>
+<span class="co">#&gt; $ Reticle      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.8, 2.8, 2.8, 0.4, 0.4, 0.4, 2.0, 3.5, NA, 4.5, 4.5, 2.2…</span>
+<span class="co">#&gt; $ DistNm       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.06, 1.06, 1.06, 2.97, 2.97, 2.97, 1.30, 0.90, 0.50, 0.7…</span>
+<span class="co">#&gt; $ Cue          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, 3, 3, 3, 3, NA, NA, NA, NA, NA, NA, NA, NA, NA, 3, …</span>
+<span class="co">#&gt; $ Method       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 4, 4, 4, 4, 4, 4, NA, NA, NA, NA, NA, NA, NA, NA, NA, 4, …</span>
+<span class="co">#&gt; $ Photos       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "N", "N", "N", "Y", "Y", "Y", NA, NA, NA, NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ Birds        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "N", "N", "N", "N", "N", "N", NA, NA, NA, NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ CalibSchool  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ PhotosAerial <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Biopsy       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ Prob         <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ nSp          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, …</span>
+<span class="co">#&gt; $ Mixed        <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ ObsEstimate  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "280", "001", "208", "280", "001", "125", NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ SpCode1      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "018", "018", "018", "076", "076", "076", NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ SpCode2      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCode3      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCode4      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCodeProb1  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCodeProb2  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCodeProb3  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpCodeProb4  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpPerc1      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 100, 100, 100, 100, 100, 100, NA, NA, NA, NA, NA, NA, NA,…</span>
+<span class="co">#&gt; $ SpPerc2      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpPerc3      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ SpPerc4      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSchoolBest <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, 6, 9, 9, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ GsSchoolHigh <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, 10, 10, 22, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ GsSchoolLow  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 43, 36, 48, 6, 2, 9, NA, NA, NA, NA, NA, NA, NA, NA, NA, …</span>
+<span class="co">#&gt; $ CourseSchool <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, 100, 100, NA, NA, NA,…</span>
+<span class="co">#&gt; $ TurtleSp     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "LV", "DC…</span>
+<span class="co">#&gt; $ TurtleGs     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1, 2, 1, …</span>
+<span class="co">#&gt; $ TurtleJFR    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ TurtleAge    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "A", "A",…</span>
+<span class="co">#&gt; $ TurtleCapt   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "N", "N",…</span>
+<span class="co">#&gt; $ PinnipedSp   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ PinnipedGs   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ BoatType     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ BoatGs       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</span>
+<span class="co">#&gt; $ PerpDistKm   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.52563078, 1.52563078, 1.52563078, 3.07580701, 3.0758070…</span></code></pre></div>
 <p>You can also easily filter or subset the sighting data for the desired event code(s)</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">y.sight.sg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">y.sight.sg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span>, return.events <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># Note that this is equivalent to:</span>
-<span class="va">y.sight.sg2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Event</span> <span class="op">%in%</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">y.sight.sg2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_sight.html">das_sight</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">Event</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="st">"G"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="effort" class="section level2">
-<h2 class="hasAnchor">
-<a href="#effort" class="anchor"></a>Effort</h2>
+<div class="section level2">
+<h2 id="effort">Effort<a class="anchor" aria-label="anchor" href="#effort"></a>
+</h2>
 <p>In addition, you can chop the effort data into segments, and summarize the conditions and sightings on those segments using <code>das_effort</code> and <code>das_effort_sight</code>. These effort segments can be used for line transect estimates using the Distance software, species distribution modeling, or summarizing the number of sightings of certain species on each segment, among other uses. <code>das_effort</code> chops continuous effort sections (the event sequence from R to E events) into effort segments using one of several different chopping methods: condition (a new effort segment every time a condition changes), equal length (effort segments of equal length), or section (each segment is a full continuous effort section, i.e. it runs from an R event to an E event). <code>das_effort_sight</code> takes the output of <code>das_effort</code> and returns the number of included sightings and animals per segment for specified species codes.</p>
 <p>Both functions return a list of three data frames: segdata, sightinfo, and randpicks. These data frames and the different chopping methodologies are described in depth in the function documentation (<code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_sight.html">?das_effort_sight</a></code>), but briefly segdata contains information about each effort segment, sightinfo contains information about the sightings such as their corresponding segment, and randpicks contains information specific to the ‘equal length’ chopping method. <code>das_effort</code> and <code>das_effort_sight</code> are separate functions to allow the user more control over which sightings should be included in the effort segment summaries (see <code><a href="../reference/das_effort.html">?das_effort</a></code>). See below for how to chop/split effort lines by strata.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -413,224 +409,224 @@
 <span class="co"># Chop the effort every time a condition changes</span>
 <span class="va">y.eff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
   <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"condition"</span>, seg.min.km <span class="op">=</span> <span class="fl">0</span>, 
-  dist.method <span class="op">=</span> <span class="st">"greatcircle"</span>, conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Bft"</span>, <span class="st">"SwellHght"</span>, <span class="st">"Vis"</span><span class="op">)</span>, 
+  dist.method <span class="op">=</span> <span class="st">"greatcircle"</span>, conditions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Bft"</span>, <span class="st">"SwellHght"</span>, <span class="st">"Vis"</span><span class="op">)</span>, 
   num.cores <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span>
-<span class="va">y.eff.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort_sight.html">das_effort_sight</a></span><span class="op">(</span><span class="va">y.eff</span>, sp.codes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"018"</span>, <span class="st">"076"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">y.eff.sight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort_sight.html">das_effort_sight</a></span><span class="op">(</span><span class="va">y.eff</span>, sp.codes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"018"</span>, <span class="st">"076"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 20</span>
 <span class="co">#&gt; Columns: 31</span>
-<span class="co">#&gt; $ segnum           &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16…</span>
-<span class="co">#&gt; $ section_id       &lt;int&gt; 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 6, 6, 7, 7, 8,…</span>
-<span class="co">#&gt; $ section_sub_id   &lt;dbl&gt; 1, 1, 2, 1, 2, 3, 4, 5, 6, 7, 1, 2, 1, 1, 2, 1, 2, 1,…</span>
-<span class="co">#&gt; $ file             &lt;chr&gt; "das_sample.das", "das_sample.das", "das_sample.das",…</span>
-<span class="co">#&gt; $ stlin            &lt;int&gt; 2, 23, 33, 59, 69, 70, 75, 78, 84, 85, 99, 108, 127, …</span>
-<span class="co">#&gt; $ endlin           &lt;int&gt; 20, 33, 43, 69, 70, 75, 78, 84, 85, 90, 108, 121, 147…</span>
-<span class="co">#&gt; $ lat1             &lt;dbl&gt; 39.32033, 39.37617, 39.42950, 39.56800, 39.66082, 39.…</span>
-<span class="co">#&gt; $ lon1             &lt;dbl&gt; -137.6043, -137.5978, -137.5715, -137.4530, -137.4132…</span>
-<span class="co">#&gt; $ DateTime1        &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:58:04, 2013-01-13…</span>
-<span class="co">#&gt; $ lat2             &lt;dbl&gt; 39.36716, 39.42950, 39.51933, 39.66082, 39.66133, 39.…</span>
-<span class="co">#&gt; $ lon2             &lt;dbl&gt; -137.5817, -137.5715, -137.5277, -137.4132, -137.4130…</span>
-<span class="co">#&gt; $ DateTime2        &lt;dttm&gt; 2013-01-13 06:46:25, 2013-01-13 07:20:02, 2013-01-13…</span>
-<span class="co">#&gt; $ mlat             &lt;dbl&gt; 39.34377, 39.40288, 39.47435, 39.61433, 39.66108, 39.…</span>
-<span class="co">#&gt; $ mlon             &lt;dbl&gt; -137.5930, -137.5848, -137.5493, -137.4327, -137.4131…</span>
-<span class="co">#&gt; $ mDateTime        &lt;dttm&gt; 2013-01-13 06:37:02, 2013-01-13 07:09:03, 2013-01-13…</span>
-<span class="co">#&gt; $ dist             &lt;dbl&gt; 5.5577, 6.3431, 10.6674, 10.8651, 0.0574, 1.4189, 1.9…</span>
-<span class="co">#&gt; $ year             &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,…</span>
-<span class="co">#&gt; $ month            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
-<span class="co">#&gt; $ day              &lt;int&gt; 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 1…</span>
-<span class="co">#&gt; $ mtime            &lt;chr&gt; "06:37:02", "07:09:03", "07:38:33", "09:40:55", "09:5…</span>
-<span class="co">#&gt; $ Cruise           &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,…</span>
-<span class="co">#&gt; $ Mode             &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"…</span>
-<span class="co">#&gt; $ EffType          &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"…</span>
-<span class="co">#&gt; $ ESWsides         &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
-<span class="co">#&gt; $ maxdistBft       &lt;dbl&gt; 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 3, 2, 2,…</span>
-<span class="co">#&gt; $ maxdistSwellHght &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…</span>
-<span class="co">#&gt; $ maxdistVis       &lt;dbl&gt; 6.0, 6.0, 5.5, 5.5, 6.0, 6.0, 5.5, 4.5, 3.5, 2.5, 5.8…</span>
-<span class="co">#&gt; $ nSI_018          &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
-<span class="co">#&gt; $ ANI_018          &lt;dbl&gt; 42.33333, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000…</span>
-<span class="co">#&gt; $ nSI_076          &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
-<span class="co">#&gt; $ ANI_076          &lt;dbl&gt; 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
+<span class="co">#&gt; $ segnum           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16…</span>
+<span class="co">#&gt; $ section_id       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 6, 6, 7, 7, 8,…</span>
+<span class="co">#&gt; $ section_sub_id   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 2, 1, 2, 3, 4, 5, 6, 7, 1, 2, 1, 1, 2, 1, 2, 1,…</span>
+<span class="co">#&gt; $ file             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "das_sample.das", "das_sample.das", "das_sample.das",…</span>
+<span class="co">#&gt; $ stlin            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2, 23, 33, 59, 69, 70, 75, 78, 84, 85, 99, 108, 127, …</span>
+<span class="co">#&gt; $ endlin           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 20, 33, 43, 69, 70, 75, 78, 84, 85, 90, 108, 121, 147…</span>
+<span class="co">#&gt; $ lat1             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.32033, 39.37617, 39.42950, 39.56800, 39.66082, 39.…</span>
+<span class="co">#&gt; $ lon1             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.6043, -137.5978, -137.5715, -137.4530, -137.4132…</span>
+<span class="co">#&gt; $ DateTime1        <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:27:39, 2013-01-13 06:58:04, 2013-01-13…</span>
+<span class="co">#&gt; $ lat2             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.36716, 39.42950, 39.51933, 39.66082, 39.66133, 39.…</span>
+<span class="co">#&gt; $ lon2             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.5817, -137.5715, -137.5277, -137.4132, -137.4130…</span>
+<span class="co">#&gt; $ DateTime2        <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:46:25, 2013-01-13 07:20:02, 2013-01-13…</span>
+<span class="co">#&gt; $ mlat             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.34377, 39.40288, 39.47435, 39.61433, 39.66108, 39.…</span>
+<span class="co">#&gt; $ mlon             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.5930, -137.5848, -137.5493, -137.4327, -137.4131…</span>
+<span class="co">#&gt; $ mDateTime        <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:37:02, 2013-01-13 07:09:03, 2013-01-13…</span>
+<span class="co">#&gt; $ dist             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 5.5577, 6.3431, 10.6674, 10.8651, 0.0574, 1.4189, 1.9…</span>
+<span class="co">#&gt; $ year             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,…</span>
+<span class="co">#&gt; $ month            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
+<span class="co">#&gt; $ day              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 1…</span>
+<span class="co">#&gt; $ mtime            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "06:37:02", "07:09:03", "07:38:33", "09:40:55", "09:5…</span>
+<span class="co">#&gt; $ Cruise           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,…</span>
+<span class="co">#&gt; $ Mode             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"…</span>
+<span class="co">#&gt; $ EffType          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"…</span>
+<span class="co">#&gt; $ ESWsides         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
+<span class="co">#&gt; $ maxdistBft       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 3, 2, 2,…</span>
+<span class="co">#&gt; $ maxdistSwellHght <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…</span>
+<span class="co">#&gt; $ maxdistVis       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 6.0, 6.0, 5.5, 5.5, 6.0, 6.0, 5.5, 4.5, 3.5, 2.5, 5.8…</span>
+<span class="co">#&gt; $ nSI_018          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
+<span class="co">#&gt; $ ANI_018          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 42.33333, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000…</span>
+<span class="co">#&gt; $ nSI_076          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
+<span class="co">#&gt; $ ANI_076          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
 
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight</span><span class="op">$</span><span class="va">sightinfo</span><span class="op">)</span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight</span><span class="op">$</span><span class="va">sightinfo</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 13</span>
 <span class="co">#&gt; Columns: 64</span>
-<span class="co">#&gt; $ segnum       &lt;int&gt; 1, 3, 4, 13, 13, 15, 17, 18, 18, 20, 20, 20, 20</span>
-<span class="co">#&gt; $ mlat         &lt;dbl&gt; 39.34377, 39.47435, 39.61433, 40.20895, 40.20895, 40.3483…</span>
-<span class="co">#&gt; $ mlon         &lt;dbl&gt; -137.5930, -137.5493, -137.4327, -137.1531, -137.1531, -1…</span>
-<span class="co">#&gt; $ Event        &lt;chr&gt; "S", "S", "t", "t", "S", "t", "S", "S", "S", "S", "S", "S…</span>
-<span class="co">#&gt; $ DateTime     &lt;dttm&gt; 2013-01-13 06:46:02, 2013-01-13 07:56:22, 2013-01-13 09:3…</span>
-<span class="co">#&gt; $ year         &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 20…</span>
-<span class="co">#&gt; $ Lat          &lt;dbl&gt; 39.36617, 39.51767, 39.59733, 40.18283, 40.26567, 40.3605…</span>
-<span class="co">#&gt; $ Lon          &lt;dbl&gt; -137.5820, -137.5285, -137.4400, -137.1622, -137.1350, -1…</span>
-<span class="co">#&gt; $ OnEffort     &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…</span>
-<span class="co">#&gt; $ Cruise       &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 100…</span>
-<span class="co">#&gt; $ Mode         &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C…</span>
-<span class="co">#&gt; $ OffsetGMT    &lt;int&gt; 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</span>
-<span class="co">#&gt; $ EffType      &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S…</span>
-<span class="co">#&gt; $ ESWsides     &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
-<span class="co">#&gt; $ Course       &lt;dbl&gt; 25, 26, 27, 20, 20, 16, 25, 30, 30, 23, 23, 23, 23</span>
-<span class="co">#&gt; $ SpdKt        &lt;dbl&gt; 10.2, 9.7, 9.0, 9.3, 9.3, 8.9, 8.9, 9.5, 9.5, 9.6, 9.6, 9…</span>
-<span class="co">#&gt; $ Bft          &lt;dbl&gt; 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2</span>
-<span class="co">#&gt; $ SwellHght    &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1</span>
-<span class="co">#&gt; $ WindSpdKt    &lt;dbl&gt; 10, 10, 10, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5</span>
-<span class="co">#&gt; $ RainFog      &lt;dbl&gt; 1, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3</span>
-<span class="co">#&gt; $ HorizSun     &lt;dbl&gt; NA, 2, 2, 8, 8, 9, 8, 8, 8, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ VertSun      &lt;dbl&gt; NA, 2, 2, 1, 1, 1, 2, 2, 2, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ Glare        &lt;lgl&gt; NA, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALS…</span>
-<span class="co">#&gt; $ Vis          &lt;dbl&gt; 6.0, 5.5, 5.5, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 4.0, 4.0, 4.…</span>
-<span class="co">#&gt; $ ObsL         &lt;chr&gt; "208", "125", "001", "280", "280", "125", "149", "126", "…</span>
-<span class="co">#&gt; $ Rec          &lt;chr&gt; "280", "208", "126", "001", "001", "208", "125", "149", "…</span>
-<span class="co">#&gt; $ ObsR         &lt;chr&gt; "001", "280", "149", "126", "126", "280", "208", "125", "…</span>
-<span class="co">#&gt; $ ObsInd       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ EffortDot    &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…</span>
-<span class="co">#&gt; $ EventNum     &lt;chr&gt; "15", "35", "59", "131", "136", "153", "167", "181", "181…</span>
-<span class="co">#&gt; $ file_das     &lt;chr&gt; "das_sample.das", "das_sample.das", "das_sample.das", "da…</span>
-<span class="co">#&gt; $ line_num     &lt;int&gt; 15, 38, 65, 137, 142, 162, 176, 193, 193, 248, 248, 252, …</span>
-<span class="co">#&gt; $ SightNo      &lt;chr&gt; "1406", "1407", NA, NA, "1408", NA, "1409", "1410", "1410…</span>
-<span class="co">#&gt; $ Subgroup     &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ SightNoDaily &lt;chr&gt; "20130113_1", "20130113_2", NA, NA, "20130113_3", NA, "20…</span>
-<span class="co">#&gt; $ Obs          &lt;chr&gt; "208", "125", "280", "228", "280", "231", "149", "125", "…</span>
-<span class="co">#&gt; $ ObsStd       &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, …</span>
-<span class="co">#&gt; $ Bearing      &lt;dbl&gt; 309, 326, 120, 300, 270, 45, 344, 70, 70, 359, 359, 38, 38</span>
-<span class="co">#&gt; $ Reticle      &lt;dbl&gt; 2.8, 0.4, NA, NA, 14.0, NA, 0.2, 1.4, 1.4, 0.3, 0.3, 0.8,…</span>
-<span class="co">#&gt; $ DistNm       &lt;dbl&gt; 1.06, 2.97, 0.03, 0.02, 0.28, 0.05, 3.68, 1.66, 1.66, 3.2…</span>
-<span class="co">#&gt; $ Cue          &lt;dbl&gt; 3, 3, NA, NA, 3, NA, 3, 3, 3, 2, 2, 3, 3</span>
-<span class="co">#&gt; $ Method       &lt;dbl&gt; 4, 4, NA, NA, 4, NA, 4, 4, 4, 4, 4, 4, 4</span>
-<span class="co">#&gt; $ Photos       &lt;chr&gt; "N", "Y", NA, NA, "N", NA, "Y", "Y", "Y", "Y", "Y", "Y", …</span>
-<span class="co">#&gt; $ Birds        &lt;chr&gt; "N", "N", NA, NA, "N", NA, "Y", "N", "N", "N", "N", "N", …</span>
-<span class="co">#&gt; $ CalibSchool  &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ PhotosAerial &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ Biopsy       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ Prob         &lt;lgl&gt; FALSE, FALSE, NA, NA, FALSE, NA, FALSE, FALSE, FALSE, FAL…</span>
-<span class="co">#&gt; $ nSp          &lt;int&gt; 1, 1, NA, NA, 1, NA, 1, 2, 2, 2, 2, 2, 2</span>
-<span class="co">#&gt; $ Mixed        &lt;lgl&gt; FALSE, FALSE, NA, NA, FALSE, NA, FALSE, TRUE, TRUE, TRUE,…</span>
-<span class="co">#&gt; $ SpCode       &lt;chr&gt; "018", "076", "LV", "DC", "037", "DC", "016", "013", "016…</span>
-<span class="co">#&gt; $ SpCodeProb   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "016", "016"</span>
-<span class="co">#&gt; $ GsSchoolBest &lt;dbl&gt; NA, 8.00000, 1.00000, 1.00000, 10.66667, 1.00000, 46.6666…</span>
-<span class="co">#&gt; $ GsSchoolHigh &lt;dbl&gt; NA, 14.00, NA, NA, 20.00, NA, 79.00, 72.75, 72.75, 249.00…</span>
-<span class="co">#&gt; $ GsSchoolLow  &lt;dbl&gt; 42.333333, 5.666667, NA, NA, 10.666667, NA, 46.666667, 41…</span>
-<span class="co">#&gt; $ GsSpBest     &lt;dbl&gt; NA, 8.00000, 1.00000, 1.00000, 10.66667, 1.00000, 46.6666…</span>
-<span class="co">#&gt; $ GsSpHigh     &lt;dbl&gt; NA, 14.000, NA, NA, 20.000, NA, 79.000, 53.165, 19.585, 2…</span>
-<span class="co">#&gt; $ GsSpLow      &lt;dbl&gt; 42.333333, 5.666667, NA, NA, 10.666667, NA, 46.666667, 30…</span>
-<span class="co">#&gt; $ CourseSchool &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ TurtleJFR    &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ TurtleAge    &lt;chr&gt; NA, NA, "A", "J", NA, "A", NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ TurtleCapt   &lt;chr&gt; NA, NA, "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
-<span class="co">#&gt; $ PerpDistKm   &lt;dbl&gt; 1.52563078, 3.07580701, 0.04811637, 0.03207758, 0.5185600…</span>
-<span class="co">#&gt; $ included     &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…</span></code></pre></div>
+<span class="co">#&gt; $ segnum       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 4, 13, 13, 15, 17, 18, 18, 20, 20, 20, 20</span>
+<span class="co">#&gt; $ mlat         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.34377, 39.47435, 39.61433, 40.20895, 40.20895, 40.3483…</span>
+<span class="co">#&gt; $ mlon         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.5930, -137.5493, -137.4327, -137.1531, -137.1531, -1…</span>
+<span class="co">#&gt; $ Event        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "S", "S", "t", "t", "S", "t", "S", "S", "S", "S", "S", "S…</span>
+<span class="co">#&gt; $ DateTime     <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:46:02, 2013-01-13 07:56:22, 2013-01-13 09:3…</span>
+<span class="co">#&gt; $ year         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 20…</span>
+<span class="co">#&gt; $ Lat          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.36617, 39.51767, 39.59733, 40.18283, 40.26567, 40.3605…</span>
+<span class="co">#&gt; $ Lon          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.5820, -137.5285, -137.4400, -137.1622, -137.1350, -1…</span>
+<span class="co">#&gt; $ OnEffort     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…</span>
+<span class="co">#&gt; $ Cruise       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 100…</span>
+<span class="co">#&gt; $ Mode         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C…</span>
+<span class="co">#&gt; $ OffsetGMT    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5</span>
+<span class="co">#&gt; $ EffType      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S…</span>
+<span class="co">#&gt; $ ESWsides     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
+<span class="co">#&gt; $ Course       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 25, 26, 27, 20, 20, 16, 25, 30, 30, 23, 23, 23, 23</span>
+<span class="co">#&gt; $ SpdKt        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 10.2, 9.7, 9.0, 9.3, 9.3, 8.9, 8.9, 9.5, 9.5, 9.6, 9.6, 9…</span>
+<span class="co">#&gt; $ Bft          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2</span>
+<span class="co">#&gt; $ SwellHght    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1</span>
+<span class="co">#&gt; $ WindSpdKt    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 10, 10, 10, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5</span>
+<span class="co">#&gt; $ RainFog      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3</span>
+<span class="co">#&gt; $ HorizSun     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 2, 2, 8, 8, 9, 8, 8, 8, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ VertSun      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 2, 2, 1, 1, 1, 2, 2, 2, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ Glare        <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> NA, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALS…</span>
+<span class="co">#&gt; $ Vis          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 6.0, 5.5, 5.5, 6.0, 6.0, 6.0, 6.0, 6.0, 6.0, 4.0, 4.0, 4.…</span>
+<span class="co">#&gt; $ ObsL         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "208", "125", "001", "280", "280", "125", "149", "126", "…</span>
+<span class="co">#&gt; $ Rec          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "280", "208", "126", "001", "001", "208", "125", "149", "…</span>
+<span class="co">#&gt; $ ObsR         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "001", "280", "149", "126", "126", "280", "208", "125", "…</span>
+<span class="co">#&gt; $ ObsInd       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ EffortDot    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRU…</span>
+<span class="co">#&gt; $ EventNum     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "15", "35", "59", "131", "136", "153", "167", "181", "181…</span>
+<span class="co">#&gt; $ file_das     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "das_sample.das", "das_sample.das", "das_sample.das", "da…</span>
+<span class="co">#&gt; $ line_num     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 15, 38, 65, 137, 142, 162, 176, 193, 193, 248, 248, 252, …</span>
+<span class="co">#&gt; $ SightNo      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1406", "1407", NA, NA, "1408", NA, "1409", "1410", "1410…</span>
+<span class="co">#&gt; $ Subgroup     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ SightNoDaily <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "20130113_1", "20130113_2", NA, NA, "20130113_3", NA, "20…</span>
+<span class="co">#&gt; $ Obs          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "208", "125", "280", "228", "280", "231", "149", "125", "…</span>
+<span class="co">#&gt; $ ObsStd       <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, …</span>
+<span class="co">#&gt; $ Bearing      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 309, 326, 120, 300, 270, 45, 344, 70, 70, 359, 359, 38, 38</span>
+<span class="co">#&gt; $ Reticle      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.8, 0.4, NA, NA, 14.0, NA, 0.2, 1.4, 1.4, 0.3, 0.3, 0.8,…</span>
+<span class="co">#&gt; $ DistNm       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.06, 2.97, 0.03, 0.02, 0.28, 0.05, 3.68, 1.66, 1.66, 3.2…</span>
+<span class="co">#&gt; $ Cue          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, NA, NA, 3, NA, 3, 3, 3, 2, 2, 3, 3</span>
+<span class="co">#&gt; $ Method       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 4, 4, NA, NA, 4, NA, 4, 4, 4, 4, 4, 4, 4</span>
+<span class="co">#&gt; $ Photos       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "N", "Y", NA, NA, "N", NA, "Y", "Y", "Y", "Y", "Y", "Y", …</span>
+<span class="co">#&gt; $ Birds        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "N", "N", NA, NA, "N", NA, "Y", "N", "N", "N", "N", "N", …</span>
+<span class="co">#&gt; $ CalibSchool  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ PhotosAerial <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ Biopsy       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ Prob         <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, NA, NA, FALSE, NA, FALSE, FALSE, FALSE, FAL…</span>
+<span class="co">#&gt; $ nSp          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, NA, NA, 1, NA, 1, 2, 2, 2, 2, 2, 2</span>
+<span class="co">#&gt; $ Mixed        <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE, FALSE, NA, NA, FALSE, NA, FALSE, TRUE, TRUE, TRUE,…</span>
+<span class="co">#&gt; $ SpCode       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "018", "076", "LV", "DC", "037", "DC", "016", "013", "016…</span>
+<span class="co">#&gt; $ SpCodeProb   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, "016", "016"</span>
+<span class="co">#&gt; $ GsSchoolBest <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 8.00000, 1.00000, 1.00000, 10.66667, 1.00000, 46.6666…</span>
+<span class="co">#&gt; $ GsSchoolHigh <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 14.00, NA, NA, 20.00, NA, 79.00, 72.75, 72.75, 249.00…</span>
+<span class="co">#&gt; $ GsSchoolLow  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 42.333333, 5.666667, NA, NA, 10.666667, NA, 46.666667, 41…</span>
+<span class="co">#&gt; $ GsSpBest     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 8.00000, 1.00000, 1.00000, 10.66667, 1.00000, 46.6666…</span>
+<span class="co">#&gt; $ GsSpHigh     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, 14.000, NA, NA, 20.000, NA, 79.000, 53.165, 19.585, 2…</span>
+<span class="co">#&gt; $ GsSpLow      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 42.333333, 5.666667, NA, NA, 10.666667, NA, 46.666667, 30…</span>
+<span class="co">#&gt; $ CourseSchool <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ TurtleJFR    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ TurtleAge    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "A", "J", NA, "A", NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ TurtleCapt   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "N", "N", NA, NA, NA, NA, NA, NA, NA, NA, NA</span>
+<span class="co">#&gt; $ PerpDistKm   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1.52563078, 3.07580701, 0.04811637, 0.03207758, 0.5185600…</span>
+<span class="co">#&gt; $ included     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…</span></code></pre></div>
 </div>
-<div id="strata" class="section level2">
-<h2 class="hasAnchor">
-<a href="#strata" class="anchor"></a>Strata</h2>
+<div class="section level2">
+<h2 id="strata">Strata<a class="anchor" aria-label="anchor" href="#strata"></a>
+</h2>
 <p>This package contains several methods to incorporate strata into your DAS data processing: <code>das_intersects_strata</code> for assigning points to strata and <code>das_effort</code> for chopping effort lines by strata. These functions contain a ‘strata.files’ argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.</p>
 <p>First, <code>das_intersects_strata</code> allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. If a list then it must be the output of <code>das_effort</code> or <code>das_effort_sight</code>, and the function will use the segment midpoints to determine if a segment (and associated sightings) intersected each stratum.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">stratum.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"das_sample_stratum.csv"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>
-<span class="va">y.eff.sight.strata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_intersects_strata.html">das_intersects_strata</a></span><span class="op">(</span><span class="va">y.eff.sight</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>InPoly <span class="op">=</span> <span class="va">stratum.file</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">stratum.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"das_sample_stratum.csv"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span>
+<span class="va">y.eff.sight.strata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_intersects_strata.html">das_intersects_strata</a></span><span class="op">(</span><span class="va">y.eff.sight</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>InPoly <span class="op">=</span> <span class="va">stratum.file</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight.strata</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight.strata</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 20</span>
 <span class="co">#&gt; Columns: 32</span>
-<span class="co">#&gt; $ segnum           &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16…</span>
-<span class="co">#&gt; $ section_id       &lt;int&gt; 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 6, 6, 7, 7, 8,…</span>
-<span class="co">#&gt; $ section_sub_id   &lt;dbl&gt; 1, 1, 2, 1, 2, 3, 4, 5, 6, 7, 1, 2, 1, 1, 2, 1, 2, 1,…</span>
-<span class="co">#&gt; $ file             &lt;chr&gt; "das_sample.das", "das_sample.das", "das_sample.das",…</span>
-<span class="co">#&gt; $ stlin            &lt;int&gt; 2, 23, 33, 59, 69, 70, 75, 78, 84, 85, 99, 108, 127, …</span>
-<span class="co">#&gt; $ endlin           &lt;int&gt; 20, 33, 43, 69, 70, 75, 78, 84, 85, 90, 108, 121, 147…</span>
-<span class="co">#&gt; $ lat1             &lt;dbl&gt; 39.32033, 39.37617, 39.42950, 39.56800, 39.66082, 39.…</span>
-<span class="co">#&gt; $ lon1             &lt;dbl&gt; -137.6043, -137.5978, -137.5715, -137.4530, -137.4132…</span>
-<span class="co">#&gt; $ DateTime1        &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:58:04, 2013-01-13…</span>
-<span class="co">#&gt; $ lat2             &lt;dbl&gt; 39.36716, 39.42950, 39.51933, 39.66082, 39.66133, 39.…</span>
-<span class="co">#&gt; $ lon2             &lt;dbl&gt; -137.5817, -137.5715, -137.5277, -137.4132, -137.4130…</span>
-<span class="co">#&gt; $ DateTime2        &lt;dttm&gt; 2013-01-13 06:46:25, 2013-01-13 07:20:02, 2013-01-13…</span>
-<span class="co">#&gt; $ mlat             &lt;dbl&gt; 39.34377, 39.40288, 39.47435, 39.61433, 39.66108, 39.…</span>
-<span class="co">#&gt; $ mlon             &lt;dbl&gt; -137.5930, -137.5848, -137.5493, -137.4327, -137.4131…</span>
-<span class="co">#&gt; $ mDateTime        &lt;dttm&gt; 2013-01-13 06:37:02, 2013-01-13 07:09:03, 2013-01-13…</span>
-<span class="co">#&gt; $ dist             &lt;dbl&gt; 5.5577, 6.3431, 10.6674, 10.8651, 0.0574, 1.4189, 1.9…</span>
-<span class="co">#&gt; $ year             &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,…</span>
-<span class="co">#&gt; $ month            &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
-<span class="co">#&gt; $ day              &lt;int&gt; 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 1…</span>
-<span class="co">#&gt; $ mtime            &lt;chr&gt; "06:37:02", "07:09:03", "07:38:33", "09:40:55", "09:5…</span>
-<span class="co">#&gt; $ Cruise           &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,…</span>
-<span class="co">#&gt; $ Mode             &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"…</span>
-<span class="co">#&gt; $ EffType          &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"…</span>
-<span class="co">#&gt; $ ESWsides         &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
-<span class="co">#&gt; $ maxdistBft       &lt;dbl&gt; 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 3, 2, 2,…</span>
-<span class="co">#&gt; $ maxdistSwellHght &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…</span>
-<span class="co">#&gt; $ maxdistVis       &lt;dbl&gt; 6.0, 6.0, 5.5, 5.5, 6.0, 6.0, 5.5, 4.5, 3.5, 2.5, 5.8…</span>
-<span class="co">#&gt; $ nSI_018          &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
-<span class="co">#&gt; $ ANI_018          &lt;dbl&gt; 42.33333, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000…</span>
-<span class="co">#&gt; $ nSI_076          &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
-<span class="co">#&gt; $ ANI_076          &lt;dbl&gt; 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
-<span class="co">#&gt; $ InPoly           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,…</span></code></pre></div>
+<span class="co">#&gt; $ segnum           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16…</span>
+<span class="co">#&gt; $ section_id       <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 6, 6, 7, 7, 8,…</span>
+<span class="co">#&gt; $ section_sub_id   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 2, 1, 2, 3, 4, 5, 6, 7, 1, 2, 1, 1, 2, 1, 2, 1,…</span>
+<span class="co">#&gt; $ file             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "das_sample.das", "das_sample.das", "das_sample.das",…</span>
+<span class="co">#&gt; $ stlin            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2, 23, 33, 59, 69, 70, 75, 78, 84, 85, 99, 108, 127, …</span>
+<span class="co">#&gt; $ endlin           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 20, 33, 43, 69, 70, 75, 78, 84, 85, 90, 108, 121, 147…</span>
+<span class="co">#&gt; $ lat1             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.32033, 39.37617, 39.42950, 39.56800, 39.66082, 39.…</span>
+<span class="co">#&gt; $ lon1             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.6043, -137.5978, -137.5715, -137.4530, -137.4132…</span>
+<span class="co">#&gt; $ DateTime1        <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:27:39, 2013-01-13 06:58:04, 2013-01-13…</span>
+<span class="co">#&gt; $ lat2             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.36716, 39.42950, 39.51933, 39.66082, 39.66133, 39.…</span>
+<span class="co">#&gt; $ lon2             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.5817, -137.5715, -137.5277, -137.4132, -137.4130…</span>
+<span class="co">#&gt; $ DateTime2        <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:46:25, 2013-01-13 07:20:02, 2013-01-13…</span>
+<span class="co">#&gt; $ mlat             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.34377, 39.40288, 39.47435, 39.61433, 39.66108, 39.…</span>
+<span class="co">#&gt; $ mlon             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.5930, -137.5848, -137.5493, -137.4327, -137.4131…</span>
+<span class="co">#&gt; $ mDateTime        <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:37:02, 2013-01-13 07:09:03, 2013-01-13…</span>
+<span class="co">#&gt; $ dist             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 5.5577, 6.3431, 10.6674, 10.8651, 0.0574, 1.4189, 1.9…</span>
+<span class="co">#&gt; $ year             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,…</span>
+<span class="co">#&gt; $ month            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span>
+<span class="co">#&gt; $ day              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 1…</span>
+<span class="co">#&gt; $ mtime            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "06:37:02", "07:09:03", "07:38:33", "09:40:55", "09:5…</span>
+<span class="co">#&gt; $ Cruise           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000,…</span>
+<span class="co">#&gt; $ Mode             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "C", "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"…</span>
+<span class="co">#&gt; $ EffType          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"…</span>
+<span class="co">#&gt; $ ESWsides         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…</span>
+<span class="co">#&gt; $ maxdistBft       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 3, 2, 2,…</span>
+<span class="co">#&gt; $ maxdistSwellHght <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…</span>
+<span class="co">#&gt; $ maxdistVis       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 6.0, 6.0, 5.5, 5.5, 6.0, 6.0, 5.5, 4.5, 3.5, 2.5, 5.8…</span>
+<span class="co">#&gt; $ nSI_018          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
+<span class="co">#&gt; $ ANI_018          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 42.33333, 0.00000, 0.00000, 0.00000, 0.00000, 0.00000…</span>
+<span class="co">#&gt; $ nSI_076          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
+<span class="co">#&gt; $ ANI_076          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</span>
+<span class="co">#&gt; $ InPoly           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1,…</span></code></pre></div>
 <p>In addition, you can chop/split effort lines by strata using the ‘strata.files’ argument of <code>das_effort</code>. Effort lines are chopped/split by strata before then being processed using the specified method (condition, equal length, etc.). The ‘segdata’ element of the <code>das_effort</code> output will contain a ‘stratum’ column, which contains the name of the stratum that the segment is in. See <code><a href="../reference/das_effort.html">?das_effort</a></code> and <code><a href="../reference/das_effort_strata.html">?das_effort_strata</a></code> for more details.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y.eff.strata.section</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
-  <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"section"</span>, strata.files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="va">stratum.file</span><span class="op">)</span>,
+  <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"section"</span>, strata.files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">stratum.file</span><span class="op">)</span>,
   num.cores <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersection assumes that they are planar</span>
 
 <span class="va">y.eff.strata.condition</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_effort.html">das_effort</a></span><span class="op">(</span>
   <span class="va">y.proc</span>, method <span class="op">=</span> <span class="st">"condition"</span>, seg.min.km <span class="op">=</span> <span class="fl">0</span>, 
-  strata.files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Poly1 <span class="op">=</span> <span class="va">stratum.file</span><span class="op">)</span>,
+  strata.files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Poly1 <span class="op">=</span> <span class="va">stratum.file</span><span class="op">)</span>,
   num.cores <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span>
 <span class="co">#&gt; although coordinates are longitude/latitude, st_intersection assumes that they are planar</span>
 
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">y.eff.strata.section</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">y.eff.strata.section</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 10</span>
 <span class="co">#&gt; Columns: 33</span>
-<span class="co">#&gt; $ segnum         &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10</span>
-<span class="co">#&gt; $ section_id     &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10</span>
-<span class="co">#&gt; $ section_sub_id &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span>
-<span class="co">#&gt; $ file           &lt;chr&gt; "das_sample.das", "das_sample.das", "das_sample.das", "…</span>
-<span class="co">#&gt; $ stlin          &lt;int&gt; 2, 23, 59, 99, 127, 150, 167, 188, 232, 242</span>
-<span class="co">#&gt; $ endlin         &lt;int&gt; 20, 43, 90, 121, 147, 164, 181, 199, 240, 259</span>
-<span class="co">#&gt; $ lat1           &lt;dbl&gt; 39.32033, 39.37617, 39.56800, 39.94517, 40.15217, 40.26…</span>
-<span class="co">#&gt; $ lon1           &lt;dbl&gt; -137.6043, -137.5978, -137.4530, -137.3692, -137.1737, …</span>
-<span class="co">#&gt; $ DateTime1      &lt;dttm&gt; 2013-01-13 06:27:39, 2013-01-13 06:58:04, 2013-01-13 09…</span>
-<span class="co">#&gt; $ lat2           &lt;dbl&gt; 39.36716, 39.51933, 39.75433, 40.12745, 40.26617, 40.37…</span>
-<span class="co">#&gt; $ lon2           &lt;dbl&gt; -137.5817, -137.5277, -137.4107, -137.2488, -137.1348, …</span>
-<span class="co">#&gt; $ DateTime2      &lt;dttm&gt; 2013-01-13 06:46:25, 2013-01-13 07:57:05, 2013-01-13 10…</span>
-<span class="co">#&gt; $ mlat           &lt;dbl&gt; 39.34377, 39.44767, 39.66117, 40.03679, 40.20895, 40.32…</span>
-<span class="co">#&gt; $ mlon           &lt;dbl&gt; -137.5930, -137.5625, -137.4131, -137.3101, -137.1531,…</span>
-<span class="co">#&gt; $ mDateTime      &lt;dttm&gt; 2013-01-13 06:37:02, 2013-01-13 07:27:34, 2013-01-13 09…</span>
-<span class="co">#&gt; $ dist           &lt;dbl&gt; 5.5577, 17.0106, 21.8086, 22.7090, 13.0922, 12.3011, 8.…</span>
-<span class="co">#&gt; $ year           &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …</span>
-<span class="co">#&gt; $ month          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span>
-<span class="co">#&gt; $ day            &lt;int&gt; 13, 13, 13, 13, 13, 13, 13, 13, 14, 14</span>
-<span class="co">#&gt; $ mtime          &lt;chr&gt; "06:37:02", "07:27:34", "09:59:20", "12:34:14", "14:14:…</span>
-<span class="co">#&gt; $ Cruise         &lt;dbl&gt; 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1…</span>
-<span class="co">#&gt; $ Mode           &lt;chr&gt; "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"</span>
-<span class="co">#&gt; $ EffType        &lt;chr&gt; "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"</span>
-<span class="co">#&gt; $ ESWsides       &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
-<span class="co">#&gt; $ avgBft         &lt;dbl&gt; 3.000000, 3.000000, 2.500835, 3.000000, 3.000000, 2.47…</span>
-<span class="co">#&gt; $ avgSwellHght   &lt;dbl&gt; 3, 3, 3, 3, 3, 3, 3, 3, 1, 1</span>
-<span class="co">#&gt; $ avgHorizSun    &lt;dbl&gt; 2.000000, 2.000000, 2.000000, 12.000000, 8.000000, 8.52…</span>
-<span class="co">#&gt; $ avgVertSun     &lt;dbl&gt; 3, 2, 2, 12, 1, 1, 2, 2, NA, NA</span>
-<span class="co">#&gt; $ avgGlare       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, NA, NA</span>
-<span class="co">#&gt; $ avgVis         &lt;dbl&gt; 6.000000, 5.686447, 5.090748, 5.974103, 6.000000, 6.000…</span>
-<span class="co">#&gt; $ avgCourse      &lt;dbl&gt; 23.56198, 27.11868, 95.65614, 34.61155, 20.43919, 16.47…</span>
-<span class="co">#&gt; $ avgSpdKt       &lt;dbl&gt; 9.912395, 9.476263, 9.287725, 9.428340, 9.343919, 9.091…</span>
-<span class="co">#&gt; $ stratum        &lt;chr&gt; NA, NA, NA, NA, "Stratum1", "Stratum1", "Stratum1", "St…</span></code></pre></div>
+<span class="co">#&gt; $ segnum         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10</span>
+<span class="co">#&gt; $ section_id     <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10</span>
+<span class="co">#&gt; $ section_sub_id <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span>
+<span class="co">#&gt; $ file           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "das_sample.das", "das_sample.das", "das_sample.das", "…</span>
+<span class="co">#&gt; $ stlin          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2, 23, 59, 99, 127, 150, 167, 188, 232, 242</span>
+<span class="co">#&gt; $ endlin         <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 20, 43, 90, 121, 147, 164, 181, 199, 240, 259</span>
+<span class="co">#&gt; $ lat1           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.32033, 39.37617, 39.56800, 39.94517, 40.15217, 40.26…</span>
+<span class="co">#&gt; $ lon1           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.6043, -137.5978, -137.4530, -137.3692, -137.1737, …</span>
+<span class="co">#&gt; $ DateTime1      <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:27:39, 2013-01-13 06:58:04, 2013-01-13 09…</span>
+<span class="co">#&gt; $ lat2           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.36716, 39.51933, 39.75433, 40.12745, 40.26617, 40.37…</span>
+<span class="co">#&gt; $ lon2           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.5817, -137.5277, -137.4107, -137.2488, -137.1348, …</span>
+<span class="co">#&gt; $ DateTime2      <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:46:25, 2013-01-13 07:57:05, 2013-01-13 10…</span>
+<span class="co">#&gt; $ mlat           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 39.34377, 39.44767, 39.66117, 40.03679, 40.20895, 40.32…</span>
+<span class="co">#&gt; $ mlon           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> -137.5930, -137.5625, -137.4131, -137.3101, -137.1531,…</span>
+<span class="co">#&gt; $ mDateTime      <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2013-01-13 06:37:02, 2013-01-13 07:27:34, 2013-01-13 09…</span>
+<span class="co">#&gt; $ dist           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 5.5577, 17.0106, 21.8086, 22.7090, 13.0922, 12.3011, 8.…</span>
+<span class="co">#&gt; $ year           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …</span>
+<span class="co">#&gt; $ month          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span>
+<span class="co">#&gt; $ day            <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 13, 13, 13, 13, 13, 13, 13, 13, 14, 14</span>
+<span class="co">#&gt; $ mtime          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "06:37:02", "07:27:34", "09:59:20", "12:34:14", "14:14:…</span>
+<span class="co">#&gt; $ Cruise         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1…</span>
+<span class="co">#&gt; $ Mode           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "C", "C", "C", "C", "C", "C", "C", "C", "C", "C"</span>
+<span class="co">#&gt; $ EffType        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"</span>
+<span class="co">#&gt; $ ESWsides       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2</span>
+<span class="co">#&gt; $ avgBft         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3.000000, 3.000000, 2.500835, 3.000000, 3.000000, 2.47…</span>
+<span class="co">#&gt; $ avgSwellHght   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 3, 3, 3, 3, 3, 3, 3, 1, 1</span>
+<span class="co">#&gt; $ avgHorizSun    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 2.000000, 2.000000, 2.000000, 12.000000, 8.000000, 8.52…</span>
+<span class="co">#&gt; $ avgVertSun     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 3, 2, 2, 12, 1, 1, 2, 2, NA, NA</span>
+<span class="co">#&gt; $ avgGlare       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0, 0, 0, 0, 0, 0, 0, 0, NA, NA</span>
+<span class="co">#&gt; $ avgVis         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 6.000000, 5.686447, 5.090748, 5.974103, 6.000000, 6.000…</span>
+<span class="co">#&gt; $ avgCourse      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 23.56198, 27.11868, 95.65614, 34.61155, 20.43919, 16.47…</span>
+<span class="co">#&gt; $ avgSpdKt       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 9.912395, 9.476263, 9.287725, 9.428340, 9.343919, 9.091…</span>
+<span class="co">#&gt; $ stratum        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, "Stratum1", "Stratum1", "Stratum1", "St…</span></code></pre></div>
 </div>
-<div id="comments" class="section level2">
-<h2 class="hasAnchor">
-<a href="#comments" class="anchor"></a>Comments</h2>
+<div class="section level2">
+<h2 id="comments">Comments<a class="anchor" aria-label="anchor" href="#comments"></a>
+</h2>
 <p>In addition, you can use <code>das_comments</code> to generate comment strings. This is particularly useful if looking for comments with keywords</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">y.comm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_comments.html">das_comments</a></span><span class="op">(</span><span class="va">y.proc</span><span class="op">)</span>
-<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">y.comm</span>, <span class="va">Event</span>, <span class="va">line_num</span>, <span class="va">comment_str</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">y.comm</span>, <span class="va">Event</span>, <span class="va">line_num</span>, <span class="va">comment_str</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Rows: 5</span>
 <span class="co">#&gt; Columns: 3</span>
-<span class="co">#&gt; $ Event       &lt;chr&gt; "C", "C", "C", "C", "C"</span>
-<span class="co">#&gt; $ line_num    &lt;int&gt; 71, 81, 186, 218, 241</span>
-<span class="co">#&gt; $ comment_str &lt;chr&gt; " Well?              ", " going left to avoid          ", …</span>
+<span class="co">#&gt; $ Event       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "C", "C", "C", "C", "C"</span>
+<span class="co">#&gt; $ line_num    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 71, 81, 186, 218, 241</span>
+<span class="co">#&gt; $ comment_str <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> " Well?              ", " going left to avoid          ", …</span>
 
-<span class="va">y.comm</span><span class="op">[</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html">str_detect</a></span><span class="op">(</span><span class="va">y.comm</span><span class="op">$</span><span class="va">comment_str</span>, <span class="st">"gear"</span><span class="op">)</span>, <span class="op">]</span> <span class="co">#Could also use grepl() here</span>
+<span class="va">y.comm</span><span class="op">[</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">y.comm</span><span class="op">$</span><span class="va">comment_str</span>, <span class="st">"gear"</span><span class="op">)</span>, <span class="op">]</span> <span class="co">#Could also use grepl() here</span>
 <span class="co">#&gt;     Event            DateTime    Lat      Lon OnEffort Cruise Mode OffsetGMT</span>
 <span class="co">#&gt; 238     C 2013-01-14 11:37:27 41.016 -135.578    FALSE   1000    C         5</span>
 <span class="co">#&gt;     EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun</span>
@@ -655,11 +651,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Sam Woodman.</p>
+  <p></p>
+<p>Developed by Sam Woodman.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -667,6 +665,8 @@
 
   
 
+
+  
 
   </body>
 </html>
