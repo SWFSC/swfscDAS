@@ -1,17 +1,18 @@
 # Platform
 
-|field    |value                        |
-|:--------|:----------------------------|
-|version  |R version 4.1.2 (2021-11-01) |
-|os       |Windows 10 x64 (build 19044) |
-|system   |x86_64, mingw32              |
-|ui       |RTerm                        |
-|language |(EN)                         |
-|collate  |English_United States.1252   |
-|ctype    |English_United States.1252   |
-|tz       |America/Los_Angeles          |
-|date     |2022-01-31                   |
-|pandoc   |NA                           |
+|field    |value                          |
+|:--------|:------------------------------|
+|version  |R version 4.1.2 (2021-11-01)   |
+|os       |Windows 10 x64 (build 19044)   |
+|system   |x86_64, mingw32                |
+|ui       |RStudio                        |
+|language |(EN)                           |
+|collate  |English_United States.1252     |
+|ctype    |English_United States.1252     |
+|tz       |America/Los_Angeles            |
+|date     |2022-01-31                     |
+|rstudio  |1.4.1717 Juliet Rose (desktop) |
+|pandoc   |NA                             |
 
 # Dependencies
 
