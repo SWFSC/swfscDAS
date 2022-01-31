@@ -29,7 +29,7 @@ Suggests:
     rmarkdown,
     stringr, 
     testthat (>= 2.1.0)
-License: GPL-3
+License: CC0
 Encoding: UTF-8
 RoxygenNote: 7.1.2
 VignetteBuilder: knitr

@@ -1,5 +1,5 @@
 ## Release summary
-Bug fixes
+Bug fixes, updated license 
 
 ## Test environments (R-release = v4.1.2)
 * Windows 10, R-release (local)

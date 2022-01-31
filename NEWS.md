@@ -2,6 +2,8 @@
 
 * Fix bug in `das_sight` and `das_effort` when the DAS file contains no sightings
 
+* Changed license based on https://github.com/NOAAGov
+
 
 # swfscDAS 0.6.0
 
