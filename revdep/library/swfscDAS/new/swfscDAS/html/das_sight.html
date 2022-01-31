@@ -1,0 +1,444 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: DAS sightings</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for das_sight {swfscDAS}"><tr><td>das_sight {swfscDAS}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>DAS sightings</h2>
+
+<h3>Description</h3>
+
+<p>Extract sightings and associated information from processed DAS data
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+das_sight(x, ...)
+
+## S3 method for class 'data.frame'
+das_sight(x, ...)
+
+## S3 method for class 'das_df'
+das_sight(
+  x,
+  return.format = c("default", "wide", "complete"),
+  return.events = c("S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"),
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an object of class <code>das_df</code>,
+or a data frame that can be coerced to class <code>das_df</code></p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>ignored</p>
+</td></tr>
+<tr valign="top"><td><code>return.format</code></td>
+<td>
+<p>character; can be one of &quot;default&quot;, &quot;wide&quot;, &quot;complete&quot;,
+or any partial match thereof (case sensitive). Formats described below</p>
+</td></tr>
+<tr valign="top"><td><code>return.events</code></td>
+<td>
+<p>character; event codes included in the output.
+Must be one or more of: &quot;S&quot;, &quot;K&quot;, &quot;M&quot;, &quot;G&quot;, &quot;s&quot;, &quot;k&quot;, &quot;m&quot;, &quot;g&quot;, &quot;t&quot;, &quot;p&quot;, &quot;F&quot;
+(case-sensitive). The default is all of these event codes</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>DAS events contain specific information in the 'Data#' columns,
+with the information depending on the event code for that row.
+The output data frame contains columns with this specific information
+extracted to dedicated columns as described below.
+This function recognizes the following types of sightings:
+marine mammal sightings (event codes &quot;S&quot;, &quot;K&quot;, or &quot;M&quot;),
+marine mammal resights (codes &quot;s&quot;, &quot;k&quot;, &quot;m&quot;),
+marine mammal subgroup sightings (code &quot;G&quot;),
+marine mammal subgroup resights (code &quot;g&quot;),
+turtle sightings (code &quot;t&quot;),
+pinniped sightings (code &quot;p&quot;)
+and fishing vessel sightings (code &quot;F&quot;).
+Warnings are printed if all S, K, M, and G events (and only these events) are not
+followed by an A event and at least one numeric event.
+See <code><a href="../../swfscDAS/help/das_format_pdf.html">das_format_pdf</a></code> for more information about events and event formats.
+Of specific note - sperm whale sightings (species code 046) often contain additional estimates
+recorded as &quot;C&quot; events immediately following the S, A, and numeric events.
+Because these estimates are recorded as&quot;C&quot; events, they are NOT included in the
+<code>das_sight</code> calculations or output for any <code>return.format</code>
+</p>
+<p>The <code>return.events</code> argument simply provides a shortcut for
+filtering the output of <code>das_sight</code> by event codes
+</p>
+<p>Abbreviations used in output column names: Gs = group size, Sp = species,
+Nm = nautical mile, Perc = percentage, Prob = probable,
+GsSchool = school-level group size info
+</p>
+<p>This function makes the following assumptions, and alterations to the raw DAS data:
+</p>
+
+<ul>
+<li><p> &quot;A&quot; events immediately following an S/K/M/G event have
+the same sighting number (Data1 value) as the S/K/M/G event
+</p>
+</li>
+<li><p> The 'nSp' column is equivalent to the number of non-<code>NA</code> values across the
+'Data5', 'Data6', 'Data7', and 'Data8' columns
+for the pertinent &quot;A&quot; event
+</p>
+</li>
+<li><p> The following data are coerced to a numeric using
+<code><a href="../../base/help/numeric.html">as.numeric</a></code>:
+Bearing, Reticle, DistNm, Cue, Method,
+species percentages, and group sizes (including for t, p, and F events).
+Note that if there are any formatting errors and these data are not numeric,
+the function will likely print a warning message
+</p>
+</li>
+<li><p> The values for the following columns are capitalized using
+<code><a href="../../base/help/chartr.html">toupper</a></code>:
+'Birds', 'Photos', 'CalibSchool', 'PhotosAerial', 'Biopsy',
+'TurtleAge', and 'TurtleCapt'
+</p>
+</li></ul>
+
+
+
+<h3>Value</h3>
+
+<p>Data frame with 1) the columns from <code>x</code>, excluding the 'Data#' columns,
+and 2) columns with sighting information extracted from 'Data#' columns.
+See <code><a href="../../swfscDAS/help/das_format_pdf.html">das_format_pdf</a></code> for more information the sighting information.
+If <code>return.format</code> is &quot;default&quot;, then there is one row for each species of each sighting event;
+if <code>return.format</code> is &quot;wide&quot;, then there is one row for each sighting event;
+if <code>return.format</code> is &quot;complete&quot;, then there is one row for every
+group size estimate for each sighting event (excluding sperm whale &quot;C&quot; events - see the Details section).
+</p>
+<p>The format-specific columns are described in their respective sections.
+The following sighting information columns are included in all return formats:
+</p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;">
+    <em>Sighting information</em>                </td><td style="text-align: left;"> <em>Column name</em> </td><td style="text-align: left;"> <em>Notes</em> </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Sighting number                            </td><td style="text-align: left;"> SightNo      </td><td style="text-align: left;"> Character                                                                              </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Subgroup code                              </td><td style="text-align: left;"> Subgroup     </td><td style="text-align: left;"> Character                                                                              </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Daily sighting number                      </td><td style="text-align: left;"> SightNoDaily </td><td style="text-align: left;"> See below                                                                              </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Observer that made the sighting            </td><td style="text-align: left;"> Obs          </td><td style="text-align: left;">                                                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Standard observer                          </td><td style="text-align: left;"> ObsStd       </td><td style="text-align: left;"> Logical; <code>TRUE</code> if Obs is one of ObsL, Rec or ObsR, and <code>FALSE</code> otherwise    </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Bearing to the sighting                    </td><td style="text-align: left;"> Bearing      </td><td style="text-align: left;"> Numeric; degrees, expected range 0 to 360                                              </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Number of reticle marks                    </td><td style="text-align: left;"> Reticle      </td><td style="text-align: left;"> Numeric                                                                                </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Distance (nautical miles)                  </td><td style="text-align: left;"> DistNm       </td><td style="text-align: left;"> Numeric                                                                                </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Sighting cue                               </td><td style="text-align: left;"> Cue          </td><td style="text-align: left;">                                                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Sighting method                            </td><td style="text-align: left;"> Method       </td><td style="text-align: left;">                                                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Photos of school?                          </td><td style="text-align: left;"> Photos       </td><td style="text-align: left;">                                                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Birds present with school?                 </td><td style="text-align: left;"> Birds        </td><td style="text-align: left;">                                                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Calibration school?                        </td><td style="text-align: left;"> CalibSchool  </td><td style="text-align: left;">                                                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Aerial photos taken?                       </td><td style="text-align: left;"> PhotosAerial </td><td style="text-align: left;">                                                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Biopsy taken?                              </td><td style="text-align: left;"> Biopsy       </td><td style="text-align: left;">                                                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Probable sighting                          </td><td style="text-align: left;"> Prob         </td><td style="text-align: left;"> Logical indicating if sighting has associated ? event; <code>NA</code> for non-S/K/M/G events</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Number of species in sighting              </td><td style="text-align: left;"> nSp          </td><td style="text-align: left;"> <code>NA</code> for non-S/K/M/G events                                                       </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Mixed species sighting                     </td><td style="text-align: left;"> Mixed        </td><td style="text-align: left;"> Logical; <code>TRUE</code> if nSp &gt; 1                                                        </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of school - best estimate       </td><td style="text-align: left;"> GsSchoolBest </td><td style="text-align: left;"> See below                                                                              </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of school - high estimate       </td><td style="text-align: left;"> GsSchoolHigh </td><td style="text-align: left;"> See below                                                                              </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of school - low estimate        </td><td style="text-align: left;"> GsSchoolLow  </td><td style="text-align: left;"> See below                                                                              </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Course (true heading) of school at resight </td><td style="text-align: left;"> CourseSchool </td><td style="text-align: left;"> <code>NA</code> for non-s/k/m events                                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Presence of associated JFR                 </td><td style="text-align: left;"> TurtleJFR    </td><td style="text-align: left;"> <code>NA</code> for non-"t" events; JFR = jellyfish, floating debris, or red tide            </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Estimated turtle maturity                  </td><td style="text-align: left;"> TurtleAge    </td><td style="text-align: left;"> <code>NA</code> for non-"t" events                                                           </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Perpendicular distance (km) to sighting    </td><td style="text-align: left;"> PerpDistKm   </td><td style="text-align: left;"> Calculated via <code>(abs(sin(Bearing*pi/180) * DistNm) * 1.852)</code>
+  </td>
+</tr>
+
+</table>
+
+<p>SightNoDaily is a running count of the number of S/K/M/G sightings that occurred on each day.
+It is formatted as 'YYYYMMDD'_'running count', e.g. &quot;20050101_1&quot;.
+The GsSchoolBest, GsSchoolHigh, and GsSchoolLow columns are either:
+1) the arithmetic mean across observer estimates for the &quot;default&quot; and &quot;wide&quot; formats, or
+2) the individual observer estimates for the &quot;complete&quot; format.
+Note that for non-&quot;complete&quot; formats, <code>na.rm = TRUE</code> is used when calculating the mean,
+and thus blank elements of estimates (but not the whole incomplete estimate) are ignored.
+To convert the perpendicular distance back to nautical miles,
+one would divide PerpDistKm by 1.852
+</p>
+
+
+<h3>The &quot;default&quot; format output</h3>
+
+<p>This output data frame contains 'long' sighting data, meaning there is one row for each species of each sighting event.
+The GsSp... columns are calculated as follows:
+for each species and for each observer estimate, the best/high/low school size estimate is multiplied by the applicable species percent estimate.
+The values are grouped by species and then averaged to get single GsSpBest, GsSpHigh, and GsSpLow values for each species.
+(using <code><a href="../../base/help/mean.html">mean</a></code> with <code>na.rm = TRUE</code>)
+</p>
+<p>Sighting information columns/formats present specifically in the &quot;default&quot; format output:
+</p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;">
+    <em>Sighting information</em> </td><td style="text-align: left;"> <em>Column name</em> </td><td style="text-align: left;"> <em>Notes</em></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species code          </td><td style="text-align: left;"> SpCode </td><td style="text-align: left;"> Boat type or mammal, turtle, or pinniped species codes</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Probable species code </td><td style="text-align: left;"> SpCodeProb </td><td style="text-align: left;"> Probable mammal species codes; <code>NA</code> if none or not applicable</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of species - best estimate </td><td style="text-align: left;"> GsSpBest </td><td style="text-align: left;">
+      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolBest and the corresponding species percentage</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of species - high estimate </td><td style="text-align: left;"> GsSpHigh </td><td style="text-align: left;">
+      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolHigh and the corresponding species percentage</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of species - low estimate </td><td style="text-align: left;"> GsSpLow </td><td style="text-align: left;">
+      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolLow and the corresponding species percentage</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+  </td>
+</tr>
+
+</table>
+
+
+
+<h3>The &quot;wide&quot; and &quot;complete&quot; format outputs</h3>
+
+<p>The &quot;wide&quot; and &quot;complete&quot; options have very similar columns in their output date frames.
+There are two main differences: 1) the &quot;wide&quot; format has one row for each sighting event,
+while the complete format has a row for every observer estimate for each sightings, and thus
+2) in the &quot;wide&quot; format, all numeric information for which there are multiple observer estimates
+(school group size, species percentage, etc.) are averaged across estimated via
+an arithmetic mean (using <code><a href="../../base/help/mean.html">mean</a></code> with <code>na.rm = TRUE</code>)
+</p>
+<p>With these formats, note that the species/type code and group size for
+turtle, pinniped, and boat sightings are in their own column
+</p>
+<p>Sighting information columns present in the &quot;wide&quot; and &quot;complete&quot; format outputs:
+</p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;">
+    <em>Sighting information</em>  </td><td style="text-align: left;"> <em>Column name</em>  </td><td style="text-align: left;"> <em>Notes</em>                            </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Observer code - estimate     </td><td style="text-align: left;"> ObsEstimate         </td><td style="text-align: left;"> See below                               </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species 1 code               </td><td style="text-align: left;"> SpCode1             </td><td style="text-align: left;">                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species 2 code               </td><td style="text-align: left;"> SpCode2             </td><td style="text-align: left;">                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species 3 code               </td><td style="text-align: left;"> SpCode3             </td><td style="text-align: left;">                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species 4 code               </td><td style="text-align: left;"> SpCode4             </td><td style="text-align: left;">                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species 1 probable code      </td><td style="text-align: left;"> SpCodeProb1         </td><td style="text-align: left;"> Extracted from '?' event                </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species 2 probable code      </td><td style="text-align: left;"> SpCodeProb2         </td><td style="text-align: left;"> Extracted from '?' event                </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species 3 probable code      </td><td style="text-align: left;"> SpCodeProb3         </td><td style="text-align: left;"> Extracted from '?' event                </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Species 4 probable code      </td><td style="text-align: left;"> SpCodeProb4         </td><td style="text-align: left;"> Extracted from '?' event                </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Percentage of Sp 1 in school </td><td style="text-align: left;"> SpPerc1             </td><td style="text-align: left;">                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Percentage of Sp 2 in school </td><td style="text-align: left;"> SpPerc2             </td><td style="text-align: left;">                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Percentage of Sp 3 in school </td><td style="text-align: left;"> SpPerc3             </td><td style="text-align: left;">                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Percentage of Sp 4 in school </td><td style="text-align: left;"> SpPerc4             </td><td style="text-align: left;">                                         </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of species 1      </td><td style="text-align: left;"> GsSpBest1           </td><td style="text-align: left;"> Present in "wide" output only; see below</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of species 2      </td><td style="text-align: left;"> GsSpBest2           </td><td style="text-align: left;"> Present in "wide" output only; see below</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of species 3      </td><td style="text-align: left;"> GsSpBest3           </td><td style="text-align: left;"> Present in "wide" output only; see below</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Group size of species 4      </td><td style="text-align: left;"> GsSpBest4           </td><td style="text-align: left;"> Present in "wide" output only; see below</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Turtle species               </td><td style="text-align: left;"> TurtleSp            </td><td style="text-align: left;"> <code>NA</code> for non-"t" events            </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Turtle group size            </td><td style="text-align: left;"> TurtleGs            </td><td style="text-align: left;"> <code>NA</code> for non-"t" events            </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Was turtle captured?         </td><td style="text-align: left;"> TurtleCapt          </td><td style="text-align: left;"> <code>NA</code> for non-"t" events            </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Pinniped species             </td><td style="text-align: left;"> PinnipedSp          </td><td style="text-align: left;"> <code>NA</code> for non-"p" events            </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Pinniped group size          </td><td style="text-align: left;"> PinnipedGs          </td><td style="text-align: left;"> <code>NA</code> for non-"p" events            </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Boat or gear type            </td><td style="text-align: left;"> BoatType            </td><td style="text-align: left;"> <code>NA</code> for non-"F" events            </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Number of boats              </td><td style="text-align: left;"> BoatGs              </td><td style="text-align: left;"> <code>NA</code> for non-"F" events
+  </td>
+</tr>
+
+</table>
+
+<p>ObsEstimate refers to the code of the observer that made the corresponding estimate.
+For the &quot;wide&quot; format, ObsEstimate is a list-column of all of the observer codes
+that provided an estimate.
+Also in the &quot;wide&quot; format, the GsSpBest# columns are the product of
+GsSchoolBest and the corresponding species percentage.
+These numbers, 1 to 4, correspond to the order of the data as it appears in the DAS file
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+y &lt;- system.file("das_sample.das", package = "swfscDAS")
+y.proc &lt;- das_process(y)
+
+das_sight(y.proc)
+das_sight(y.proc, return.format = "complete")
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>swfscDAS</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

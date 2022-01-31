@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Process DAS data</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for das_process {swfscDAS}"><tr><td>das_process {swfscDAS}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Process DAS data</h2>
+
+<h3>Description</h3>
+
+<p>Process DAS data (the output of <code><a href="../../swfscDAS/help/das_read.html">das_read</a></code>),
+including extracting state and condition information for each DAS event
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+das_process(x, ...)
+
+## S3 method for class 'character'
+das_process(x, ...)
+
+## S3 method for class 'data.frame'
+das_process(x, ...)
+
+## S3 method for class 'das_dfr'
+das_process(
+  x,
+  days.gap = 20,
+  reset.event = TRUE,
+  reset.effort = TRUE,
+  reset.day = TRUE,
+  add.dtll.sight = TRUE,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an object of class <code>das_dfr</code>,
+an object that can be coerced to class <code>das_dfr</code>,
+or a character (filepath) which is first passed to <code><a href="../../swfscDAS/help/das_read.html">das_read</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>passed to <code><a href="../../swfscDAS/help/das_read.html">das_read</a></code> if <code>x</code> is a character.
+Otherwise ignored</p>
+</td></tr>
+<tr valign="top"><td><code>days.gap</code></td>
+<td>
+<p>numeric of length 1; default is <code>20</code>.
+Time gap (in days) used to identify a new cruise in concatenated DAS files,
+and thus also when state/condition information
+(cruise number, weather, Bft, Mode, etc) is reset</p>
+</td></tr>
+<tr valign="top"><td><code>reset.event</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>.
+Indicates if state/condition information (weather, Bft, Mode, etc)
+should be reset to <code>NA</code>
+if there is an applicable event with an <code>NA</code> for that state/condition</p>
+</td></tr>
+<tr valign="top"><td><code>reset.effort</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>.
+Indicates if state/condition information should be reset to <code>NA</code>
+when beginning a new continuous effort section. See Details section</p>
+</td></tr>
+<tr valign="top"><td><code>reset.day</code></td>
+<td>
+<p>logical; default is <code>TRUE</code>.
+Indicates if state/condition information should be reset to <code>NA</code>
+at the beginning of each day. This argument should only
+be set to <code>FALSE</code> for comparison with older methods, such as REPORT</p>
+</td></tr>
+<tr valign="top"><td><code>add.dtll.sight</code></td>
+<td>
+<p>logical indicating if the DateTime (dt)
+and latitude and longitude (ll)
+columns should be added to the sighting events (?, 1, 2, 3, 4, 5, 6, 7, and 8)
+from the corresponding (immediately preceding) A event</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>If <code>x</code> is a character,
+it is assumed to be a filepath and first passed to <code><a href="../../swfscDAS/help/das_read.html">das_read</a></code>.
+This output is then passed to <code>das_process</code>.
+</p>
+<p>DAS data is event-based, meaning most events indicate when a
+state or weather condition changes.
+For instance, a 'V' event indicates when one or more sea state viewing conditions
+(such as Beaufort sea state) change, and these conditions
+are the same for subsequent events until the next 'V' event.
+For each state/condition: a new column is created,
+the state/condition information is extracted from relevant events,
+and extracted information is propagated to appropriate subsequent rows (events).
+Thus, each row in the output data frame contains all
+pertinent state/condition information for that row.
+</p>
+<p>The following assumptions/decisions are made during processing:
+</p>
+
+<ul>
+<li><p> Event codes are expected to be one of the following:
+#, *, ?, 1, 2, 3, 4, 5, 6, 7, 8, A, B, C, E, F, k, K, M, N,
+P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z
+</p>
+</li>
+<li><p> All '#' events (deleted events) are removed
+</p>
+</li>
+<li><p> r events are converted to R events with non-standard effort;
+see <code><a href="../../swfscDAS/help/das_format_pdf.html">das_format_pdf</a></code> for more details
+</p>
+</li>
+<li><p> An event is considered 'on effort' if it is 1) an R event,
+2) a B event immediately preceding an R event, or
+3) between corresponding R and E events (not including the E event).
+The 'EffortDot' column is not used when determining on effort data.
+Note that effort is reset to 'off effort' at the beginning of a new day.
+</p>
+</li>
+<li><p> All state/condition information is reset at the beginning of each cruise.
+New cruises are identified using <code>days.gap</code>.
+</p>
+</li>
+<li><p> All state/condition information relating to B, R, P, V, N, and W events
+are reset every time there is a BR event sequence if <code>reset.effort == TRUE</code>,
+because in WinCruz a BR event sequence should always be a BRPVNW event sequence.
+An event sequence means that all of the events have the same Lat/Lon/DateTime info,
+and thus previous values for conditions set during the event sequence should not
+carry over to any part of the event sequence.
+</p>
+</li>
+<li><p> 'OffsetGMT' is converted to an integer. Values are expected to be
+consistent within a day for each cruise, so events will have an
+OffsetGMT value if there is any B event with the offset data on
+the same day, whether that event is before or after the B event.
+Thus, if any date/cruise combinations have multiple OffsetGMT values
+in the data, then a warning message will be printed and the
+OffsetGMT values will be all NA (for the entire output).
+</p>
+</li>
+<li><p> 'Mode' is capitalized, and 'Mode' values of <code>NA</code> are assigned a value of &quot;C&quot;
+</p>
+</li>
+<li><p> 'EffType' is capitalized, and values of <code>NA</code> are assigned a value of &quot;S&quot;
+</p>
+</li>
+<li><p> 'ESWsides' represents the number of sides being searched during that effort section -
+a value of <code>NA</code> (for compatibility with older data) or &quot;F&quot; means 2 sides are being searched,
+and a value of &quot;H&quot; means 1 side is being searched.
+ESWsides will be <code>NA</code> for values that are not one of &quot;F&quot;, <code>NA</code>, or &quot;H&quot;
+</p>
+</li>
+<li><p> 'Glare': <code>TRUE</code> if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,
+or if 'HorizSun' is 12 and 'VertSun' is 1;
+<code>NA</code> if 'HorizSun' or 'VertSun' is <code>NA</code>;
+otherwise <code>FALSE</code>
+</p>
+</li>
+<li><p> Missing values are <code>NA</code> rather than <code>-1</code>
+</p>
+</li></ul>
+
+
+
+<h3>Value</h3>
+
+<p>A <code>das_df</code> object, which is also a data frame.
+It consists of the input data frame, i.e. the output of <code><a href="../../swfscDAS/help/das_read.html">das_read</a></code>,
+with the following columns added:
+</p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;">
+    <em>State/condition</em>        </td><td style="text-align: left;"> <em>Column name</em> </td><td style="text-align: left;"> <em>Data source</em></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    On/off effort                 </td><td style="text-align: left;"> OnEffort  </td><td style="text-align: left;"> B/R and E events</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Cruise number                 </td><td style="text-align: left;"> Cruise    </td><td style="text-align: left;"> Event: B; Column: Data1</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Effort mode                   </td><td style="text-align: left;"> Mode      </td><td style="text-align: left;"> Event: B; Column: Data2</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    GMT offset of DateTime data   </td><td style="text-align: left;"> OffsetGMT </td><td style="text-align: left;"> Event: B; Column: Data3</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Effort type                   </td><td style="text-align: left;"> EffType   </td><td style="text-align: left;"> Event: R; Column: Data1</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Number of sides with observer </td><td style="text-align: left;"> ESWSide   </td><td style="text-align: left;"> Event: R; Column: Data2</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Course (ship direction)       </td><td style="text-align: left;"> Course    </td><td style="text-align: left;"> Event: N; Column: Data1</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Speed (ship speed, knots)     </td><td style="text-align: left;"> SpdKt     </td><td style="text-align: left;"> Event: N; Column: Data2</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Beaufort sea state            </td><td style="text-align: left;"> Bft       </td><td style="text-align: left;"> Event: V; Column: Data1</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Swell height (ft)             </td><td style="text-align: left;"> SwellHght </td><td style="text-align: left;"> Event: V; Column: Data2</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Wind speed (knots)            </td><td style="text-align: left;"> WindSpdKt </td><td style="text-align: left;"> Event: V; Column: Data5</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Rain/fog/haze code            </td><td style="text-align: left;"> RainFog   </td><td style="text-align: left;"> Event: W; Column: Data1</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Horizontal sun (clock system) </td><td style="text-align: left;"> HorizSun  </td><td style="text-align: left;"> Event: W; Column: Data2</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Vertical sun (clock system)   </td><td style="text-align: left;"> VertSun   </td><td style="text-align: left;"> Event: W; Column: Data3</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Glare                         </td><td style="text-align: left;"> Glare     </td><td style="text-align: left;"> HorizSun and VertSun</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Visibility (nm)               </td><td style="text-align: left;"> Vis       </td><td style="text-align: left;"> Event: W; Column: Data5</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Left observer                 </td><td style="text-align: left;"> ObsL      </td><td style="text-align: left;"> Event: P; Column: Data1</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data recorder                 </td><td style="text-align: left;"> Rec       </td><td style="text-align: left;"> Event: P; Column: Data2</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Right observer                </td><td style="text-align: left;"> ObsR      </td><td style="text-align: left;"> Event: P; Column: Data3</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Independent observer          </td><td style="text-align: left;"> ObsInd    </td><td style="text-align: left;"> Event: P; Column: Data4</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+  </td>
+</tr>
+
+</table>
+
+<p>OffsetGMT represents the difference in hours between the DateTime data
+(which should be in local time) and GMT (i.e., UTC).
+</p>
+<p>Internal warning messages are printed with row numbers of the input file
+(NOT of the output data frame) of unexpected event codes and r events,
+as well as if there is are potential issues with the number and/or order
+of R and E events
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+y &lt;- system.file("das_sample.das", package = "swfscDAS")
+das_process(y)
+
+y.read &lt;- das_read(y)
+das_process(y.read)
+das_process(y.read, reset.effort = FALSE)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>swfscDAS</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

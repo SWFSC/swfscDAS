@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: 'das_dfr' class</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for das_dfr-class {swfscDAS}"><tr><td>das_dfr-class {swfscDAS}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2><code>das_dfr</code> class</h2>
+
+<h3>Description</h3>
+
+<p>The <code>das_dfr</code> class is a subclass of <code><a href="../../base/help/data.frame.html">data.frame</a></code>,
+created to provide a concise and robust way to ensure that the input to <code><a href="../../swfscDAS/help/das_process.html">das_process</a></code>
+adheres to certain requirements.
+Specifically, objects of class <code>das_dfr</code> are data frames with specific column names and classes,
+as detailed in the 'Properties of <code>das_dfr</code>' section. Objects of class <code>das_dfr</code> are created by
+<code><a href="../../swfscDAS/help/das_read.html">das_read</a></code> or <code><a href="../../swfscDAS/help/as_das_dfr.html">as_das_dfr</a></code>, and are intended to be passed directly to
+<code><a href="../../swfscDAS/help/das_process.html">das_process</a></code>.
+</p>
+<p>Subsetting or otherwise altering an object of class <code>das_dfr</code> will cause the object to drop its
+<code>das_dfr</code> class attribute. <code><a href="../../swfscDAS/help/das_process.html">das_process</a></code> will then try to coerce the object to a
+<code>das_dfr</code> object. It is <b>strongly</b> recommended to pass an object of class <code>das_dfr</code> to
+<code><a href="../../swfscDAS/help/das_process.html">das_process</a></code> before subsetting, e.g. for events from a certain date range.
+</p>
+
+
+<h3>Properties of <code>das_dfr</code> objects</h3>
+
+<p>Objects of class <code>das_dfr</code> have a class attribute of <code>c("das_dfr", "data.frame")</code>.
+In addition, they must have the following column names and classes:
+</p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;">
+    <em>Column name</em> </td><td style="text-align: left;"> <em>Column class</em></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Event     </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    EffortDot </td><td style="text-align: left;"> "logical"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    DateTime  </td><td style="text-align: left;"> c("POSIXct", "POSIXt")</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Lat       </td><td style="text-align: left;"> "numeric"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Lon       </td><td style="text-align: left;"> "numeric"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data1 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data2 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data3 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data4 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data5 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data6 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data7 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data8 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data9 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data10 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data11 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    Data12 </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    EventNum </td><td style="text-align: left;"> "integer"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    file_das </td><td style="text-align: left;"> "character"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    line_num </td><td style="text-align: left;"> "integer"</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+  </td>
+</tr>
+
+</table>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../swfscDAS/help/as_das_dfr.html">as_das_dfr</a></code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>swfscDAS</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

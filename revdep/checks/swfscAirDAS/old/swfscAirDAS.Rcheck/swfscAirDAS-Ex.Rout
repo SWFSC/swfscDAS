@@ -1,0 +1,2546 @@
+
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "swfscAirDAS"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> options(pager = "console")
+> library('swfscAirDAS')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("airdas_check")
+> ### * airdas_check
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_check
+> ### Title: Check AirDAS file
+> ### Aliases: airdas_check
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> if (interactive()) airdas_check(y, print.transect = TRUE)
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_chop_section")
+> ### * airdas_chop_section
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_chop_section
+> ### Title: Chop AirDAS data - section
+> ### Aliases: airdas_chop_section airdas_chop_section.data.frame
+> ###   airdas_chop_section.airdas_df
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> y.proc <- airdas_process(y)
+> 
+> y.eff1 <- airdas_effort(y.proc, method = "equallength", seg.km = 35, num.cores = 1)
+No argument was passed via randpicks.load, and thus new randpicks values will be generated
+> y.eff2 <- airdas_effort(y.proc, method = "section", num.cores = 1)
+> 
+> all.equal(y.eff1, y.eff2)
+[1] TRUE
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_comments")
+> ### * airdas_comments
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_comments
+> ### Title: Extract comments from AirDAS data
+> ### Aliases: airdas_comments airdas_comments.data.frame
+> ###   airdas_comments.airdas_df airdas_comments.airdas_dfr
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> y.read <- airdas_read(y, file.type = "turtle")
+> 
+> airdas_comments(y.read)
+   Event EffortDot            DateTime      Lat       Lon Data1 Data2 Data3
+1      C     FALSE 2015-04-09 12:30:59 39.23550 -123.1563  Reco rder:  dd  
+2      C     FALSE 2015-04-09 12:30:59 39.23550 -123.1563  Not  recor ding 
+11     C      TRUE 2015-04-09 12:31:48 39.23350 -123.1857  2 cp  <NA>  <NA>
+22     C      TRUE 2015-04-09 12:34:56 39.23317 -123.2968  stre aky r ed ti
+25     C      TRUE 2015-04-09 12:35:32 39.23317 -123.3178  shar k 11f t    
+38     C     FALSE 2015-04-09 12:38:00 39.23400 -123.4047  off  effor t to 
+42     C      TRUE 2015-04-09 12:40:36 39.23317 -123.4960  wate r got  more
+46     C      TRUE 2015-04-09 12:42:01 39.23267 -123.5433  fb2s  fb1m  <NA>
+73     C      TRUE 2015-04-09 12:52:39 39.21700 -123.4072  bell y has  some
+84     C      TRUE 2015-04-09 12:56:43 39.21717 -123.2718  patc hy re d tid
+   Data4 Data5 Data6           Data7 EventNum          file_das line_num
+1   <NA>  <NA>  <NA>            <NA>        1 airdas_sample.das        1
+2  molas  <NA>  <NA>            <NA>        2 airdas_sample.das        2
+11  <NA>  <NA>  <NA>            <NA>       11 airdas_sample.das       11
+22 de     <NA>  <NA>            <NA>       21 airdas_sample.das       22
+25  <NA>  <NA>  <NA>            <NA>       24 airdas_sample.das       25
+38 circl e on  unide ntifed object         37 airdas_sample.das       38
+42  blue  <NA>  <NA>            <NA>       41 airdas_sample.das       42
+46  <NA>  <NA>  <NA>            <NA>       45 airdas_sample.das       46
+73  glar e      <NA>            <NA>       72 airdas_sample.das       73
+84 e      <NA>  <NA>            <NA>       83 airdas_sample.das       84
+   file_type                                   comment_str
+1     turtle                                Recorder: dd  
+2     turtle                           Not recording molas
+11    turtle                                          2 cp
+22    turtle                           streaky red tide   
+25    turtle                                shark 11ft    
+38    turtle  off effort to circle on unidentifed object  
+42    turtle                           water got more blue
+46    turtle                                     fb2s fb1m
+73    turtle                      belly has some glare    
+84    turtle                           patchy red tide    
+> 
+> # Extract all comments containing "record"
+> y.comm <- airdas_comments(y.read)
+> y.comm[grepl("record", y.comm$comment_str, ignore.case = TRUE), ]
+  Event EffortDot            DateTime     Lat       Lon Data1 Data2 Data3 Data4
+1     C     FALSE 2015-04-09 12:30:59 39.2355 -123.1563  Reco rder:  dd    <NA>
+2     C     FALSE 2015-04-09 12:30:59 39.2355 -123.1563  Not  recor ding  molas
+  Data5 Data6 Data7 EventNum          file_das line_num file_type
+1  <NA>  <NA>  <NA>        1 airdas_sample.das        1    turtle
+2  <NA>  <NA>  <NA>        2 airdas_sample.das        2    turtle
+           comment_str
+1       Recorder: dd  
+2  Not recording molas
+> 
+> # Extract all comments containing "record", but not "recorder"
+> y.comm <- airdas_comments(y.read)
+> y.comm[grepl("record", y.comm$comment_str, ignore.case = TRUE) & 
++          !grepl("recorder", y.comm$comment_str, ignore.case = TRUE), ]
+  Event EffortDot            DateTime     Lat       Lon Data1 Data2 Data3 Data4
+2     C     FALSE 2015-04-09 12:30:59 39.2355 -123.1563  Not  recor ding  molas
+  Data5 Data6 Data7 EventNum          file_das line_num file_type
+2  <NA>  <NA>  <NA>        2 airdas_sample.das        2    turtle
+           comment_str
+2  Not recording molas
+>          
+> # Join comments with processed data
+> dplyr::left_join(y.read, y.comm[, c("file_das", "line_num", "comment_str")],
++                  by = c("file_das", "line_num"))
+   Event EffortDot            DateTime      Lat       Lon Data1 Data2 Data3
+1      C     FALSE 2015-04-09 12:30:59 39.23550 -123.1563  Reco rder:  dd  
+2      C     FALSE 2015-04-09 12:30:59 39.23550 -123.1563  Not  recor ding 
+3      T      TRUE 2015-04-09 12:30:59 39.23550 -123.1563    T1  <NA>  <NA>
+4      V      TRUE 2015-04-09 12:30:59 39.23550 -123.1563     g     g     g
+5      P      TRUE 2015-04-09 12:30:59 39.23550 -123.1563    aa    bb    cc
+6      A      TRUE 2015-04-09 12:30:59 39.23550 -123.1563   650   100  <NA>
+7      W      TRUE 2015-04-09 12:30:59 39.23550 -123.1563     n    10     1
+8      *      TRUE 2015-04-09 12:31:00 39.23567 -123.1575  <NA>  <NA>  <NA>
+9      S      TRUE 2015-04-09 12:31:35 39.23367 -123.1783     1    cc    67
+10     S      TRUE 2015-04-09 12:31:47 39.23350 -123.1857     2    bb   -60
+11     C      TRUE 2015-04-09 12:31:48 39.23350 -123.1857  2 cp  <NA>  <NA>
+12     S      TRUE 2015-04-09 12:31:56 39.23333 -123.1917     3    cc    38
+13     *      TRUE 2015-04-09 12:32:00 39.23317 -123.1930  <NA>  <NA>  <NA>
+14     S      TRUE 2015-04-09 12:32:20 39.23233 -123.2053     4    aa   -50
+15     S      TRUE 2015-04-09 12:32:30 39.23233 -123.2108     5    cc    49
+16     S      TRUE 2015-04-09 12:32:42 39.23233 -123.2195     6    cc    42
+17     1     FALSE                <NA>       NA        NA  <NA>  <NA>  <NA>
+18     *      TRUE 2015-04-09 12:33:00 39.23267 -123.2292  <NA>  <NA>  <NA>
+19     S      TRUE 2015-04-09 12:33:43 39.23333 -123.2550     7    aa   -53
+20     *      TRUE 2015-04-09 12:34:00 39.23300 -123.2637  <NA>  <NA>  <NA>
+21     W      TRUE 2015-04-09 12:34:52 39.23317 -123.2945     r    10     1
+22     C      TRUE 2015-04-09 12:34:56 39.23317 -123.2968  stre aky r ed ti
+23     *      TRUE 2015-04-09 12:35:00 39.23317 -123.2985  <NA>  <NA>  <NA>
+24     S      TRUE 2015-04-09 12:35:13 39.23317 -123.3073     8    dd    24
+25     C      TRUE 2015-04-09 12:35:32 39.23317 -123.3178  shar k 11f t    
+26     *      TRUE 2015-04-09 12:36:00 39.23333 -123.3337  <NA>  <NA>  <NA>
+27     S      TRUE 2015-04-09 12:36:13 39.23333 -123.3418     9    aa   -57
+28     S      TRUE 2015-04-09 12:36:26 39.23350 -123.3500    10    cc    65
+29     t      TRUE 2015-04-09 12:36:26 39.23350 -123.3500    aa   -20    dc
+30     S      TRUE 2015-04-09 12:36:43 39.23350 -123.3592    11    bb    87
+31     *      TRUE 2015-04-09 12:37:01 39.23383 -123.3685  <NA>  <NA>  <NA>
+32     S      TRUE 2015-04-09 12:37:01 39.23400 -123.3697    12    bb    82
+33     S      TRUE 2015-04-09 12:37:16 39.23433 -123.3790    13    bb    54
+34     #      TRUE 2015-04-09 12:37:17 39.23433 -123.3790  <NA>  <NA>  <NA>
+35     S      TRUE 2015-04-09 12:37:37 39.23417 -123.3910    14    cc    62
+36     W      TRUE 2015-04-09 12:37:57 39.23400 -123.4033     n    10     2
+37     E     FALSE 2015-04-09 12:38:00 39.23400 -123.4047  <NA>  <NA>  <NA>
+38     C     FALSE 2015-04-09 12:38:00 39.23400 -123.4047  off  effor t to 
+39     *     FALSE 2015-04-09 12:39:00 39.23417 -123.4400  <NA>  <NA>  <NA>
+40     R      TRUE 2015-04-09 12:40:00 39.23400 -123.4742  <NA>  <NA>  <NA>
+41     W      TRUE 2015-04-09 12:40:28 39.23333 -123.4915     n    20     2
+42     C      TRUE 2015-04-09 12:40:36 39.23317 -123.4960  wate r got  more
+43     *      TRUE 2015-04-09 12:41:00 39.23317 -123.5092  <NA>  <NA>  <NA>
+44     W      TRUE 2015-04-09 12:41:08 39.23317 -123.5143     n    20     1
+45     *      TRUE 2015-04-09 12:42:00 39.23267 -123.5433  <NA>  <NA>  <NA>
+46     C      TRUE 2015-04-09 12:42:01 39.23267 -123.5433  fb2s  fb1m  <NA>
+47     S      TRUE 2015-04-09 12:42:13 39.23250 -123.5515    15    bb    50
+48     *      TRUE 2015-04-09 12:43:00 39.23233 -123.5778  <NA>  <NA>  <NA>
+49     O     FALSE 2015-04-09 12:43:43 39.23283 -123.6033  <NA>  <NA>  <NA>
+50     *     FALSE 2015-04-09 12:44:00 39.23300 -123.6118  <NA>  <NA>  <NA>
+51     *     FALSE 2015-04-09 12:45:00 39.24450 -123.6415  <NA>  <NA>  <NA>
+52     *     FALSE 2015-04-09 12:46:00 39.22167 -123.6373  <NA>  <NA>  <NA>
+53     T      TRUE 2015-04-09 12:46:51 39.22000 -123.6078    T2  <NA>  <NA>
+54     V      TRUE 2015-04-09 12:46:51 39.22000 -123.6078     g     g     g
+55     P      TRUE 2015-04-09 12:46:51 39.22000 -123.6078    aa    dd    cc
+56     A      TRUE 2015-04-09 12:46:51 39.22000 -123.6078   650   100  <NA>
+57     W      TRUE 2015-04-09 12:46:51 39.22000 -123.6078     n    20     1
+58     *      TRUE 2015-04-09 12:47:00 39.21950 -123.6025  <NA>  <NA>  <NA>
+59     *      TRUE 2015-04-09 12:48:00 39.21783 -123.5682  <NA>  <NA>  <NA>
+60     A      TRUE 2015-04-09 12:48:29 39.21767 -123.5515   680   100  <NA>
+61     A      TRUE 2015-04-09 12:48:36 39.21783 -123.5468   650   100  <NA>
+62     *      TRUE 2015-04-09 12:49:00 39.21783 -123.5333  <NA>  <NA>  <NA>
+63     *      TRUE 2015-04-09 12:50:00 39.21617 -123.4987  <NA>  <NA>  <NA>
+64     A      TRUE 2015-04-09 12:50:32 39.21683 -123.4797   680    90  <NA>
+65     *      TRUE 2015-04-09 12:51:00 39.21733 -123.4653  <NA>  <NA>  <NA>
+66     S      TRUE 2015-04-09 12:51:40 39.21750 -123.4410    16    aa   -31
+67     S      TRUE 2015-04-09 12:51:55 39.21750 -123.4317    17    bb   -59
+68     *      TRUE 2015-04-09 12:52:00 39.21733 -123.4293  <NA>  <NA>  <NA>
+69     S      TRUE 2015-04-09 12:52:03 39.21733 -123.4270    18    aa   -62
+70     S      TRUE 2015-04-09 12:52:04 39.21733 -123.4270    19    cc    42
+71     S      TRUE 2015-04-09 12:52:07 39.21733 -123.4258    20    aa   -48
+72     S      TRUE 2015-04-09 12:52:17 39.21700 -123.4185    21    cc    63
+73     C      TRUE 2015-04-09 12:52:39 39.21700 -123.4072  bell y has  some
+74     S      TRUE 2015-04-09 12:52:54 39.21700 -123.3982    22    cc    43
+75     *      TRUE 2015-04-09 12:53:00 39.21717 -123.3960  <NA>  <NA>  <NA>
+76     *      TRUE 2015-04-09 12:54:00 39.21683 -123.3617  <NA>  <NA>  <NA>
+77     V      TRUE 2015-04-09 12:54:01 39.21683 -123.3605     g     g     p
+78     W      TRUE 2015-04-09 12:54:04 39.21683 -123.3605     n    20     2
+79     S      TRUE 2015-04-09 12:54:34 39.21667 -123.3422    23    cc    56
+80     *      TRUE 2015-04-09 12:55:00 39.21667 -123.3285  <NA>  <NA>  <NA>
+81     S      TRUE 2015-04-09 12:55:20 39.21700 -123.3172    24    cc    37
+82     *      TRUE 2015-04-09 12:56:00 39.21700 -123.2960  <NA>  <NA>  <NA>
+83     W      TRUE 2015-04-09 12:56:40 39.21733 -123.2730     r    20     2
+84     C      TRUE 2015-04-09 12:56:43 39.21717 -123.2718  patc hy re d tid
+85     S      TRUE 2015-04-09 12:56:49 39.21717 -123.2685    25    bb   -76
+86     *      TRUE 2015-04-09 12:57:00 39.21700 -123.2617  <NA>  <NA>  <NA>
+87     s      TRUE 2015-04-09 12:57:00 39.21700 -123.2617    25   -70  <NA>
+88     O     FALSE 2015-04-09 12:57:30 39.21700 -123.2417  <NA>  <NA>  <NA>
+   Data4 Data5 Data6           Data7 EventNum          file_das line_num
+1   <NA>  <NA>  <NA>            <NA>        1 airdas_sample.das        1
+2  molas  <NA>  <NA>            <NA>        2 airdas_sample.das        2
+3   <NA>  <NA>  <NA>            <NA>        3 airdas_sample.das        3
+4      g     g  <NA>            <NA>        4 airdas_sample.das        4
+5     dd  <NA>  <NA>            <NA>        5 airdas_sample.das        5
+6   <NA>  <NA>  <NA>            <NA>        6 airdas_sample.das        6
+7      0     6  <NA>            <NA>        7 airdas_sample.das        7
+8   <NA>  <NA>  <NA>            <NA>        8 airdas_sample.das        8
+9      6    mn  <NA>            <NA>        9 airdas_sample.das        9
+10     6    mn  <NA>            <NA>       10 airdas_sample.das       10
+11  <NA>  <NA>  <NA>            <NA>       11 airdas_sample.das       11
+12     2    mn  <NA>            <NA>       12 airdas_sample.das       12
+13  <NA>  <NA>  <NA>            <NA>       13 airdas_sample.das       13
+14     5    mn  <NA>            <NA>       14 airdas_sample.das       14
+15     4    bm  <NA>            <NA>       15 airdas_sample.das       15
+16    10    gg    er            <NA>       16 airdas_sample.das       16
+17  <NA>    80    20            <NA>     <NA> airdas_sample.das       17
+18  <NA>  <NA>  <NA>            <NA>       17 airdas_sample.das       18
+19     5    bm  <NA>            <NA>       18 airdas_sample.das       19
+20  <NA>  <NA>  <NA>            <NA>       19 airdas_sample.das       20
+21     2     6  <NA>            <NA>       20 airdas_sample.das       21
+22 de     <NA>  <NA>            <NA>       21 airdas_sample.das       22
+23  <NA>  <NA>  <NA>            <NA>       22 airdas_sample.das       23
+24     2    bm  <NA>            <NA>       23 airdas_sample.das       24
+25  <NA>  <NA>  <NA>            <NA>       24 airdas_sample.das       25
+26  <NA>  <NA>  <NA>            <NA>       25 airdas_sample.das       26
+27     4    mn  <NA>            <NA>       26 airdas_sample.das       27
+28     5    gg  <NA>            <NA>       27 airdas_sample.das       28
+29     5    90     n            <NA>       28 airdas_sample.das       29
+30     3    pp  <NA>            <NA>       29 airdas_sample.das       30
+31  <NA>  <NA>  <NA>            <NA>       30 airdas_sample.das       31
+32     5    gg  <NA>            <NA>       31 airdas_sample.das       32
+33     6    pp  <NA>            <NA>       32 airdas_sample.das       33
+34  <NA>  <NA>  <NA>            <NA>       33 airdas_sample.das       34
+35     2    gg  <NA>            <NA>       34 airdas_sample.das       35
+36     0     6  <NA>            <NA>       35 airdas_sample.das       36
+37  <NA>  <NA>  <NA>            <NA>       36 airdas_sample.das       37
+38 circl e on  unide ntifed object         37 airdas_sample.das       38
+39  <NA>  <NA>  <NA>            <NA>       38 airdas_sample.das       39
+40  <NA>  <NA>  <NA>            <NA>       39 airdas_sample.das       40
+41     0     6  <NA>            <NA>       40 airdas_sample.das       41
+42  blue  <NA>  <NA>            <NA>       41 airdas_sample.das       42
+43  <NA>  <NA>  <NA>            <NA>       42 airdas_sample.das       43
+44     0     6  <NA>            <NA>       43 airdas_sample.das       44
+45  <NA>  <NA>  <NA>            <NA>       44 airdas_sample.das       45
+46  <NA>  <NA>  <NA>            <NA>       45 airdas_sample.das       46
+47     3    mn  <NA>            <NA>       46 airdas_sample.das       47
+48  <NA>  <NA>  <NA>            <NA>       47 airdas_sample.das       48
+49  <NA>  <NA>  <NA>            <NA>       48 airdas_sample.das       49
+50  <NA>  <NA>  <NA>            <NA>       49 airdas_sample.das       50
+51  <NA>  <NA>  <NA>            <NA>       50 airdas_sample.das       51
+52  <NA>  <NA>  <NA>            <NA>       51 airdas_sample.das       52
+53  <NA>  <NA>  <NA>            <NA>       52 airdas_sample.das       53
+54     g     g  <NA>            <NA>       53 airdas_sample.das       54
+55    bb  <NA>  <NA>            <NA>       54 airdas_sample.das       55
+56  <NA>  <NA>  <NA>            <NA>       55 airdas_sample.das       56
+57     0    12  <NA>            <NA>       56 airdas_sample.das       57
+58  <NA>  <NA>  <NA>            <NA>       57 airdas_sample.das       58
+59  <NA>  <NA>  <NA>            <NA>       58 airdas_sample.das       59
+60  <NA>  <NA>  <NA>            <NA>       59 airdas_sample.das       60
+61  <NA>  <NA>  <NA>            <NA>       60 airdas_sample.das       61
+62  <NA>  <NA>  <NA>            <NA>       61 airdas_sample.das       62
+63  <NA>  <NA>  <NA>            <NA>       62 airdas_sample.das       63
+64  <NA>  <NA>  <NA>            <NA>       63 airdas_sample.das       64
+65  <NA>  <NA>  <NA>            <NA>       64 airdas_sample.das       65
+66     6    mn  <NA>            <NA>       65 airdas_sample.das       66
+67     6    bm  <NA>            <NA>       66 airdas_sample.das       67
+68  <NA>  <NA>  <NA>            <NA>       67 airdas_sample.das       68
+69     2    gg  <NA>            <NA>       68 airdas_sample.das       69
+70     3    bm  <NA>            <NA>       69 airdas_sample.das       70
+71     4    bm  <NA>            <NA>       70 airdas_sample.das       71
+72     6    pp  <NA>            <NA>       71 airdas_sample.das       72
+73  glar e      <NA>            <NA>       72 airdas_sample.das       73
+74     2    pp  <NA>            <NA>       73 airdas_sample.das       74
+75  <NA>  <NA>  <NA>            <NA>       74 airdas_sample.das       75
+76  <NA>  <NA>  <NA>            <NA>       75 airdas_sample.das       76
+77     g     g  <NA>            <NA>       76 airdas_sample.das       77
+78     0    12  <NA>            <NA>       77 airdas_sample.das       78
+79     6    mn  <NA>            <NA>       78 airdas_sample.das       79
+80  <NA>  <NA>  <NA>            <NA>       79 airdas_sample.das       80
+81     6    mn  <NA>            <NA>       80 airdas_sample.das       81
+82  <NA>  <NA>  <NA>            <NA>       81 airdas_sample.das       82
+83     0    12  <NA>            <NA>       82 airdas_sample.das       83
+84 e      <NA>  <NA>            <NA>       83 airdas_sample.das       84
+85     1    pp  <NA>            <NA>       84 airdas_sample.das       85
+86  <NA>  <NA>  <NA>            <NA>       85 airdas_sample.das       86
+87  <NA>  <NA>  <NA>            <NA>       86 airdas_sample.das       87
+88  <NA>  <NA>  <NA>            <NA>       87 airdas_sample.das       88
+   file_type                                   comment_str
+1     turtle                                Recorder: dd  
+2     turtle                           Not recording molas
+3     turtle                                          <NA>
+4     turtle                                          <NA>
+5     turtle                                          <NA>
+6     turtle                                          <NA>
+7     turtle                                          <NA>
+8     turtle                                          <NA>
+9     turtle                                          <NA>
+10    turtle                                          <NA>
+11    turtle                                          2 cp
+12    turtle                                          <NA>
+13    turtle                                          <NA>
+14    turtle                                          <NA>
+15    turtle                                          <NA>
+16    turtle                                          <NA>
+17    turtle                                          <NA>
+18    turtle                                          <NA>
+19    turtle                                          <NA>
+20    turtle                                          <NA>
+21    turtle                                          <NA>
+22    turtle                           streaky red tide   
+23    turtle                                          <NA>
+24    turtle                                          <NA>
+25    turtle                                shark 11ft    
+26    turtle                                          <NA>
+27    turtle                                          <NA>
+28    turtle                                          <NA>
+29    turtle                                          <NA>
+30    turtle                                          <NA>
+31    turtle                                          <NA>
+32    turtle                                          <NA>
+33    turtle                                          <NA>
+34    turtle                                          <NA>
+35    turtle                                          <NA>
+36    turtle                                          <NA>
+37    turtle                                          <NA>
+38    turtle  off effort to circle on unidentifed object  
+39    turtle                                          <NA>
+40    turtle                                          <NA>
+41    turtle                                          <NA>
+42    turtle                           water got more blue
+43    turtle                                          <NA>
+44    turtle                                          <NA>
+45    turtle                                          <NA>
+46    turtle                                     fb2s fb1m
+47    turtle                                          <NA>
+48    turtle                                          <NA>
+49    turtle                                          <NA>
+50    turtle                                          <NA>
+51    turtle                                          <NA>
+52    turtle                                          <NA>
+53    turtle                                          <NA>
+54    turtle                                          <NA>
+55    turtle                                          <NA>
+56    turtle                                          <NA>
+57    turtle                                          <NA>
+58    turtle                                          <NA>
+59    turtle                                          <NA>
+60    turtle                                          <NA>
+61    turtle                                          <NA>
+62    turtle                                          <NA>
+63    turtle                                          <NA>
+64    turtle                                          <NA>
+65    turtle                                          <NA>
+66    turtle                                          <NA>
+67    turtle                                          <NA>
+68    turtle                                          <NA>
+69    turtle                                          <NA>
+70    turtle                                          <NA>
+71    turtle                                          <NA>
+72    turtle                                          <NA>
+73    turtle                      belly has some glare    
+74    turtle                                          <NA>
+75    turtle                                          <NA>
+76    turtle                                          <NA>
+77    turtle                                          <NA>
+78    turtle                                          <NA>
+79    turtle                                          <NA>
+80    turtle                                          <NA>
+81    turtle                                          <NA>
+82    turtle                                          <NA>
+83    turtle                                          <NA>
+84    turtle                           patchy red tide    
+85    turtle                                          <NA>
+86    turtle                                          <NA>
+87    turtle                                          <NA>
+88    turtle                                          <NA>
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_comments_process")
+> ### * airdas_comments_process
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_comments_process
+> ### Title: Process comments in AirDAS data
+> ### Aliases: airdas_comments_process airdas_comments_process.data.frame
+> ###   airdas_comments_process.airdas_dfr airdas_comments_process.airdas_df
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> y.proc <- airdas_process(y)
+> 
+> airdas_comments_process(y.proc)
+  Event            DateTime      Lat       Lon OnEffort Trans Bft CCover Jelly
+1     C 2015-04-09 12:31:48 39.23350 -123.1857     TRUE    T1   1     10     0
+2     C 2015-04-09 12:42:01 39.23267 -123.5433     TRUE    T1   1     20     0
+3     C 2015-04-09 12:42:01 39.23267 -123.5433     TRUE    T1   1     20     0
+  HorizSun VertSun HKR  Haze  Kelp RedTide AltFt SpKnot ObsL ObsB ObsR Rec VLI
+1        6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+2        6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+3        6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+  VLO VB VRI VRO Data1 Data2 Data3 Data4 Data5 Data6 Data7 EffortDot EventNum
+1   g  g   g   g  2 cp  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>      TRUE       11
+2   g  g   g   g  fb2s  fb1m  <NA>  <NA>  <NA>  <NA>  <NA>      TRUE       45
+3   g  g   g   g  fb2s  fb1m  <NA>  <NA>  <NA>  <NA>  <NA>      TRUE       45
+           file_das line_num file_type comment_str     Misc1 Misc2 Value
+1 airdas_sample.das       11    turtle        2 cp  crab pot  <NA>     2
+2 airdas_sample.das       46    turtle   fb2s fb1m fish ball     s     2
+3 airdas_sample.das       46    turtle   fb2s fb1m fish ball     m     1
+  flag_check
+1      FALSE
+2      FALSE
+3      FALSE
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_effort")
+> ### * airdas_effort
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_effort
+> ### Title: Summarize AirDAS effort
+> ### Aliases: airdas_effort airdas_effort.data.frame airdas_effort.airdas_df
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> y.proc <- airdas_process(y)
+> 
+> airdas_effort(
++   y.proc, method = "condition", conditions = "Bft", seg.min.km = 0.05, 
++   num.cores = 1
++ )
+$segdata
+      segnum section_id section_sub_id event transect              file stlin
+lat        1          1              1     T       T1 airdas_sample.das     3
+lat1       2          1              2     T       T1 airdas_sample.das    36
+lat2       3          2              1     R       T1 airdas_sample.das    40
+lat11      4          2              2     R       T1 airdas_sample.das    44
+lat3       5          3              1     T       T2 airdas_sample.das    53
+lat12      6          3              2     T       T2 airdas_sample.das    78
+      endlin     lat1      lon1           DateTime1     lat2      lon2
+lat       36 39.23550 -123.1563 2015-04-09 12:30:59 39.23400 -123.4033
+lat1      37 39.23400 -123.4033 2015-04-09 12:37:57 39.23400 -123.4047
+lat2      44 39.23400 -123.4742 2015-04-09 12:40:00 39.23317 -123.5143
+lat11     49 39.23317 -123.5143 2015-04-09 12:41:08 39.23283 -123.6032
+lat3      78 39.22000 -123.6078 2015-04-09 12:46:51 39.21683 -123.3605
+lat12     88 39.21683 -123.3605 2015-04-09 12:54:04 39.21700 -123.2418
+                DateTime2     mlat      mlon           mDateTime    dist year
+lat   2015-04-09 12:37:57 39.23309 -123.2797 2015-04-09 12:34:28 21.2882 2015
+lat1  2015-04-09 12:38:00 39.23400 -123.4040 2015-04-09 12:37:58  0.1148 2015
+lat2  2015-04-09 12:41:08 39.23323 -123.4942 2015-04-09 12:40:34  3.4595 2015
+lat11 2015-04-09 12:43:43 39.23245 -123.5588 2015-04-09 12:42:25  7.6620 2015
+lat3  2015-04-09 12:54:04 39.21667 -123.4842 2015-04-09 12:50:27 21.3146 2015
+lat12 2015-04-09 12:57:30 39.21700 -123.3011 2015-04-09 12:55:47 10.2336 2015
+      month day    mtime maxdistBft
+lat       4   9 12:34:28          1
+lat1      4   9 12:37:58          2
+lat2      4   9 12:40:34          2
+lat11     4   9 12:42:25          1
+lat3      4   9 12:50:27          1
+lat12     4   9 12:55:47          2
+
+$sightinfo
+   segnum     mlat      mlon Event            DateTime      Lat       Lon
+1       1 39.23309 -123.2797     S 2015-04-09 12:31:35 39.23367 -123.1783
+2       1 39.23309 -123.2797     S 2015-04-09 12:31:47 39.23350 -123.1857
+3       1 39.23309 -123.2797     S 2015-04-09 12:31:56 39.23333 -123.1917
+4       1 39.23309 -123.2797     S 2015-04-09 12:32:20 39.23233 -123.2053
+5       1 39.23309 -123.2797     S 2015-04-09 12:32:30 39.23233 -123.2108
+6       1 39.23309 -123.2797     S 2015-04-09 12:32:42 39.23233 -123.2195
+7       1 39.23309 -123.2797     S 2015-04-09 12:32:42 39.23233 -123.2195
+8       1 39.23309 -123.2797     S 2015-04-09 12:33:43 39.23333 -123.2550
+9       1 39.23309 -123.2797     S 2015-04-09 12:35:13 39.23317 -123.3073
+10      1 39.23309 -123.2797     S 2015-04-09 12:36:13 39.23333 -123.3418
+11      1 39.23309 -123.2797     S 2015-04-09 12:36:26 39.23350 -123.3500
+12      1 39.23309 -123.2797     t 2015-04-09 12:36:26 39.23350 -123.3500
+13      1 39.23309 -123.2797     S 2015-04-09 12:36:43 39.23350 -123.3592
+14      1 39.23309 -123.2797     S 2015-04-09 12:37:01 39.23400 -123.3697
+15      1 39.23309 -123.2797     S 2015-04-09 12:37:16 39.23433 -123.3790
+16      1 39.23309 -123.2797     S 2015-04-09 12:37:37 39.23417 -123.3910
+17      4 39.23245 -123.5588     S 2015-04-09 12:42:13 39.23250 -123.5515
+18      5 39.21667 -123.4842     S 2015-04-09 12:51:40 39.21750 -123.4410
+19      5 39.21667 -123.4842     S 2015-04-09 12:51:55 39.21750 -123.4317
+20      5 39.21667 -123.4842     S 2015-04-09 12:52:03 39.21733 -123.4270
+21      5 39.21667 -123.4842     S 2015-04-09 12:52:04 39.21733 -123.4270
+22      5 39.21667 -123.4842     S 2015-04-09 12:52:07 39.21733 -123.4258
+23      5 39.21667 -123.4842     S 2015-04-09 12:52:17 39.21700 -123.4185
+24      5 39.21667 -123.4842     S 2015-04-09 12:52:54 39.21700 -123.3982
+25      6 39.21700 -123.3011     S 2015-04-09 12:54:34 39.21667 -123.3422
+26      6 39.21700 -123.3011     S 2015-04-09 12:55:20 39.21700 -123.3172
+27      6 39.21700 -123.3011     S 2015-04-09 12:56:49 39.21717 -123.2685
+28      6 39.21700 -123.3011     s 2015-04-09 12:57:00 39.21700 -123.2617
+   OnEffort Trans Bft CCover Jelly HorizSun VertSun HKR  Haze  Kelp RedTide
+1      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+2      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+3      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+4      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+5      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+6      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+7      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+8      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+9      TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+10     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+11     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+12     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+13     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+14     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+15     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+16     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+17     TRUE    T1   1     20     0        6      NA   n FALSE FALSE   FALSE
+18     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+19     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+20     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+21     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+22     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+23     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+24     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+25     TRUE    T2   2     20     0       12      NA   n FALSE FALSE   FALSE
+26     TRUE    T2   2     20     0       12      NA   n FALSE FALSE   FALSE
+27     TRUE    T2   2     20     0       12      NA   r FALSE FALSE    TRUE
+28     TRUE    T2   2     20     0       12      NA   r FALSE FALSE    TRUE
+   AltFt SpKnot ObsL ObsB ObsR Rec VLI VLO VB VRI VRO EffortDot EventNum
+1    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE        9
+2    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       10
+3    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       12
+4    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       14
+5    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       15
+6    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       16
+7    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       16
+8    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       18
+9    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       23
+10   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       26
+11   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       27
+12   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       28
+13   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       29
+14   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       31
+15   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       32
+16   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       34
+17   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       46
+18   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       65
+19   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       66
+20   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       68
+21   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       69
+22   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       70
+23   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       71
+24   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       73
+25   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       78
+26   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       80
+27   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       84
+28   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       86
+            file_das line_num file_type SightNo  Obs Angle SightStd Mixed
+1  airdas_sample.das        9    turtle       1   cc    67     TRUE FALSE
+2  airdas_sample.das       10    turtle       2   bb   -60     TRUE FALSE
+3  airdas_sample.das       12    turtle       3   cc    38     TRUE FALSE
+4  airdas_sample.das       14    turtle       4   aa   -50     TRUE FALSE
+5  airdas_sample.das       15    turtle       5   cc    49     TRUE FALSE
+6  airdas_sample.das       16    turtle       6   cc    42     TRUE  TRUE
+7  airdas_sample.das       16    turtle       6   cc    42     TRUE  TRUE
+8  airdas_sample.das       19    turtle       7   aa   -53     TRUE FALSE
+9  airdas_sample.das       24    turtle       8   dd    24     TRUE FALSE
+10 airdas_sample.das       27    turtle       9   aa   -57     TRUE FALSE
+11 airdas_sample.das       28    turtle      10   cc    65     TRUE FALSE
+12 airdas_sample.das       29    turtle    <NA>   aa   -20     TRUE FALSE
+13 airdas_sample.das       30    turtle      11   bb    87     TRUE FALSE
+14 airdas_sample.das       32    turtle      12   bb    82     TRUE FALSE
+15 airdas_sample.das       33    turtle      13   bb    54     TRUE FALSE
+16 airdas_sample.das       35    turtle      14   cc    62     TRUE FALSE
+17 airdas_sample.das       47    turtle      15   bb    50     TRUE FALSE
+18 airdas_sample.das       66    turtle      16   aa   -31     TRUE FALSE
+19 airdas_sample.das       67    turtle      17   bb   -59     TRUE FALSE
+20 airdas_sample.das       69    turtle      18   aa   -62     TRUE FALSE
+21 airdas_sample.das       70    turtle      19   cc    42     TRUE FALSE
+22 airdas_sample.das       71    turtle      20   aa   -48     TRUE FALSE
+23 airdas_sample.das       72    turtle      21   cc    63     TRUE FALSE
+24 airdas_sample.das       74    turtle      22   cc    43     TRUE FALSE
+25 airdas_sample.das       79    turtle      23   cc    56     TRUE FALSE
+26 airdas_sample.das       81    turtle      24   cc    37     TRUE FALSE
+27 airdas_sample.das       85    turtle      25   bb   -76     TRUE FALSE
+28 airdas_sample.das       87    turtle      25 <NA>   -70       NA    NA
+   SpCode GsTotal GsSp TurtleSize TurtleDirection TurtleTail included
+1      mn       6    6         NA              NA       <NA>     TRUE
+2      mn       6    6         NA              NA       <NA>     TRUE
+3      mn       2    2         NA              NA       <NA>     TRUE
+4      mn       5    5         NA              NA       <NA>     TRUE
+5      bm       4    4         NA              NA       <NA>     TRUE
+6      gg      10    8         NA              NA       <NA>     TRUE
+7      er      10    2         NA              NA       <NA>     TRUE
+8      bm       5    5         NA              NA       <NA>     TRUE
+9      bm       2    2         NA              NA       <NA>     TRUE
+10     mn       4    4         NA              NA       <NA>     TRUE
+11     gg       5    5         NA              NA       <NA>     TRUE
+12     dc       1    1          5              90          n     TRUE
+13     pp       3    3         NA              NA       <NA>    FALSE
+14     gg       5    5         NA              NA       <NA>    FALSE
+15     pp       6    6         NA              NA       <NA>     TRUE
+16     gg       2    2         NA              NA       <NA>     TRUE
+17     mn       3    3         NA              NA       <NA>     TRUE
+18     mn       6    6         NA              NA       <NA>     TRUE
+19     bm       6    6         NA              NA       <NA>     TRUE
+20     gg       2    2         NA              NA       <NA>     TRUE
+21     bm       3    3         NA              NA       <NA>     TRUE
+22     bm       4    4         NA              NA       <NA>     TRUE
+23     pp       6    6         NA              NA       <NA>     TRUE
+24     pp       2    2         NA              NA       <NA>     TRUE
+25     mn       6    6         NA              NA       <NA>     TRUE
+26     mn       6    6         NA              NA       <NA>     TRUE
+27     pp       1    1         NA              NA       <NA>     TRUE
+28   <NA>      NA   NA         NA              NA       <NA>    FALSE
+
+$randpicks
+NULL
+
+> 
+> y.rand <- system.file("airdas_sample_randpicks.csv", package = "swfscAirDAS")
+> airdas_effort(
++   y.proc, method = "equallength", conditions = c("Bft", "CCover"), 
++   seg.km = 3, randpicks.load = y.rand, num.cores = 1
++ )
+$segdata
+      segnum section_id section_sub_id event transect              file stlin
+lat        1          1              1     T       T1 airdas_sample.das     3
+lat1       2          1              2     T       T1 airdas_sample.das    12
+lat2       3          1              3     T       T1 airdas_sample.das    18
+lat3       4          1              4     T       T1 airdas_sample.das    20
+lat4       5          1              5     T       T1 airdas_sample.das    22
+lat5       6          1              6     T       T1 airdas_sample.das    26
+lat6       7          1              7     T       T1 airdas_sample.das    31
+lat11      8          2              1     R       T1 airdas_sample.das    40
+lat12      9          2              2     R       T1 airdas_sample.das    43
+lat21     10          2              3     R       T1 airdas_sample.das    45
+lat31     11          2              4     R       T1 airdas_sample.das    48
+lat13     12          3              1     T       T2 airdas_sample.das    53
+lat14     13          3              2     T       T2 airdas_sample.das    59
+lat22     14          3              3     T       T2 airdas_sample.das    62
+lat32     15          3              4     T       T2 airdas_sample.das    63
+lat41     16          3              5     T       T2 airdas_sample.das    65
+lat51     17          3              6     T       T2 airdas_sample.das    67
+lat61     18          3              7     T       T2 airdas_sample.das    74
+lat7      19          3              8     T       T2 airdas_sample.das    76
+lat8      20          3              9     T       T2 airdas_sample.das    80
+lat9      21          3             10     T       T2 airdas_sample.das    82
+lat10     22          3             11     T       T2 airdas_sample.das    83
+      endlin     lat1      lon1           DateTime1     lat2      lon2
+lat       12 39.23550 -123.1563 2015-04-09 12:30:59 39.23335 -123.1910
+lat1      18 39.23335 -123.1910 2015-04-09 12:31:55 39.23255 -123.2257
+lat2      20 39.23255 -123.2257 2015-04-09 12:32:53 39.23312 -123.2606
+lat3      22 39.23312 -123.2606 2015-04-09 12:33:54 39.23317 -123.2955
+lat4      26 39.23317 -123.2955 2015-04-09 12:34:53 39.23330 -123.3302
+lat5      31 39.23330 -123.3302 2015-04-09 12:35:54 39.23371 -123.3651
+lat6      37 39.23371 -123.3651 2015-04-09 12:36:54 39.23400 -123.4047
+lat11     43 39.23400 -123.4742 2015-04-09 12:40:00 39.23317 -123.5089
+lat12     45 39.23317 -123.5089 2015-04-09 12:40:59 39.23284 -123.5335
+lat21     48 39.23284 -123.5335 2015-04-09 12:41:42 39.23239 -123.5684
+lat31     49 39.23239 -123.5684 2015-04-09 12:42:43 39.23283 -123.6032
+lat13     59 39.22000 -123.6078 2015-04-09 12:46:51 39.21808 -123.5733
+lat14     62 39.21808 -123.5733 2015-04-09 12:47:51 39.21783 -123.5383
+lat22     63 39.21783 -123.5383 2015-04-09 12:48:51 39.21640 -123.5037
+lat32     65 39.21640 -123.5037 2015-04-09 12:49:51 39.21722 -123.4687
+lat41     67 39.21722 -123.4687 2015-04-09 12:50:53 39.21750 -123.4339
+lat51     74 39.21750 -123.4339 2015-04-09 12:51:51 39.21700 -123.3990
+lat61     76 39.21700 -123.3990 2015-04-09 12:52:52 39.21686 -123.3644
+lat7      80 39.21686 -123.3644 2015-04-09 12:53:55 39.21667 -123.3294
+lat8      82 39.21667 -123.3294 2015-04-09 12:54:58 39.21700 -123.3114
+lat9      83 39.21700 -123.3114 2015-04-09 12:55:31 39.21728 -123.2766
+lat10     88 39.21728 -123.2766 2015-04-09 12:56:33 39.21700 -123.2418
+                DateTime2     mlat      mlon           mDateTime   dist year
+lat   2015-04-09 12:31:55 39.23412 -123.1736 2015-04-09 12:31:27 3.0000 2015
+lat1  2015-04-09 12:32:53 39.23233 -123.2084 2015-04-09 12:32:24 3.0000 2015
+lat2  2015-04-09 12:33:54 39.23303 -123.2432 2015-04-09 12:33:23 3.0000 2015
+lat3  2015-04-09 12:34:53 39.23308 -123.2781 2015-04-09 12:34:23 3.0000 2015
+lat4  2015-04-09 12:35:54 39.23317 -123.3129 2015-04-09 12:35:23 3.0000 2015
+lat5  2015-04-09 12:36:54 39.23345 -123.3478 2015-04-09 12:36:24 3.0000 2015
+lat6  2015-04-09 12:38:00 39.23425 -123.3849 2015-04-09 12:37:27 3.4029 2015
+lat11 2015-04-09 12:40:59 39.23333 -123.4916 2015-04-09 12:40:29 3.0000 2015
+lat12 2015-04-09 12:41:42 39.23305 -123.5213 2015-04-09 12:41:21 2.1215 2015
+lat21 2015-04-09 12:42:43 39.23251 -123.5511 2015-04-09 12:42:12 3.0000 2015
+lat31 2015-04-09 12:43:43 39.23249 -123.5859 2015-04-09 12:43:13 3.0000 2015
+lat13 2015-04-09 12:47:51 39.21892 -123.5905 2015-04-09 12:47:21 3.0000 2015
+lat14 2015-04-09 12:48:51 39.21771 -123.5557 2015-04-09 12:48:21 3.0000 2015
+lat22 2015-04-09 12:49:51 39.21723 -123.5208 2015-04-09 12:49:21 3.0000 2015
+lat32 2015-04-09 12:50:53 39.21661 -123.4860 2015-04-09 12:50:22 3.0000 2015
+lat41 2015-04-09 12:51:51 39.21743 -123.4512 2015-04-09 12:51:22 3.0000 2015
+lat51 2015-04-09 12:52:52 39.21700 -123.4164 2015-04-09 12:52:22 3.0000 2015
+lat61 2015-04-09 12:53:55 39.21703 -123.3816 2015-04-09 12:53:24 3.0000 2015
+lat7  2015-04-09 12:54:58 39.21671 -123.3467 2015-04-09 12:54:27 3.0000 2015
+lat8  2015-04-09 12:55:31 39.21691 -123.3203 2015-04-09 12:55:14 1.5482 2015
+lat9  2015-04-09 12:56:33 39.21703 -123.2939 2015-04-09 12:56:02 3.0000 2015
+lat10 2015-04-09 12:57:30 39.21700 -123.2591 2015-04-09 12:57:01 3.0000 2015
+      month day    mtime   avgBft avgCCover
+lat       4   9 12:31:27 1.000000  10.00000
+lat1      4   9 12:32:24 1.000000  10.00000
+lat2      4   9 12:33:23 1.000000  10.00000
+lat3      4   9 12:34:23 1.000000  10.00000
+lat4      4   9 12:35:23 1.000000  10.00000
+lat5      4   9 12:36:24 1.000000  10.00000
+lat6      4   9 12:37:27 1.033724  10.00000
+lat11     4   9 12:40:29 2.000000  15.02091
+lat12     4   9 12:41:21 1.216574  20.00000
+lat21     4   9 12:42:12 1.000000  20.00000
+lat31     4   9 12:43:13 1.000000  20.00000
+lat13     4   9 12:47:21 1.000000  20.00000
+lat14     4   9 12:48:21 1.000000  20.00000
+lat22     4   9 12:49:21 1.000000  20.00000
+lat32     4   9 12:50:22 1.000000  20.00000
+lat41     4   9 12:51:22 1.000000  20.00000
+lat51     4   9 12:52:22 1.000000  20.00000
+lat61     4   9 12:53:24 1.000000  20.00000
+lat7      4   9 12:54:27 1.895145  20.00000
+lat8      4   9 12:55:14 2.000000  20.00000
+lat9      4   9 12:56:02 2.000000  20.00000
+lat10     4   9 12:57:01 2.000000  20.00000
+
+$sightinfo
+   segnum     mlat      mlon Event            DateTime      Lat       Lon
+1       1 39.23412 -123.1736     S 2015-04-09 12:31:35 39.23367 -123.1783
+2       1 39.23412 -123.1736     S 2015-04-09 12:31:47 39.23350 -123.1857
+3       2 39.23233 -123.2084     S 2015-04-09 12:31:56 39.23333 -123.1917
+4       2 39.23233 -123.2084     S 2015-04-09 12:32:20 39.23233 -123.2053
+5       2 39.23233 -123.2084     S 2015-04-09 12:32:30 39.23233 -123.2108
+6       2 39.23233 -123.2084     S 2015-04-09 12:32:42 39.23233 -123.2195
+7       2 39.23233 -123.2084     S 2015-04-09 12:32:42 39.23233 -123.2195
+8       3 39.23303 -123.2432     S 2015-04-09 12:33:43 39.23333 -123.2550
+9       5 39.23317 -123.3129     S 2015-04-09 12:35:13 39.23317 -123.3073
+10      6 39.23345 -123.3478     S 2015-04-09 12:36:13 39.23333 -123.3418
+11      6 39.23345 -123.3478     S 2015-04-09 12:36:26 39.23350 -123.3500
+12      6 39.23345 -123.3478     t 2015-04-09 12:36:26 39.23350 -123.3500
+13      6 39.23345 -123.3478     S 2015-04-09 12:36:43 39.23350 -123.3592
+14      7 39.23425 -123.3849     S 2015-04-09 12:37:01 39.23400 -123.3697
+15      7 39.23425 -123.3849     S 2015-04-09 12:37:16 39.23433 -123.3790
+16      7 39.23425 -123.3849     S 2015-04-09 12:37:37 39.23417 -123.3910
+17     10 39.23251 -123.5511     S 2015-04-09 12:42:13 39.23250 -123.5515
+18     16 39.21743 -123.4512     S 2015-04-09 12:51:40 39.21750 -123.4410
+19     17 39.21700 -123.4164     S 2015-04-09 12:51:55 39.21750 -123.4317
+20     17 39.21700 -123.4164     S 2015-04-09 12:52:03 39.21733 -123.4270
+21     17 39.21700 -123.4164     S 2015-04-09 12:52:04 39.21733 -123.4270
+22     17 39.21700 -123.4164     S 2015-04-09 12:52:07 39.21733 -123.4258
+23     17 39.21700 -123.4164     S 2015-04-09 12:52:17 39.21700 -123.4185
+24     18 39.21703 -123.3816     S 2015-04-09 12:52:54 39.21700 -123.3982
+25     19 39.21671 -123.3467     S 2015-04-09 12:54:34 39.21667 -123.3422
+26     20 39.21691 -123.3203     S 2015-04-09 12:55:20 39.21700 -123.3172
+27     22 39.21700 -123.2591     S 2015-04-09 12:56:49 39.21717 -123.2685
+28     22 39.21700 -123.2591     s 2015-04-09 12:57:00 39.21700 -123.2617
+   OnEffort Trans Bft CCover Jelly HorizSun VertSun HKR  Haze  Kelp RedTide
+1      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+2      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+3      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+4      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+5      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+6      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+7      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+8      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+9      TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+10     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+11     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+12     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+13     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+14     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+15     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+16     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+17     TRUE    T1   1     20     0        6      NA   n FALSE FALSE   FALSE
+18     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+19     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+20     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+21     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+22     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+23     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+24     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+25     TRUE    T2   2     20     0       12      NA   n FALSE FALSE   FALSE
+26     TRUE    T2   2     20     0       12      NA   n FALSE FALSE   FALSE
+27     TRUE    T2   2     20     0       12      NA   r FALSE FALSE    TRUE
+28     TRUE    T2   2     20     0       12      NA   r FALSE FALSE    TRUE
+   AltFt SpKnot ObsL ObsB ObsR Rec VLI VLO VB VRI VRO EffortDot EventNum
+1    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE        9
+2    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       10
+3    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       12
+4    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       14
+5    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       15
+6    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       16
+7    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       16
+8    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       18
+9    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       23
+10   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       26
+11   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       27
+12   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       28
+13   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       29
+14   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       31
+15   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       32
+16   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       34
+17   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       46
+18   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       65
+19   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       66
+20   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       68
+21   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       69
+22   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       70
+23   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       71
+24   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       73
+25   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       78
+26   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       80
+27   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       84
+28   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       86
+            file_das line_num file_type SightNo  Obs Angle SightStd Mixed
+1  airdas_sample.das        9    turtle       1   cc    67     TRUE FALSE
+2  airdas_sample.das       10    turtle       2   bb   -60     TRUE FALSE
+3  airdas_sample.das       12    turtle       3   cc    38     TRUE FALSE
+4  airdas_sample.das       14    turtle       4   aa   -50     TRUE FALSE
+5  airdas_sample.das       15    turtle       5   cc    49     TRUE FALSE
+6  airdas_sample.das       16    turtle       6   cc    42     TRUE  TRUE
+7  airdas_sample.das       16    turtle       6   cc    42     TRUE  TRUE
+8  airdas_sample.das       19    turtle       7   aa   -53     TRUE FALSE
+9  airdas_sample.das       24    turtle       8   dd    24     TRUE FALSE
+10 airdas_sample.das       27    turtle       9   aa   -57     TRUE FALSE
+11 airdas_sample.das       28    turtle      10   cc    65     TRUE FALSE
+12 airdas_sample.das       29    turtle    <NA>   aa   -20     TRUE FALSE
+13 airdas_sample.das       30    turtle      11   bb    87     TRUE FALSE
+14 airdas_sample.das       32    turtle      12   bb    82     TRUE FALSE
+15 airdas_sample.das       33    turtle      13   bb    54     TRUE FALSE
+16 airdas_sample.das       35    turtle      14   cc    62     TRUE FALSE
+17 airdas_sample.das       47    turtle      15   bb    50     TRUE FALSE
+18 airdas_sample.das       66    turtle      16   aa   -31     TRUE FALSE
+19 airdas_sample.das       67    turtle      17   bb   -59     TRUE FALSE
+20 airdas_sample.das       69    turtle      18   aa   -62     TRUE FALSE
+21 airdas_sample.das       70    turtle      19   cc    42     TRUE FALSE
+22 airdas_sample.das       71    turtle      20   aa   -48     TRUE FALSE
+23 airdas_sample.das       72    turtle      21   cc    63     TRUE FALSE
+24 airdas_sample.das       74    turtle      22   cc    43     TRUE FALSE
+25 airdas_sample.das       79    turtle      23   cc    56     TRUE FALSE
+26 airdas_sample.das       81    turtle      24   cc    37     TRUE FALSE
+27 airdas_sample.das       85    turtle      25   bb   -76     TRUE FALSE
+28 airdas_sample.das       87    turtle      25 <NA>   -70       NA    NA
+   SpCode GsTotal GsSp TurtleSize TurtleDirection TurtleTail included
+1      mn       6    6         NA              NA       <NA>     TRUE
+2      mn       6    6         NA              NA       <NA>     TRUE
+3      mn       2    2         NA              NA       <NA>     TRUE
+4      mn       5    5         NA              NA       <NA>     TRUE
+5      bm       4    4         NA              NA       <NA>     TRUE
+6      gg      10    8         NA              NA       <NA>     TRUE
+7      er      10    2         NA              NA       <NA>     TRUE
+8      bm       5    5         NA              NA       <NA>     TRUE
+9      bm       2    2         NA              NA       <NA>     TRUE
+10     mn       4    4         NA              NA       <NA>     TRUE
+11     gg       5    5         NA              NA       <NA>     TRUE
+12     dc       1    1          5              90          n     TRUE
+13     pp       3    3         NA              NA       <NA>    FALSE
+14     gg       5    5         NA              NA       <NA>    FALSE
+15     pp       6    6         NA              NA       <NA>     TRUE
+16     gg       2    2         NA              NA       <NA>     TRUE
+17     mn       3    3         NA              NA       <NA>     TRUE
+18     mn       6    6         NA              NA       <NA>     TRUE
+19     bm       6    6         NA              NA       <NA>     TRUE
+20     gg       2    2         NA              NA       <NA>     TRUE
+21     bm       3    3         NA              NA       <NA>     TRUE
+22     bm       4    4         NA              NA       <NA>     TRUE
+23     pp       6    6         NA              NA       <NA>     TRUE
+24     pp       2    2         NA              NA       <NA>     TRUE
+25     mn       6    6         NA              NA       <NA>     TRUE
+26     mn       6    6         NA              NA       <NA>     TRUE
+27     pp       1    1         NA              NA       <NA>     TRUE
+28   <NA>      NA   NA         NA              NA       <NA>    FALSE
+
+$randpicks
+  effort_section randpicks
+1              1         7
+2              2         2
+3              3         9
+
+> 
+> airdas_effort(y.proc, method = "section", num.cores = 1)
+$segdata
+     segnum section_id section_sub_id event transect              file stlin
+lat       1          1              1     T       T1 airdas_sample.das     3
+lat1      2          2              1     R       T1 airdas_sample.das    40
+lat2      3          3              1     T       T2 airdas_sample.das    53
+     endlin    lat1      lon1           DateTime1     lat2      lon2
+lat      37 39.2355 -123.1563 2015-04-09 12:30:59 39.23400 -123.4047
+lat1     49 39.2340 -123.4742 2015-04-09 12:40:00 39.23283 -123.6032
+lat2     88 39.2200 -123.6078 2015-04-09 12:46:51 39.21700 -123.2418
+               DateTime2     mlat      mlon           mDateTime    dist year
+lat  2015-04-09 12:38:00 39.23309 -123.2804 2015-04-09 12:34:29 21.4029 2015
+lat1 2015-04-09 12:43:43 39.23275 -123.5388 2015-04-09 12:41:51 11.1215 2015
+lat2 2015-04-09 12:57:30 39.21729 -123.4248 2015-04-09 12:52:10 31.5482 2015
+     month day    mtime   avgBft avgCCover  avgJelly avgHorizSun avgVertSun
+lat      4   9 12:34:29 1.005362   10.0000 0.8757162           6         NA
+lat1     4   9 12:41:51 1.311061   18.6569 0.0000000           6         NA
+lat2     4   9 12:52:10 1.324381   20.0000 0.0000000          12         NA
+     avgHaze avgKelp avgRedTide avgAltFt avgSpKnot
+lat        0       0 0.43785812 650.0000 100.00000
+lat1       0       0 0.00000000 650.0000 100.00000
+lat2       0       0 0.08556751 669.8738  93.50289
+
+$sightinfo
+   segnum     mlat      mlon Event            DateTime      Lat       Lon
+1       1 39.23309 -123.2804     S 2015-04-09 12:31:35 39.23367 -123.1783
+2       1 39.23309 -123.2804     S 2015-04-09 12:31:47 39.23350 -123.1857
+3       1 39.23309 -123.2804     S 2015-04-09 12:31:56 39.23333 -123.1917
+4       1 39.23309 -123.2804     S 2015-04-09 12:32:20 39.23233 -123.2053
+5       1 39.23309 -123.2804     S 2015-04-09 12:32:30 39.23233 -123.2108
+6       1 39.23309 -123.2804     S 2015-04-09 12:32:42 39.23233 -123.2195
+7       1 39.23309 -123.2804     S 2015-04-09 12:32:42 39.23233 -123.2195
+8       1 39.23309 -123.2804     S 2015-04-09 12:33:43 39.23333 -123.2550
+9       1 39.23309 -123.2804     S 2015-04-09 12:35:13 39.23317 -123.3073
+10      1 39.23309 -123.2804     S 2015-04-09 12:36:13 39.23333 -123.3418
+11      1 39.23309 -123.2804     S 2015-04-09 12:36:26 39.23350 -123.3500
+12      1 39.23309 -123.2804     t 2015-04-09 12:36:26 39.23350 -123.3500
+13      1 39.23309 -123.2804     S 2015-04-09 12:36:43 39.23350 -123.3592
+14      1 39.23309 -123.2804     S 2015-04-09 12:37:01 39.23400 -123.3697
+15      1 39.23309 -123.2804     S 2015-04-09 12:37:16 39.23433 -123.3790
+16      1 39.23309 -123.2804     S 2015-04-09 12:37:37 39.23417 -123.3910
+17      2 39.23275 -123.5388     S 2015-04-09 12:42:13 39.23250 -123.5515
+18      3 39.21729 -123.4248     S 2015-04-09 12:51:40 39.21750 -123.4410
+19      3 39.21729 -123.4248     S 2015-04-09 12:51:55 39.21750 -123.4317
+20      3 39.21729 -123.4248     S 2015-04-09 12:52:03 39.21733 -123.4270
+21      3 39.21729 -123.4248     S 2015-04-09 12:52:04 39.21733 -123.4270
+22      3 39.21729 -123.4248     S 2015-04-09 12:52:07 39.21733 -123.4258
+23      3 39.21729 -123.4248     S 2015-04-09 12:52:17 39.21700 -123.4185
+24      3 39.21729 -123.4248     S 2015-04-09 12:52:54 39.21700 -123.3982
+25      3 39.21729 -123.4248     S 2015-04-09 12:54:34 39.21667 -123.3422
+26      3 39.21729 -123.4248     S 2015-04-09 12:55:20 39.21700 -123.3172
+27      3 39.21729 -123.4248     S 2015-04-09 12:56:49 39.21717 -123.2685
+28      3 39.21729 -123.4248     s 2015-04-09 12:57:00 39.21700 -123.2617
+   OnEffort Trans Bft CCover Jelly HorizSun VertSun HKR  Haze  Kelp RedTide
+1      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+2      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+3      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+4      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+5      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+6      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+7      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+8      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+9      TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+10     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+11     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+12     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+13     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+14     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+15     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+16     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+17     TRUE    T1   1     20     0        6      NA   n FALSE FALSE   FALSE
+18     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+19     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+20     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+21     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+22     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+23     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+24     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+25     TRUE    T2   2     20     0       12      NA   n FALSE FALSE   FALSE
+26     TRUE    T2   2     20     0       12      NA   n FALSE FALSE   FALSE
+27     TRUE    T2   2     20     0       12      NA   r FALSE FALSE    TRUE
+28     TRUE    T2   2     20     0       12      NA   r FALSE FALSE    TRUE
+   AltFt SpKnot ObsL ObsB ObsR Rec VLI VLO VB VRI VRO EffortDot EventNum
+1    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE        9
+2    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       10
+3    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       12
+4    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       14
+5    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       15
+6    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       16
+7    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       16
+8    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       18
+9    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       23
+10   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       26
+11   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       27
+12   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       28
+13   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       29
+14   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       31
+15   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       32
+16   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       34
+17   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       46
+18   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       65
+19   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       66
+20   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       68
+21   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       69
+22   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       70
+23   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       71
+24   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       73
+25   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       78
+26   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       80
+27   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       84
+28   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       86
+            file_das line_num file_type SightNo  Obs Angle SightStd Mixed
+1  airdas_sample.das        9    turtle       1   cc    67     TRUE FALSE
+2  airdas_sample.das       10    turtle       2   bb   -60     TRUE FALSE
+3  airdas_sample.das       12    turtle       3   cc    38     TRUE FALSE
+4  airdas_sample.das       14    turtle       4   aa   -50     TRUE FALSE
+5  airdas_sample.das       15    turtle       5   cc    49     TRUE FALSE
+6  airdas_sample.das       16    turtle       6   cc    42     TRUE  TRUE
+7  airdas_sample.das       16    turtle       6   cc    42     TRUE  TRUE
+8  airdas_sample.das       19    turtle       7   aa   -53     TRUE FALSE
+9  airdas_sample.das       24    turtle       8   dd    24     TRUE FALSE
+10 airdas_sample.das       27    turtle       9   aa   -57     TRUE FALSE
+11 airdas_sample.das       28    turtle      10   cc    65     TRUE FALSE
+12 airdas_sample.das       29    turtle    <NA>   aa   -20     TRUE FALSE
+13 airdas_sample.das       30    turtle      11   bb    87     TRUE FALSE
+14 airdas_sample.das       32    turtle      12   bb    82     TRUE FALSE
+15 airdas_sample.das       33    turtle      13   bb    54     TRUE FALSE
+16 airdas_sample.das       35    turtle      14   cc    62     TRUE FALSE
+17 airdas_sample.das       47    turtle      15   bb    50     TRUE FALSE
+18 airdas_sample.das       66    turtle      16   aa   -31     TRUE FALSE
+19 airdas_sample.das       67    turtle      17   bb   -59     TRUE FALSE
+20 airdas_sample.das       69    turtle      18   aa   -62     TRUE FALSE
+21 airdas_sample.das       70    turtle      19   cc    42     TRUE FALSE
+22 airdas_sample.das       71    turtle      20   aa   -48     TRUE FALSE
+23 airdas_sample.das       72    turtle      21   cc    63     TRUE FALSE
+24 airdas_sample.das       74    turtle      22   cc    43     TRUE FALSE
+25 airdas_sample.das       79    turtle      23   cc    56     TRUE FALSE
+26 airdas_sample.das       81    turtle      24   cc    37     TRUE FALSE
+27 airdas_sample.das       85    turtle      25   bb   -76     TRUE FALSE
+28 airdas_sample.das       87    turtle      25 <NA>   -70       NA    NA
+   SpCode GsTotal GsSp TurtleSize TurtleDirection TurtleTail included
+1      mn       6    6         NA              NA       <NA>     TRUE
+2      mn       6    6         NA              NA       <NA>     TRUE
+3      mn       2    2         NA              NA       <NA>     TRUE
+4      mn       5    5         NA              NA       <NA>     TRUE
+5      bm       4    4         NA              NA       <NA>     TRUE
+6      gg      10    8         NA              NA       <NA>     TRUE
+7      er      10    2         NA              NA       <NA>     TRUE
+8      bm       5    5         NA              NA       <NA>     TRUE
+9      bm       2    2         NA              NA       <NA>     TRUE
+10     mn       4    4         NA              NA       <NA>     TRUE
+11     gg       5    5         NA              NA       <NA>     TRUE
+12     dc       1    1          5              90          n     TRUE
+13     pp       3    3         NA              NA       <NA>    FALSE
+14     gg       5    5         NA              NA       <NA>    FALSE
+15     pp       6    6         NA              NA       <NA>     TRUE
+16     gg       2    2         NA              NA       <NA>     TRUE
+17     mn       3    3         NA              NA       <NA>     TRUE
+18     mn       6    6         NA              NA       <NA>     TRUE
+19     bm       6    6         NA              NA       <NA>     TRUE
+20     gg       2    2         NA              NA       <NA>     TRUE
+21     bm       3    3         NA              NA       <NA>     TRUE
+22     bm       4    4         NA              NA       <NA>     TRUE
+23     pp       6    6         NA              NA       <NA>     TRUE
+24     pp       2    2         NA              NA       <NA>     TRUE
+25     mn       6    6         NA              NA       <NA>     TRUE
+26     mn       6    6         NA              NA       <NA>     TRUE
+27     pp       1    1         NA              NA       <NA>     TRUE
+28   <NA>      NA   NA         NA              NA       <NA>    FALSE
+
+$randpicks
+  effort_section randpicks
+1              1        NA
+2              2        NA
+3              3        NA
+
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_effort_sight")
+> ### * airdas_effort_sight
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_effort_sight
+> ### Title: Summarize AirDAS sightings by effort segment
+> ### Aliases: airdas_effort_sight
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> y.proc <- airdas_process(y)
+> y.cond <- airdas_effort(
++   y.proc, method = "condition", conditions = "Bft", seg.min.km = 0.05, 
++   num.cores = 1
++ )
+> 
+> airdas_effort_sight(y.cond, sp.codes = c("mn", "bm"))
+$segdata
+  segnum section_id section_sub_id event transect              file stlin
+1      1          1              1     T       T1 airdas_sample.das     3
+2      2          1              2     T       T1 airdas_sample.das    36
+3      3          2              1     R       T1 airdas_sample.das    40
+4      4          2              2     R       T1 airdas_sample.das    44
+5      5          3              1     T       T2 airdas_sample.das    53
+6      6          3              2     T       T2 airdas_sample.das    78
+  endlin     lat1      lon1           DateTime1     lat2      lon2
+1     36 39.23550 -123.1563 2015-04-09 12:30:59 39.23400 -123.4033
+2     37 39.23400 -123.4033 2015-04-09 12:37:57 39.23400 -123.4047
+3     44 39.23400 -123.4742 2015-04-09 12:40:00 39.23317 -123.5143
+4     49 39.23317 -123.5143 2015-04-09 12:41:08 39.23283 -123.6032
+5     78 39.22000 -123.6078 2015-04-09 12:46:51 39.21683 -123.3605
+6     88 39.21683 -123.3605 2015-04-09 12:54:04 39.21700 -123.2418
+            DateTime2     mlat      mlon           mDateTime    dist year month
+1 2015-04-09 12:37:57 39.23309 -123.2797 2015-04-09 12:34:28 21.2882 2015     4
+2 2015-04-09 12:38:00 39.23400 -123.4040 2015-04-09 12:37:58  0.1148 2015     4
+3 2015-04-09 12:41:08 39.23323 -123.4942 2015-04-09 12:40:34  3.4595 2015     4
+4 2015-04-09 12:43:43 39.23245 -123.5588 2015-04-09 12:42:25  7.6620 2015     4
+5 2015-04-09 12:54:04 39.21667 -123.4842 2015-04-09 12:50:27 21.3146 2015     4
+6 2015-04-09 12:57:30 39.21700 -123.3011 2015-04-09 12:55:47 10.2336 2015     4
+  day    mtime maxdistBft nSI_bm ANI_bm nSI_mn ANI_mn
+1   9 12:34:28          1      3     11      5     23
+2   9 12:37:58          2      0      0      0      0
+3   9 12:40:34          2      0      0      0      0
+4   9 12:42:25          1      0      0      1      3
+5   9 12:50:27          1      3     13      1      6
+6   9 12:55:47          2      0      0      2     12
+
+$sightinfo
+   segnum     mlat      mlon Event            DateTime      Lat       Lon
+1       1 39.23309 -123.2797     S 2015-04-09 12:31:35 39.23367 -123.1783
+2       1 39.23309 -123.2797     S 2015-04-09 12:31:47 39.23350 -123.1857
+3       1 39.23309 -123.2797     S 2015-04-09 12:31:56 39.23333 -123.1917
+4       1 39.23309 -123.2797     S 2015-04-09 12:32:20 39.23233 -123.2053
+5       1 39.23309 -123.2797     S 2015-04-09 12:32:30 39.23233 -123.2108
+6       1 39.23309 -123.2797     S 2015-04-09 12:32:42 39.23233 -123.2195
+7       1 39.23309 -123.2797     S 2015-04-09 12:32:42 39.23233 -123.2195
+8       1 39.23309 -123.2797     S 2015-04-09 12:33:43 39.23333 -123.2550
+9       1 39.23309 -123.2797     S 2015-04-09 12:35:13 39.23317 -123.3073
+10      1 39.23309 -123.2797     S 2015-04-09 12:36:13 39.23333 -123.3418
+11      1 39.23309 -123.2797     S 2015-04-09 12:36:26 39.23350 -123.3500
+12      1 39.23309 -123.2797     t 2015-04-09 12:36:26 39.23350 -123.3500
+13      1 39.23309 -123.2797     S 2015-04-09 12:36:43 39.23350 -123.3592
+14      1 39.23309 -123.2797     S 2015-04-09 12:37:01 39.23400 -123.3697
+15      1 39.23309 -123.2797     S 2015-04-09 12:37:16 39.23433 -123.3790
+16      1 39.23309 -123.2797     S 2015-04-09 12:37:37 39.23417 -123.3910
+17      4 39.23245 -123.5588     S 2015-04-09 12:42:13 39.23250 -123.5515
+18      5 39.21667 -123.4842     S 2015-04-09 12:51:40 39.21750 -123.4410
+19      5 39.21667 -123.4842     S 2015-04-09 12:51:55 39.21750 -123.4317
+20      5 39.21667 -123.4842     S 2015-04-09 12:52:03 39.21733 -123.4270
+21      5 39.21667 -123.4842     S 2015-04-09 12:52:04 39.21733 -123.4270
+22      5 39.21667 -123.4842     S 2015-04-09 12:52:07 39.21733 -123.4258
+23      5 39.21667 -123.4842     S 2015-04-09 12:52:17 39.21700 -123.4185
+24      5 39.21667 -123.4842     S 2015-04-09 12:52:54 39.21700 -123.3982
+25      6 39.21700 -123.3011     S 2015-04-09 12:54:34 39.21667 -123.3422
+26      6 39.21700 -123.3011     S 2015-04-09 12:55:20 39.21700 -123.3172
+27      6 39.21700 -123.3011     S 2015-04-09 12:56:49 39.21717 -123.2685
+   OnEffort Trans Bft CCover Jelly HorizSun VertSun HKR  Haze  Kelp RedTide
+1      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+2      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+3      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+4      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+5      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+6      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+7      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+8      TRUE    T1   1     10     0        6      NA   n FALSE FALSE   FALSE
+9      TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+10     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+11     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+12     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+13     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+14     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+15     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+16     TRUE    T1   1     10     2        6      NA   r FALSE FALSE    TRUE
+17     TRUE    T1   1     20     0        6      NA   n FALSE FALSE   FALSE
+18     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+19     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+20     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+21     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+22     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+23     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+24     TRUE    T2   1     20     0       12      NA   n FALSE FALSE   FALSE
+25     TRUE    T2   2     20     0       12      NA   n FALSE FALSE   FALSE
+26     TRUE    T2   2     20     0       12      NA   n FALSE FALSE   FALSE
+27     TRUE    T2   2     20     0       12      NA   r FALSE FALSE    TRUE
+   AltFt SpKnot ObsL ObsB ObsR Rec VLI VLO VB VRI VRO EffortDot EventNum
+1    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE        9
+2    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       10
+3    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       12
+4    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       14
+5    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       15
+6    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       16
+7    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       16
+8    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       18
+9    650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       23
+10   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       26
+11   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       27
+12   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       28
+13   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       29
+14   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       31
+15   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       32
+16   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       34
+17   650    100   aa   bb   cc  dd   g   g  g   g   g      TRUE       46
+18   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       65
+19   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       66
+20   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       68
+21   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       69
+22   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       70
+23   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       71
+24   680     90   aa   dd   cc  bb   g   g  g   g   g      TRUE       73
+25   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       78
+26   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       80
+27   680     90   aa   dd   cc  bb   g   g  p   g   g      TRUE       84
+            file_das line_num file_type SightNo Obs Angle SightStd Mixed SpCode
+1  airdas_sample.das        9    turtle       1  cc    67     TRUE FALSE     mn
+2  airdas_sample.das       10    turtle       2  bb   -60     TRUE FALSE     mn
+3  airdas_sample.das       12    turtle       3  cc    38     TRUE FALSE     mn
+4  airdas_sample.das       14    turtle       4  aa   -50     TRUE FALSE     mn
+5  airdas_sample.das       15    turtle       5  cc    49     TRUE FALSE     bm
+6  airdas_sample.das       16    turtle       6  cc    42     TRUE  TRUE     gg
+7  airdas_sample.das       16    turtle       6  cc    42     TRUE  TRUE     er
+8  airdas_sample.das       19    turtle       7  aa   -53     TRUE FALSE     bm
+9  airdas_sample.das       24    turtle       8  dd    24     TRUE FALSE     bm
+10 airdas_sample.das       27    turtle       9  aa   -57     TRUE FALSE     mn
+11 airdas_sample.das       28    turtle      10  cc    65     TRUE FALSE     gg
+12 airdas_sample.das       29    turtle    <NA>  aa   -20     TRUE FALSE     dc
+13 airdas_sample.das       30    turtle      11  bb    87     TRUE FALSE     pp
+14 airdas_sample.das       32    turtle      12  bb    82     TRUE FALSE     gg
+15 airdas_sample.das       33    turtle      13  bb    54     TRUE FALSE     pp
+16 airdas_sample.das       35    turtle      14  cc    62     TRUE FALSE     gg
+17 airdas_sample.das       47    turtle      15  bb    50     TRUE FALSE     mn
+18 airdas_sample.das       66    turtle      16  aa   -31     TRUE FALSE     mn
+19 airdas_sample.das       67    turtle      17  bb   -59     TRUE FALSE     bm
+20 airdas_sample.das       69    turtle      18  aa   -62     TRUE FALSE     gg
+21 airdas_sample.das       70    turtle      19  cc    42     TRUE FALSE     bm
+22 airdas_sample.das       71    turtle      20  aa   -48     TRUE FALSE     bm
+23 airdas_sample.das       72    turtle      21  cc    63     TRUE FALSE     pp
+24 airdas_sample.das       74    turtle      22  cc    43     TRUE FALSE     pp
+25 airdas_sample.das       79    turtle      23  cc    56     TRUE FALSE     mn
+26 airdas_sample.das       81    turtle      24  cc    37     TRUE FALSE     mn
+27 airdas_sample.das       85    turtle      25  bb   -76     TRUE FALSE     pp
+   GsTotal GsSp TurtleSize TurtleDirection TurtleTail included
+1        6    6         NA              NA       <NA>     TRUE
+2        6    6         NA              NA       <NA>     TRUE
+3        2    2         NA              NA       <NA>     TRUE
+4        5    5         NA              NA       <NA>     TRUE
+5        4    4         NA              NA       <NA>     TRUE
+6       10    8         NA              NA       <NA>    FALSE
+7       10    2         NA              NA       <NA>    FALSE
+8        5    5         NA              NA       <NA>     TRUE
+9        2    2         NA              NA       <NA>     TRUE
+10       4    4         NA              NA       <NA>     TRUE
+11       5    5         NA              NA       <NA>    FALSE
+12       1    1          5              90          n    FALSE
+13       3    3         NA              NA       <NA>    FALSE
+14       5    5         NA              NA       <NA>    FALSE
+15       6    6         NA              NA       <NA>    FALSE
+16       2    2         NA              NA       <NA>    FALSE
+17       3    3         NA              NA       <NA>     TRUE
+18       6    6         NA              NA       <NA>     TRUE
+19       6    6         NA              NA       <NA>     TRUE
+20       2    2         NA              NA       <NA>    FALSE
+21       3    3         NA              NA       <NA>     TRUE
+22       4    4         NA              NA       <NA>     TRUE
+23       6    6         NA              NA       <NA>    FALSE
+24       2    2         NA              NA       <NA>    FALSE
+25       6    6         NA              NA       <NA>     TRUE
+26       6    6         NA              NA       <NA>     TRUE
+27       1    1         NA              NA       <NA>    FALSE
+
+$randpicks
+NULL
+
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_format_pdf")
+> ### * airdas_format_pdf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_format_pdf
+> ### Title: Aerial DAS format requirements
+> ### Aliases: airdas_format_pdf
+> 
+> ### ** Examples
+> 
+> if (interactive()) {
++   airdas_format_pdf(
++     "AirDAS_Format_TURTLE.pdf", file.type  = "turtle", 
++     overwrite = FALSE
++   )
++ }
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_process")
+> ### * airdas_process
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_process
+> ### Title: Process aerial survey DAS data
+> ### Aliases: airdas_process airdas_process.character
+> ###   airdas_process.data.frame airdas_process.airdas_dfr
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> airdas_process(y, trans.upper = FALSE)
+   Event            DateTime      Lat       Lon OnEffort Trans Bft CCover Jelly
+1      C 2015-04-09 12:30:59 39.23550 -123.1563    FALSE  <NA>  NA     NA    NA
+2      C 2015-04-09 12:30:59 39.23550 -123.1563    FALSE  <NA>  NA     NA    NA
+3      T 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1  NA     NA    NA
+4      V 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1  NA     NA    NA
+5      P 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1  NA     NA    NA
+6      A 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1  NA     NA    NA
+7      W 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1   1     10     0
+8      * 2015-04-09 12:31:00 39.23567 -123.1575     TRUE    T1   1     10     0
+9      S 2015-04-09 12:31:35 39.23367 -123.1783     TRUE    T1   1     10     0
+10     S 2015-04-09 12:31:47 39.23350 -123.1857     TRUE    T1   1     10     0
+11     C 2015-04-09 12:31:48 39.23350 -123.1857     TRUE    T1   1     10     0
+12     S 2015-04-09 12:31:56 39.23333 -123.1917     TRUE    T1   1     10     0
+13     * 2015-04-09 12:32:00 39.23317 -123.1930     TRUE    T1   1     10     0
+14     S 2015-04-09 12:32:20 39.23233 -123.2053     TRUE    T1   1     10     0
+15     S 2015-04-09 12:32:30 39.23233 -123.2108     TRUE    T1   1     10     0
+16     S 2015-04-09 12:32:42 39.23233 -123.2195     TRUE    T1   1     10     0
+17     1 2015-04-09 12:32:42 39.23233 -123.2195     TRUE    T1   1     10     0
+18     * 2015-04-09 12:33:00 39.23267 -123.2292     TRUE    T1   1     10     0
+19     S 2015-04-09 12:33:43 39.23333 -123.2550     TRUE    T1   1     10     0
+20     * 2015-04-09 12:34:00 39.23300 -123.2637     TRUE    T1   1     10     0
+21     W 2015-04-09 12:34:52 39.23317 -123.2945     TRUE    T1   1     10     2
+22     C 2015-04-09 12:34:56 39.23317 -123.2968     TRUE    T1   1     10     2
+23     * 2015-04-09 12:35:00 39.23317 -123.2985     TRUE    T1   1     10     2
+24     S 2015-04-09 12:35:13 39.23317 -123.3073     TRUE    T1   1     10     2
+25     C 2015-04-09 12:35:32 39.23317 -123.3178     TRUE    T1   1     10     2
+26     * 2015-04-09 12:36:00 39.23333 -123.3337     TRUE    T1   1     10     2
+27     S 2015-04-09 12:36:13 39.23333 -123.3418     TRUE    T1   1     10     2
+28     S 2015-04-09 12:36:26 39.23350 -123.3500     TRUE    T1   1     10     2
+29     t 2015-04-09 12:36:26 39.23350 -123.3500     TRUE    T1   1     10     2
+30     S 2015-04-09 12:36:43 39.23350 -123.3592     TRUE    T1   1     10     2
+31     * 2015-04-09 12:37:01 39.23383 -123.3685     TRUE    T1   1     10     2
+32     S 2015-04-09 12:37:01 39.23400 -123.3697     TRUE    T1   1     10     2
+33     S 2015-04-09 12:37:16 39.23433 -123.3790     TRUE    T1   1     10     2
+34     S 2015-04-09 12:37:37 39.23417 -123.3910     TRUE    T1   1     10     2
+35     W 2015-04-09 12:37:57 39.23400 -123.4033     TRUE    T1   2     10     0
+36     E 2015-04-09 12:38:00 39.23400 -123.4047    FALSE    T1   2     10     0
+37     C 2015-04-09 12:38:00 39.23400 -123.4047    FALSE    T1   2     10     0
+38     * 2015-04-09 12:39:00 39.23417 -123.4400    FALSE    T1   2     10     0
+39     R 2015-04-09 12:40:00 39.23400 -123.4742     TRUE    T1   2     10     0
+40     W 2015-04-09 12:40:28 39.23333 -123.4915     TRUE    T1   2     20     0
+41     C 2015-04-09 12:40:36 39.23317 -123.4960     TRUE    T1   2     20     0
+42     * 2015-04-09 12:41:00 39.23317 -123.5092     TRUE    T1   2     20     0
+43     W 2015-04-09 12:41:08 39.23317 -123.5143     TRUE    T1   1     20     0
+44     * 2015-04-09 12:42:00 39.23267 -123.5433     TRUE    T1   1     20     0
+45     C 2015-04-09 12:42:01 39.23267 -123.5433     TRUE    T1   1     20     0
+46     S 2015-04-09 12:42:13 39.23250 -123.5515     TRUE    T1   1     20     0
+47     * 2015-04-09 12:43:00 39.23233 -123.5778     TRUE    T1   1     20     0
+48     O 2015-04-09 12:43:43 39.23283 -123.6033    FALSE  <NA>   1     20     0
+49     * 2015-04-09 12:44:00 39.23300 -123.6118    FALSE  <NA>   1     20     0
+50     * 2015-04-09 12:45:00 39.24450 -123.6415    FALSE  <NA>   1     20     0
+51     * 2015-04-09 12:46:00 39.22167 -123.6373    FALSE  <NA>   1     20     0
+52     T 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2  NA     NA    NA
+53     V 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2  NA     NA    NA
+54     P 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2  NA     NA    NA
+55     A 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2  NA     NA    NA
+56     W 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2   1     20     0
+57     * 2015-04-09 12:47:00 39.21950 -123.6025     TRUE    T2   1     20     0
+58     * 2015-04-09 12:48:00 39.21783 -123.5682     TRUE    T2   1     20     0
+59     A 2015-04-09 12:48:29 39.21767 -123.5515     TRUE    T2   1     20     0
+60     A 2015-04-09 12:48:36 39.21783 -123.5468     TRUE    T2   1     20     0
+61     * 2015-04-09 12:49:00 39.21783 -123.5333     TRUE    T2   1     20     0
+62     * 2015-04-09 12:50:00 39.21617 -123.4987     TRUE    T2   1     20     0
+63     A 2015-04-09 12:50:32 39.21683 -123.4797     TRUE    T2   1     20     0
+64     * 2015-04-09 12:51:00 39.21733 -123.4653     TRUE    T2   1     20     0
+65     S 2015-04-09 12:51:40 39.21750 -123.4410     TRUE    T2   1     20     0
+66     S 2015-04-09 12:51:55 39.21750 -123.4317     TRUE    T2   1     20     0
+67     * 2015-04-09 12:52:00 39.21733 -123.4293     TRUE    T2   1     20     0
+68     S 2015-04-09 12:52:03 39.21733 -123.4270     TRUE    T2   1     20     0
+69     S 2015-04-09 12:52:04 39.21733 -123.4270     TRUE    T2   1     20     0
+70     S 2015-04-09 12:52:07 39.21733 -123.4258     TRUE    T2   1     20     0
+71     S 2015-04-09 12:52:17 39.21700 -123.4185     TRUE    T2   1     20     0
+72     C 2015-04-09 12:52:39 39.21700 -123.4072     TRUE    T2   1     20     0
+73     S 2015-04-09 12:52:54 39.21700 -123.3982     TRUE    T2   1     20     0
+74     * 2015-04-09 12:53:00 39.21717 -123.3960     TRUE    T2   1     20     0
+75     * 2015-04-09 12:54:00 39.21683 -123.3617     TRUE    T2   1     20     0
+76     V 2015-04-09 12:54:01 39.21683 -123.3605     TRUE    T2   1     20     0
+77     W 2015-04-09 12:54:04 39.21683 -123.3605     TRUE    T2   2     20     0
+78     S 2015-04-09 12:54:34 39.21667 -123.3422     TRUE    T2   2     20     0
+79     * 2015-04-09 12:55:00 39.21667 -123.3285     TRUE    T2   2     20     0
+80     S 2015-04-09 12:55:20 39.21700 -123.3172     TRUE    T2   2     20     0
+81     * 2015-04-09 12:56:00 39.21700 -123.2960     TRUE    T2   2     20     0
+82     W 2015-04-09 12:56:40 39.21733 -123.2730     TRUE    T2   2     20     0
+83     C 2015-04-09 12:56:43 39.21717 -123.2718     TRUE    T2   2     20     0
+84     S 2015-04-09 12:56:49 39.21717 -123.2685     TRUE    T2   2     20     0
+85     * 2015-04-09 12:57:00 39.21700 -123.2617     TRUE    T2   2     20     0
+86     s 2015-04-09 12:57:00 39.21700 -123.2617     TRUE    T2   2     20     0
+87     O 2015-04-09 12:57:30 39.21700 -123.2417    FALSE  <NA>   2     20     0
+   HorizSun VertSun  HKR  Haze  Kelp RedTide AltFt SpKnot ObsL ObsB ObsR  Rec
+1        NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+2        NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+3        NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+4        NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+5        NA      NA <NA> FALSE FALSE   FALSE    NA     NA   aa   bb   cc   dd
+6        NA      NA <NA> FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+7         6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+8         6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+9         6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+10        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+11        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+12        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+13        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+14        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+15        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+16        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+17        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+18        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+19        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+20        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+21        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+22        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+23        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+24        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+25        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+26        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+27        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+28        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+29        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+30        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+31        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+32        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+33        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+34        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+35        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+36        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+37        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+38        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+39        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+40        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+41        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+42        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+43        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+44        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+45        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+46        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+47        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+48        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+49        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+50        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+51        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+52       NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+53       NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+54       NA      NA <NA> FALSE FALSE   FALSE    NA     NA   aa   dd   cc   bb
+55       NA      NA <NA> FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+56       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+57       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+58       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+59       12      NA    n FALSE FALSE   FALSE   680    100   aa   dd   cc   bb
+60       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+61       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+62       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+63       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+64       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+65       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+66       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+67       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+68       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+69       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+70       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+71       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+72       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+73       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+74       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+75       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+76       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+77       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+78       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+79       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+80       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+81       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+82       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+83       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+84       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+85       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+86       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+87       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+    VLI  VLO   VB  VRI  VRO Data1 Data2 Data3 Data4 Data5 Data6           Data7
+1  <NA> <NA> <NA> <NA> <NA>  Reco rder:  dd    <NA>  <NA>  <NA>            <NA>
+2  <NA> <NA> <NA> <NA> <NA>  Not  recor ding  molas  <NA>  <NA>            <NA>
+3  <NA> <NA> <NA> <NA> <NA>    T1  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+4     g    g    g    g    g     g     g     g     g     g  <NA>            <NA>
+5     g    g    g    g    g    aa    bb    cc    dd  <NA>  <NA>            <NA>
+6     g    g    g    g    g   650   100  <NA>  <NA>  <NA>  <NA>            <NA>
+7     g    g    g    g    g     n    10     1     0     6  <NA>            <NA>
+8     g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+9     g    g    g    g    g     1    cc    67     6    mn  <NA>            <NA>
+10    g    g    g    g    g     2    bb   -60     6    mn  <NA>            <NA>
+11    g    g    g    g    g  2 cp  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+12    g    g    g    g    g     3    cc    38     2    mn  <NA>            <NA>
+13    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+14    g    g    g    g    g     4    aa   -50     5    mn  <NA>            <NA>
+15    g    g    g    g    g     5    cc    49     4    bm  <NA>            <NA>
+16    g    g    g    g    g     6    cc    42    10    gg    er            <NA>
+17    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>    80    20            <NA>
+18    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+19    g    g    g    g    g     7    aa   -53     5    bm  <NA>            <NA>
+20    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+21    g    g    g    g    g     r    10     1     2     6  <NA>            <NA>
+22    g    g    g    g    g  stre aky r ed ti de     <NA>  <NA>            <NA>
+23    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+24    g    g    g    g    g     8    dd    24     2    bm  <NA>            <NA>
+25    g    g    g    g    g  shar k 11f t      <NA>  <NA>  <NA>            <NA>
+26    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+27    g    g    g    g    g     9    aa   -57     4    mn  <NA>            <NA>
+28    g    g    g    g    g    10    cc    65     5    gg  <NA>            <NA>
+29    g    g    g    g    g    aa   -20    dc     5    90     n            <NA>
+30    g    g    g    g    g    11    bb    87     3    pp  <NA>            <NA>
+31    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+32    g    g    g    g    g    12    bb    82     5    gg  <NA>            <NA>
+33    g    g    g    g    g    13    bb    54     6    pp  <NA>            <NA>
+34    g    g    g    g    g    14    cc    62     2    gg  <NA>            <NA>
+35    g    g    g    g    g     n    10     2     0     6  <NA>            <NA>
+36    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+37    g    g    g    g    g  off  effor t to  circl e on  unide ntifed object  
+38    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+39    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+40    g    g    g    g    g     n    20     2     0     6  <NA>            <NA>
+41    g    g    g    g    g  wate r got  more  blue  <NA>  <NA>            <NA>
+42    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+43    g    g    g    g    g     n    20     1     0     6  <NA>            <NA>
+44    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+45    g    g    g    g    g  fb2s  fb1m  <NA>  <NA>  <NA>  <NA>            <NA>
+46    g    g    g    g    g    15    bb    50     3    mn  <NA>            <NA>
+47    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+48    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+49    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+50    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+51    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+52 <NA> <NA> <NA> <NA> <NA>    T2  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+53    g    g    g    g    g     g     g     g     g     g  <NA>            <NA>
+54    g    g    g    g    g    aa    dd    cc    bb  <NA>  <NA>            <NA>
+55    g    g    g    g    g   650   100  <NA>  <NA>  <NA>  <NA>            <NA>
+56    g    g    g    g    g     n    20     1     0    12  <NA>            <NA>
+57    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+58    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+59    g    g    g    g    g   680   100  <NA>  <NA>  <NA>  <NA>            <NA>
+60    g    g    g    g    g   650   100  <NA>  <NA>  <NA>  <NA>            <NA>
+61    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+62    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+63    g    g    g    g    g   680    90  <NA>  <NA>  <NA>  <NA>            <NA>
+64    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+65    g    g    g    g    g    16    aa   -31     6    mn  <NA>            <NA>
+66    g    g    g    g    g    17    bb   -59     6    bm  <NA>            <NA>
+67    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+68    g    g    g    g    g    18    aa   -62     2    gg  <NA>            <NA>
+69    g    g    g    g    g    19    cc    42     3    bm  <NA>            <NA>
+70    g    g    g    g    g    20    aa   -48     4    bm  <NA>            <NA>
+71    g    g    g    g    g    21    cc    63     6    pp  <NA>            <NA>
+72    g    g    g    g    g  bell y has  some  glar e      <NA>            <NA>
+73    g    g    g    g    g    22    cc    43     2    pp  <NA>            <NA>
+74    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+75    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+76    g    g    p    g    g     g     g     p     g     g  <NA>            <NA>
+77    g    g    p    g    g     n    20     2     0    12  <NA>            <NA>
+78    g    g    p    g    g    23    cc    56     6    mn  <NA>            <NA>
+79    g    g    p    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+80    g    g    p    g    g    24    cc    37     6    mn  <NA>            <NA>
+81    g    g    p    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+82    g    g    p    g    g     r    20     2     0    12  <NA>            <NA>
+83    g    g    p    g    g  patc hy re d tid e      <NA>  <NA>            <NA>
+84    g    g    p    g    g    25    bb   -76     1    pp  <NA>            <NA>
+85    g    g    p    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+86    g    g    p    g    g    25   -70  <NA>  <NA>  <NA>  <NA>            <NA>
+87    g    g    p    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+   EffortDot EventNum          file_das line_num file_type
+1      FALSE        1 airdas_sample.das        1    turtle
+2      FALSE        2 airdas_sample.das        2    turtle
+3       TRUE        3 airdas_sample.das        3    turtle
+4       TRUE        4 airdas_sample.das        4    turtle
+5       TRUE        5 airdas_sample.das        5    turtle
+6       TRUE        6 airdas_sample.das        6    turtle
+7       TRUE        7 airdas_sample.das        7    turtle
+8       TRUE        8 airdas_sample.das        8    turtle
+9       TRUE        9 airdas_sample.das        9    turtle
+10      TRUE       10 airdas_sample.das       10    turtle
+11      TRUE       11 airdas_sample.das       11    turtle
+12      TRUE       12 airdas_sample.das       12    turtle
+13      TRUE       13 airdas_sample.das       13    turtle
+14      TRUE       14 airdas_sample.das       14    turtle
+15      TRUE       15 airdas_sample.das       15    turtle
+16      TRUE       16 airdas_sample.das       16    turtle
+17     FALSE     <NA> airdas_sample.das       17    turtle
+18      TRUE       17 airdas_sample.das       18    turtle
+19      TRUE       18 airdas_sample.das       19    turtle
+20      TRUE       19 airdas_sample.das       20    turtle
+21      TRUE       20 airdas_sample.das       21    turtle
+22      TRUE       21 airdas_sample.das       22    turtle
+23      TRUE       22 airdas_sample.das       23    turtle
+24      TRUE       23 airdas_sample.das       24    turtle
+25      TRUE       24 airdas_sample.das       25    turtle
+26      TRUE       25 airdas_sample.das       26    turtle
+27      TRUE       26 airdas_sample.das       27    turtle
+28      TRUE       27 airdas_sample.das       28    turtle
+29      TRUE       28 airdas_sample.das       29    turtle
+30      TRUE       29 airdas_sample.das       30    turtle
+31      TRUE       30 airdas_sample.das       31    turtle
+32      TRUE       31 airdas_sample.das       32    turtle
+33      TRUE       32 airdas_sample.das       33    turtle
+34      TRUE       34 airdas_sample.das       35    turtle
+35      TRUE       35 airdas_sample.das       36    turtle
+36     FALSE       36 airdas_sample.das       37    turtle
+37     FALSE       37 airdas_sample.das       38    turtle
+38     FALSE       38 airdas_sample.das       39    turtle
+39      TRUE       39 airdas_sample.das       40    turtle
+40      TRUE       40 airdas_sample.das       41    turtle
+41      TRUE       41 airdas_sample.das       42    turtle
+42      TRUE       42 airdas_sample.das       43    turtle
+43      TRUE       43 airdas_sample.das       44    turtle
+44      TRUE       44 airdas_sample.das       45    turtle
+45      TRUE       45 airdas_sample.das       46    turtle
+46      TRUE       46 airdas_sample.das       47    turtle
+47      TRUE       47 airdas_sample.das       48    turtle
+48     FALSE       48 airdas_sample.das       49    turtle
+49     FALSE       49 airdas_sample.das       50    turtle
+50     FALSE       50 airdas_sample.das       51    turtle
+51     FALSE       51 airdas_sample.das       52    turtle
+52      TRUE       52 airdas_sample.das       53    turtle
+53      TRUE       53 airdas_sample.das       54    turtle
+54      TRUE       54 airdas_sample.das       55    turtle
+55      TRUE       55 airdas_sample.das       56    turtle
+56      TRUE       56 airdas_sample.das       57    turtle
+57      TRUE       57 airdas_sample.das       58    turtle
+58      TRUE       58 airdas_sample.das       59    turtle
+59      TRUE       59 airdas_sample.das       60    turtle
+60      TRUE       60 airdas_sample.das       61    turtle
+61      TRUE       61 airdas_sample.das       62    turtle
+62      TRUE       62 airdas_sample.das       63    turtle
+63      TRUE       63 airdas_sample.das       64    turtle
+64      TRUE       64 airdas_sample.das       65    turtle
+65      TRUE       65 airdas_sample.das       66    turtle
+66      TRUE       66 airdas_sample.das       67    turtle
+67      TRUE       67 airdas_sample.das       68    turtle
+68      TRUE       68 airdas_sample.das       69    turtle
+69      TRUE       69 airdas_sample.das       70    turtle
+70      TRUE       70 airdas_sample.das       71    turtle
+71      TRUE       71 airdas_sample.das       72    turtle
+72      TRUE       72 airdas_sample.das       73    turtle
+73      TRUE       73 airdas_sample.das       74    turtle
+74      TRUE       74 airdas_sample.das       75    turtle
+75      TRUE       75 airdas_sample.das       76    turtle
+76      TRUE       76 airdas_sample.das       77    turtle
+77      TRUE       77 airdas_sample.das       78    turtle
+78      TRUE       78 airdas_sample.das       79    turtle
+79      TRUE       79 airdas_sample.das       80    turtle
+80      TRUE       80 airdas_sample.das       81    turtle
+81      TRUE       81 airdas_sample.das       82    turtle
+82      TRUE       82 airdas_sample.das       83    turtle
+83      TRUE       83 airdas_sample.das       84    turtle
+84      TRUE       84 airdas_sample.das       85    turtle
+85      TRUE       85 airdas_sample.das       86    turtle
+86      TRUE       86 airdas_sample.das       87    turtle
+87     FALSE       87 airdas_sample.das       88    turtle
+> 
+> y.read <- airdas_read(y)
+> airdas_process(y.read)
+   Event            DateTime      Lat       Lon OnEffort Trans Bft CCover Jelly
+1      C 2015-04-09 12:30:59 39.23550 -123.1563    FALSE  <NA>  NA     NA    NA
+2      C 2015-04-09 12:30:59 39.23550 -123.1563    FALSE  <NA>  NA     NA    NA
+3      T 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1  NA     NA    NA
+4      V 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1  NA     NA    NA
+5      P 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1  NA     NA    NA
+6      A 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1  NA     NA    NA
+7      W 2015-04-09 12:30:59 39.23550 -123.1563     TRUE    T1   1     10     0
+8      * 2015-04-09 12:31:00 39.23567 -123.1575     TRUE    T1   1     10     0
+9      S 2015-04-09 12:31:35 39.23367 -123.1783     TRUE    T1   1     10     0
+10     S 2015-04-09 12:31:47 39.23350 -123.1857     TRUE    T1   1     10     0
+11     C 2015-04-09 12:31:48 39.23350 -123.1857     TRUE    T1   1     10     0
+12     S 2015-04-09 12:31:56 39.23333 -123.1917     TRUE    T1   1     10     0
+13     * 2015-04-09 12:32:00 39.23317 -123.1930     TRUE    T1   1     10     0
+14     S 2015-04-09 12:32:20 39.23233 -123.2053     TRUE    T1   1     10     0
+15     S 2015-04-09 12:32:30 39.23233 -123.2108     TRUE    T1   1     10     0
+16     S 2015-04-09 12:32:42 39.23233 -123.2195     TRUE    T1   1     10     0
+17     1 2015-04-09 12:32:42 39.23233 -123.2195     TRUE    T1   1     10     0
+18     * 2015-04-09 12:33:00 39.23267 -123.2292     TRUE    T1   1     10     0
+19     S 2015-04-09 12:33:43 39.23333 -123.2550     TRUE    T1   1     10     0
+20     * 2015-04-09 12:34:00 39.23300 -123.2637     TRUE    T1   1     10     0
+21     W 2015-04-09 12:34:52 39.23317 -123.2945     TRUE    T1   1     10     2
+22     C 2015-04-09 12:34:56 39.23317 -123.2968     TRUE    T1   1     10     2
+23     * 2015-04-09 12:35:00 39.23317 -123.2985     TRUE    T1   1     10     2
+24     S 2015-04-09 12:35:13 39.23317 -123.3073     TRUE    T1   1     10     2
+25     C 2015-04-09 12:35:32 39.23317 -123.3178     TRUE    T1   1     10     2
+26     * 2015-04-09 12:36:00 39.23333 -123.3337     TRUE    T1   1     10     2
+27     S 2015-04-09 12:36:13 39.23333 -123.3418     TRUE    T1   1     10     2
+28     S 2015-04-09 12:36:26 39.23350 -123.3500     TRUE    T1   1     10     2
+29     t 2015-04-09 12:36:26 39.23350 -123.3500     TRUE    T1   1     10     2
+30     S 2015-04-09 12:36:43 39.23350 -123.3592     TRUE    T1   1     10     2
+31     * 2015-04-09 12:37:01 39.23383 -123.3685     TRUE    T1   1     10     2
+32     S 2015-04-09 12:37:01 39.23400 -123.3697     TRUE    T1   1     10     2
+33     S 2015-04-09 12:37:16 39.23433 -123.3790     TRUE    T1   1     10     2
+34     S 2015-04-09 12:37:37 39.23417 -123.3910     TRUE    T1   1     10     2
+35     W 2015-04-09 12:37:57 39.23400 -123.4033     TRUE    T1   2     10     0
+36     E 2015-04-09 12:38:00 39.23400 -123.4047    FALSE    T1   2     10     0
+37     C 2015-04-09 12:38:00 39.23400 -123.4047    FALSE    T1   2     10     0
+38     * 2015-04-09 12:39:00 39.23417 -123.4400    FALSE    T1   2     10     0
+39     R 2015-04-09 12:40:00 39.23400 -123.4742     TRUE    T1   2     10     0
+40     W 2015-04-09 12:40:28 39.23333 -123.4915     TRUE    T1   2     20     0
+41     C 2015-04-09 12:40:36 39.23317 -123.4960     TRUE    T1   2     20     0
+42     * 2015-04-09 12:41:00 39.23317 -123.5092     TRUE    T1   2     20     0
+43     W 2015-04-09 12:41:08 39.23317 -123.5143     TRUE    T1   1     20     0
+44     * 2015-04-09 12:42:00 39.23267 -123.5433     TRUE    T1   1     20     0
+45     C 2015-04-09 12:42:01 39.23267 -123.5433     TRUE    T1   1     20     0
+46     S 2015-04-09 12:42:13 39.23250 -123.5515     TRUE    T1   1     20     0
+47     * 2015-04-09 12:43:00 39.23233 -123.5778     TRUE    T1   1     20     0
+48     O 2015-04-09 12:43:43 39.23283 -123.6033    FALSE  <NA>   1     20     0
+49     * 2015-04-09 12:44:00 39.23300 -123.6118    FALSE  <NA>   1     20     0
+50     * 2015-04-09 12:45:00 39.24450 -123.6415    FALSE  <NA>   1     20     0
+51     * 2015-04-09 12:46:00 39.22167 -123.6373    FALSE  <NA>   1     20     0
+52     T 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2  NA     NA    NA
+53     V 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2  NA     NA    NA
+54     P 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2  NA     NA    NA
+55     A 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2  NA     NA    NA
+56     W 2015-04-09 12:46:51 39.22000 -123.6078     TRUE    T2   1     20     0
+57     * 2015-04-09 12:47:00 39.21950 -123.6025     TRUE    T2   1     20     0
+58     * 2015-04-09 12:48:00 39.21783 -123.5682     TRUE    T2   1     20     0
+59     A 2015-04-09 12:48:29 39.21767 -123.5515     TRUE    T2   1     20     0
+60     A 2015-04-09 12:48:36 39.21783 -123.5468     TRUE    T2   1     20     0
+61     * 2015-04-09 12:49:00 39.21783 -123.5333     TRUE    T2   1     20     0
+62     * 2015-04-09 12:50:00 39.21617 -123.4987     TRUE    T2   1     20     0
+63     A 2015-04-09 12:50:32 39.21683 -123.4797     TRUE    T2   1     20     0
+64     * 2015-04-09 12:51:00 39.21733 -123.4653     TRUE    T2   1     20     0
+65     S 2015-04-09 12:51:40 39.21750 -123.4410     TRUE    T2   1     20     0
+66     S 2015-04-09 12:51:55 39.21750 -123.4317     TRUE    T2   1     20     0
+67     * 2015-04-09 12:52:00 39.21733 -123.4293     TRUE    T2   1     20     0
+68     S 2015-04-09 12:52:03 39.21733 -123.4270     TRUE    T2   1     20     0
+69     S 2015-04-09 12:52:04 39.21733 -123.4270     TRUE    T2   1     20     0
+70     S 2015-04-09 12:52:07 39.21733 -123.4258     TRUE    T2   1     20     0
+71     S 2015-04-09 12:52:17 39.21700 -123.4185     TRUE    T2   1     20     0
+72     C 2015-04-09 12:52:39 39.21700 -123.4072     TRUE    T2   1     20     0
+73     S 2015-04-09 12:52:54 39.21700 -123.3982     TRUE    T2   1     20     0
+74     * 2015-04-09 12:53:00 39.21717 -123.3960     TRUE    T2   1     20     0
+75     * 2015-04-09 12:54:00 39.21683 -123.3617     TRUE    T2   1     20     0
+76     V 2015-04-09 12:54:01 39.21683 -123.3605     TRUE    T2   1     20     0
+77     W 2015-04-09 12:54:04 39.21683 -123.3605     TRUE    T2   2     20     0
+78     S 2015-04-09 12:54:34 39.21667 -123.3422     TRUE    T2   2     20     0
+79     * 2015-04-09 12:55:00 39.21667 -123.3285     TRUE    T2   2     20     0
+80     S 2015-04-09 12:55:20 39.21700 -123.3172     TRUE    T2   2     20     0
+81     * 2015-04-09 12:56:00 39.21700 -123.2960     TRUE    T2   2     20     0
+82     W 2015-04-09 12:56:40 39.21733 -123.2730     TRUE    T2   2     20     0
+83     C 2015-04-09 12:56:43 39.21717 -123.2718     TRUE    T2   2     20     0
+84     S 2015-04-09 12:56:49 39.21717 -123.2685     TRUE    T2   2     20     0
+85     * 2015-04-09 12:57:00 39.21700 -123.2617     TRUE    T2   2     20     0
+86     s 2015-04-09 12:57:00 39.21700 -123.2617     TRUE    T2   2     20     0
+87     O 2015-04-09 12:57:30 39.21700 -123.2417    FALSE  <NA>   2     20     0
+   HorizSun VertSun  HKR  Haze  Kelp RedTide AltFt SpKnot ObsL ObsB ObsR  Rec
+1        NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+2        NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+3        NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+4        NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+5        NA      NA <NA> FALSE FALSE   FALSE    NA     NA   aa   bb   cc   dd
+6        NA      NA <NA> FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+7         6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+8         6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+9         6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+10        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+11        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+12        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+13        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+14        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+15        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+16        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+17        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+18        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+19        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+20        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+21        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+22        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+23        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+24        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+25        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+26        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+27        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+28        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+29        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+30        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+31        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+32        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+33        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+34        6      NA    r FALSE FALSE    TRUE   650    100   aa   bb   cc   dd
+35        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+36        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+37        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+38        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+39        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+40        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+41        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+42        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+43        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+44        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+45        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+46        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+47        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+48        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+49        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+50        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+51        6      NA    n FALSE FALSE   FALSE   650    100   aa   bb   cc   dd
+52       NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+53       NA      NA <NA> FALSE FALSE   FALSE    NA     NA <NA> <NA> <NA> <NA>
+54       NA      NA <NA> FALSE FALSE   FALSE    NA     NA   aa   dd   cc   bb
+55       NA      NA <NA> FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+56       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+57       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+58       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+59       12      NA    n FALSE FALSE   FALSE   680    100   aa   dd   cc   bb
+60       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+61       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+62       12      NA    n FALSE FALSE   FALSE   650    100   aa   dd   cc   bb
+63       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+64       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+65       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+66       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+67       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+68       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+69       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+70       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+71       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+72       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+73       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+74       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+75       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+76       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+77       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+78       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+79       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+80       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+81       12      NA    n FALSE FALSE   FALSE   680     90   aa   dd   cc   bb
+82       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+83       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+84       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+85       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+86       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+87       12      NA    r FALSE FALSE    TRUE   680     90   aa   dd   cc   bb
+    VLI  VLO   VB  VRI  VRO Data1 Data2 Data3 Data4 Data5 Data6           Data7
+1  <NA> <NA> <NA> <NA> <NA>  Reco rder:  dd    <NA>  <NA>  <NA>            <NA>
+2  <NA> <NA> <NA> <NA> <NA>  Not  recor ding  molas  <NA>  <NA>            <NA>
+3  <NA> <NA> <NA> <NA> <NA>    T1  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+4     g    g    g    g    g     g     g     g     g     g  <NA>            <NA>
+5     g    g    g    g    g    aa    bb    cc    dd  <NA>  <NA>            <NA>
+6     g    g    g    g    g   650   100  <NA>  <NA>  <NA>  <NA>            <NA>
+7     g    g    g    g    g     n    10     1     0     6  <NA>            <NA>
+8     g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+9     g    g    g    g    g     1    cc    67     6    mn  <NA>            <NA>
+10    g    g    g    g    g     2    bb   -60     6    mn  <NA>            <NA>
+11    g    g    g    g    g  2 cp  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+12    g    g    g    g    g     3    cc    38     2    mn  <NA>            <NA>
+13    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+14    g    g    g    g    g     4    aa   -50     5    mn  <NA>            <NA>
+15    g    g    g    g    g     5    cc    49     4    bm  <NA>            <NA>
+16    g    g    g    g    g     6    cc    42    10    gg    er            <NA>
+17    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>    80    20            <NA>
+18    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+19    g    g    g    g    g     7    aa   -53     5    bm  <NA>            <NA>
+20    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+21    g    g    g    g    g     r    10     1     2     6  <NA>            <NA>
+22    g    g    g    g    g  stre aky r ed ti de     <NA>  <NA>            <NA>
+23    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+24    g    g    g    g    g     8    dd    24     2    bm  <NA>            <NA>
+25    g    g    g    g    g  shar k 11f t      <NA>  <NA>  <NA>            <NA>
+26    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+27    g    g    g    g    g     9    aa   -57     4    mn  <NA>            <NA>
+28    g    g    g    g    g    10    cc    65     5    gg  <NA>            <NA>
+29    g    g    g    g    g    aa   -20    dc     5    90     n            <NA>
+30    g    g    g    g    g    11    bb    87     3    pp  <NA>            <NA>
+31    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+32    g    g    g    g    g    12    bb    82     5    gg  <NA>            <NA>
+33    g    g    g    g    g    13    bb    54     6    pp  <NA>            <NA>
+34    g    g    g    g    g    14    cc    62     2    gg  <NA>            <NA>
+35    g    g    g    g    g     n    10     2     0     6  <NA>            <NA>
+36    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+37    g    g    g    g    g  off  effor t to  circl e on  unide ntifed object  
+38    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+39    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+40    g    g    g    g    g     n    20     2     0     6  <NA>            <NA>
+41    g    g    g    g    g  wate r got  more  blue  <NA>  <NA>            <NA>
+42    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+43    g    g    g    g    g     n    20     1     0     6  <NA>            <NA>
+44    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+45    g    g    g    g    g  fb2s  fb1m  <NA>  <NA>  <NA>  <NA>            <NA>
+46    g    g    g    g    g    15    bb    50     3    mn  <NA>            <NA>
+47    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+48    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+49    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+50    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+51    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+52 <NA> <NA> <NA> <NA> <NA>    T2  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+53    g    g    g    g    g     g     g     g     g     g  <NA>            <NA>
+54    g    g    g    g    g    aa    dd    cc    bb  <NA>  <NA>            <NA>
+55    g    g    g    g    g   650   100  <NA>  <NA>  <NA>  <NA>            <NA>
+56    g    g    g    g    g     n    20     1     0    12  <NA>            <NA>
+57    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+58    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+59    g    g    g    g    g   680   100  <NA>  <NA>  <NA>  <NA>            <NA>
+60    g    g    g    g    g   650   100  <NA>  <NA>  <NA>  <NA>            <NA>
+61    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+62    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+63    g    g    g    g    g   680    90  <NA>  <NA>  <NA>  <NA>            <NA>
+64    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+65    g    g    g    g    g    16    aa   -31     6    mn  <NA>            <NA>
+66    g    g    g    g    g    17    bb   -59     6    bm  <NA>            <NA>
+67    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+68    g    g    g    g    g    18    aa   -62     2    gg  <NA>            <NA>
+69    g    g    g    g    g    19    cc    42     3    bm  <NA>            <NA>
+70    g    g    g    g    g    20    aa   -48     4    bm  <NA>            <NA>
+71    g    g    g    g    g    21    cc    63     6    pp  <NA>            <NA>
+72    g    g    g    g    g  bell y has  some  glar e      <NA>            <NA>
+73    g    g    g    g    g    22    cc    43     2    pp  <NA>            <NA>
+74    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+75    g    g    g    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+76    g    g    p    g    g     g     g     p     g     g  <NA>            <NA>
+77    g    g    p    g    g     n    20     2     0    12  <NA>            <NA>
+78    g    g    p    g    g    23    cc    56     6    mn  <NA>            <NA>
+79    g    g    p    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+80    g    g    p    g    g    24    cc    37     6    mn  <NA>            <NA>
+81    g    g    p    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+82    g    g    p    g    g     r    20     2     0    12  <NA>            <NA>
+83    g    g    p    g    g  patc hy re d tid e      <NA>  <NA>            <NA>
+84    g    g    p    g    g    25    bb   -76     1    pp  <NA>            <NA>
+85    g    g    p    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+86    g    g    p    g    g    25   -70  <NA>  <NA>  <NA>  <NA>            <NA>
+87    g    g    p    g    g  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>            <NA>
+   EffortDot EventNum          file_das line_num file_type
+1      FALSE        1 airdas_sample.das        1    turtle
+2      FALSE        2 airdas_sample.das        2    turtle
+3       TRUE        3 airdas_sample.das        3    turtle
+4       TRUE        4 airdas_sample.das        4    turtle
+5       TRUE        5 airdas_sample.das        5    turtle
+6       TRUE        6 airdas_sample.das        6    turtle
+7       TRUE        7 airdas_sample.das        7    turtle
+8       TRUE        8 airdas_sample.das        8    turtle
+9       TRUE        9 airdas_sample.das        9    turtle
+10      TRUE       10 airdas_sample.das       10    turtle
+11      TRUE       11 airdas_sample.das       11    turtle
+12      TRUE       12 airdas_sample.das       12    turtle
+13      TRUE       13 airdas_sample.das       13    turtle
+14      TRUE       14 airdas_sample.das       14    turtle
+15      TRUE       15 airdas_sample.das       15    turtle
+16      TRUE       16 airdas_sample.das       16    turtle
+17     FALSE     <NA> airdas_sample.das       17    turtle
+18      TRUE       17 airdas_sample.das       18    turtle
+19      TRUE       18 airdas_sample.das       19    turtle
+20      TRUE       19 airdas_sample.das       20    turtle
+21      TRUE       20 airdas_sample.das       21    turtle
+22      TRUE       21 airdas_sample.das       22    turtle
+23      TRUE       22 airdas_sample.das       23    turtle
+24      TRUE       23 airdas_sample.das       24    turtle
+25      TRUE       24 airdas_sample.das       25    turtle
+26      TRUE       25 airdas_sample.das       26    turtle
+27      TRUE       26 airdas_sample.das       27    turtle
+28      TRUE       27 airdas_sample.das       28    turtle
+29      TRUE       28 airdas_sample.das       29    turtle
+30      TRUE       29 airdas_sample.das       30    turtle
+31      TRUE       30 airdas_sample.das       31    turtle
+32      TRUE       31 airdas_sample.das       32    turtle
+33      TRUE       32 airdas_sample.das       33    turtle
+34      TRUE       34 airdas_sample.das       35    turtle
+35      TRUE       35 airdas_sample.das       36    turtle
+36     FALSE       36 airdas_sample.das       37    turtle
+37     FALSE       37 airdas_sample.das       38    turtle
+38     FALSE       38 airdas_sample.das       39    turtle
+39      TRUE       39 airdas_sample.das       40    turtle
+40      TRUE       40 airdas_sample.das       41    turtle
+41      TRUE       41 airdas_sample.das       42    turtle
+42      TRUE       42 airdas_sample.das       43    turtle
+43      TRUE       43 airdas_sample.das       44    turtle
+44      TRUE       44 airdas_sample.das       45    turtle
+45      TRUE       45 airdas_sample.das       46    turtle
+46      TRUE       46 airdas_sample.das       47    turtle
+47      TRUE       47 airdas_sample.das       48    turtle
+48     FALSE       48 airdas_sample.das       49    turtle
+49     FALSE       49 airdas_sample.das       50    turtle
+50     FALSE       50 airdas_sample.das       51    turtle
+51     FALSE       51 airdas_sample.das       52    turtle
+52      TRUE       52 airdas_sample.das       53    turtle
+53      TRUE       53 airdas_sample.das       54    turtle
+54      TRUE       54 airdas_sample.das       55    turtle
+55      TRUE       55 airdas_sample.das       56    turtle
+56      TRUE       56 airdas_sample.das       57    turtle
+57      TRUE       57 airdas_sample.das       58    turtle
+58      TRUE       58 airdas_sample.das       59    turtle
+59      TRUE       59 airdas_sample.das       60    turtle
+60      TRUE       60 airdas_sample.das       61    turtle
+61      TRUE       61 airdas_sample.das       62    turtle
+62      TRUE       62 airdas_sample.das       63    turtle
+63      TRUE       63 airdas_sample.das       64    turtle
+64      TRUE       64 airdas_sample.das       65    turtle
+65      TRUE       65 airdas_sample.das       66    turtle
+66      TRUE       66 airdas_sample.das       67    turtle
+67      TRUE       67 airdas_sample.das       68    turtle
+68      TRUE       68 airdas_sample.das       69    turtle
+69      TRUE       69 airdas_sample.das       70    turtle
+70      TRUE       70 airdas_sample.das       71    turtle
+71      TRUE       71 airdas_sample.das       72    turtle
+72      TRUE       72 airdas_sample.das       73    turtle
+73      TRUE       73 airdas_sample.das       74    turtle
+74      TRUE       74 airdas_sample.das       75    turtle
+75      TRUE       75 airdas_sample.das       76    turtle
+76      TRUE       76 airdas_sample.das       77    turtle
+77      TRUE       77 airdas_sample.das       78    turtle
+78      TRUE       78 airdas_sample.das       79    turtle
+79      TRUE       79 airdas_sample.das       80    turtle
+80      TRUE       80 airdas_sample.das       81    turtle
+81      TRUE       81 airdas_sample.das       82    turtle
+82      TRUE       82 airdas_sample.das       83    turtle
+83      TRUE       83 airdas_sample.das       84    turtle
+84      TRUE       84 airdas_sample.das       85    turtle
+85      TRUE       85 airdas_sample.das       86    turtle
+86      TRUE       86 airdas_sample.das       87    turtle
+87     FALSE       87 airdas_sample.das       88    turtle
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_read")
+> ### * airdas_read
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_read
+> ### Title: Read AirDAS file(s)
+> ### Aliases: airdas_read
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> airdas_read(y, file.type = "turtle")
+   Event EffortDot            DateTime      Lat       Lon Data1 Data2 Data3
+1      C     FALSE 2015-04-09 12:30:59 39.23550 -123.1563  Reco rder:  dd  
+2      C     FALSE 2015-04-09 12:30:59 39.23550 -123.1563  Not  recor ding 
+3      T      TRUE 2015-04-09 12:30:59 39.23550 -123.1563    T1  <NA>  <NA>
+4      V      TRUE 2015-04-09 12:30:59 39.23550 -123.1563     g     g     g
+5      P      TRUE 2015-04-09 12:30:59 39.23550 -123.1563    aa    bb    cc
+6      A      TRUE 2015-04-09 12:30:59 39.23550 -123.1563   650   100  <NA>
+7      W      TRUE 2015-04-09 12:30:59 39.23550 -123.1563     n    10     1
+8      *      TRUE 2015-04-09 12:31:00 39.23567 -123.1575  <NA>  <NA>  <NA>
+9      S      TRUE 2015-04-09 12:31:35 39.23367 -123.1783     1    cc    67
+10     S      TRUE 2015-04-09 12:31:47 39.23350 -123.1857     2    bb   -60
+11     C      TRUE 2015-04-09 12:31:48 39.23350 -123.1857  2 cp  <NA>  <NA>
+12     S      TRUE 2015-04-09 12:31:56 39.23333 -123.1917     3    cc    38
+13     *      TRUE 2015-04-09 12:32:00 39.23317 -123.1930  <NA>  <NA>  <NA>
+14     S      TRUE 2015-04-09 12:32:20 39.23233 -123.2053     4    aa   -50
+15     S      TRUE 2015-04-09 12:32:30 39.23233 -123.2108     5    cc    49
+16     S      TRUE 2015-04-09 12:32:42 39.23233 -123.2195     6    cc    42
+17     1     FALSE                <NA>       NA        NA  <NA>  <NA>  <NA>
+18     *      TRUE 2015-04-09 12:33:00 39.23267 -123.2292  <NA>  <NA>  <NA>
+19     S      TRUE 2015-04-09 12:33:43 39.23333 -123.2550     7    aa   -53
+20     *      TRUE 2015-04-09 12:34:00 39.23300 -123.2637  <NA>  <NA>  <NA>
+21     W      TRUE 2015-04-09 12:34:52 39.23317 -123.2945     r    10     1
+22     C      TRUE 2015-04-09 12:34:56 39.23317 -123.2968  stre aky r ed ti
+23     *      TRUE 2015-04-09 12:35:00 39.23317 -123.2985  <NA>  <NA>  <NA>
+24     S      TRUE 2015-04-09 12:35:13 39.23317 -123.3073     8    dd    24
+25     C      TRUE 2015-04-09 12:35:32 39.23317 -123.3178  shar k 11f t    
+26     *      TRUE 2015-04-09 12:36:00 39.23333 -123.3337  <NA>  <NA>  <NA>
+27     S      TRUE 2015-04-09 12:36:13 39.23333 -123.3418     9    aa   -57
+28     S      TRUE 2015-04-09 12:36:26 39.23350 -123.3500    10    cc    65
+29     t      TRUE 2015-04-09 12:36:26 39.23350 -123.3500    aa   -20    dc
+30     S      TRUE 2015-04-09 12:36:43 39.23350 -123.3592    11    bb    87
+31     *      TRUE 2015-04-09 12:37:01 39.23383 -123.3685  <NA>  <NA>  <NA>
+32     S      TRUE 2015-04-09 12:37:01 39.23400 -123.3697    12    bb    82
+33     S      TRUE 2015-04-09 12:37:16 39.23433 -123.3790    13    bb    54
+34     #      TRUE 2015-04-09 12:37:17 39.23433 -123.3790  <NA>  <NA>  <NA>
+35     S      TRUE 2015-04-09 12:37:37 39.23417 -123.3910    14    cc    62
+36     W      TRUE 2015-04-09 12:37:57 39.23400 -123.4033     n    10     2
+37     E     FALSE 2015-04-09 12:38:00 39.23400 -123.4047  <NA>  <NA>  <NA>
+38     C     FALSE 2015-04-09 12:38:00 39.23400 -123.4047  off  effor t to 
+39     *     FALSE 2015-04-09 12:39:00 39.23417 -123.4400  <NA>  <NA>  <NA>
+40     R      TRUE 2015-04-09 12:40:00 39.23400 -123.4742  <NA>  <NA>  <NA>
+41     W      TRUE 2015-04-09 12:40:28 39.23333 -123.4915     n    20     2
+42     C      TRUE 2015-04-09 12:40:36 39.23317 -123.4960  wate r got  more
+43     *      TRUE 2015-04-09 12:41:00 39.23317 -123.5092  <NA>  <NA>  <NA>
+44     W      TRUE 2015-04-09 12:41:08 39.23317 -123.5143     n    20     1
+45     *      TRUE 2015-04-09 12:42:00 39.23267 -123.5433  <NA>  <NA>  <NA>
+46     C      TRUE 2015-04-09 12:42:01 39.23267 -123.5433  fb2s  fb1m  <NA>
+47     S      TRUE 2015-04-09 12:42:13 39.23250 -123.5515    15    bb    50
+48     *      TRUE 2015-04-09 12:43:00 39.23233 -123.5778  <NA>  <NA>  <NA>
+49     O     FALSE 2015-04-09 12:43:43 39.23283 -123.6033  <NA>  <NA>  <NA>
+50     *     FALSE 2015-04-09 12:44:00 39.23300 -123.6118  <NA>  <NA>  <NA>
+51     *     FALSE 2015-04-09 12:45:00 39.24450 -123.6415  <NA>  <NA>  <NA>
+52     *     FALSE 2015-04-09 12:46:00 39.22167 -123.6373  <NA>  <NA>  <NA>
+53     T      TRUE 2015-04-09 12:46:51 39.22000 -123.6078    T2  <NA>  <NA>
+54     V      TRUE 2015-04-09 12:46:51 39.22000 -123.6078     g     g     g
+55     P      TRUE 2015-04-09 12:46:51 39.22000 -123.6078    aa    dd    cc
+56     A      TRUE 2015-04-09 12:46:51 39.22000 -123.6078   650   100  <NA>
+57     W      TRUE 2015-04-09 12:46:51 39.22000 -123.6078     n    20     1
+58     *      TRUE 2015-04-09 12:47:00 39.21950 -123.6025  <NA>  <NA>  <NA>
+59     *      TRUE 2015-04-09 12:48:00 39.21783 -123.5682  <NA>  <NA>  <NA>
+60     A      TRUE 2015-04-09 12:48:29 39.21767 -123.5515   680   100  <NA>
+61     A      TRUE 2015-04-09 12:48:36 39.21783 -123.5468   650   100  <NA>
+62     *      TRUE 2015-04-09 12:49:00 39.21783 -123.5333  <NA>  <NA>  <NA>
+63     *      TRUE 2015-04-09 12:50:00 39.21617 -123.4987  <NA>  <NA>  <NA>
+64     A      TRUE 2015-04-09 12:50:32 39.21683 -123.4797   680    90  <NA>
+65     *      TRUE 2015-04-09 12:51:00 39.21733 -123.4653  <NA>  <NA>  <NA>
+66     S      TRUE 2015-04-09 12:51:40 39.21750 -123.4410    16    aa   -31
+67     S      TRUE 2015-04-09 12:51:55 39.21750 -123.4317    17    bb   -59
+68     *      TRUE 2015-04-09 12:52:00 39.21733 -123.4293  <NA>  <NA>  <NA>
+69     S      TRUE 2015-04-09 12:52:03 39.21733 -123.4270    18    aa   -62
+70     S      TRUE 2015-04-09 12:52:04 39.21733 -123.4270    19    cc    42
+71     S      TRUE 2015-04-09 12:52:07 39.21733 -123.4258    20    aa   -48
+72     S      TRUE 2015-04-09 12:52:17 39.21700 -123.4185    21    cc    63
+73     C      TRUE 2015-04-09 12:52:39 39.21700 -123.4072  bell y has  some
+74     S      TRUE 2015-04-09 12:52:54 39.21700 -123.3982    22    cc    43
+75     *      TRUE 2015-04-09 12:53:00 39.21717 -123.3960  <NA>  <NA>  <NA>
+76     *      TRUE 2015-04-09 12:54:00 39.21683 -123.3617  <NA>  <NA>  <NA>
+77     V      TRUE 2015-04-09 12:54:01 39.21683 -123.3605     g     g     p
+78     W      TRUE 2015-04-09 12:54:04 39.21683 -123.3605     n    20     2
+79     S      TRUE 2015-04-09 12:54:34 39.21667 -123.3422    23    cc    56
+80     *      TRUE 2015-04-09 12:55:00 39.21667 -123.3285  <NA>  <NA>  <NA>
+81     S      TRUE 2015-04-09 12:55:20 39.21700 -123.3172    24    cc    37
+82     *      TRUE 2015-04-09 12:56:00 39.21700 -123.2960  <NA>  <NA>  <NA>
+83     W      TRUE 2015-04-09 12:56:40 39.21733 -123.2730     r    20     2
+84     C      TRUE 2015-04-09 12:56:43 39.21717 -123.2718  patc hy re d tid
+85     S      TRUE 2015-04-09 12:56:49 39.21717 -123.2685    25    bb   -76
+86     *      TRUE 2015-04-09 12:57:00 39.21700 -123.2617  <NA>  <NA>  <NA>
+87     s      TRUE 2015-04-09 12:57:00 39.21700 -123.2617    25   -70  <NA>
+88     O     FALSE 2015-04-09 12:57:30 39.21700 -123.2417  <NA>  <NA>  <NA>
+   Data4 Data5 Data6           Data7 EventNum          file_das line_num
+1   <NA>  <NA>  <NA>            <NA>        1 airdas_sample.das        1
+2  molas  <NA>  <NA>            <NA>        2 airdas_sample.das        2
+3   <NA>  <NA>  <NA>            <NA>        3 airdas_sample.das        3
+4      g     g  <NA>            <NA>        4 airdas_sample.das        4
+5     dd  <NA>  <NA>            <NA>        5 airdas_sample.das        5
+6   <NA>  <NA>  <NA>            <NA>        6 airdas_sample.das        6
+7      0     6  <NA>            <NA>        7 airdas_sample.das        7
+8   <NA>  <NA>  <NA>            <NA>        8 airdas_sample.das        8
+9      6    mn  <NA>            <NA>        9 airdas_sample.das        9
+10     6    mn  <NA>            <NA>       10 airdas_sample.das       10
+11  <NA>  <NA>  <NA>            <NA>       11 airdas_sample.das       11
+12     2    mn  <NA>            <NA>       12 airdas_sample.das       12
+13  <NA>  <NA>  <NA>            <NA>       13 airdas_sample.das       13
+14     5    mn  <NA>            <NA>       14 airdas_sample.das       14
+15     4    bm  <NA>            <NA>       15 airdas_sample.das       15
+16    10    gg    er            <NA>       16 airdas_sample.das       16
+17  <NA>    80    20            <NA>     <NA> airdas_sample.das       17
+18  <NA>  <NA>  <NA>            <NA>       17 airdas_sample.das       18
+19     5    bm  <NA>            <NA>       18 airdas_sample.das       19
+20  <NA>  <NA>  <NA>            <NA>       19 airdas_sample.das       20
+21     2     6  <NA>            <NA>       20 airdas_sample.das       21
+22 de     <NA>  <NA>            <NA>       21 airdas_sample.das       22
+23  <NA>  <NA>  <NA>            <NA>       22 airdas_sample.das       23
+24     2    bm  <NA>            <NA>       23 airdas_sample.das       24
+25  <NA>  <NA>  <NA>            <NA>       24 airdas_sample.das       25
+26  <NA>  <NA>  <NA>            <NA>       25 airdas_sample.das       26
+27     4    mn  <NA>            <NA>       26 airdas_sample.das       27
+28     5    gg  <NA>            <NA>       27 airdas_sample.das       28
+29     5    90     n            <NA>       28 airdas_sample.das       29
+30     3    pp  <NA>            <NA>       29 airdas_sample.das       30
+31  <NA>  <NA>  <NA>            <NA>       30 airdas_sample.das       31
+32     5    gg  <NA>            <NA>       31 airdas_sample.das       32
+33     6    pp  <NA>            <NA>       32 airdas_sample.das       33
+34  <NA>  <NA>  <NA>            <NA>       33 airdas_sample.das       34
+35     2    gg  <NA>            <NA>       34 airdas_sample.das       35
+36     0     6  <NA>            <NA>       35 airdas_sample.das       36
+37  <NA>  <NA>  <NA>            <NA>       36 airdas_sample.das       37
+38 circl e on  unide ntifed object         37 airdas_sample.das       38
+39  <NA>  <NA>  <NA>            <NA>       38 airdas_sample.das       39
+40  <NA>  <NA>  <NA>            <NA>       39 airdas_sample.das       40
+41     0     6  <NA>            <NA>       40 airdas_sample.das       41
+42  blue  <NA>  <NA>            <NA>       41 airdas_sample.das       42
+43  <NA>  <NA>  <NA>            <NA>       42 airdas_sample.das       43
+44     0     6  <NA>            <NA>       43 airdas_sample.das       44
+45  <NA>  <NA>  <NA>            <NA>       44 airdas_sample.das       45
+46  <NA>  <NA>  <NA>            <NA>       45 airdas_sample.das       46
+47     3    mn  <NA>            <NA>       46 airdas_sample.das       47
+48  <NA>  <NA>  <NA>            <NA>       47 airdas_sample.das       48
+49  <NA>  <NA>  <NA>            <NA>       48 airdas_sample.das       49
+50  <NA>  <NA>  <NA>            <NA>       49 airdas_sample.das       50
+51  <NA>  <NA>  <NA>            <NA>       50 airdas_sample.das       51
+52  <NA>  <NA>  <NA>            <NA>       51 airdas_sample.das       52
+53  <NA>  <NA>  <NA>            <NA>       52 airdas_sample.das       53
+54     g     g  <NA>            <NA>       53 airdas_sample.das       54
+55    bb  <NA>  <NA>            <NA>       54 airdas_sample.das       55
+56  <NA>  <NA>  <NA>            <NA>       55 airdas_sample.das       56
+57     0    12  <NA>            <NA>       56 airdas_sample.das       57
+58  <NA>  <NA>  <NA>            <NA>       57 airdas_sample.das       58
+59  <NA>  <NA>  <NA>            <NA>       58 airdas_sample.das       59
+60  <NA>  <NA>  <NA>            <NA>       59 airdas_sample.das       60
+61  <NA>  <NA>  <NA>            <NA>       60 airdas_sample.das       61
+62  <NA>  <NA>  <NA>            <NA>       61 airdas_sample.das       62
+63  <NA>  <NA>  <NA>            <NA>       62 airdas_sample.das       63
+64  <NA>  <NA>  <NA>            <NA>       63 airdas_sample.das       64
+65  <NA>  <NA>  <NA>            <NA>       64 airdas_sample.das       65
+66     6    mn  <NA>            <NA>       65 airdas_sample.das       66
+67     6    bm  <NA>            <NA>       66 airdas_sample.das       67
+68  <NA>  <NA>  <NA>            <NA>       67 airdas_sample.das       68
+69     2    gg  <NA>            <NA>       68 airdas_sample.das       69
+70     3    bm  <NA>            <NA>       69 airdas_sample.das       70
+71     4    bm  <NA>            <NA>       70 airdas_sample.das       71
+72     6    pp  <NA>            <NA>       71 airdas_sample.das       72
+73  glar e      <NA>            <NA>       72 airdas_sample.das       73
+74     2    pp  <NA>            <NA>       73 airdas_sample.das       74
+75  <NA>  <NA>  <NA>            <NA>       74 airdas_sample.das       75
+76  <NA>  <NA>  <NA>            <NA>       75 airdas_sample.das       76
+77     g     g  <NA>            <NA>       76 airdas_sample.das       77
+78     0    12  <NA>            <NA>       77 airdas_sample.das       78
+79     6    mn  <NA>            <NA>       78 airdas_sample.das       79
+80  <NA>  <NA>  <NA>            <NA>       79 airdas_sample.das       80
+81     6    mn  <NA>            <NA>       80 airdas_sample.das       81
+82  <NA>  <NA>  <NA>            <NA>       81 airdas_sample.das       82
+83     0    12  <NA>            <NA>       82 airdas_sample.das       83
+84 e      <NA>  <NA>            <NA>       83 airdas_sample.das       84
+85     1    pp  <NA>            <NA>       84 airdas_sample.das       85
+86  <NA>  <NA>  <NA>            <NA>       85 airdas_sample.das       86
+87  <NA>  <NA>  <NA>            <NA>       86 airdas_sample.das       87
+88  <NA>  <NA>  <NA>            <NA>       87 airdas_sample.das       88
+   file_type
+1     turtle
+2     turtle
+3     turtle
+4     turtle
+5     turtle
+6     turtle
+7     turtle
+8     turtle
+9     turtle
+10    turtle
+11    turtle
+12    turtle
+13    turtle
+14    turtle
+15    turtle
+16    turtle
+17    turtle
+18    turtle
+19    turtle
+20    turtle
+21    turtle
+22    turtle
+23    turtle
+24    turtle
+25    turtle
+26    turtle
+27    turtle
+28    turtle
+29    turtle
+30    turtle
+31    turtle
+32    turtle
+33    turtle
+34    turtle
+35    turtle
+36    turtle
+37    turtle
+38    turtle
+39    turtle
+40    turtle
+41    turtle
+42    turtle
+43    turtle
+44    turtle
+45    turtle
+46    turtle
+47    turtle
+48    turtle
+49    turtle
+50    turtle
+51    turtle
+52    turtle
+53    turtle
+54    turtle
+55    turtle
+56    turtle
+57    turtle
+58    turtle
+59    turtle
+60    turtle
+61    turtle
+62    turtle
+63    turtle
+64    turtle
+65    turtle
+66    turtle
+67    turtle
+68    turtle
+69    turtle
+70    turtle
+71    turtle
+72    turtle
+73    turtle
+74    turtle
+75    turtle
+76    turtle
+77    turtle
+78    turtle
+79    turtle
+80    turtle
+81    turtle
+82    turtle
+83    turtle
+84    turtle
+85    turtle
+86    turtle
+87    turtle
+88    turtle
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("airdas_sight")
+> ### * airdas_sight
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: airdas_sight
+> ### Title: Aerial DAS sightings
+> ### Aliases: airdas_sight airdas_sight.data.frame airdas_sight.airdas_df
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> y.proc <- airdas_process(y)
+> 
+> airdas_sight(y.proc)
+   Event            DateTime      Lat       Lon OnEffort Trans Bft CCover Jelly
+1      S 2015-04-09 12:31:35 39.23367 -123.1783     TRUE    T1   1     10     0
+2      S 2015-04-09 12:31:47 39.23350 -123.1857     TRUE    T1   1     10     0
+3      S 2015-04-09 12:31:56 39.23333 -123.1917     TRUE    T1   1     10     0
+4      S 2015-04-09 12:32:20 39.23233 -123.2053     TRUE    T1   1     10     0
+5      S 2015-04-09 12:32:30 39.23233 -123.2108     TRUE    T1   1     10     0
+6      S 2015-04-09 12:32:42 39.23233 -123.2195     TRUE    T1   1     10     0
+7      S 2015-04-09 12:32:42 39.23233 -123.2195     TRUE    T1   1     10     0
+8      S 2015-04-09 12:33:43 39.23333 -123.2550     TRUE    T1   1     10     0
+9      S 2015-04-09 12:35:13 39.23317 -123.3073     TRUE    T1   1     10     2
+10     S 2015-04-09 12:36:13 39.23333 -123.3418     TRUE    T1   1     10     2
+11     S 2015-04-09 12:36:26 39.23350 -123.3500     TRUE    T1   1     10     2
+12     t 2015-04-09 12:36:26 39.23350 -123.3500     TRUE    T1   1     10     2
+13     S 2015-04-09 12:36:43 39.23350 -123.3592     TRUE    T1   1     10     2
+14     S 2015-04-09 12:37:01 39.23400 -123.3697     TRUE    T1   1     10     2
+15     S 2015-04-09 12:37:16 39.23433 -123.3790     TRUE    T1   1     10     2
+16     S 2015-04-09 12:37:37 39.23417 -123.3910     TRUE    T1   1     10     2
+17     S 2015-04-09 12:42:13 39.23250 -123.5515     TRUE    T1   1     20     0
+18     S 2015-04-09 12:51:40 39.21750 -123.4410     TRUE    T2   1     20     0
+19     S 2015-04-09 12:51:55 39.21750 -123.4317     TRUE    T2   1     20     0
+20     S 2015-04-09 12:52:03 39.21733 -123.4270     TRUE    T2   1     20     0
+21     S 2015-04-09 12:52:04 39.21733 -123.4270     TRUE    T2   1     20     0
+22     S 2015-04-09 12:52:07 39.21733 -123.4258     TRUE    T2   1     20     0
+23     S 2015-04-09 12:52:17 39.21700 -123.4185     TRUE    T2   1     20     0
+24     S 2015-04-09 12:52:54 39.21700 -123.3982     TRUE    T2   1     20     0
+25     S 2015-04-09 12:54:34 39.21667 -123.3422     TRUE    T2   2     20     0
+26     S 2015-04-09 12:55:20 39.21700 -123.3172     TRUE    T2   2     20     0
+27     S 2015-04-09 12:56:49 39.21717 -123.2685     TRUE    T2   2     20     0
+28     s 2015-04-09 12:57:00 39.21700 -123.2617     TRUE    T2   2     20     0
+   HorizSun VertSun HKR  Haze  Kelp RedTide AltFt SpKnot ObsL ObsB ObsR Rec VLI
+1         6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+2         6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+3         6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+4         6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+5         6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+6         6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+7         6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+8         6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+9         6      NA   r FALSE FALSE    TRUE   650    100   aa   bb   cc  dd   g
+10        6      NA   r FALSE FALSE    TRUE   650    100   aa   bb   cc  dd   g
+11        6      NA   r FALSE FALSE    TRUE   650    100   aa   bb   cc  dd   g
+12        6      NA   r FALSE FALSE    TRUE   650    100   aa   bb   cc  dd   g
+13        6      NA   r FALSE FALSE    TRUE   650    100   aa   bb   cc  dd   g
+14        6      NA   r FALSE FALSE    TRUE   650    100   aa   bb   cc  dd   g
+15        6      NA   r FALSE FALSE    TRUE   650    100   aa   bb   cc  dd   g
+16        6      NA   r FALSE FALSE    TRUE   650    100   aa   bb   cc  dd   g
+17        6      NA   n FALSE FALSE   FALSE   650    100   aa   bb   cc  dd   g
+18       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+19       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+20       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+21       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+22       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+23       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+24       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+25       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+26       12      NA   n FALSE FALSE   FALSE   680     90   aa   dd   cc  bb   g
+27       12      NA   r FALSE FALSE    TRUE   680     90   aa   dd   cc  bb   g
+28       12      NA   r FALSE FALSE    TRUE   680     90   aa   dd   cc  bb   g
+   VLO VB VRI VRO EffortDot EventNum          file_das line_num file_type
+1    g  g   g   g      TRUE        9 airdas_sample.das        9    turtle
+2    g  g   g   g      TRUE       10 airdas_sample.das       10    turtle
+3    g  g   g   g      TRUE       12 airdas_sample.das       12    turtle
+4    g  g   g   g      TRUE       14 airdas_sample.das       14    turtle
+5    g  g   g   g      TRUE       15 airdas_sample.das       15    turtle
+6    g  g   g   g      TRUE       16 airdas_sample.das       16    turtle
+7    g  g   g   g      TRUE       16 airdas_sample.das       16    turtle
+8    g  g   g   g      TRUE       18 airdas_sample.das       19    turtle
+9    g  g   g   g      TRUE       23 airdas_sample.das       24    turtle
+10   g  g   g   g      TRUE       26 airdas_sample.das       27    turtle
+11   g  g   g   g      TRUE       27 airdas_sample.das       28    turtle
+12   g  g   g   g      TRUE       28 airdas_sample.das       29    turtle
+13   g  g   g   g      TRUE       29 airdas_sample.das       30    turtle
+14   g  g   g   g      TRUE       31 airdas_sample.das       32    turtle
+15   g  g   g   g      TRUE       32 airdas_sample.das       33    turtle
+16   g  g   g   g      TRUE       34 airdas_sample.das       35    turtle
+17   g  g   g   g      TRUE       46 airdas_sample.das       47    turtle
+18   g  g   g   g      TRUE       65 airdas_sample.das       66    turtle
+19   g  g   g   g      TRUE       66 airdas_sample.das       67    turtle
+20   g  g   g   g      TRUE       68 airdas_sample.das       69    turtle
+21   g  g   g   g      TRUE       69 airdas_sample.das       70    turtle
+22   g  g   g   g      TRUE       70 airdas_sample.das       71    turtle
+23   g  g   g   g      TRUE       71 airdas_sample.das       72    turtle
+24   g  g   g   g      TRUE       73 airdas_sample.das       74    turtle
+25   g  p   g   g      TRUE       78 airdas_sample.das       79    turtle
+26   g  p   g   g      TRUE       80 airdas_sample.das       81    turtle
+27   g  p   g   g      TRUE       84 airdas_sample.das       85    turtle
+28   g  p   g   g      TRUE       86 airdas_sample.das       87    turtle
+   SightNo  Obs Angle SightStd Mixed SpCode GsTotal GsSp TurtleSize
+1        1   cc    67     TRUE FALSE     mn       6    6         NA
+2        2   bb   -60     TRUE FALSE     mn       6    6         NA
+3        3   cc    38     TRUE FALSE     mn       2    2         NA
+4        4   aa   -50     TRUE FALSE     mn       5    5         NA
+5        5   cc    49     TRUE FALSE     bm       4    4         NA
+6        6   cc    42     TRUE  TRUE     gg      10    8         NA
+7        6   cc    42     TRUE  TRUE     er      10    2         NA
+8        7   aa   -53     TRUE FALSE     bm       5    5         NA
+9        8   dd    24     TRUE FALSE     bm       2    2         NA
+10       9   aa   -57     TRUE FALSE     mn       4    4         NA
+11      10   cc    65     TRUE FALSE     gg       5    5         NA
+12    <NA>   aa   -20     TRUE FALSE     dc       1    1          5
+13      11   bb    87     TRUE FALSE     pp       3    3         NA
+14      12   bb    82     TRUE FALSE     gg       5    5         NA
+15      13   bb    54     TRUE FALSE     pp       6    6         NA
+16      14   cc    62     TRUE FALSE     gg       2    2         NA
+17      15   bb    50     TRUE FALSE     mn       3    3         NA
+18      16   aa   -31     TRUE FALSE     mn       6    6         NA
+19      17   bb   -59     TRUE FALSE     bm       6    6         NA
+20      18   aa   -62     TRUE FALSE     gg       2    2         NA
+21      19   cc    42     TRUE FALSE     bm       3    3         NA
+22      20   aa   -48     TRUE FALSE     bm       4    4         NA
+23      21   cc    63     TRUE FALSE     pp       6    6         NA
+24      22   cc    43     TRUE FALSE     pp       2    2         NA
+25      23   cc    56     TRUE FALSE     mn       6    6         NA
+26      24   cc    37     TRUE FALSE     mn       6    6         NA
+27      25   bb   -76     TRUE FALSE     pp       1    1         NA
+28      25 <NA>   -70       NA    NA   <NA>      NA   NA         NA
+   TurtleDirection TurtleTail
+1               NA       <NA>
+2               NA       <NA>
+3               NA       <NA>
+4               NA       <NA>
+5               NA       <NA>
+6               NA       <NA>
+7               NA       <NA>
+8               NA       <NA>
+9               NA       <NA>
+10              NA       <NA>
+11              NA       <NA>
+12              90          n
+13              NA       <NA>
+14              NA       <NA>
+15              NA       <NA>
+16              NA       <NA>
+17              NA       <NA>
+18              NA       <NA>
+19              NA       <NA>
+20              NA       <NA>
+21              NA       <NA>
+22              NA       <NA>
+23              NA       <NA>
+24              NA       <NA>
+25              NA       <NA>
+26              NA       <NA>
+27              NA       <NA>
+28              NA       <NA>
+> 
+> 
+> 
+> 
+> cleanEx()
+> nameEx("subsetting")
+> ### * subsetting
+> 
+> flush(stderr()); flush(stdout())
+> 
+> ### Name: subsetting
+> ### Title: Subsetting objects created using swfscAirDAS
+> ### Aliases: subsetting [.airdas_dfr $<-.airdas_dfr [<-.airdas_dfr
+> ###   [[<-.airdas_dfr [.airdas_df $<-.airdas_df [<-.airdas_df
+> ###   [[<-.airdas_df
+> 
+> ### ** Examples
+> 
+> y <- system.file("airdas_sample.das", package = "swfscAirDAS")
+> y.read <- airdas_read(y)
+> 
+> # All return a data frame:
+> class(y.read[1:10, ])
+[1] "data.frame"
+> class(y.read[, 1:10])
+[1] "data.frame"
+> 
+> y.df <- y.read
+> y.df[, 1] <- "a"
+> class(y.df)
+[1] "data.frame"
+> 
+> y.df <- y.read
+> y.df$Event <- "a"
+> class(y.df)
+[1] "data.frame"
+> 
+> y.df <- y.read
+> y.df[["Event"]] <- "a"
+> class(y.df)
+[1] "data.frame"
+> 
+> 
+> 
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  4.91 0.31 5.31 NA NA 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

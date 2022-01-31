@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Southwest Fisheries Science Center Shipboard DAS Data Processing</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+<h1> Southwest Fisheries Science Center Shipboard DAS Data Processing
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;swfscDAS&rsquo; version 0.6.1</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="swfscDAS-package.html">swfscDAS-package</a></td>
+<td>Southwest Fisheries Science Center DAS</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">$&lt;-.das_df</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">$&lt;-.das_dfr</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscAirDAS-internals.html">.chop_condition_eff</a></td>
+<td>Internal functions for swfscAirDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscAirDAS-internals.html">.chop_equallength_eff</a></td>
+<td>Internal functions for swfscAirDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscAirDAS-internals.html">.dist_from_prev</a></td>
+<td>Internal functions for swfscAirDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscAirDAS-internals.html">.process_chr</a></td>
+<td>Internal functions for swfscAirDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscAirDAS-internals.html">.process_num</a></td>
+<td>Internal functions for swfscAirDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscAirDAS-internals.html">.segdata_aggr</a></td>
+<td>Internal functions for swfscAirDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscAirDAS-internals.html">.segdata_proc</a></td>
+<td>Internal functions for swfscAirDAS</td></tr>
+<tr><td style="width: 25%;"><a href="as_das_df.html">as_das_df</a></td>
+<td>Coerce object to a das_df object</td></tr>
+<tr><td style="width: 25%;"><a href="as_das_df.html">as_das_df.das_df</a></td>
+<td>Coerce object to a das_df object</td></tr>
+<tr><td style="width: 25%;"><a href="as_das_df.html">as_das_df.data.frame</a></td>
+<td>Coerce object to a das_df object</td></tr>
+<tr><td style="width: 25%;"><a href="as_das_dfr.html">as_das_dfr</a></td>
+<td>Coerce object to a das_dfr object</td></tr>
+<tr><td style="width: 25%;"><a href="as_das_dfr.html">as_das_dfr.das_dfr</a></td>
+<td>Coerce object to a das_dfr object</td></tr>
+<tr><td style="width: 25%;"><a href="as_das_dfr.html">as_das_dfr.data.frame</a></td>
+<td>Coerce object to a das_dfr object</td></tr>
+<tr><td style="width: 25%;"><a href="das_check.html">das_check</a></td>
+<td>Check DAS file</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_condition.html">das_chop_condition</a></td>
+<td>Chop DAS data - condition</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_condition.html">das_chop_condition.das_df</a></td>
+<td>Chop DAS data - condition</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_condition.html">das_chop_condition.data.frame</a></td>
+<td>Chop DAS data - condition</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_equallength.html">das_chop_equallength</a></td>
+<td>Chop DAS data - equal length</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_equallength.html">das_chop_equallength.das_df</a></td>
+<td>Chop DAS data - equal length</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_equallength.html">das_chop_equallength.data.frame</a></td>
+<td>Chop DAS data - equal length</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_section.html">das_chop_section</a></td>
+<td>Chop DAS data - section</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_section.html">das_chop_section.das_df</a></td>
+<td>Chop DAS data - section</td></tr>
+<tr><td style="width: 25%;"><a href="das_chop_section.html">das_chop_section.data.frame</a></td>
+<td>Chop DAS data - section</td></tr>
+<tr><td style="width: 25%;"><a href="das_comments.html">das_comments</a></td>
+<td>Extract comments from DAS data</td></tr>
+<tr><td style="width: 25%;"><a href="das_comments.html">das_comments.das_df</a></td>
+<td>Extract comments from DAS data</td></tr>
+<tr><td style="width: 25%;"><a href="das_comments.html">das_comments.das_dfr</a></td>
+<td>Extract comments from DAS data</td></tr>
+<tr><td style="width: 25%;"><a href="das_comments.html">das_comments.data.frame</a></td>
+<td>Extract comments from DAS data</td></tr>
+<tr><td style="width: 25%;"><a href="das_df-class.html">das_df</a></td>
+<td>'das_df' class</td></tr>
+<tr><td style="width: 25%;"><a href="das_df-class.html">das_df-class</a></td>
+<td>'das_df' class</td></tr>
+<tr><td style="width: 25%;"><a href="das_dfr-class.html">das_dfr</a></td>
+<td>'das_dfr' class</td></tr>
+<tr><td style="width: 25%;"><a href="das_dfr-class.html">das_dfr-class</a></td>
+<td>'das_dfr' class</td></tr>
+<tr><td style="width: 25%;"><a href="das_effort.html">das_effort</a></td>
+<td>Summarize DAS effort</td></tr>
+<tr><td style="width: 25%;"><a href="das_effort.html">das_effort.das_df</a></td>
+<td>Summarize DAS effort</td></tr>
+<tr><td style="width: 25%;"><a href="das_effort.html">das_effort.data.frame</a></td>
+<td>Summarize DAS effort</td></tr>
+<tr><td style="width: 25%;"><a href="das_effort_sight.html">das_effort_sight</a></td>
+<td>Summarize DAS sightings by effort segment</td></tr>
+<tr><td style="width: 25%;"><a href="das_effort_strata.html">das_effort_strata</a></td>
+<td>Split effort by strata</td></tr>
+<tr><td style="width: 25%;"><a href="das_effort_strata.html">das_effort_strata.das_df</a></td>
+<td>Split effort by strata</td></tr>
+<tr><td style="width: 25%;"><a href="das_effort_strata.html">das_effort_strata.data.frame</a></td>
+<td>Split effort by strata</td></tr>
+<tr><td style="width: 25%;"><a href="das_format_pdf.html">das_format_pdf</a></td>
+<td>DAS format requirements</td></tr>
+<tr><td style="width: 25%;"><a href="das_intersects_strata.html">das_intersects_strata</a></td>
+<td>DAS strata - points</td></tr>
+<tr><td style="width: 25%;"><a href="das_intersects_strata.html">das_intersects_strata.data.frame</a></td>
+<td>DAS strata - points</td></tr>
+<tr><td style="width: 25%;"><a href="das_intersects_strata.html">das_intersects_strata.list</a></td>
+<td>DAS strata - points</td></tr>
+<tr><td style="width: 25%;"><a href="das_process.html">das_process</a></td>
+<td>Process DAS data</td></tr>
+<tr><td style="width: 25%;"><a href="das_process.html">das_process.character</a></td>
+<td>Process DAS data</td></tr>
+<tr><td style="width: 25%;"><a href="das_process.html">das_process.das_dfr</a></td>
+<td>Process DAS data</td></tr>
+<tr><td style="width: 25%;"><a href="das_process.html">das_process.data.frame</a></td>
+<td>Process DAS data</td></tr>
+<tr><td style="width: 25%;"><a href="das_read.html">das_read</a></td>
+<td>Read DAS file(s)</td></tr>
+<tr><td style="width: 25%;"><a href="das_segdata.html">das_segdata</a></td>
+<td>Summarize DAS data for a continuous effort section</td></tr>
+<tr><td style="width: 25%;"><a href="das_segdata.html">das_segdata.das_df</a></td>
+<td>Summarize DAS data for a continuous effort section</td></tr>
+<tr><td style="width: 25%;"><a href="das_segdata.html">das_segdata.data.frame</a></td>
+<td>Summarize DAS data for a continuous effort section</td></tr>
+<tr><td style="width: 25%;"><a href="das_sight.html">das_sight</a></td>
+<td>DAS sightings</td></tr>
+<tr><td style="width: 25%;"><a href="das_sight.html">das_sight.das_df</a></td>
+<td>DAS sightings</td></tr>
+<tr><td style="width: 25%;"><a href="das_sight.html">das_sight.data.frame</a></td>
+<td>DAS sightings</td></tr>
+<tr><td style="width: 25%;"><a href="distance_greatcircle.html">distance_greatcircle</a></td>
+<td>Calculate great-circle distance</td></tr>
+<tr><td style="width: 25%;"><a href="randpicks_convert.html">randpicks_convert</a></td>
+<td>Convert randpicks file</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">subsetting</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscAirDAS-internals.html">swfscAirDAS-internals</a></td>
+<td>Internal functions for swfscAirDAS</td></tr>
+<tr><td style="width: 25%;"><a href="swfscDAS-package.html">swfscDAS</a></td>
+<td>Southwest Fisheries Science Center DAS</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">[.das_df</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">[.das_dfr</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">[&lt;-.das_df</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">[&lt;-.das_dfr</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">[[&lt;-.das_df</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+<tr><td style="width: 25%;"><a href="subsetting.html">[[&lt;-.das_dfr</a></td>
+<td>Subsetting objects created using swfscDAS</td></tr>
+</table>
+</div></body></html>

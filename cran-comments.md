@@ -1,7 +1,7 @@
 ## Release summary
-Bug fixes, fix NOTEs from CRAN checks
+Bug fixes
 
-## Test environments (R-release = v4.1.0)
+## Test environments (R-release = v4.1.2)
 * Windows 10, R-release (local)
 * win-builder (devel)
 * windows-latest (Microsoft Windows Server 2019, on github actions) R-release

@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Summarize DAS sightings by effort segment</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for das_effort_sight {swfscDAS}"><tr><td>das_effort_sight {swfscDAS}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Summarize DAS sightings by effort segment</h2>
+
+<h3>Description</h3>
+
+<p>Summarize number of sightings and animals for selected species by segment
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+das_effort_sight(
+  x.list,
+  sp.codes,
+  sp.events = c("S", "G", "K", "M", "t", "p"),
+  gs.columns = c("GsSpBest", "GsSpLow", "GsSpHigh")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x.list</code></td>
+<td>
+<p>output of <code><a href="../../swfscDAS/help/das_effort.html">das_effort</a></code>; a list of three data frames
+named 'segdata', 'sightinfo', and 'randpicks', respectively</p>
+</td></tr>
+<tr valign="top"><td><code>sp.codes</code></td>
+<td>
+<p>character; species code(s) to include in segdata output.
+These must exactly match the species codes in the data,
+such as including leading zeros</p>
+</td></tr>
+<tr valign="top"><td><code>sp.events</code></td>
+<td>
+<p>character; event code(s) to include in the sightinfo output.
+This argument supersedes the 'included' value when determining
+whether a sighting is included in the segment summaries.
+Must be one or more of: &quot;S&quot;, &quot;K&quot;, &quot;M&quot;, &quot;G&quot;, &quot;t&quot;, &quot;p&quot; (case-sensitive).
+The default is that all of these event codes are kept</p>
+</td></tr>
+<tr valign="top"><td><code>gs.columns</code></td>
+<td>
+<p>character; the column(s) to use to get the group size
+values that will be summarized in the segdata output.
+Must be one or more of 'GsSpBest', 'GsSpLow', and 'GsSpBest' (case-sensitive).
+See Details section for more information</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This function takes the output of <code><a href="../../swfscDAS/help/das_effort.html">das_effort</a></code> and
+adds columns for the number of sightings (nSI) and number of animals (ANI)
+for selected species (selected via <code>sp.codes</code>) for each segment
+to the segdata element of <code>x.list</code>.
+However, only sightings with an included value of <code>TRUE</code>
+(included is a column in sightinfo) are included in the summaries.
+Having this step separate from <code><a href="../../swfscDAS/help/das_effort.html">das_effort</a></code> allows users to
+personalize the included values as desired for their analysis.
+</p>
+<p>The ANI columns are the sum of the 'GsSp...' column(s) from
+<code><a href="../../swfscDAS/help/das_sight.html">das_sight</a></code> specified using <code>gs.columns</code>.
+If <code>gs.columns</code> specifies more than one column,
+then the secondary columns will only be used if
+the values for the previous columns are <code>NA</code>.
+For instance, if <code>gs.columns = c('GsSpBest', 'GsSpLow')</code>,
+then for each row in sightinfo, the value from GsSpLow
+will be used only if the value from GsSpBest is <code>NA</code>
+</p>
+
+
+<h3>Value</h3>
+
+<p>A list, identical to <code>x.list</code> except for
+1) the nSI and ANI columns added to <code>x.list$segdata</code>,
+one each for each element of <code>sp.codes</code>, and
+2) the 'included' column of <code>x.list$sightinfo</code>, which has been set as
+<code>FALSE</code> for sightings of species not listed in <code>sp.codes</code>.
+Thus, the 'included' column in the output accurately reflects
+the sightings that were included in the effort segment summaries
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+y &lt;- system.file("das_sample.das", package = "swfscDAS")
+y.proc &lt;- das_process(y)
+y.eff.cond &lt;- das_effort(
+  y.proc, method = "condition", conditions = "Bft", seg.min.km = 0.05,
+  num.cores = 1
+)
+
+das_effort_sight(y.eff.cond, sp.codes = c("013", "076", "DC"), sp.events = c("S", "t"))
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>swfscDAS</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

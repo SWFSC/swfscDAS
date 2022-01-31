@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Chop DAS data - section</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for das_chop_section {swfscDAS}"><tr><td>das_chop_section {swfscDAS}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Chop DAS data - section</h2>
+
+<h3>Description</h3>
+
+<p>Chop DAS data into effort segments by continuous effort section
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+das_chop_section(x, ...)
+
+## S3 method for class 'data.frame'
+das_chop_section(x, ...)
+
+## S3 method for class 'das_df'
+das_chop_section(x, conditions, distance.method = NULL, num.cores = NULL, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an object of class <code>das_df</code>,
+or a data frame that can be coerced to class <code>das_df</code>
+This data must be filtered for 'OnEffort' events;
+see the Details section below</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>ignored</p>
+</td></tr>
+<tr valign="top"><td><code>conditions</code></td>
+<td>
+<p>see <code><a href="../../swfscDAS/help/das_effort.html">das_effort</a></code></p>
+</td></tr>
+<tr valign="top"><td><code>distance.method</code></td>
+<td>
+<p>character; see <code><a href="../../swfscDAS/help/das_effort.html">das_effort</a></code>.
+Default is <code>NULL</code> since these distances should have already been calculated</p>
+</td></tr>
+<tr valign="top"><td><code>num.cores</code></td>
+<td>
+<p>see <code><a href="../../swfscDAS/help/das_effort.html">das_effort</a></code></p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>WARNING - do not call this function directly!
+It is exported for documentation purposes, but is intended for internal package use only.
+</p>
+<p>This function is simply a wrapper for <code><a href="../../swfscDAS/help/das_chop_equallength.html">das_chop_equallength</a></code>.
+It calls <code><a href="../../swfscDAS/help/das_chop_equallength.html">das_chop_equallength</a></code>, with <code>seg.km</code> set to a
+value larger than the longest continuous effort section in <code>x</code>.
+Thus, the effort is 'chopped' into the continuous effort sections and then summarized.
+</p>
+<p>See the Examples section for an example where the two methods give the same output.
+Note that the longest continuous effort section in the sample data is ~22km.
+</p>
+
+
+<h3>Value</h3>
+
+<p>See <code><a href="../../swfscDAS/help/das_chop_equallength.html">das_chop_equallength</a></code>. The randpicks values will all be <code>NA</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+y &lt;- system.file("das_sample.das", package = "swfscDAS")
+y.proc &lt;- das_process(y)
+
+y.eff1 &lt;- das_effort(y.proc, method = "equallength", seg.km = 25, num.cores = 1)
+y.eff2 &lt;- das_effort(y.proc, method = "section", num.cores = 1)
+
+all.equal(y.eff1, y.eff2)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>swfscDAS</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div></body></html>

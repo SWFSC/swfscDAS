@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Summarize DAS data for a continuous effort section</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body><div class="container">
+
+<table width="100%" summary="page for das_segdata {swfscDAS}"><tr><td>das_segdata {swfscDAS}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Summarize DAS data for a continuous effort section</h2>
+
+<h3>Description</h3>
+
+<p>Summarize DAS effort data by effort segment, while averaging or getting the max for each condition
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+das_segdata(x, ...)
+
+## S3 method for class 'data.frame'
+das_segdata(x, ...)
+
+## S3 method for class 'das_df'
+das_segdata(
+  x,
+  conditions,
+  segdata.method = c("avg", "maxdist"),
+  seg.lengths,
+  section.id,
+  ...
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>an object of class <code>das_df</code>,
+or a data frame that can be coerced to class <code>das_df</code>
+Must contain a single continuous effort section of DAS data;
+see the Details section below</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>ignored</p>
+</td></tr>
+<tr valign="top"><td><code>conditions</code></td>
+<td>
+<p>see <code><a href="../../swfscDAS/help/das_effort.html">das_effort</a></code>, or
+see Details section for more information</p>
+</td></tr>
+<tr valign="top"><td><code>segdata.method</code></td>
+<td>
+<p>character; either avg&quot; or &quot;maxdist&quot;.
+See Details section for more information</p>
+</td></tr>
+<tr valign="top"><td><code>seg.lengths</code></td>
+<td>
+<p>numeric; length of the modeling segments
+into which <code>x</code> will be chopped</p>
+</td></tr>
+<tr valign="top"><td><code>section.id</code></td>
+<td>
+<p>numeric; the ID of <code>x</code> (the current continuous effort section)</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>WARNING - do not call this function directly!
+It is exported for documentation purposes, but is intended for internal package use only.
+</p>
+<p>This function was designed to be called by one of the das_chop_ functions,
+e.g. <code><a href="../../swfscDAS/help/das_chop_equallength.html">das_chop_equallength</a></code>, and thus
+users should avoid calling it themselves.
+It loops through the events in <code>x</code>, chopping <code>x</code> into modeling segments
+while calculating and storing relevant information for each segment.
+Because <code>x</code> is a continuous effort section, it must begin with
+a &quot;B&quot; or &quot;R&quot; event and end with the corresponding &quot;E&quot; event.
+</p>
+<p>For each segment, this function reports the segment number,
+segment ID, cruise number, the start/end/mid coordinates (lat/lon),
+start/end/mid date/times (DateTime), segment length,
+year, month, day, midpoint time, mode, effort type,
+effective strip width sides (number of sides searched),
+and average conditions (which are specified by <code>conditions</code>).
+The segment ID is designated as <code>section.id</code> _ index of the modeling segment.
+Thus, if <code>section.id</code> is <code>1</code>, then the segment ID for
+the second segment from <code>x</code> is <code>"1_2"</code>.
+The start/end coordinates and date/times are interpolated as needed,
+e.g. when using the 'equallength' method.
+</p>
+<p>When <code>segdata.method</code> is &quot;avg&quot;, the condition values are
+calculated as a weighted average by distance.
+The reported value for logical columns (e.g. Glare) is the percentage
+(in decimals) of the segment in which that condition was <code>TRUE</code>.
+For character columns, the reported value for each segment is
+the unique value(s) present in the segment, with <code>NA</code>s omitted,
+pasted together via <code>paste(..., collapse = "; ")</code>.
+When <code>segdata.method</code> is &quot;maxdist&quot;, the reported values
+are, for each condition, the value recorded for the longest distance
+during that segment (with <code>NA</code>s omitted).
+</p>
+<p>Cruise number, mode, effort type, sides searched, and file name are
+also included in the segdata output.
+These values (excluding <code>NA</code>s) must be consistent across the
+entire effort section, and thus across all segments in <code>x</code>;
+a warning is printed if there are any inconsistencies
+</p>
+<p><code><a href="../../swfscMisc/help/bearing.html">bearing</a></code> and <code><a href="../../swfscMisc/help/destination.html">destination</a></code>
+are used to calculate the segment start, mid, and end points,
+with <code>method = "vincenty"</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Data frame with the segdata information described in Details
+and in <code><a href="../../swfscDAS/help/das_effort.html">das_effort</a></code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>swfscDAS</em> version 0.6.1 <a href="00Index.html">Index</a>]</div>
+</div></body></html>
