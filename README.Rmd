@@ -17,9 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CRAN version](http://www.r-pkg.org/badges/version/swfscDAS)](https://cran.r-project.org/package=swfscDAS)
-[![R-CMD-check](https://github.com/smwoodman/swfscDAS/workflows/R-CMD-check/badge.svg)](https://github.com/smwoodman/swfscDAS/actions)
-<!-- [![Travis build status](https://travis-ci.com/smwoodman/swfscDAS.svg?branch=master)](https://travis-ci.com/smwoodman/swfscDAS)
-[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/smwoodman/swfscDAS?branch=master&svg=true)](https://ci.appveyor.com/project/smwoodman/swfscDAS) -->
+[![R-CMD-check](https://github.com/smwoodman/swfscDAS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/smwoodman/swfscDAS/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 This package contains functions designed for processing and analyzing shipboard DAS data generated using the WinCruz program from the Southwest Fisheries Science Center. It is intended to standardize and streamline basic DAS data processing. Functionality currently includes reading DAS data into a data frame, processing this data (extracting state and condition information for each DAS event), and summarizing sighting, effort, and comment information. Learn more in `vignette("swfscDAS")`
