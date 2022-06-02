@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   DAS_data_join: DAS_data_join.html
   swfscDAS: swfscDAS.html
-last_built: 2022-06-01T22:25Z
+last_built: 2022-06-02T00:45Z
 urls:
   reference: https://smwoodman.github.io/swfscDAS/reference
   article: https://smwoodman.github.io/swfscDAS/articles
