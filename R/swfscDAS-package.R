@@ -13,7 +13,7 @@
 #'
 #' @importFrom dplyr add_row arrange between bind_cols bind_rows case_when desc
 #'   distinct everything filter full_join group_by if_else
-#'   lag left_join mutate n n_distinct
+#'   lag left_join mutate n n_distinct reframe
 #'   right_join select slice starts_with summarise ungroup
 #' @importFrom lubridate year month day tz
 #' @importFrom magrittr %>%

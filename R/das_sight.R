@@ -322,9 +322,9 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   sight.info.skmg3 <- sight.df %>%
     filter(.data$Event %in% c("?")) %>%
     group_by(.data$sight_cumsum) %>%
-    summarise(Prob = TRUE,
-              SpCodeProb1 = .data$Data5, SpCodeProb2 = .data$Data6,
-              SpCodeProb3 = .data$Data7, SpCodeProb4 = .data$Data8)
+    reframe(Prob = TRUE,
+            SpCodeProb1 = .data$Data5, SpCodeProb2 = .data$Data6,
+            SpCodeProb3 = .data$Data7, SpCodeProb4 = .data$Data8)
 
 
   # Data from numeric events (groupsize and composition estimates)
@@ -350,26 +350,26 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
              Data6 = as.numeric(.data$Data6), Data7 = as.numeric(.data$Data7),
              Data8 = as.numeric(.data$Data8)) %>%
       group_by(.data$sight_cumsum) %>%
-      summarise(ObsEstimate = list(.data$Data1),
-                SpPerc1 = mean(.data$Data5, na.rm = TRUE),
-                SpPerc2 = mean(.data$Data6, na.rm = TRUE),
-                SpPerc3 = mean(.data$Data7, na.rm = TRUE),
-                SpPerc4 = mean(.data$Data8, na.rm = TRUE),
-                GsSchoolBest = mean(.data$Data2, na.rm = TRUE),
-                GsSchoolHigh = mean(.data$Data3, na.rm = TRUE),
-                GsSchoolLow = mean(.data$Data4, na.rm = TRUE),
-                GsSpBest1 = mean(.data$Data2 * .data$Data5 / 100, na.rm = TRUE),
-                GsSpBest2 = mean(.data$Data2 * .data$Data6 / 100, na.rm = TRUE),
-                GsSpBest3 = mean(.data$Data2 * .data$Data7 / 100, na.rm = TRUE),
-                GsSpBest4 = mean(.data$Data2 * .data$Data8 / 100, na.rm = TRUE),
-                GsSpHigh1 = mean(.data$Data3 * .data$Data5 / 100, na.rm = TRUE),
-                GsSpHigh2 = mean(.data$Data3 * .data$Data6 / 100, na.rm = TRUE),
-                GsSpHigh3 = mean(.data$Data3 * .data$Data7 / 100, na.rm = TRUE),
-                GsSpHigh4 = mean(.data$Data3 * .data$Data8 / 100, na.rm = TRUE),
-                GsSpLow1 = mean(.data$Data4 * .data$Data5 / 100, na.rm = TRUE),
-                GsSpLow2 = mean(.data$Data4 * .data$Data6 / 100, na.rm = TRUE),
-                GsSpLow3 = mean(.data$Data4 * .data$Data7 / 100, na.rm = TRUE),
-                GsSpLow4 = mean(.data$Data4 * .data$Data8 / 100, na.rm = TRUE))
+      reframe(ObsEstimate = list(.data$Data1),
+              SpPerc1 = mean(.data$Data5, na.rm = TRUE),
+              SpPerc2 = mean(.data$Data6, na.rm = TRUE),
+              SpPerc3 = mean(.data$Data7, na.rm = TRUE),
+              SpPerc4 = mean(.data$Data8, na.rm = TRUE),
+              GsSchoolBest = mean(.data$Data2, na.rm = TRUE),
+              GsSchoolHigh = mean(.data$Data3, na.rm = TRUE),
+              GsSchoolLow = mean(.data$Data4, na.rm = TRUE),
+              GsSpBest1 = mean(.data$Data2 * .data$Data5 / 100, na.rm = TRUE),
+              GsSpBest2 = mean(.data$Data2 * .data$Data6 / 100, na.rm = TRUE),
+              GsSpBest3 = mean(.data$Data2 * .data$Data7 / 100, na.rm = TRUE),
+              GsSpBest4 = mean(.data$Data2 * .data$Data8 / 100, na.rm = TRUE),
+              GsSpHigh1 = mean(.data$Data3 * .data$Data5 / 100, na.rm = TRUE),
+              GsSpHigh2 = mean(.data$Data3 * .data$Data6 / 100, na.rm = TRUE),
+              GsSpHigh3 = mean(.data$Data3 * .data$Data7 / 100, na.rm = TRUE),
+              GsSpHigh4 = mean(.data$Data3 * .data$Data8 / 100, na.rm = TRUE),
+              GsSpLow1 = mean(.data$Data4 * .data$Data5 / 100, na.rm = TRUE),
+              GsSpLow2 = mean(.data$Data4 * .data$Data6 / 100, na.rm = TRUE),
+              GsSpLow3 = mean(.data$Data4 * .data$Data7 / 100, na.rm = TRUE),
+              GsSpLow4 = mean(.data$Data4 * .data$Data8 / 100, na.rm = TRUE))
   }
 
   if (!all(sight.info.skmg1$sight_cumsum %in% sight.info.skmg4$sight_cumsum))
