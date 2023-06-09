@@ -1,6 +1,6 @@
 # swfscDAS 0.6.2.9000
 
-* Use `reframe` in grouping summaries in `das_sight` for when none of a certain event are in the data [#8]
+* Use `reframe` in grouping summaries in `das_sight` for when none of a certain event are in the data (#8)
 
 
 # swfscDAS 0.6.1
