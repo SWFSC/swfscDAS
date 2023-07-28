@@ -36,16 +36,6 @@ You can install the developmental version of swfscDAS from
 remotes::install_github("smwoodman/swfscDAS")
 ```
 
-Before installing swfscDAS, you must have
-[R](https://www.r-project.org/),
-[RStudio](https://www.rstudio.com/products/rstudio/download/), and the
-appropriate version of
-[Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed. When
-installing the developmental version, it is best practice to install
-after closing all instances of R and RStudio, and then running the
-install code from the R GUI rather than RStudio. Please contact the
-developer if you have any issues.
-
 ## DAS data format
 
 swfscDAS expects data to follow the conventions and format used by the
