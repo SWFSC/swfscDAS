@@ -73,11 +73,13 @@ Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
 
   SightNoDaily is a running count of the number of S/K/M/G sightings that occurred on each day.
   It is formatted as 'YYYYMMDD'_'running count', e.g. "20050101_1".
+
   The GsSchoolBest, GsSchoolHigh, and GsSchoolLow columns are either:
-  1) the arithmetic mean across observer estimates for the "default" and "wide" formats, or
-  2) the individual observer estimates for the "complete" format.
+  1) the arithmetic mean across observer estimates, for the "default" and "wide" formats, or
+  2) the individual observer estimates, for the "complete" format.
   Note that for non-"complete" formats, \code{na.rm = TRUE} is used when calculating the mean,
   and thus blank elements of estimates (but not the whole incomplete estimate) are ignored.
+
   To convert the perpendicular distance back to nautical miles,
   one would divide PerpDistKm by 1.852
 }
@@ -95,7 +97,7 @@ DAS events contain specific information in the 'Data#' columns,
   marine mammal subgroup sightings (code "G"),
   marine mammal subgroup resights (code "g"),
   turtle sightings (code "t"),
-  pinniped sightings (code "p")
+  pinniped sightings (code "p"),
   and fishing vessel sightings (code "F").
   Warnings are printed if all S, K, M, and G events (and only these events) are not
   followed by an A event and at least one numeric event.
@@ -145,12 +147,18 @@ DAS events contain specific information in the 'Data#' columns,
     Species code          \tab SpCode \tab Boat type or mammal, turtle, or pinniped species codes\cr
     Probable species code \tab SpCodeProb \tab Probable mammal species codes; \code{NA} if none or not applicable\cr
     Group size of species - best estimate \tab GsSpBest \tab
-      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolBest and the corresponding species percentage\cr
+      The product of the arithmetic means of GsSchoolBest and the corresponding species percentage\cr
     Group size of species - high estimate \tab GsSpHigh \tab
-      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolHigh and the corresponding species percentage\cr
+      The product of the arithmetic means of GsSchoolHigh and the corresponding species percentage\cr
     Group size of species - low estimate \tab GsSpLow \tab
-      Arithmetic mean, across observer estimates, of the product(s) of GsSchoolLow and the corresponding species percentage\cr
+      The product of the arithmetic means of GsSchoolLow and the corresponding species percentage\cr
   }
+
+  Note that for the above calculations,
+  the GsSchoolX value and corresponding species percentages were each
+  averaged across observers, using \code{na.rm = TRUE},
+  before being multiplied to calculate GsSpX. For example, in the workflow:
+  \code{GsSpBest1 = mean(.data$Data2, na.rm = TRUE) * mean(.data$Data5, na.rm = TRUE)}
 }
 
 \section{The "wide" and "complete" format outputs}{
@@ -198,7 +206,8 @@ DAS events contain specific information in the 'Data#' columns,
   For the "wide" format, ObsEstimate is a list-column of all of the observer codes
   that provided an estimate.
   Also in the "wide" format, the GsSpBest# columns are the product of
-  GsSchoolBest and the corresponding species percentage.
+  the means of GsSchoolBest and the corresponding species percentage
+  (see the Default section for calculation details).
   These numbers, 1 to 4, correspond to the order of the data as it appears in the DAS file
 }
 

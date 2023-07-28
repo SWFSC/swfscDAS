@@ -21,7 +21,7 @@
 #'   marine mammal subgroup sightings (code "G"),
 #'   marine mammal subgroup resights (code "g"),
 #'   turtle sightings (code "t"),
-#'   pinniped sightings (code "p")
+#'   pinniped sightings (code "p"),
 #'   and fishing vessel sightings (code "F").
 #'   Warnings are printed if all S, K, M, and G events (and only these events) are not
 #'   followed by an A event and at least one numeric event.
@@ -99,11 +99,13 @@
 #'
 #'   SightNoDaily is a running count of the number of S/K/M/G sightings that occurred on each day.
 #'   It is formatted as 'YYYYMMDD'_'running count', e.g. "20050101_1".
+#'
 #'   The GsSchoolBest, GsSchoolHigh, and GsSchoolLow columns are either:
-#'   1) the arithmetic mean across observer estimates for the "default" and "wide" formats, or
-#'   2) the individual observer estimates for the "complete" format.
+#'   1) the arithmetic mean across observer estimates, for the "default" and "wide" formats, or
+#'   2) the individual observer estimates, for the "complete" format.
 #'   Note that for non-"complete" formats, \code{na.rm = TRUE} is used when calculating the mean,
 #'   and thus blank elements of estimates (but not the whole incomplete estimate) are ignored.
+#'
 #'   To convert the perpendicular distance back to nautical miles,
 #'   one would divide PerpDistKm by 1.852
 #'
@@ -120,12 +122,18 @@
 #'     Species code          \tab SpCode \tab Boat type or mammal, turtle, or pinniped species codes\cr
 #'     Probable species code \tab SpCodeProb \tab Probable mammal species codes; \code{NA} if none or not applicable\cr
 #'     Group size of species - best estimate \tab GsSpBest \tab
-#'       Arithmetic mean, across observer estimates, of the product(s) of GsSchoolBest and the corresponding species percentage\cr
+#'       The product of the arithmetic means of GsSchoolBest and the corresponding species percentage\cr
 #'     Group size of species - high estimate \tab GsSpHigh \tab
-#'       Arithmetic mean, across observer estimates, of the product(s) of GsSchoolHigh and the corresponding species percentage\cr
+#'       The product of the arithmetic means of GsSchoolHigh and the corresponding species percentage\cr
 #'     Group size of species - low estimate \tab GsSpLow \tab
-#'       Arithmetic mean, across observer estimates, of the product(s) of GsSchoolLow and the corresponding species percentage\cr
+#'       The product of the arithmetic means of GsSchoolLow and the corresponding species percentage\cr
 #'   }
+#'
+#'   Note that for the above calculations,
+#'   the GsSchoolX value and corresponding species percentages were each
+#'   averaged across observers, using \code{na.rm = TRUE},
+#'   before being multiplied to calculate GsSpX. For example, in the workflow:
+#'   \code{GsSpBest1 = mean(.data$Data2, na.rm = TRUE) * mean(.data$Data5, na.rm = TRUE)}
 #'
 #' @section The "wide" and "complete" format outputs:
 #'   The "wide" and "complete" options have very similar columns in their output date frames.
@@ -171,7 +179,8 @@
 #'   For the "wide" format, ObsEstimate is a list-column of all of the observer codes
 #'   that provided an estimate.
 #'   Also in the "wide" format, the GsSpBest# columns are the product of
-#'   GsSchoolBest and the corresponding species percentage.
+#'   the means of GsSchoolBest and the corresponding species percentage
+#'   (see the Default section for calculation details).
 #'   These numbers, 1 to 4, correspond to the order of the data as it appears in the DAS file
 #'
 #' @examples
@@ -197,6 +206,8 @@ das_sight.data.frame <- function(x, ...) {
 das_sight.das_df <- function(x, return.format = c("default", "wide", "complete"),
                              return.events = c("S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"),
                              ...) {
+  mean_narm <- function(i) mean(i, na.rm = TRUE)
+
   #----------------------------------------------------------------------------
   return.format <- match.arg(return.format)
   return.events <- match.arg(return.events, several.ok = TRUE)
@@ -351,25 +362,37 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
              Data8 = as.numeric(.data$Data8)) %>%
       group_by(.data$sight_cumsum) %>%
       reframe(ObsEstimate = list(.data$Data1),
-              SpPerc1 = mean(.data$Data5, na.rm = TRUE),
-              SpPerc2 = mean(.data$Data6, na.rm = TRUE),
-              SpPerc3 = mean(.data$Data7, na.rm = TRUE),
-              SpPerc4 = mean(.data$Data8, na.rm = TRUE),
-              GsSchoolBest = mean(.data$Data2, na.rm = TRUE),
-              GsSchoolHigh = mean(.data$Data3, na.rm = TRUE),
-              GsSchoolLow = mean(.data$Data4, na.rm = TRUE),
-              GsSpBest1 = mean(.data$Data2 * .data$Data5 / 100, na.rm = TRUE),
-              GsSpBest2 = mean(.data$Data2 * .data$Data6 / 100, na.rm = TRUE),
-              GsSpBest3 = mean(.data$Data2 * .data$Data7 / 100, na.rm = TRUE),
-              GsSpBest4 = mean(.data$Data2 * .data$Data8 / 100, na.rm = TRUE),
-              GsSpHigh1 = mean(.data$Data3 * .data$Data5 / 100, na.rm = TRUE),
-              GsSpHigh2 = mean(.data$Data3 * .data$Data6 / 100, na.rm = TRUE),
-              GsSpHigh3 = mean(.data$Data3 * .data$Data7 / 100, na.rm = TRUE),
-              GsSpHigh4 = mean(.data$Data3 * .data$Data8 / 100, na.rm = TRUE),
-              GsSpLow1 = mean(.data$Data4 * .data$Data5 / 100, na.rm = TRUE),
-              GsSpLow2 = mean(.data$Data4 * .data$Data6 / 100, na.rm = TRUE),
-              GsSpLow3 = mean(.data$Data4 * .data$Data7 / 100, na.rm = TRUE),
-              GsSpLow4 = mean(.data$Data4 * .data$Data8 / 100, na.rm = TRUE))
+              SpPerc1 = mean_narm(.data$Data5),
+              SpPerc2 = mean_narm(.data$Data6),
+              SpPerc3 = mean_narm(.data$Data7),
+              SpPerc4 = mean_narm(.data$Data8),
+              GsSchoolBest = mean_narm(.data$Data2),
+              GsSchoolHigh = mean_narm(.data$Data3),
+              GsSchoolLow = mean_narm(.data$Data4),
+              GsSpBest1 = mean_narm(.data$Data2) * mean_narm(.data$Data5) / 100,
+              GsSpBest2 = mean_narm(.data$Data2) * mean_narm(.data$Data6) / 100,
+              GsSpBest3 = mean_narm(.data$Data2) * mean_narm(.data$Data7) / 100,
+              GsSpBest4 = mean_narm(.data$Data2) * mean_narm(.data$Data8) / 100,
+              GsSpHigh1 = mean_narm(.data$Data3) * mean_narm(.data$Data5) / 100,
+              GsSpHigh2 = mean_narm(.data$Data3) * mean_narm(.data$Data6) / 100,
+              GsSpHigh3 = mean_narm(.data$Data3) * mean_narm(.data$Data7) / 100,
+              GsSpHigh4 = mean_narm(.data$Data3) * mean_narm(.data$Data8) / 100,
+              GsSpLow1  = mean_narm(.data$Data4) * mean_narm(.data$Data5) / 100,
+              GsSpLow2  = mean_narm(.data$Data4) * mean_narm(.data$Data6) / 100,
+              GsSpLow3  = mean_narm(.data$Data4) * mean_narm(.data$Data7) / 100,
+              GsSpLow4  = mean_narm(.data$Data4) * mean_narm(.data$Data8) / 100)
+              # GsSpBest1 = mean(.data$Data2 * .data$Data5 / 100, na.rm = TRUE),
+              # GsSpBest2 = mean(.data$Data2 * .data$Data6 / 100, na.rm = TRUE),
+              # GsSpBest3 = mean(.data$Data2 * .data$Data7 / 100, na.rm = TRUE),
+              # GsSpBest4 = mean(.data$Data2 * .data$Data8 / 100, na.rm = TRUE),
+              # GsSpHigh1 = mean(.data$Data3 * .data$Data5 / 100, na.rm = TRUE),
+              # GsSpHigh2 = mean(.data$Data3 * .data$Data6 / 100, na.rm = TRUE),
+              # GsSpHigh3 = mean(.data$Data3 * .data$Data7 / 100, na.rm = TRUE),
+              # GsSpHigh4 = mean(.data$Data3 * .data$Data8 / 100, na.rm = TRUE),
+              # GsSpLow1 = mean(.data$Data4 * .data$Data5 / 100, na.rm = TRUE),
+              # GsSpLow2 = mean(.data$Data4 * .data$Data6 / 100, na.rm = TRUE),
+              # GsSpLow3 = mean(.data$Data4 * .data$Data7 / 100, na.rm = TRUE),
+              # GsSpLow4 = mean(.data$Data4 * .data$Data8 / 100, na.rm = TRUE))
   }
 
   if (!all(sight.info.skmg1$sight_cumsum %in% sight.info.skmg4$sight_cumsum))
