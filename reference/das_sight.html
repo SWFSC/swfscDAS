@@ -113,13 +113,17 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
   The following sighting information columns are included in all return formats:</p>
 <p></p>
 <table class="table table"><tr><td><em>Sighting information</em></td><td><em>Column name</em></td><td><em>Notes</em></td></tr><tr><td>Sighting number</td><td>SightNo</td><td>Character</td></tr><tr><td>Subgroup code</td><td>Subgroup</td><td>Character</td></tr><tr><td>Daily sighting number</td><td>SightNoDaily</td><td>See below</td></tr><tr><td>Observer that made the sighting</td><td>Obs</td><td></td></tr><tr><td>Standard observer</td><td>ObsStd</td><td>Logical; <code>TRUE</code> if Obs is one of ObsL, Rec or ObsR, and <code>FALSE</code> otherwise</td></tr><tr><td>Bearing to the sighting</td><td>Bearing</td><td>Numeric; degrees, expected range 0 to 360</td></tr><tr><td>Number of reticle marks</td><td>Reticle</td><td>Numeric</td></tr><tr><td>Distance (nautical miles)</td><td>DistNm</td><td>Numeric</td></tr><tr><td>Sighting cue</td><td>Cue</td><td></td></tr><tr><td>Sighting method</td><td>Method</td><td></td></tr><tr><td>Photos of school?</td><td>Photos</td><td></td></tr><tr><td>Birds present with school?</td><td>Birds</td><td></td></tr><tr><td>Calibration school?</td><td>CalibSchool</td><td></td></tr><tr><td>Aerial photos taken?</td><td>PhotosAerial</td><td></td></tr><tr><td>Biopsy taken?</td><td>Biopsy</td><td></td></tr><tr><td>Probable sighting</td><td>Prob</td><td>Logical indicating if sighting has associated ? event; <code>NA</code> for non-S/K/M/G events</td></tr><tr><td>Number of species in sighting</td><td>nSp</td><td><code>NA</code> for non-S/K/M/G events</td></tr><tr><td>Mixed species sighting</td><td>Mixed</td><td>Logical; <code>TRUE</code> if nSp &gt; 1</td></tr><tr><td>Group size of school - best estimate</td><td>GsSchoolBest</td><td>See below</td></tr><tr><td>Group size of school - high estimate</td><td>GsSchoolHigh</td><td>See below</td></tr><tr><td>Group size of school - low estimate</td><td>GsSchoolLow</td><td>See below</td></tr><tr><td>Course (true heading) of school at resight</td><td>CourseSchool</td><td><code>NA</code> for non-s/k/m events</td></tr><tr><td>Presence of associated JFR</td><td>TurtleJFR</td><td><code>NA</code> for non-"t" events; JFR = jellyfish, floating debris, or red tide</td></tr><tr><td>Estimated turtle maturity</td><td>TurtleAge</td><td><code>NA</code> for non-"t" events</td></tr><tr><td>Perpendicular distance (km) to sighting</td><td>PerpDistKm</td><td>Calculated via <code>(abs(sin(Bearing*pi/180) * DistNm) * 1.852)</code></td></tr></table><p>SightNoDaily is a running count of the number of S/K/M/G sightings that occurred on each day.
-  It is formatted as 'YYYYMMDD'_'running count', e.g. "20050101_1".
-  The GsSchoolBest, GsSchoolHigh, and GsSchoolLow columns are either:
-  1) the arithmetic mean across observer estimates for the "default" and "wide" formats, or
-  2) the individual observer estimates for the "complete" format.
+  It is formatted as 'YYYYMMDD'_'running count', e.g. "20050101_1".</p>
+
+
+<p>The GsSchoolBest, GsSchoolHigh, and GsSchoolLow columns are either:
+  1) the arithmetic mean across observer estimates, for the "default" and "wide" formats, or
+  2) the individual observer estimates, for the "complete" format.
   Note that for non-"complete" formats, <code>na.rm = TRUE</code> is used when calculating the mean,
-  and thus blank elements of estimates (but not the whole incomplete estimate) are ignored.
-  To convert the perpendicular distance back to nautical miles,
+  and thus blank elements of estimates (but not the whole incomplete estimate) are ignored.</p>
+
+
+<p>To convert the perpendicular distance back to nautical miles,
   one would divide PerpDistKm by 1.852</p>
     </div>
     <div class="section level2">
@@ -134,7 +138,7 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
   marine mammal subgroup sightings (code "G"),
   marine mammal subgroup resights (code "g"),
   turtle sightings (code "t"),
-  pinniped sightings (code "p")
+  pinniped sightings (code "p"),
   and fishing vessel sightings (code "F").
   Warnings are printed if all S, K, M, and G events (and only these events) are not
   followed by an A event and at least one numeric event.
@@ -173,7 +177,12 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
   for each species and for each observer estimate, the best/high/low school size estimate is multiplied by the applicable species percent estimate.
   The values are grouped by species and then averaged to get single GsSpBest, GsSpHigh, and GsSpLow values for each species.
   (using <code><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></code> with <code>na.rm = TRUE</code>)</p>
-<p>Sighting information columns/formats present specifically in the "default" format output:</p><table class="table table"><tr><td><em>Sighting information</em></td><td><em>Column name</em></td><td><em>Notes</em></td></tr><tr><td>Species code</td><td>SpCode</td><td>Boat type or mammal, turtle, or pinniped species codes</td></tr><tr><td>Probable species code</td><td>SpCodeProb</td><td>Probable mammal species codes; <code>NA</code> if none or not applicable</td></tr><tr><td>Group size of species - best estimate</td><td>GsSpBest</td><td>Arithmetic mean, across observer estimates, of the product(s) of GsSchoolBest and the corresponding species percentage</td></tr><tr><td>Group size of species - high estimate</td><td>GsSpHigh</td><td>Arithmetic mean, across observer estimates, of the product(s) of GsSchoolHigh and the corresponding species percentage</td></tr><tr><td>Group size of species - low estimate</td><td>GsSpLow</td><td>Arithmetic mean, across observer estimates, of the product(s) of GsSchoolLow and the corresponding species percentage</td></tr></table></div>
+<p>Sighting information columns/formats present specifically in the "default" format output:</p><table class="table table"><tr><td><em>Sighting information</em></td><td><em>Column name</em></td><td><em>Notes</em></td></tr><tr><td>Species code</td><td>SpCode</td><td>Boat type or mammal, turtle, or pinniped species codes</td></tr><tr><td>Probable species code</td><td>SpCodeProb</td><td>Probable mammal species codes; <code>NA</code> if none or not applicable</td></tr><tr><td>Group size of species - best estimate</td><td>GsSpBest</td><td>The product of the arithmetic means of GsSchoolBest and the corresponding species percentage</td></tr><tr><td>Group size of species - high estimate</td><td>GsSpHigh</td><td>The product of the arithmetic means of GsSchoolHigh and the corresponding species percentage</td></tr><tr><td>Group size of species - low estimate</td><td>GsSpLow</td><td>The product of the arithmetic means of GsSchoolLow and the corresponding species percentage</td></tr></table><p>Note that for the above calculations,
+  the GsSchoolX value and corresponding species percentages were each
+  averaged across observers, using <code>na.rm = TRUE</code>,
+  before being multiplied to calculate GsSpX. For example, in the workflow:
+  <code>GsSpBest1 = mean(.data$Data2, na.rm = TRUE) * mean(.data$Data5, na.rm = TRUE)</code></p>
+    </div>
     <div class="section level2">
     <h2 id="the-wide-and-complete-format-outputs">The "wide" and "complete" format outputs<a class="anchor" aria-label="anchor" href="#the-wide-and-complete-format-outputs"></a></h2>
     
@@ -190,7 +199,8 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
   For the "wide" format, ObsEstimate is a list-column of all of the observer codes
   that provided an estimate.
   Also in the "wide" format, the GsSpBest# columns are the product of
-  GsSchoolBest and the corresponding species percentage.
+  the means of GsSchoolBest and the corresponding species percentage
+  (see the Default section for calculation details).
   These numbers, 1 to 4, correspond to the order of the data as it appears in the DAS file</p>
     </div>
 
@@ -332,7 +342,7 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25   3      4      Y     N        &lt;NA&gt;         &lt;NA&gt;   &lt;NA&gt;  TRUE   2  TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    SpCode SpCodeProb GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest GsSpHigh</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1     018       &lt;NA&gt;           NA           NA   42.333333        NA       NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2     076       &lt;NA&gt;      8.00000        14.00    5.666667   8.00000   14.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     076       &lt;NA&gt;      8.00000        14.00    5.666667   8.00000  14.0000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5    &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA</span>
@@ -342,20 +352,20 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9      LV       &lt;NA&gt;      1.00000           NA          NA   1.00000       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10     DC       &lt;NA&gt;      2.00000           NA          NA   2.00000       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11     DC       &lt;NA&gt;      1.00000           NA          NA   1.00000       NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12    037       &lt;NA&gt;     10.66667        20.00   10.666667  10.66667   20.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12    037       &lt;NA&gt;     10.66667        20.00   10.666667  10.66667  20.0000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13     DC       &lt;NA&gt;      1.00000           NA          NA   1.00000       NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14    016       &lt;NA&gt;     46.66667        79.00   46.666667  46.66667   79.000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14    016       &lt;NA&gt;     46.66667        79.00   46.666667  46.66667  79.0000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15   &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16    013       &lt;NA&gt;     41.75000        72.75   41.750000  30.76500   53.165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17    016       &lt;NA&gt;     41.75000        72.75   41.750000  10.98500   19.585</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16    013       &lt;NA&gt;     41.75000        72.75   41.750000  30.06000  52.3800</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17    016       &lt;NA&gt;     41.75000        72.75   41.750000  11.69000  20.3700</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18     DC       &lt;NA&gt;      2.00000           NA          NA   2.00000       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 19     LV       &lt;NA&gt;      1.00000           NA          NA   1.00000       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20    075       &lt;NA&gt;           NA           NA          NA        NA       NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21   &lt;NA&gt;       &lt;NA&gt;           NA           NA          NA        NA       NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22    018       &lt;NA&gt;    151.50000       249.00  151.500000 127.20000  207.700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23    277       &lt;NA&gt;    151.50000       249.00  151.500000  24.30000   41.300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24    016        016     21.25000        37.75   21.250000  16.31000   27.935</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25    277        016     21.25000        37.75   21.250000   4.94000    9.815</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22    018       &lt;NA&gt;    151.50000       249.00  151.500000 128.77500 211.6500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23    277       &lt;NA&gt;    151.50000       249.00  151.500000  22.72500  37.3500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24    016        016     21.25000        37.75   21.250000  15.08750  26.8025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25    277        016     21.25000        37.75   21.250000   6.16250  10.9475</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       GsSpLow CourseSchool TurtleJFR TurtleAge TurtleCapt   PerpDistKm</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   42.333333           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.525631e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2    5.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.075807e+00</span>
@@ -372,16 +382,16 @@ Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 <span class="r-out co"><span class="r-pr">#&gt;</span> 13         NA           NA      &lt;NA&gt;         A       &lt;NA&gt; 6.547809e-02</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 14  46.666667           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.878568e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 15         NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 3.875670e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  30.765000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.888916e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  10.985000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.888916e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  30.060000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.888916e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  11.690000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.888916e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 18         NA           NA         F         A          Y 2.850229e-01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 19         NA           NA      &lt;NA&gt;         A          N 2.268046e-18</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 20         NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 0.000000e+00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21         NA           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.115733e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 127.200000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  24.300000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  16.310000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25   4.940000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 128.775000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  22.725000           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 1.060157e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  15.087500           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25   6.162500           NA      &lt;NA&gt;      &lt;NA&gt;       &lt;NA&gt; 2.542657e+00</span>
 <span class="r-in"><span><span class="fu">das_sight</span><span class="op">(</span><span class="va">y.proc</span>, return.format <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Event            DateTime      Lat       Lon OnEffort Cruise Mode OffsetGMT</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      S 2013-01-13 06:46:02 39.36617 -137.5820     TRUE   1000    C         5</span>
