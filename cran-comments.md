@@ -1,12 +1,12 @@
 ## Release summary
-Bug fixes, updated license 
+Bug fixes, update to keep up with dependencies
 
-## Test environments (R-release = v4.1.2)
+## Test environments (R-release = v4.3.0)
 * Windows 10, R-release (local)
 * win-builder (devel)
-* windows-latest (Microsoft Windows Server 2019, on github actions) R-release
+* windows-latest (on github actions) R-release
 * macOS-latest (on github actions) R-release
-* ubuntu 20.04 (on github actions) R-devel and release
+* ubuntu-latest (on github actions) R-devel and release
 
 ## R CMD check results
 There were no ERRORs, WARNINGs, or NOTES
