@@ -2,6 +2,8 @@
 
 * Moved repo to https://github.com/swfsc, and updated all associated documentation. Also generalized documentation to not be as SWFSC-focused
 
+* Changed license back to GPL3, based on https://nmfs-opensci.github.io/GitHub-Guide
+
 
 # swfscDAS 0.6.2
 
