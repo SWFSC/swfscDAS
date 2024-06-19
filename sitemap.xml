@@ -1,99 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/404.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/404.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/LICENSE.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/articles/DAS_data_join.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/articles/index.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/articles/DAS_data_join.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/articles/swfscDAS.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/authors.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/articles/swfscDAS.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/index.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/authors.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/news/index.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/index.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/as_das_df.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/news/index.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/as_das_dfr.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/as_das_df.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_check.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/as_das_dfr.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_chop_condition.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_check.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_chop_equallength.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_chop_condition.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_chop_section.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_chop_equallength.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_comments.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_chop_section.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_df-class.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_comments.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_dfr-class.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_df-class.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_effort.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_dfr-class.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_effort_sight.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_effort.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_effort_strata.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_effort_sight.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_format_pdf.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_effort_strata.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_intersects_strata.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_format_pdf.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_process.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_intersects_strata.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_read.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_process.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_segdata.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_read.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/das_sight.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_segdata.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/distance_greatcircle.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/das_sight.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/index.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/distance_greatcircle.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/randpicks_convert.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/subsetting.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/randpicks_convert.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/swfscAirDAS-internals.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/subsetting.html</loc>
   </url>
   <url>
-    <loc>https://smwoodman.github.io/swfscDAS/reference/swfscDAS-package.html</loc>
+    <loc>https://swfsc.github.io/swfscDAS/reference/swfscAirDAS-internals.html</loc>
+  </url>
+  <url>
+    <loc>https://swfsc.github.io/swfscDAS/reference/swfscDAS-package.html</loc>
   </url>
 </urlset>
