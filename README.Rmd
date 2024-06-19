@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![CRAN version](http://www.r-pkg.org/badges/version/swfscDAS)](https://cran.r-project.org/package=swfscDAS)
-[![R-CMD-check](https://github.com/smwoodman/swfscDAS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/smwoodman/swfscDAS/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/swfsc/swfscDAS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/swfsc/swfscDAS/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 This package contains functions designed for processing and analyzing shipboard DAS data generated using the WinCruz program from the Southwest Fisheries Science Center. It is intended to standardize and streamline basic DAS data processing. Functionality currently includes reading DAS data into a data frame, processing this data (extracting state and condition information for each DAS event), and summarizing sighting, effort, and comment information. Learn more in `vignette("swfscDAS")`
@@ -34,12 +34,12 @@ You can install the developmental version of swfscDAS from [GitHub](https://gith
 
 ```{r, eval=FALSE}
 # install.packages("remotes")
-remotes::install_github("smwoodman/swfscDAS")
+remotes::install_github("swfsc/swfscDAS")
 ```
 
 ## DAS data format
 
-swfscDAS expects data to follow the conventions and format used by the WinCruz program. You can [download a PDF here](https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_Format.pdf) describing the DAS data format requirements. See `das_format_pdf` for instructions on how to access the local copy of the format PDF that is included in the package.
+swfscDAS expects data to follow the conventions and format used by the WinCruz program. You can [download a PDF here](https://github.com/swfsc/swfscDAS/blob/main/inst/DAS_Format.pdf) describing the DAS data format requirements. See `das_format_pdf` for instructions on how to access the local copy of the format PDF that is included in the package.
 
 ## Disclaimer
 

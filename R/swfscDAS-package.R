@@ -6,10 +6,9 @@
 #'
 #' @name swfscDAS-package
 #' @aliases swfscDAS
-#' @docType package
 #' @title Southwest Fisheries Science Center DAS
 #' @author Sam Woodman \email{sam.woodman@@noaa.gov}
-#' @seealso \url{https://smwoodman.github.io/swfscDAS/}
+#' @seealso \url{https://swfsc.github.io/swfscDAS/}
 #'
 #' @importFrom dplyr add_row arrange between bind_cols bind_rows case_when desc
 #'   distinct everything filter full_join group_by if_else
@@ -30,7 +29,7 @@
 #' @importFrom utils head read.csv tail write.csv
 #'
 #' @keywords package
-NULL
+"_PACKAGE"
 
 setOldClass("das_dfr")
 setOldClass("das_df")

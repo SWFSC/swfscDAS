@@ -1,6 +1,6 @@
 Package: swfscDAS
 Title: Southwest Fisheries Science Center Shipboard DAS Data Processing
-Version: 0.6.2
+Version: 0.6.3.9000
 Authors@R: 
     person("Sam", "Woodman", email = "sam.woodman@noaa.gov", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6071-8186"))
 Description: Process and summarize shipboard 
@@ -9,9 +9,9 @@ Description: Process and summarize shipboard
     <https://www.fisheries.noaa.gov/west-coast/science-data/california-current-marine-mammal-assessment-program>.
     This package standardizes and streamlines basic DAS data processing,
     and includes a PDF with the DAS data format requirements.
-URL: https://smwoodman.github.io/swfscDAS/,
-    https://github.com/smwoodman/swfscDAS/
-BugReports: https://github.com/smwoodman/swfscDAS/issues/
+URL: https://swfsc.github.io/swfscDAS/,
+    https://github.com/swfsc/swfscDAS/
+BugReports: https://github.com/swfsc/swfscDAS/issues/
 Depends: R (>= 4.0.0)
 Imports:
     dplyr (>= 1.1.0), 
@@ -30,7 +30,7 @@ Suggests:
     rmarkdown,
     stringr, 
     testthat (>= 2.1.0)
-License: CC0
+License: GPL (>= 3)
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 VignetteBuilder: knitr

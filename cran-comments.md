@@ -1,7 +1,7 @@
 ## Release summary
-Bug fixes, update to keep up with dependencies
+Minor update to update package metadata/links after moving GitHub repo to a new organization
 
-## Test environments (R-release = v4.3.0)
+## Test environments (R-release = v4.4.0)
 * Windows 10, R-release (local)
 * win-builder (devel)
 * windows-latest (on github actions) R-release

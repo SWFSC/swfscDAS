@@ -1,3 +1,8 @@
+# swfscDAS 0.6.3.9000
+
+* Moved repo to https://github.com/swfsc, and updated all associated documentation. Also generalized documentation to not be as SWFSC-focused
+
+
 # swfscDAS 0.6.2
 
 * Use `reframe` in grouping summaries in `das_sight` for when none of a certain event are in the data (#8)
