@@ -14,7 +14,7 @@ generated using the WinCruz program by the Southwest Fisheries Science Center.
 It is intended to standardize and streamline basic DAS data processing.
 }
 \seealso{
-\url{https://smwoodman.github.io/swfscDAS/}
+\url{https://swfsc.github.io/swfscDAS/}
 }
 \author{
 Sam Woodman \email{sam.woodman@noaa.gov}
