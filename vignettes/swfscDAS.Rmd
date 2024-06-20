@@ -35,7 +35,7 @@ head(readLines(y))
 
 ## Check data format
 
-The first step in processing DAS data is to ensure that the DAS file has expected formatting and values. This package contains the `das_check` function, which performs some basic checks. This function is a precursor to a more comprehensive DASCHECK program, which is currently in development. The checks performed by this function are detailed in the function documentation, which can be accessed by running `?das_check`. You can find the PDF with the expected DAS data format at https://smwoodman.github.io/swfscDAS/, or see `?das_format_pdf` for how to access a local copy. To check for valid species codes using this function, you can pass the function an SpCodes.dat file
+The first step in processing DAS data is to ensure that the DAS file has expected formatting and values. This package contains the `das_check` function, which performs some basic checks. This function is a precursor to a more comprehensive DASCHECK program, which is currently in development. The checks performed by this function are detailed in the function documentation, which can be accessed by running `?das_check`. You can find the PDF with the expected DAS data format at https://swfsc.github.io/swfscDAS/, or see `?das_format_pdf` for how to access a local copy. To check for valid species codes using this function, you can pass the function an SpCodes.dat file
 
 ```{r check, eval=FALSE}
 # Code not run
