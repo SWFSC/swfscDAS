@@ -1,4 +1,4 @@
-# swfscDAS 0.6.3.9000
+# swfscDAS 0.6.3
 
 * Moved repo to https://github.com/swfsc, and updated all associated documentation. Also generalized documentation to not be as SWFSC-focused, and thus speak to more general uses of DAS files
 
