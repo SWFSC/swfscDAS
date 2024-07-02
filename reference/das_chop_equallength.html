@@ -143,14 +143,14 @@ Default is <code>NULL</code> since these distances should have already been calc
   there are several possible scenarios:</p><ul><li><p>The extra length remaining after chopping is greater than or equal to
       half of the target segment length (i.e. <code>&gt;= 0.5*seg.km</code>):
       the extra length is assigned to a random portion of the effort section as its own segment
-      (<a href="https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf" class="external-link">see Fig. 1a</a>)</p></li>
+      (<a href="https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf" class="external-link">see Fig. 1a</a>)</p></li>
 <li><p>The extra length remaining after chopping is less than half of the
       target segment length (i.e. <code>&lt; 0.5*seg.km</code>):
       the extra length is added to one of the (randomly selected) equal-length segments
-      (<a href="https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf" class="external-link">see Fig. 1b</a>)</p></li>
+      (<a href="https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf" class="external-link">see Fig. 1b</a>)</p></li>
 <li><p>The length of the effort section is less than or equal to
       the target segment length: the entire segment becomes a segment
-      (<a href="https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf" class="external-link">see Fig. 1c</a>)</p></li>
+      (<a href="https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf" class="external-link">see Fig. 1c</a>)</p></li>
 <li><p>The length of the effort section is zero: a segment of length zero.
       If there are more than two events (the "B"/R" and "E" events),
       the function throws a warning</p></li>
@@ -160,7 +160,7 @@ Default is <code>NULL</code> since these distances should have already been calc
   and the central tendency is approximately equal to the target segment length.
   The only exception is when a continuous effort section is less than
   one half of the target segment length (i.e. <code>&lt; 0.5*seg.km</code>;
-  <a href="https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf" class="external-link">see Fig. 1c</a>).</p>
+  <a href="https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf" class="external-link">see Fig. 1c</a>).</p>
 <p>Note the PDF with Figs. 1a - 1c is included in the package, and can be found at:
   <code>system.file("DAS_chop_equal_figures.pdf", package = "swfscDAS")</code></p>
 <p>'Randpicks' is a record of the random assignments that were made when
