@@ -77,14 +77,14 @@ WARNING - do not call this function directly!
     \item The extra length remaining after chopping is greater than or equal to
       half of the target segment length (i.e. \code{>= 0.5*seg.km}):
       the extra length is assigned to a random portion of the effort section as its own segment
-      (\href{https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf}{see Fig. 1a})
+      (\href{https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf}{see Fig. 1a})
     \item The extra length remaining after chopping is less than half of the
       target segment length (i.e. \code{< 0.5*seg.km}):
       the extra length is added to one of the (randomly selected) equal-length segments
-      (\href{https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf}{see Fig. 1b})
+      (\href{https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf}{see Fig. 1b})
     \item The length of the effort section is less than or equal to
       the target segment length: the entire segment becomes a segment
-      (\href{https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf}{see Fig. 1c})
+      (\href{https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf}{see Fig. 1c})
     \item The length of the effort section is zero: a segment of length zero.
       If there are more than two events (the "B"/R" and "E" events),
       the function throws a warning
@@ -96,7 +96,7 @@ WARNING - do not call this function directly!
   and the central tendency is approximately equal to the target segment length.
   The only exception is when a continuous effort section is less than
   one half of the target segment length (i.e. \code{< 0.5*seg.km};
-  \href{https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf}{see Fig. 1c}).
+  \href{https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_chop_equallength_figures.pdf}{see Fig. 1c}).
 
   Note the PDF with Figs. 1a - 1c is included in the package, and can be found at:
   \code{system.file("DAS_chop_equal_figures.pdf", package = "swfscDAS")}

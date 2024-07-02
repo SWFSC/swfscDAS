@@ -25,7 +25,7 @@ A wrapper function for \code{\link[base:files]{file.copy}}.
   to \code{file}
 
   This file can also be downloaded from
-  \url{https://github.com/smwoodman/swfscDAS/blob/master/inst/DAS_Format.pdf}
+  \url{https://github.com/swfsc/swfscDAS/blob/master/inst/DAS_Format.pdf}
 }
 \examples{
 das_format_pdf(file.path(tempdir(), "DAS_Format.pdf"), overwrite = FALSE)
