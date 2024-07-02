@@ -20,7 +20,7 @@ library(stringr)
 library(swfscDAS)
 ```
 
-This document introduces you to the swfscDAS package, and specifically its functionality and workflow. This package is intended to standardize and streamline processing of DAS data. It  was designed for shipboard DAS data generated using the [WinCruz software](https://github.com/SWFSC/WinCruz-2.0) from the Southwest Fisheries Science Center. However, the DAS files and the `swfscDAS` package are and can be used by others, e.g. to process decades of NOAA Fisheries survey data. 
+This document introduces you to the swfscDAS package, and specifically its functionality and workflow. This package is intended to standardize and streamline processing of DAS data. It was designed for shipboard DAS data generated using the WinCruz software from the Southwest Fisheries Science Center. However, the DAS files and the `swfscDAS` package are and can be used by others, e.g. to process decades of NOAA Fisheries survey data. 
 
 In DAS data, an event is only recorded when something changes or happens, which can complicate processing. Thus, the main theme of this package is enabling analyses and downstream processing by 1) determining associated state and condition information for each event and 2) pulling out event-specific information from the Data (Field) columns.
 

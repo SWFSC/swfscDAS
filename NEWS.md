@@ -2,9 +2,9 @@
 
 * Moved repo to https://github.com/swfsc, and updated all associated documentation. Also generalized documentation to not be as SWFSC-focused, and thus speak to more general uses of DAS files
 
-* Changed license back to GPL3 + [addendum](https://github.com/SWFSC/swfscDAS/blob/main/LICENSE), based on https://nmfs-opensci.github.io/GitHub-Guide
+* Changed license to Apache License (== 2), based on NMFS guidance at https://nmfs-opensci.github.io/GitHub-Guide
 
-* Generalized package title
+* Generalized package title and description to not be SWFSC-specific
 
 
 # swfscDAS 0.6.2

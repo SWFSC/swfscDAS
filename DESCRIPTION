@@ -6,12 +6,10 @@ Authors@R:
 Description: Process and summarize DAS data files. 
     These files are typically, but do not have to be 
     DAS <https://swfsc-publications.fisheries.noaa.gov/publications/TM/SWFSC/NOAA-TM-NMFS-SWFSC-305.PDF> data
-    produced by the Southwest Fisheries Science Center (SWFSC) program 'WinCruz' 
-    <https://www.fisheries.noaa.gov/west-coast/science-data/california-current-marine-mammal-assessment-program>.
+    produced by the Southwest Fisheries Science Center (SWFSC) program 'WinCruz'.
     This package standardizes and streamlines basic DAS data processing,
     and includes a PDF with the DAS data format requirements expected by the package.
-URL: https://swfsc.github.io/swfscDAS/,
-    https://github.com/swfsc/swfscDAS/
+URL: https://swfsc.github.io/swfscDAS/, https://github.com/swfsc/swfscDAS/
 BugReports: https://github.com/swfsc/swfscDAS/issues/
 Depends: R (>= 4.0.0)
 Imports:
@@ -31,7 +29,7 @@ Suggests:
     rmarkdown,
     stringr, 
     testthat (>= 2.1.0)
-License: GPL-3
+License: Apache License (== 2)
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 VignetteBuilder: knitr
