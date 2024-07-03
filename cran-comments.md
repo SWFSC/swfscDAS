@@ -1,5 +1,5 @@
 ## Release summary
-Minor update to update package metadata/links/license, after moving GitHub repo to a new organization
+Minor update to update package metadata/links/license, after moving GitHub repo to a new organization. Fixed error from initial submission (invlaid URL).
 
 ## Test environments (R-release = v4.4.0)
 * Windows 10, R-release (local)
