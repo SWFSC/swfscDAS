@@ -12,13 +12,13 @@ More generally, the package is intended to standardize and streamline basic DAS 
 
 ## Installation
 
-You can install the released version of swfscDAS from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of `swfscDAS` from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("swfscDAS")
 ```
 
-You can install the developmental version of swfscDAS from [GitHub](https://github.com) with:
+You can install the developmental version of `swfscDAS` from [GitHub](https://github.com) with:
 
 ``` r
 # install.packages("remotes")
@@ -27,7 +27,7 @@ remotes::install_github("swfsc/swfscDAS")
 
 ## DAS data format
 
-swfscDAS expects data to follow the conventions and format used by the WinCruz program. You can [download a PDF here](https://github.com/swfsc/swfscDAS/blob/main/inst/DAS_Format.pdf) describing the DAS data format requirements. See `das_format_pdf` for instructions on how to access the local copy of the format PDF that is included in the package.
+`swfscDAS` expects data to follow the conventions and format used by the WinCruz program. You can [download a PDF here](https://github.com/swfsc/swfscDAS/blob/main/inst/DAS_Format.pdf) describing the DAS data format requirements. See `das_format_pdf` for instructions on how to access the local copy of the format PDF that is included in the package.
 
 ## Disclaimer
 
