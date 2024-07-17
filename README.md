@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 
-[![CRAN version](http://www.r-pkg.org/badges/version/swfscDAS)](https://cran.r-project.org/package=swfscDAS)
+[![CRAN version](https://www.r-pkg.org/badges/version/swfscDAS)](https://cran.r-project.org/package=swfscDAS)
 [![R-CMD-check](https://github.com/swfsc/swfscDAS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/swfsc/swfscDAS/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
