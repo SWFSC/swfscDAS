@@ -24,36 +24,36 @@ das_process(x, ...)
 )
 }
 \arguments{
-\item{x}{an object of class \code{das_dfr},
-an object that can be coerced to class \code{das_dfr},
-or a character (filepath) which is first passed to \code{\link{das_read}}}
+\item{x}{an object of class \code{das_dfr}, an object that can be coerced to
+class \code{das_dfr}, or a character (file path) which is first passed to
+\code{\link{das_read}}}
 
 \item{...}{passed to \code{\link{das_read}} if \code{x} is a character.
 Otherwise ignored}
 
-\item{days.gap}{numeric of length 1; default is \code{20}.
-Time gap (in days) used to identify a new cruise in concatenated DAS files,
-and thus also when state/condition information
-(cruise number, weather, Bft, Mode, etc) is reset}
+\item{days.gap}{numeric of length 1; default is \code{20}. Time gap (in days)
+used to identify a new cruise in concatenated DAS files, and thus also when
+state/condition information (cruise number, weather, Bft, Mode, etc) is
+reset}
 
-\item{reset.event}{logical; default is \code{TRUE}.
-Indicates if state/condition information (weather, Bft, Mode, etc)
-should be reset to \code{NA}
-if there is an applicable event with an \code{NA} for that state/condition}
+\item{reset.event}{logical; default is \code{TRUE}. Indicates if
+state/condition information (weather, Bft, Mode, etc) should be reset to
+\code{NA} if there is an applicable event with an \code{NA} for that
+state/condition}
 
-\item{reset.effort}{logical; default is \code{TRUE}.
-Indicates if state/condition information should be reset to \code{NA}
-when beginning a new continuous effort section. See Details section}
+\item{reset.effort}{logical; default is \code{TRUE}. Indicates if
+state/condition information should be reset to \code{NA} when beginning a
+new continuous effort section. See Details section}
 
-\item{reset.day}{logical; default is \code{TRUE}.
-Indicates if state/condition information should be reset to \code{NA}
-at the beginning of each day. This argument should only
-be set to \code{FALSE} for comparison with older methods, such as REPORT}
+\item{reset.day}{logical; default is \code{TRUE}. Indicates if
+state/condition information should be reset to \code{NA} at the beginning
+of each day. This argument should only be set to \code{FALSE} for
+comparison with older methods, such as REPORT}
 
-\item{add.dtll.sight}{logical indicating if the DateTime (dt)
-and latitude and longitude (ll)
-  columns should be added to the sighting events (?, 1, 2, 3, 4, 5, 6, 7, and 8)
-  from the corresponding (immediately preceding) A event}
+\item{add.dtll.sight}{logical indicating if the DateTime (dt) and latitude
+and longitude (ll) columns should be added to the sighting events (?, 1, 2,
+3, 4, 5, 6, 7, and 8) from the corresponding (immediately preceding) A
+event}
 }
 \value{
 A \code{das_df} object, which is also a data frame.
@@ -93,23 +93,22 @@ A \code{das_df} object, which is also a data frame.
 }
 \description{
 Process DAS data (the output of \code{\link{das_read}}),
-  including extracting state and condition information for each DAS event
+including extracting state and condition information for each DAS event
 }
 \details{
 If \code{x} is a character,
-  it is assumed to be a filepath and first passed to \code{\link{das_read}}.
+  it is assumed to be a file path and first passed to \code{\link{das_read}}.
   This output is then passed to \code{das_process}.
 
-  DAS data is event-based, meaning most events indicate when a
-  state or weather condition changes.
-  For instance, a 'V' event indicates when one or more sea state viewing conditions
-  (such as Beaufort sea state) change, and these conditions
-  are the same for subsequent events until the next 'V' event.
-  For each state/condition: a new column is created,
-  the state/condition information is extracted from relevant events,
-  and extracted information is propagated to appropriate subsequent rows (events).
-  Thus, each row in the output data frame contains all
-  pertinent state/condition information for that row.
+  DAS data is event-based, meaning most events indicate when a state or
+  weather condition changes. For instance, a 'V' event indicates when one or
+  more sea state viewing conditions (such as Beaufort sea state) change, and
+  these conditions are the same for subsequent events until the next 'V'
+  event. For each state/condition: a new column is created, the
+  state/condition information is extracted from relevant events, and
+  extracted information is propagated to appropriate subsequent rows
+  (events). Thus, each row in the output data frame contains all pertinent
+  state/condition information for that row.
 
   The following assumptions/decisions are made during processing:
   \itemize{
@@ -118,38 +117,40 @@ If \code{x} is a character,
       P, Q, r, R, s, S, t, V, W, g, G, p, X, Y, Z
     \item All '#' events (deleted events) are removed
     \item r events are converted to R events with non-standard effort;
-      see \code{\link{das_format_pdf}} for more details
+    see \code{\link{das_format_pdf}} for more details
     \item An event is considered 'on effort' if it is 1) an R event,
-      2) a B event immediately preceding an R event, or
-      3) between corresponding R and E events (not including the E event).
-      The 'EffortDot' column is not used when determining on effort data.
-      Note that effort is reset to 'off effort' at the beginning of a new day.
-    \item All state/condition information is reset at the beginning of each cruise.
-      New cruises are identified using \code{days.gap}.
-    \item All state/condition information relating to B, R, P, V, N, and W events
-      are reset every time there is a BR event sequence if \code{reset.effort == TRUE},
-      because in WinCruz a BR event sequence should always be a BRPVNW event sequence.
-      An event sequence means that all of the events have the same Lat/Lon/DateTime info,
-      and thus previous values for conditions set during the event sequence should not
-      carry over to any part of the event sequence.
+    2) a B event immediately preceding an R event, or
+    3) between corresponding R and E events (not including the E event). The
+    'EffortDot' column is not used when determining on effort data. Note that
+    effort is reset to 'off effort' at the beginning of a new day.
+    \item All state/condition information is reset at the beginning of each
+    cruise. New cruises are identified using \code{days.gap}.
+    \item All state/condition information relating to B, R, P, V, N, and W
+    events are reset every time there is a BR event sequence if
+    \code{reset.effort == TRUE}, because in WinCruz a BR event sequence
+    should always be a BRPVNW event sequence. An event sequence means that
+    all of the events have the same Lat/Lon/DateTime info, and thus previous
+    values for conditions set during the event sequence should not carry over
+    to any part of the event sequence.
     \item 'OffsetGMT' is converted to an integer. Values are expected to be
-      consistent within a day for each cruise, so events will have an
-      OffsetGMT value if there is any B event with the offset data on
-      the same day, whether that event is before or after the B event.
-      Thus, if any date/cruise combinations have multiple OffsetGMT values
-      in the data, then a warning message will be printed and the
-      OffsetGMT values will be all NA (for the entire output).
-
-    \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned a value of "C"
-    \item 'EffType' is capitalized, and values of \code{NA} are assigned a value of "S"
-    \item 'ESWsides' represents the number of sides being searched during that effort section -
-      a value of \code{NA} (for compatibility with older data) or "F" means 2 sides are being searched,
-      and a value of "H" means 1 side is being searched.
-      ESWsides will be \code{NA} for values that are not one of "F", \code{NA}, or "H"
-    \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is 2 or 3,
-      or if 'HorizSun' is 12 and 'VertSun' is 1;
-      \code{NA} if 'HorizSun' or 'VertSun' is \code{NA};
-      otherwise \code{FALSE}
+    consistent within a day for each cruise, so events will have an OffsetGMT
+    value if there is any B event with the offset data on the same day,
+    whether that event is before or after the B event. Thus, if any
+    date/cruise combinations have multiple OffsetGMT values in the data, then
+    a warning message will be printed and the OffsetGMT values will be all NA
+    (for the entire output).#'
+    \item 'Mode' is capitalized, and 'Mode' values of \code{NA} are assigned
+    a value of "C"
+    \item 'EffType' is capitalized, and values of \code{NA} are assigned a
+    value of "S"
+    \item 'ESWsides' represents the number of sides being searched during
+    that effort section - a value of \code{NA} (for compatibility with older
+    data) or "F" means 2 sides are being searched, and a value of "H" means 1
+    side is being searched. ESWsides will be \code{NA} for values that are
+    not one of "F", \code{NA}, or "H"
+    \item 'Glare': \code{TRUE} if 'HorizSun' is 11, 12 or 1 and 'VertSun' is
+    2 or 3, or if 'HorizSun' is 12 and 'VertSun' is 1; \code{NA} if
+    'HorizSun' or 'VertSun' is \code{NA}; otherwise \code{FALSE}
     \item Missing values are \code{NA} rather than \code{-1}
   }
 }
