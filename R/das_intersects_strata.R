@@ -90,7 +90,7 @@ das_intersects_strata.list <- function(x, strata.files, ...) {
 
   x1 <- das_intersects_strata(x$segdata, strata.files, "mlon", "mlat")
   names.new <- base::setdiff(names(x1), names(x$segdata))
-  x1.tojoin <- x1 %>% select(.data$segnum, !!names.new)
+  x1.tojoin <- x1 %>% select("segnum", !!names.new)
 
   x2 <- left_join(x$sightinfo, x1.tojoin, by = "segnum")
   # x2 <- das_intersects_strata(x$sightinfo, strata.files, "mlat", "mlon")

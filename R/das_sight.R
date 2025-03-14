@@ -298,8 +298,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
            SightNoDaily = if_else(.data$Event %in% c("S", "K", "M", "G"),
                                   .data$SightNoDaily, NA_character_)) %>%
     ungroup() %>%
-    select(.data$sight_cumsum, .data$SightNo, .data$Subgroup, .data$SightNoDaily,
-           .data$Obs, .data$ObsStd, .data$Bearing, .data$Reticle, .data$DistNm)
+    select("sight_cumsum", "SightNo", "Subgroup", "SightNoDaily",
+           "Obs", "ObsStd", "Bearing", "Reticle", "DistNm")
 
 
   #--------------------------------------------------------
@@ -311,8 +311,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
            CalibSchool = toupper(.data$Data10),
            PhotosAerial = toupper(.data$Data11),
            Biopsy = toupper(.data$Data12)) %>%
-    select(.data$sight_cumsum, .data$Cue, .data$Method,
-           .data$CalibSchool, .data$PhotosAerial, .data$Biopsy)
+    select("sight_cumsum", "Cue", "Method",
+           "CalibSchool", "PhotosAerial", "Biopsy")
 
   # Data from A row
   sight.info.skmg2 <- sight.df %>%
@@ -325,9 +325,9 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
                         sum(!is.na(c(d5, d6, d7, d8)))
                       })),
            Mixed = .data$nSp > 1) %>%
-    select(.data$sight_cumsum, .data$Photos, .data$Birds, .data$nSp, .data$Mixed,
-           SpCode1 = .data$Data5, SpCode2 = .data$Data6,
-           SpCode3 = .data$Data7, SpCode4 = .data$Data8)
+    select("sight_cumsum", "Photos", "Birds", "nSp", "Mixed",
+           SpCode1 = "Data5", SpCode2 = "Data6",
+           SpCode3 = "Data7", SpCode4 = "Data8")
 
   # Data from ? row, if any
   sight.info.skmg3 <- sight.df %>%
@@ -349,9 +349,9 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
              GsSchoolBest = as.numeric(.data$Data2),
              GsSchoolHigh = as.numeric(.data$Data3),
              GsSchoolLow = as.numeric(.data$Data4)) %>%
-      select(.data$sight_cumsum, ObsEstimate = .data$Data1,
-             .data$SpPerc1, .data$SpPerc2, .data$SpPerc3, .data$SpPerc4,
-             .data$GsSchoolBest, .data$GsSchoolHigh, .data$GsSchoolLow)
+      select("sight_cumsum", ObsEstimate = "Data1",
+             "SpPerc1", "SpPerc2", "SpPerc3", "SpPerc4",
+             "GsSchoolBest", "GsSchoolHigh", "GsSchoolLow")
 
   } else {
     sight.df %>%
@@ -381,18 +381,18 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
               GsSpLow2  = mean_narm(.data$Data4) * mean_narm(.data$Data6) / 100,
               GsSpLow3  = mean_narm(.data$Data4) * mean_narm(.data$Data7) / 100,
               GsSpLow4  = mean_narm(.data$Data4) * mean_narm(.data$Data8) / 100)
-              # GsSpBest1 = mean(.data$Data2 * .data$Data5 / 100, na.rm = TRUE),
-              # GsSpBest2 = mean(.data$Data2 * .data$Data6 / 100, na.rm = TRUE),
-              # GsSpBest3 = mean(.data$Data2 * .data$Data7 / 100, na.rm = TRUE),
-              # GsSpBest4 = mean(.data$Data2 * .data$Data8 / 100, na.rm = TRUE),
-              # GsSpHigh1 = mean(.data$Data3 * .data$Data5 / 100, na.rm = TRUE),
-              # GsSpHigh2 = mean(.data$Data3 * .data$Data6 / 100, na.rm = TRUE),
-              # GsSpHigh3 = mean(.data$Data3 * .data$Data7 / 100, na.rm = TRUE),
-              # GsSpHigh4 = mean(.data$Data3 * .data$Data8 / 100, na.rm = TRUE),
-              # GsSpLow1 = mean(.data$Data4 * .data$Data5 / 100, na.rm = TRUE),
-              # GsSpLow2 = mean(.data$Data4 * .data$Data6 / 100, na.rm = TRUE),
-              # GsSpLow3 = mean(.data$Data4 * .data$Data7 / 100, na.rm = TRUE),
-              # GsSpLow4 = mean(.data$Data4 * .data$Data8 / 100, na.rm = TRUE))
+    # GsSpBest1 = mean(.data$Data2 * .data$Data5 / 100, na.rm = TRUE),
+    # GsSpBest2 = mean(.data$Data2 * .data$Data6 / 100, na.rm = TRUE),
+    # GsSpBest3 = mean(.data$Data2 * .data$Data7 / 100, na.rm = TRUE),
+    # GsSpBest4 = mean(.data$Data2 * .data$Data8 / 100, na.rm = TRUE),
+    # GsSpHigh1 = mean(.data$Data3 * .data$Data5 / 100, na.rm = TRUE),
+    # GsSpHigh2 = mean(.data$Data3 * .data$Data6 / 100, na.rm = TRUE),
+    # GsSpHigh3 = mean(.data$Data3 * .data$Data7 / 100, na.rm = TRUE),
+    # GsSpHigh4 = mean(.data$Data3 * .data$Data8 / 100, na.rm = TRUE),
+    # GsSpLow1 = mean(.data$Data4 * .data$Data5 / 100, na.rm = TRUE),
+    # GsSpLow2 = mean(.data$Data4 * .data$Data6 / 100, na.rm = TRUE),
+    # GsSpLow3 = mean(.data$Data4 * .data$Data7 / 100, na.rm = TRUE),
+    # GsSpLow4 = mean(.data$Data4 * .data$Data8 / 100, na.rm = TRUE))
   }
 
   if (!all(sight.info.skmg1$sight_cumsum %in% sight.info.skmg4$sight_cumsum))
@@ -410,11 +410,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     left_join(sight.info.skmg3, by = "sight_cumsum") %>%
     left_join(sight.info.skmg4, by = "sight_cumsum") %>%
     mutate(Prob = ifelse(is.na(.data$Prob), FALSE, .data$Prob)) %>%
-    select(.data$sight_cumsum, .data$Cue, .data$Method,
-           .data$Photos, .data$Birds,
-           .data$CalibSchool, .data$PhotosAerial, .data$Biopsy,
-           .data$Prob, .data$nSp, .data$Mixed,
-           .data$ObsEstimate,
+    select("sight_cumsum", "Cue", "Method", "Photos", "Birds", "CalibSchool",
+           "PhotosAerial", "Biopsy", "Prob", "nSp", "Mixed", "ObsEstimate",
            starts_with("SpCode"), starts_with("SpCodeProb"), starts_with("SpPerc"),
            starts_with("GsSchool"), starts_with("GsSpBest"),
            starts_with("GsSpHigh"), starts_with("GsSpLow"),
@@ -428,7 +425,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   sight.info.resight <- sight.df %>%
     filter(.data$Event %in% c("s", "k", "m")) %>%
     mutate(CourseSchool = as.numeric(.data$Data5)) %>%
-    select(.data$sight_cumsum, .data$CourseSchool)
+    select("sight_cumsum", "CourseSchool")
 
 
   #--------------------------------------------------------
@@ -440,8 +437,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
            TurtleJFR = .data$Data6,
            TurtleAge = toupper(.data$Data8),
            TurtleCapt = toupper(.data$Data9)) %>%
-    select(.data$sight_cumsum, .data$TurtleSp, .data$TurtleGs,
-           .data$TurtleJFR, .data$TurtleAge, .data$TurtleCapt)
+    select("sight_cumsum", "TurtleSp", "TurtleGs",
+           "TurtleJFR", "TurtleAge", "TurtleCapt")
 
 
   #--------------------------------------------------------
@@ -450,7 +447,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     filter(.data$Event == "p") %>%
     mutate(PinnipedSp = .data$Data2,
            PinnipedGs = as.numeric(.data$Data5)) %>%
-    select(.data$sight_cumsum, .data$PinnipedSp, .data$PinnipedGs)
+    select("sight_cumsum", "PinnipedSp", "PinnipedGs")
 
 
   #--------------------------------------------------------
@@ -459,7 +456,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     filter(.data$Event == "F") %>%
     mutate(BoatType = .data$Data5,
            BoatGs = as.numeric(.data$Data6)) %>%
-    select(.data$sight_cumsum, .data$BoatType, .data$BoatGs)
+    select("sight_cumsum", "BoatType", "BoatGs")
 
 
   #----------------------------------------------------------------------------
@@ -469,17 +466,15 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   ### Formatting for all options - now done for wide and complete
   to.return <- sight.df %>%
     filter(.data$Event %in% event.sight) %>%
-    select(-.data$Data1, -.data$Data2, -.data$Data3,
-           -.data$Data4, -.data$Data5, -.data$Data6,
-           -.data$Data7, -.data$Data8, -.data$Data9,
-           -.data$Data10, -.data$Data11, -.data$Data12) %>%
+    select(-c("Data1", "Data2", "Data3", "Data4", "Data5", "Data6",
+              "Data7", "Data8", "Data9", "Data10", "Data11", "Data12")) %>%
     left_join(sight.info.all, by = "sight_cumsum") %>%
     left_join(sight.info.skmg, by = "sight_cumsum") %>%
     left_join(sight.info.resight, by = "sight_cumsum") %>%
     left_join(sight.info.t, by = "sight_cumsum") %>%
     left_join(sight.info.p, by = "sight_cumsum") %>%
     left_join(sight.info.f, by = "sight_cumsum") %>%
-    select(-.data$sight_cumsum)
+    select(-"sight_cumsum")
 
 
   #--------------------------------------------------------
@@ -507,7 +502,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
              GsSpHigh = as.numeric(map_chr(.data$sp_list, function(i) i[4])),
              GsSpLow = as.numeric(map_chr(.data$sp_list, function(i) i[5]))) %>%
       filter(!is.na(.data$SpCode)) %>%
-      select(.data$idx, .data$SpCode, .data$SpCodeProb, .data$GsSpBest, .data$GsSpHigh, .data$GsSpLow) %>%
+      select("idx", "SpCode", "SpCodeProb", "GsSpBest", "GsSpHigh", "GsSpLow") %>%
       arrange(.data$idx)
 
     # Names and order of columns to return
@@ -524,12 +519,12 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
     # Finalize return data frame, consolidating columns as possible
     to.return <- to.return %>%
-      select(-.data$SpCode1, -.data$SpCode2, -.data$SpCode3, -.data$SpCode4,
-             -.data$SpCodeProb1, -.data$SpCodeProb2, -.data$SpCodeProb3, -.data$SpCodeProb4,
-             -.data$SpPerc1, -.data$SpPerc2, -.data$SpPerc3, -.data$SpPerc4,
-             -.data$GsSpBest1, -.data$GsSpBest2, -.data$GsSpBest3, -.data$GsSpBest4,
-             -.data$GsSpHigh1, -.data$GsSpHigh2, -.data$GsSpHigh3, -.data$GsSpHigh4,
-             -.data$GsSpLow1, -.data$GsSpLow2, -.data$GsSpLow3, -.data$GsSpLow4) %>%
+      select(-c("SpCode1", "SpCode2", "SpCode3", "SpCode4",
+                "SpCodeProb1", "SpCodeProb2", "SpCodeProb3", "SpCodeProb4",
+                "SpPerc1", "SpPerc2", "SpPerc3", "SpPerc4",
+                "GsSpBest1", "GsSpBest2", "GsSpBest3", "GsSpBest4",
+                "GsSpHigh1", "GsSpHigh2", "GsSpHigh3", "GsSpHigh4",
+                "GsSpLow1", "GsSpLow2", "GsSpLow3", "GsSpLow4")) %>%
       full_join(to.return.multi, by = "idx") %>%
       arrange(.data$idx) %>%
       select(!!sight.names) %>%
@@ -545,8 +540,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
                                       TRUE ~ NA_real_),
              GsSpBest = if_else(.data$Event %in% c("t", "p", "F"),
                                 .data$GsSchoolBest, .data$GsSpBest)) %>%
-      select(-.data$TurtleSp, -.data$TurtleGs, -.data$PinnipedSp,
-             -.data$PinnipedGs, -.data$BoatType, -.data$BoatGs)
+      select(-c("TurtleSp", "TurtleGs", "PinnipedSp", "PinnipedGs",
+                "BoatType", "BoatGs"))
   }
 
 

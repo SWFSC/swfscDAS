@@ -182,7 +182,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   ) %>%
     mutate(segnum = seq_along(.data$seg_idx),
            dist = round(.data$dist, 4)) %>%
-    select(.data$segnum, .data$seg_idx, everything())
+    select("segnum", "seg_idx", everything())
 
   ### Segment lengths
   x.len <- lapply(eff.chop.list, function(i) i[["seg.lengths"]])
@@ -193,7 +193,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
     stringsAsFactors = FALSE
   ) %>%
     left_join(segdata[, c("seg_idx", "segnum")], by = "seg_idx") %>%
-    select(-.data$dist_to_next)
+    select(-"dist_to_next")
 
   ### Message about segments that were combined
   ###   Must be outside b/c no messages come out of parallel
@@ -284,7 +284,7 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   effort.seg[cond.idx] <- TRUE
 
   das.df <- das.df %>%
-    select(-.data$effort_seg_pre, -.data$idx) %>%
+    select(-c("effort_seg_pre", "idx")) %>%
     mutate(seg_idx = paste(i, cumsum(effort.seg), sep = "_"))
 
 

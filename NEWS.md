@@ -1,6 +1,9 @@
 # swfscDAS 0.6.4 (dev)
 
-* 
+* The DateTime column in `das_read` output now has a timezone of `""` (#13)
+
+* remove [superseded](https://tidyselect.r-lib.org/news/index.html#lifecycle-changes-1-2-0) `.data$` syntax in tidyselect expressions
+
 
 
 # swfscDAS 0.6.3

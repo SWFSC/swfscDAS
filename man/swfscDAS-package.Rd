@@ -9,9 +9,11 @@
 Process and summarize shipboard DAS data
 }
 \details{
-This package contains functions designed for processing and analyzing DAS data
-generated using the WinCruz program by the Southwest Fisheries Science Center.
-It is intended to standardize and streamline basic DAS data processing.
+This package contains functions designed for processing and analyzing DAS
+data generated using the WinCruz program by the Southwest Fisheries Science
+Center, although note that it can by anyone that collects data in this
+format. It is intended to standardize and streamline basic DAS data
+processing.
 }
 \seealso{
 \url{https://swfsc.github.io/swfscDAS/}

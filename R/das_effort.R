@@ -346,7 +346,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
       summarise(strata_which = unique(.data$strata_which),
                 stratum = ifelse(.data$strata_which == 0, NA,
                                  names(strata.files)[.data$strata_which])) %>%
-      select(.data$segnum, .data$stratum)
+      select("segnum", "stratum")
     if (nrow(x.strata.summ) != nrow(segdata))
       stop("Error processing strata and segdata - please report this as an issue")
 
@@ -372,28 +372,27 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
 
   x.eff.all <- x.eff %>%
     arrange(.data$idx_eff) %>%
-    select(-.data$idx_eff)
+    select(-"idx_eff")
 
 
   #----------------------------------------------------------------------------
   #----------------------------------------------------------------------------
   # Summarize sightings
   sightinfo <- x.eff.all %>%
-    left_join(select(segdata, .data$segnum, .data$mlat, .data$mlon),
+    left_join(select(segdata, "segnum", "mlat", "mlon"),
               by = "segnum") %>%
     das_sight(returnformat = "default") %>%
     mutate(included = (.data$Bft <= 5 & .data$OnEffort & .data$ObsStd),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
-    select(-.data$dist_from_prev, -.data$cont_eff_section)
+    select(-c("dist_from_prev", "cont_eff_section"))
 
   # Clean and return
   segdata <- segdata %>% select(-.data$seg_idx)
 
   sightinfo <- sightinfo %>%
     mutate(year = year(.data$DateTime)) %>%
-    select(-.data$seg_idx) %>%
-    select(.data$segnum, .data$mlat, .data$mlon, .data$Event,
-           .data$DateTime, .data$year, everything())
+    select(-"seg_idx") %>%
+    select("segnum", "mlat", "mlon", "Event", "DateTime", "year", everything())
 
   list(segdata = segdata, sightinfo = sightinfo, randpicks = randpicks)
 }

@@ -254,7 +254,7 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
     mutate(Date = as.Date(.data$DateTime),
            Cruise = as.numeric(.data$Data1),
            OffsetGMT = as.integer(.data$Data3)) %>%
-    select(.data$Date, .data$Cruise, .data$OffsetGMT) %>%
+    select("Date", "Cruise", "OffsetGMT") %>%
     distinct()
 
   x.offset.summ <- x.offset %>%
@@ -424,10 +424,10 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
     x$idx <- seq_along(x$Event)
     x.key <- x %>%
       filter(.data$Event == "A") %>%
-      select(.data$a_idx, .data$DateTime, .data$Lat, .data$Lon)
+      select("a_idx", "DateTime", "Lat", "Lon")
     x.tmp <- x %>%
       filter(.data$Event %in% event.tmp) %>%
-      select(-.data$DateTime, -.data$Lat, -.data$Lon) %>%
+      select(-c("DateTime", "Lat", "Lon")) %>%
       left_join(x.key, by = "a_idx") %>%
       select(!!names(x))
 
@@ -435,7 +435,7 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
       filter(!(.data$Event %in% event.tmp)) %>%
       bind_rows(x.tmp) %>%
       arrange(.data$idx) %>%
-      select(-.data$idx, -.data$a_idx)
+      select(-c("idx", "a_idx"))
     rm(x.key, x.tmp)
   }
 

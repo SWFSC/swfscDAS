@@ -114,7 +114,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
 
   df.out1 <- x %>%
     select(!!df.out1.cols) %>%
-    select(file = .data$file_das, everything()) %>%
+    select(file = "file_das", everything()) %>%
     slice(n()) #use n() instead of 1 b/c some vars may be NA in first line
 
 
@@ -126,12 +126,9 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
 
   #----------------------------------------------------------------------------
   segdata.all %>%
-    select(.data$seg_idx, .data$section_id, .data$section_sub_id,
-           .data$file, .data$stlin, .data$endlin,
-           .data$lat1, .data$lon1, .data$DateTime1,
-           .data$lat2, .data$lon2, .data$DateTime2,
-           .data$mlat, .data$mlon, .data$mDateTime,
-           .data$dist, .data$year, .data$month, .data$day, .data$mtime,
+    select("seg_idx", "section_id", "section_sub_id", "file", "stlin", "endlin",
+           "lat1", "lon1", "DateTime1", "lat2", "lon2", "DateTime2",
+           "mlat", "mlon", "mDateTime", "dist", "year", "month", "day", "mtime",
            everything())
 }
 

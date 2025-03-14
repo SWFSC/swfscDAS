@@ -119,7 +119,7 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
 
   message("Processing DAS file")
   x.proc <- suppressWarnings(das_process(x)) %>%
-    left_join(select(x, .data$file_das, .data$line_num, .data$idx),
+    left_join(select(x, "file_das", "line_num", "idx"),
               by = c('file_das', "line_num"))
   x.proc <- as_das_df(x.proc)
 
@@ -235,12 +235,16 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   br.r.which <- x.proc.prev %>%
     filter((.data$Event == "R" & .data$OnEffort_prev & .data$Event_prev != "B") |
              (.data$Event == "B" & .data$OnEffort_prev)) %>%
-    select(.data$idx) %>% unlist() %>% unname()
+    select("idx") %>%
+    unlist() %>%
+    unname()
 
   # 3) All E events occur while on effort
   e.which <- x.proc.prev %>%
     filter(.data$Event == "E" & !.data$OnEffort_prev) %>%
-    select(.data$idx) %>% unlist() %>% unname()
+    select("idx") %>%
+    unlist() %>%
+    unname()
 
 
   error.out <- rbind(

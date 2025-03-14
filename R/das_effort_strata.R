@@ -89,8 +89,8 @@ das_effort_strata.das_df <- function(x, strata.files, ...) {
       # 'New' point will have same data as i-1 b/c we haven't made it to i yet
       idx.eff <- das.df.curr$idx_eff[1]
       df.out2 <- bind_cols(
-        das.df.curr %>% select(.data$Event:.data$line_num) %>% slice(1),
-        das.df.curr %>% select(.data$idx_eff:.data$strata_which) %>% slice(2)
+        das.df.curr %>% select("Event":"line_num") %>% slice(1),
+        das.df.curr %>% select("idx_eff":"strata_which") %>% slice(2)
       )
 
       das.df.curr %>%

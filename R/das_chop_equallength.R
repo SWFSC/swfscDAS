@@ -254,7 +254,7 @@ das_chop_equallength.das_df <- function(x,
   ) %>%
     mutate(segnum = seq_along(.data$file),
            dist = round(.data$dist, 4)) %>%
-    select(.data$segnum, everything())
+    select("segnum", everything())
 
   ### Each das data point, along with segnum
   x.eff <- data.frame(

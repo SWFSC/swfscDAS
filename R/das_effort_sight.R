@@ -82,7 +82,7 @@ das_effort_sight <- function(x.list, sp.codes, sp.events = c("S", "G", "K", "M",
 
   # Make data frame with nSI and ANI columns, and join it with segdata
   segdata$seg_idx <- paste(segdata$section_id, segdata$section_sub_id, sep = "_")
-  sightinfo <- left_join(sightinfo, select(segdata, .data$segnum, .data$seg_idx),
+  sightinfo <- left_join(sightinfo, select(segdata, "segnum", "seg_idx"),
                          by = "segnum")
 
   sightinfo$GsSegment <- apply(select(sightinfo, !!gs.columns), 1, function(i) {
@@ -90,7 +90,7 @@ das_effort_sight <- function(x.list, sp.codes, sp.events = c("S", "G", "K", "M",
     if (all(i.na)) NA else i[!i.na][1]
   })
 
-  segdata.col1 <- select(segdata, .data$seg_idx)
+  segdata.col1 <- select(segdata, "seg_idx")
   sightinfo.forsegdata.list <- lapply(sp.codes, function(i, sightinfo, d1) {
     d0 <- sightinfo %>%
       filter(.data$included, .data$SpCode == i) %>%
@@ -100,7 +100,7 @@ das_effort_sight <- function(x.list, sp.codes, sp.events = c("S", "G", "K", "M",
 
     names(d0) <- c("seg_idx", paste(names(d0)[-1], i, sep = "_"))
 
-    z <- full_join(d1, d0, by = "seg_idx") %>% select(-.data$seg_idx)
+    z <- full_join(d1, d0, by = "seg_idx") %>% select(-"seg_idx")
     z[is.na(z)] <- 0
 
     z
@@ -112,11 +112,11 @@ das_effort_sight <- function(x.list, sp.codes, sp.events = c("S", "G", "K", "M",
   ### Clean up and return
   segdata <- segdata %>%
     left_join(sightinfo.forsegdata.df, by = "seg_idx") %>%
-    select(-.data$seg_idx)
+    select(-"seg_idx")
 
   sightinfo <- sightinfo %>%
     mutate(included = ifelse(.data$SpCode %in% sp.codes, .data$included, FALSE)) %>%
-    select(-.data$seg_idx, -.data$GsSegment)
+    select(-c("seg_idx", "GsSegment"))
 
   list(segdata = segdata, sightinfo = sightinfo, randpicks = randpicks)
 }

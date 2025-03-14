@@ -48,7 +48,7 @@ randpicks_convert <- function(x.randpicks, x.segdata, seg.km) {
 
   # 'Expand' randpicks data to include all continuous effort sections
   x.segdata.summ %>%
-    select(effort_section = .data$cont_eff_sect) %>%
+    select(effort_section = "cont_eff_sect") %>%
     left_join(rand.out, by = c("effort_section" = "cont_eff_sect")) %>%
-    select(.data$effort_section, randpicks = .data$pos_value)
+    select("effort_section", randpicks = "pos_value")
 }
