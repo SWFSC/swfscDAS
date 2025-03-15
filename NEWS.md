@@ -4,6 +4,7 @@
 
 * remove [superseded](https://tidyselect.r-lib.org/news/index.html#lifecycle-changes-1-2-0) `.data$` syntax in tidyselect expressions
 
+* Add OffSetGMT column to `das_effort` 'segdata' output (#12)
 
 
 # swfscDAS 0.6.3

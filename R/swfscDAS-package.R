@@ -26,7 +26,7 @@
 #'   st_intersection st_linestring st_polygon st_sf st_sfc st_wrap_dateline
 #' @importFrom stats na.omit runif
 #' @importFrom swfscMisc bearing destination distance setupClusters
-#' @importFrom tidyr gather
+#' @importFrom tidyr pivot_longer
 #' @importFrom utils head read.csv tail write.csv
 #'
 #' @keywords package

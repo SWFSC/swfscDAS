@@ -1,63 +1,61 @@
 #' Summarize DAS data for a continuous effort section
 #'
-#' Summarize DAS effort data by effort segment, while averaging or getting the max for each condition
+#' Summarize DAS effort data by effort segment, while averaging or getting the
+#' max for each condition
 #'
-#' @param x an object of class \code{das_df},
-#'   or a data frame that can be coerced to class \code{das_df}
-#'   Must contain a single continuous effort section of DAS data;
-#'   see the Details section below
-#' @param conditions see \code{\link{das_effort}}, or
-#'   see Details section for more information
-#' @param segdata.method character; either avg" or "maxdist".
-#'   See Details section for more information
-#' @param seg.lengths numeric; length of the modeling segments
-#'   into which \code{x} will be chopped
-#' @param section.id numeric; the ID of \code{x} (the current continuous effort section)
+#' @param x an object of class \code{das_df}, or a data frame that can be
+#'   coerced to class \code{das_df} Must contain a single continuous effort
+#'   section of DAS data; see the Details section below
+#' @param conditions see \code{\link{das_effort}}, or see Details section for
+#'   more information
+#' @param segdata.method character; either avg" or "maxdist". See Details
+#'   section for more information
+#' @param seg.lengths numeric; length of the modeling segments into which
+#'   \code{x} will be chopped
+#' @param section.id numeric; the ID of \code{x} (the current continuous effort
+#'   section)
 #' @param ... ignored
 #'
-#' @details WARNING - do not call this function directly!
-#'   It is exported for documentation purposes, but is intended for internal package use only.
+#' @details WARNING - do not call this function directly! It is exported for
+#'   documentation purposes, but is intended for internal package use only.
 #'
 #'   This function was designed to be called by one of the das_chop_ functions,
-#'   e.g. \code{\link{das_chop_equallength}}, and thus
-#'   users should avoid calling it themselves.
-#'   It loops through the events in \code{x}, chopping \code{x} into modeling segments
-#'   while calculating and storing relevant information for each segment.
-#'   Because \code{x} is a continuous effort section, it must begin with
-#'   a "B" or "R" event and end with the corresponding "E" event.
+#'   e.g. \code{\link{das_chop_equallength}}, and thus users should avoid
+#'   calling it themselves. It loops through the events in \code{x}, chopping
+#'   \code{x} into modeling segments while calculating and storing relevant
+#'   information for each segment. Because \code{x} is a continuous effort
+#'   section, it must begin with a "B" or "R" event and end with the
+#'   corresponding "E" event.
 #'
-#'   For each segment, this function reports the segment number,
-#'   segment ID, cruise number, the start/end/mid coordinates (lat/lon),
-#'   start/end/mid date/times (DateTime), segment length,
-#'   year, month, day, midpoint time, mode, effort type,
-#'   effective strip width sides (number of sides searched),
-#'   and average conditions (which are specified by \code{conditions}).
-#'   The segment ID is designated as \code{section.id} _ index of the modeling segment.
-#'   Thus, if \code{section.id} is \code{1}, then the segment ID for
-#'   the second segment from \code{x} is \code{"1_2"}.
-#'   The start/end coordinates and date/times are interpolated as needed,
-#'   e.g. when using the 'equallength' method.
+#'   For each segment, this function reports the segment number, segment ID,
+#'   cruise number, the start/end/mid coordinates (lat/lon), start/end/mid
+#'   date/times (DateTime), segment length, year, month, day, midpoint time,
+#'   mode, OffsetGMT value, effort type, effective strip width sides (number of
+#'   sides searched), and average conditions (which are specified by
+#'   \code{conditions}). The segment ID is designated as \code{section.id} _
+#'   index of the modeling segment. Thus, if \code{section.id} is \code{1}, then
+#'   the segment ID for the second segment from \code{x} is \code{"1_2"}. The
+#'   start/end coordinates and date/times are interpolated as needed, e.g. when
+#'   using the 'equallength' method.
 #'
-#'   When \code{segdata.method} is "avg", the condition values are
-#'   calculated as a weighted average by distance.
-#'   The reported value for logical columns (e.g. Glare) is the percentage
-#'   (in decimals) of the segment in which that condition was \code{TRUE}.
-#'   For character columns, the reported value for each segment is
-#'   the unique value(s) present in the segment, with \code{NA}s omitted,
-#'   pasted together via \code{paste(..., collapse = "; ")}.
-#'   When \code{segdata.method} is "maxdist", the reported values
-#'   are, for each condition, the value recorded for the longest distance
-#'   during that segment (with \code{NA}s omitted).
+#'   When \code{segdata.method} is "avg", the condition values are calculated as
+#'   a weighted average by distance. The reported value for logical columns
+#'   (e.g. Glare) is the percentage (in decimals) of the segment in which that
+#'   condition was \code{TRUE}. For character columns, the reported value for
+#'   each segment is the unique value(s) present in the segment, with \code{NA}s
+#'   omitted, pasted together via \code{paste(..., collapse = "; ")}. When
+#'   \code{segdata.method} is "maxdist", the reported values are, for each
+#'   condition, the value recorded for the longest distance during that segment
+#'   (with \code{NA}s omitted).
 #'
-#'   Cruise number, mode, effort type, sides searched, and file name are
-#'   also included in the segdata output.
-#'   These values (excluding \code{NA}s) must be consistent across the
-#'   entire effort section, and thus across all segments in \code{x};
-#'   a warning is printed if there are any inconsistencies
+#'   Cruise number, mode, effort type, sides searched, and file name are also
+#'   included in the segdata output. These values (excluding \code{NA}s) must be
+#'   consistent across the entire effort section, and thus across all segments
+#'   in \code{x}; a warning is printed if there are any inconsistencies
 #'
 #'   \code{\link[swfscMisc]{bearing}} and \code{\link[swfscMisc]{destination}}
-#'   are used to calculate the segment start, mid, and end points,
-#'   with \code{method = "vincenty"}.
+#'   are used to calculate the segment start, mid, and end points, with
+#'   \code{method = "vincenty"}.
 #'
 #' @return Data frame with the segdata information described in Details
 #'   and in \code{\link{das_effort}}
@@ -100,7 +98,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
   #----------------------------------------------------------------------------
   # Prep stuff - get the info that is consistent for the entire effort length
   # ymd determined below to be safe
-  df.out1.cols <- c("file_das", "Cruise", "Mode", "EffType", "ESWsides")
+  df.out1.cols <- c("file_das", "Cruise", "Mode", "OffsetGMT",
+                    "EffType", "ESWsides")
 
   # <=1 accounts for when all
   df.out1.check <- vapply(df.out1.cols, function(i) {
