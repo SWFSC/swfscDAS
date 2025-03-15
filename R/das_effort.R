@@ -164,11 +164,13 @@ das_effort.data.frame <- function(x, ...) {
 
 #' @name das_effort
 #' @export
-das_effort.das_df <- function(x, method = c("condition", "equallength", "section"),
-                              conditions = NULL, strata.files = NULL,
-                              distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
-                              seg0.drop = FALSE, comment.drop = FALSE, event.touse = NULL,
-                              num.cores = NULL, ...) {
+das_effort.das_df <- function(
+    x, method = c("condition", "equallength", "section"),
+    conditions = NULL, strata.files = NULL,
+    distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
+    seg0.drop = FALSE, comment.drop = FALSE, event.touse = NULL,
+    num.cores = NULL, ...
+) {
   #----------------------------------------------------------------------------
   # Input checks
   if (!(inherits(seg0.drop, "logical") & inherits(comment.drop, "logical")))
@@ -387,7 +389,7 @@ das_effort.das_df <- function(x, method = c("condition", "equallength", "section
     select(-c("dist_from_prev", "cont_eff_section"))
 
   # Clean and return
-  segdata <- segdata %>% select(-.data$seg_idx)
+  segdata <- segdata %>% select(-"seg_idx")
 
   sightinfo <- sightinfo %>%
     mutate(year = year(.data$DateTime)) %>%

@@ -412,7 +412,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     mutate(Prob = ifelse(is.na(.data$Prob), FALSE, .data$Prob)) %>%
     select("sight_cumsum", "Cue", "Method", "Photos", "Birds", "CalibSchool",
            "PhotosAerial", "Biopsy", "Prob", "nSp", "Mixed", "ObsEstimate",
-           starts_with("SpCode"), starts_with("SpCodeProb"), starts_with("SpPerc"),
+           starts_with("SpCode"), starts_with("SpCodeProb"),
+           starts_with("SpPerc"),
            starts_with("GsSchool"), starts_with("GsSpBest"),
            starts_with("GsSpHigh"), starts_with("GsSpLow"),
            everything())
@@ -494,8 +495,9 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
                                   .data$GsSpHigh3, .data$GsSpLow3)),
                 Sp4_list = list(c(.data$SpCode4, .data$SpCodeProb4, .data$GsSpBest4,
                                   .data$GsSpHigh4, .data$GsSpLow4))) %>%
-      gather(.data$Sp1_list, .data$Sp2_list, .data$Sp3_list, .data$Sp4_list,
-             key = "sp_list_name", value = "sp_list", na.rm = TRUE) %>%
+      pivot_longer(c("Sp1_list", "Sp2_list", "Sp3_list", "Sp4_list"),
+                   names_to = "sp_list_name", values_to = "sp_list",
+                   values_drop_na = TRUE) %>%
       mutate(SpCode = map_chr(.data$sp_list, function(i) i[1]),
              SpCodeProb = map_chr(.data$sp_list, function(i) i[2]),
              GsSpBest = as.numeric(map_chr(.data$sp_list, function(i) i[3])),
