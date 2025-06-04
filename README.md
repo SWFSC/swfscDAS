@@ -21,9 +21,11 @@ install.packages("swfscDAS")
 You can install the developmental version of `swfscDAS` from [GitHub](https://github.com) with:
 
 ``` r
-# install.packages("remotes")
-remotes::install_github("swfsc/swfscDAS")
+# install.packages("pak")
+pak::install_github("swfsc/swfscDAS")
 ```
+
+Note that `pak` is recommended here because of occassional issues using `remotes` from government computers.
 
 ## DAS data format
 
