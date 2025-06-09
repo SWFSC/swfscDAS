@@ -1,5 +1,5 @@
 ## Release summary
-Resubmitting to CRAN, after archival because of archived dependency. Also minor update for small bug fixes
+Resubmitting to CRAN, after archival because of archived dependency. This dependency (swfscMisc) is now back on CRAN. Also minor update for small bug fixes
 
 ## Test environments (R-release = v4.5.0)
 * Windows 10, R-release (local)
