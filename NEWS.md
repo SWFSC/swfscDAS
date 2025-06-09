@@ -1,4 +1,4 @@
-# swfscDAS 0.6.4 (dev)
+# swfscDAS 0.6.4
 
 * The DateTime column in `das_read` output now has a timezone of `""` (#13)
 
