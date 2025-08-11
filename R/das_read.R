@@ -48,8 +48,8 @@
 #'     \emph{Name} \tab \emph{Class} \tab \emph{Details}\cr
 #'     EffortDot \tab logical   \tab \code{TRUE} if "." was present, and \code{FALSE} otherwise\cr
 #'     DateTime  \tab POSIXct   \tab combination of 'Date' and 'Time' columns\cr
-#'     Lat       \tab numeric   \tab 'Latitude' column converted to decimal degrees in range [-90, 90]\cr
-#'     Lon       \tab numeric   \tab 'Longitude' column converted to decimal degrees in range [-180, 180]\cr
+#'     Lat       \tab numeric   \tab 'Latitude' column converted to decimal degrees in range `[-90, 90]`\cr
+#'     Lon       \tab numeric   \tab 'Longitude' column converted to decimal degrees in range `[-180, 180]`\cr
 #'     Data#     \tab character \tab leading/trailing whitespace trimmed for non-comment events (i.e. where 'Event' is not "C")\cr
 #'     EventNum  \tab character \tab leading/trailing whitespace trimmed; left as character for some project-specific codes\cr
 #'     file_das  \tab character \tab base filename, extracted from the \code{file} argument\cr
