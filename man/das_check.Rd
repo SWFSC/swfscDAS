@@ -116,4 +116,8 @@ And that each has at least one group size estimate (1:8 event)
 y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 if (interactive()) das_check(y)
 
+# Using your own SpCodes file
+sp.codes.file <- system.file("extdata", "SpCodes.dat", package = "swfscDAS")
+if (interactive()) das_check(y, sp.codes.file = sp.codes.file)
+
 }

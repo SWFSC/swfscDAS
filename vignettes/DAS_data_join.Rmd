@@ -42,7 +42,7 @@ ships.df <- data.frame(read_fwf(
   trim_ws = TRUE
 ), stringsAsFactors = FALSE)
 
-spcodes.file <- system.file("extdata", "SpCodes_sample.dat", package = "swfscDAS")
+spcodes.file <- system.file("extdata", "SpCodes.dat", package = "swfscDAS")
 spcodes.df <- das_spcodes_read(spcodes.file)
 ```
 

@@ -96,6 +96,10 @@
 #' y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 #' if (interactive()) das_check(y)
 #'
+#' # Using your own SpCodes file
+#' sp.codes.file <- system.file("extdata", "SpCodes.dat", package = "swfscDAS")
+#' if (interactive()) das_check(y, sp.codes.file = sp.codes.file)
+#'
 #' @export
 das_check <- function(
     file,
