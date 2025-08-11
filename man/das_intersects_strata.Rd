@@ -45,45 +45,45 @@ See 'Value' section for more details}
 }
 \value{
 If \code{x} is a data frame, then logical columns are added to \code{x}
-  indicating if each point intersected with the corresponding stratum polygon.
-  The names of these columns are the names of \code{strata.files};
-  the element(s) of \code{strata.files} will have the name InPoly#,
-  where '#' is the index of that stratum polygon in \code{strata.files}.
-  If \code{strata.which}, then the column 'strata_which' is added to the end of the data frame.
-  This column contains either a 0 if the point intersects with no strata or
-  2) a numeric indicating the index (in \code{strata.files}) of
-  the (first) strata polygon that the point intersects with.
+indicating if each point intersected with the corresponding stratum polygon.
+The names of these columns are the names of \code{strata.files}; the
+element(s) of \code{strata.files} will have the name InPoly#, where '#' is
+the index of that stratum polygon in \code{strata.files}. If
+\code{strata.which}, then the column 'strata_which' is added to the end of
+the data frame. This column contains either a 0 if the point intersects with
+no strata or 2) a numeric indicating the index (in \code{strata.files}) of
+the (first) strata polygon that the point intersects with.
 
-  Otherwise, i.e. if \code{x} is a list and thus the output of one of the effort functions,
-  then the stratum columns are added to both the segdata and sightinfo data frames.
-  However, note that the columns added to the sightinfo data frame still indicate
-  whether or not the segment midpoint was in the corresponding stratum,
-  rather than the sighting point itself.
+Otherwise, i.e. if \code{x} is a list and thus the output of one of the
+effort functions, then the stratum columns are added to both the segdata and
+sightinfo data frames. However, note that the columns added to the sightinfo
+data frame still indicate whether or not the segment midpoint was in the
+corresponding stratum, rather than the sighting point itself.
 }
 \description{
 Determine if swfscDAS outputs intersect with strata polygons
 }
 \details{
-Assigns DAS event points or segment midpoints to strata polygons
-  using \code{\link[sf:geos_binary_pred]{st_intersects}}.
+Assigns DAS event points or segment midpoints to strata polygons using
+\code{\link[sf:geos_binary_pred]{sf::st_intersects()}}.
 
-  If \code{x} is a list, then 1) it must be the output of
-  \code{\link{das_effort}} or \code{\link{das_effort_sight}} and
-  2) the segment midpoints (column names mlon and mlat, respectively)
-  are the points checked if they intersect with each provided stratum.
-  If \code{x} is a data frame, then the user must provide the columns
-  that specify the point coordinates to check.
+If \code{x} is a list, then 1) it must be the output of
+\code{\link{das_effort}} or \code{\link{das_effort_sight}} and 2) the segment
+midpoints (column names mlon and mlat, respectively) are the points checked
+if they intersect with each provided stratum. If \code{x} is a data frame,
+then the user must provide the columns that specify the point coordinates to
+check.
 
-  \code{x} should not be an object of class \code{das_dfr},
-  or an object of class \code{das_df} created with \code{add.dtll.sight = FALSE},
-  because the ? and numeric event codes will have NA latitude and longitude values.
+\code{x} should not be an object of class \code{das_dfr}, or an object of
+class \code{das_df} created with \code{add.dtll.sight = FALSE}, because the ?
+and numeric event codes will have NA latitude and longitude values.
 }
 \examples{
-y <- system.file("das_sample.das", package = "swfscDAS")
+y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 y.proc <- das_process(y)
 y.eff <- das_effort(y.proc, method = "section", num.cores = 1)
 
-stratum.file <- system.file("das_sample_stratum.csv", package = "swfscDAS")
+stratum.file <- system.file("extdata", "das_sample_stratum.csv", package = "swfscDAS")
 das_intersects_strata(y.eff, list(InPoly = stratum.file), x.lon = "Lon", x.lat = "Lat")
 
 das_intersects_strata(y.proc, list(stratum.file))

@@ -6,9 +6,12 @@
 #' @param skip integer: see \code{\link[readr]{read_fwf}}. Default is 0
 #' @param file.out filename to which to write the error log;
 #'   default is \code{NULL}
-#' @param sp.codes character; filename of .dat file from which to read
-#'   accepted species codes. If \code{NULL}, species codes will not be checked.
-#'   Default is \code{NULL}
+#' @param sp.codes.file character; default is `NULL`.
+#'   Filename of the SpCodes file from which to read the species codes.
+#'   If `NULL`, the default (internal) file will be used.
+#'   The SpCodes file will be read by [das_spcodes_read()]
+#' @param sp.codes.skip integer; default is 0.
+#'   Passed directly to `skip` argument of [das_spcodes_read()]
 #' @param print.cruise.nums logical; indicates if a table with all the
 #'   cruise numbers in the \code{x} should be printed using
 #'   \code{\link[base]{table}}. Default is \code{TRUE}
@@ -90,12 +93,18 @@
 #' A warning is printed if any events are r events; see \code{\link{das_process}} for details about r events
 #'
 #' @examples
-#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 #' if (interactive()) das_check(y)
 #'
 #' @export
-das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
-                      print.cruise.nums = TRUE) {
+das_check <- function(
+    file,
+    skip = 0,
+    file.out = NULL,
+    sp.codes.file = NULL,
+    sp.codes.skip = 0,
+    print.cruise.nums = TRUE
+    ) {
 
   if (length(unique(file)) != length(file))
     warning("Not all files are unique - this likely will cause an error in ",
@@ -133,10 +142,10 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
 
   #----------------------------------------------------------------------------
   ### Process sp.codes file
-  if (!is.null(sp.codes)) {
+  if (!is.null(sp.codes.file)) {
     message("Reading and processing SpCodes file")
     sp.acc.df <- read_fwf(
-      sp.codes,
+      sp.codes.file,
       col_positions = fwf_positions(start = c(1, 6, 18, 58), end = c(4, 15, 57, NA)),
       col_types = cols(.default = col_character()),
       trim_ws = TRUE, skip = 0, skip_empty_rows = FALSE
@@ -146,7 +155,7 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
     sp.acc.all <- c(sp.acc, tolower(sp.acc))
 
     if (!all(nchar(sp.acc) %in% 2:3))
-      warning("Some species codes from sp.codes are not two or three charcters. ",
+      warning("Some species codes from sp.codes.file are not two or three charcters. ",
               "Did you load the correct species code .dat file?",
               immediate. = TRUE)
   }
@@ -485,8 +494,8 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   idx.a.4 <- .check_character(x, "A", "Data4", c("N", "Y", "n", "y", NA))
   txt.a.4 <- "Birds (Data4 of A events) is not one of N, Y, n, y, or NA"
 
-  txt.a.spcode <- "Species code(s) were not one of the accepted codes provided via sp.codes"
-  idx.a.spcode <- if (is.null(sp.codes)) {
+  txt.a.spcode <- "Species code(s) were not one of the accepted codes provided via sp.codes.file"
+  idx.a.spcode <- if (is.null(sp.codes.file)) {
     integer(0)
   } else {
     .check_character(x, "A", paste0("Data", 5:8), c(sp.acc.all, NA))
@@ -500,8 +509,8 @@ das_check <- function(file, skip = 0, file.out = NULL, sp.codes = NULL,
   )
 
   # Turtle
-  txt.t.spcode <- "Turtle species code was not one of the accepted codes provided via sp.codes"
-  idx.t.spcode <- if (is.null(sp.codes)) {
+  txt.t.spcode <- "Turtle species code was not one of the accepted codes provided via sp.codes.file"
+  idx.t.spcode <- if (is.null(sp.codes.file)) {
     integer(0)
   } else {
     .check_character(x, "t", paste0("Data", 2), c(sp.acc.all, NA))

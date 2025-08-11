@@ -19,7 +19,7 @@
 #' @importFrom magrittr %>%
 #' @importFrom methods setOldClass
 #' @importFrom parallel clusterExport detectCores parLapplyLB stopCluster
-#' @importFrom readr cols col_character fwf_positions read_fwf
+#' @importFrom readr cols col_character fwf_cols fwf_positions read_fwf
 #' @importFrom rlang !! .data
 #' @importFrom purrr map_chr pmap pmap_int pmap_lgl
 #' @importFrom sf st_as_sf st_cast st_coordinates st_geometry st_intersects

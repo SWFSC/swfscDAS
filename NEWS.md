@@ -1,3 +1,12 @@
+# swfscDAS 0.7.0.9000
+
+* Added an exported function `das_spcodes_read` for consistent reading of shipboard SpCode files
+
+* Moved example data files to an 'extdata' folder within 'inst'
+
+* Update roxygen to use markdown
+
+
 # swfscDAS 0.6.4
 
 * The DateTime column in `das_read` output now has a timezone of `""` (#13)

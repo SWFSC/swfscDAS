@@ -4,15 +4,15 @@
 #' data frame, where each line is data for a specific event
 #'
 #' @param file file name(s) of one or more DAS files
-#' @param skip integer; see \code{\link[readr]{read_fwf}}. Default is 0
+#' @param skip integer; see [readr::read_fwf()]. Default is 0
 #' @param ... ignored
 #'
-#' @details Reads/parses DAS data into columns of a data frame.
-#'   If \code{file} contains multiple file names, then the individual
-#'   data frames will be concatenated.
+#' @details
+#' Reads/parses DAS data into columns of a data frame. If \code{file} contains
+#' multiple file names, then the individual data frames will be concatenated.
 #'
-#'   The provided DAS file must adhere to the following column number and format
-#'   specifications:
+#' The provided DAS file must adhere to the following column number and format
+#' specifications:
 #'   \tabular{lrr}{
 #'     \emph{Item}  \tab \emph{Columns} \tab \emph{Format}\cr
 #'     Event number \tab 1-3   \tab \cr
@@ -36,12 +36,14 @@
 #'     Data12       \tab 95+   \tab \cr
 #'   }
 #'
-#'   See \code{\link{das_format_pdf}} for more information about DAS format requirements, and
-#'   note that 'Data#' columns may be referred to as 'Field#' columns in other documentation.
+#' See \code{\link{das_format_pdf}} for more information about DAS format
+#' requirements, and note that 'Data#' columns may be referred to as 'Field#'
+#' columns in other documentation.
 #'
-#' @return A \code{das_dfr} object, which is also a data frame, with DAS data
-#'   read into columns. The data are read into the data frame as characters as
-#'   described in 'Details', with the following exceptions:
+#' @return
+#' A \code{das_dfr} object, which is also a data frame, with DAS data read into
+#' columns. The data are read into the data frame as characters as described in
+#' 'Details', with the following exceptions:
 #'   \tabular{lll}{
 #'     \emph{Name} \tab \emph{Class} \tab \emph{Details}\cr
 #'     EffortDot \tab logical   \tab \code{TRUE} if "." was present, and \code{FALSE} otherwise\cr
@@ -54,18 +56,18 @@
 #'     line_num  \tab integer   \tab line number of each data row\cr
 #'   }
 #'
-#'   DateTime values have a time zone value (i.e., a tzone attribute) of "".
-#'   Note that this means RStudio will print these datetimes with the local
-#'   timezone See the OffsetGMT column from \code{\link{das_process}} for
-#'   relevant time zone information
+#' DateTime values have a time zone value (i.e., a tzone attribute) of "". Note
+#' that this means RStudio will print these datetimes with the local timezone
+#' See the OffsetGMT column from \code{\link{das_process}} for relevant time
+#' zone information
 #'
-#'   Warnings are printed if any unexpected events have \code{NA}
-#'   DateTime/Lat/Lon values, or if any Lat/Lon values cannot be converted to
-#'   numeric values. Events that are 'expected' to have \code{NA}
-#'   DateTime/Lat/Lon values are: C, ?, 1, 2, 3, 4, 5, 6, 7, 8
+#' Warnings are printed if any unexpected events have \code{NA} DateTime/Lat/Lon
+#' values, or if any Lat/Lon values cannot be converted to numeric values.
+#' Events that are 'expected' to have \code{NA} DateTime/Lat/Lon values are: C,
+#' ?, 1, 2, 3, 4, 5, 6, 7, 8
 #'
 #' @examples
-#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 #' das_read(y)
 #'
 #' @export

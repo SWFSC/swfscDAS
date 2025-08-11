@@ -32,37 +32,39 @@ See Details section for more information}
 }
 \value{
 A list, identical to \code{x.list} except for
-  1) the nSI and ANI columns added to \code{x.list$segdata},
-  one each for each element of \code{sp.codes}, and
-  2) the 'included' column of \code{x.list$sightinfo}, which has been set as
-  \code{FALSE} for sightings of species not listed in \code{sp.codes}.
-  Thus, the 'included' column in the output accurately reflects
-  the sightings that were included in the effort segment summaries
+\enumerate{
+\item the nSI and ANI columns added to \code{x.list$segdata},
+one each for each element of \code{sp.codes}, and
+\item the 'included' column of \code{x.list$sightinfo}, which has been set as
+\code{FALSE} for sightings of species not listed in \code{sp.codes}.
+Thus, the 'included' column in the output accurately reflects
+the sightings that were included in the effort segment summaries
+}
 }
 \description{
 Summarize number of sightings and animals for selected species by segment
 }
 \details{
 This function takes the output of \code{\link{das_effort}} and
-  adds columns for the number of sightings (nSI) and number of animals (ANI)
-  for selected species (selected via \code{sp.codes}) for each segment
-  to the segdata element of \code{x.list}.
-  However, only sightings with an included value of \code{TRUE}
-  (included is a column in sightinfo) are included in the summaries.
-  Having this step separate from \code{\link{das_effort}} allows users to
-  personalize the included values as desired for their analysis.
+adds columns for the number of sightings (nSI) and number of animals (ANI)
+for selected species (selected via \code{sp.codes}) for each segment
+to the segdata element of \code{x.list}.
+However, only sightings with an included value of \code{TRUE}
+(included is a column in sightinfo) are included in the summaries.
+Having this step separate from \code{\link{das_effort}} allows users to
+personalize the included values as desired for their analysis.
 
-  The ANI columns are the sum of the 'GsSp...' column(s) from
-  \code{\link{das_sight}} specified using \code{gs.columns}.
-  If \code{gs.columns} specifies more than one column,
-  then the secondary columns will only be used if
-  the values for the previous columns are \code{NA}.
-  For instance, if \code{gs.columns = c('GsSpBest', 'GsSpLow')},
-  then for each row in sightinfo, the value from GsSpLow
-  will be used only if the value from GsSpBest is \code{NA}
+The ANI columns are the sum of the 'GsSp...' column(s) from
+\code{\link{das_sight}} specified using \code{gs.columns}.
+If \code{gs.columns} specifies more than one column,
+then the secondary columns will only be used if
+the values for the previous columns are \code{NA}.
+For instance, if \code{gs.columns = c('GsSpBest', 'GsSpLow')},
+then for each row in sightinfo, the value from GsSpLow
+will be used only if the value from GsSpBest is \code{NA}
 }
 \examples{
-y <- system.file("das_sample.das", package = "swfscDAS")
+y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 y.proc <- das_process(y)
 y.eff.cond <- das_effort(
   y.proc, method = "condition", conditions = "Bft", seg.min.km = 0.05,

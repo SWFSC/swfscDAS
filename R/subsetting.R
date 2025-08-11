@@ -9,21 +9,22 @@
 #' @param value A suitable replacement value, see \code{\link[base]{[.data.frame}}
 #'
 #' @details
-#' When subsetting a \code{das_dfr} or \code{das_df} object, henceforth a \code{das_} object,
-#' using any of the functions described in \code{\link[base]{[.data.frame}},
-#' then then the \code{das_} class is simply dropped and the object is of class \code{data.frame}.
-#' This is because of the strict format requirements of \code{das_} objects;
-#' it is likely that a subsetted \code{das_} object will not have
-#' the format required by subsequent swfscDAS functions,
-#' and thus it is safest to drop the \code{das_} class.
-#' If a data frame is passed to downstream \code{swfscDAS} functions that require a \code{das_} object,
-#' then they will attempt to coerce the object to the necessary \code{das_} class
-#' See \code{\link{as_das_dfr}} and \code{\link{as_das_df}} for more details.
+#' When subsetting a \code{das_dfr} or \code{das_df} object, henceforth a
+#' \code{das_} object, using any of the functions described in
+#' \code{\link[base]{[.data.frame}}, then then the \code{das_} class is simply
+#' dropped and the object is of class \code{data.frame}. This is because of the
+#' strict format requirements of \code{das_} objects; it is likely that a
+#' subsetted \code{das_} object will not have the format required by subsequent
+#' swfscDAS functions, and thus it is safest to drop the \code{das_} class. If a
+#' data frame is passed to downstream \code{swfscDAS} functions that require a
+#' \code{das_} object, then they will attempt to coerce the object to the
+#' necessary \code{das_} class See \code{\link{as_das_dfr}} and
+#' \code{\link{as_das_df}} for more details.
 #'
 #' @name subsetting
 #'
 #' @examples
-#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 #' y.read <- das_read(y)
 #'
 #' # All return a data frame:

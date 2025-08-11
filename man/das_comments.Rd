@@ -21,18 +21,18 @@ or a data frame that can be coerced to a \code{das_dfr} object}
 }
 \value{
 \code{x}, filtered for C events and with the added column
-  comment_str containing the concatenated comment strings
+comment_str containing the concatenated comment strings
 }
 \description{
 Extract comments from DAS data
 }
 \details{
 This function recreates the comment strings by
-  pasting the Data# columns back together for the C events (comments).
-  See the examples section for how to search for comments with certain phrases
+pasting the Data# columns back together for the C events (comments).
+See the examples section for how to search for comments with certain phrases
 }
 \examples{
-y <- system.file("das_sample.das", package = "swfscDAS")
+y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 y.proc <- das_process(y)
 
 das_comments(y.proc)
