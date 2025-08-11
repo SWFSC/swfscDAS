@@ -2,9 +2,13 @@
 
 * Added an exported function `das_spcodes_read` for consistent reading of shipboard SpCode files
 
+* Changed the argument name in `das_check` of the user-provided SpCodes file from `sp.codes` to `sp.codes.file`. Also added a `sp.codes.skip` argument to pass to `das_spcodes_read`
+
 * Moved example data files to an 'extdata' folder within 'inst'
 
 * Update roxygen to use markdown
+
+* Added the SpCodes.dat file from [`CruzPlot`](https://github.com/SWFSC/CruzPlot) to 'inst' to have available as a default
 
 
 # swfscDAS 0.6.4
