@@ -1,3 +1,10 @@
+# swfscDAS 0.6.5 (dev)
+
+* Update link to NOAA Tech Memo describing DAS data; now (https://repository.library.noaa.gov/view/noaa/3174)[https://repository.library.noaa.gov/view/noaa/3174](#17)
+
+* Fix documentation issues realted to upgrade to roxygen2 v8.0
+
+
 # swfscDAS 0.6.4
 
 * The DateTime column in `das_read` output now has a timezone of `""` (#13)

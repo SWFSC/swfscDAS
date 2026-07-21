@@ -6,7 +6,7 @@
 [![R-CMD-check](https://github.com/swfsc/swfscDAS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/swfsc/swfscDAS/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-This package contains functions designed for processing and analyzing shipboard DAS data. This package was originally designed to handle [DAS data](https://swfsc-publications.fisheries.noaa.gov/publications/TM/SWFSC/NOAA-TM-NMFS-SWFSC-305.PDF) collected using WinCruz, the ship-based line-transect data collection software developed by the Southwest Fisheries Science Center. However, the `swfscDAS` package can be used by anyone who has collected DAS data that meets the format requirements described in the ['DAS data format'](#DAS-data-format) section below, for instance to process decades of available NOAA Fisheries DAS survey data.
+This package contains functions designed for processing and analyzing shipboard DAS data. This package was originally designed to handle [DAS data](https://repository.library.noaa.gov/view/noaa/3174) collected using WinCruz, the ship-based line-transect data collection software developed by the Southwest Fisheries Science Center. However, the `swfscDAS` package can be used by anyone who has collected DAS data that meets the format requirements described in the ['DAS data format'](#DAS-data-format) section below, for instance to process decades of available NOAA Fisheries DAS survey data.
 
 More generally, the package is intended to standardize and streamline basic DAS data processing. Functionality currently includes reading DAS data into a data frame, processing this data (extracting state and condition information for each DAS event), and summarizing sighting, effort, and comment information. Learn more in `vignette("swfscDAS")`
 
