@@ -251,7 +251,7 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
   ### Extract GMT Offsets for dates + cruise numbers
   x.offset <- x %>%
     filter(.data$Event == "B") %>%
-    mutate(Date = as.Date(.data$DateTime),
+    mutate(Date = as.Date(.data$DateTime, tz = ""),
            Cruise = as.numeric(.data$Data1),
            OffsetGMT = as.integer(.data$Data3)) %>%
     select("Date", "Cruise", "OffsetGMT") %>%
@@ -452,7 +452,7 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
   )
 
   data.frame(x, tmp, stringsAsFactors = FALSE) %>%
-    mutate(Date = as.Date(.data$DateTime)) %>%
+    mutate(Date = as.Date(.data$DateTime, tz = "")) %>%
     left_join(x.offset, by = c("Cruise", "Date")) %>%
     select(!!cols.tokeep) %>%
     as_das_df()
