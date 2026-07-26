@@ -171,5 +171,6 @@ In addition, you can use `das_comments` to generate comment strings. This is par
 y.comm <- das_comments(y.proc)
 glimpse(select(y.comm, Event, line_num, comment_str))
 
-y.comm[str_detect(y.comm$comment_str, "gear"), ] #Could also use grepl() here
+y.comm %>% 
+  filter(str_detect(comment_str, "gear")) #Could also use grepl() here
 ```

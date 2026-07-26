@@ -35,11 +35,13 @@
 das_effort_strata <- function(x, ...) UseMethod("das_effort_strata")
 
 #' @name das_effort_strata
+#' @export
 das_effort_strata.data.frame <- function(x, ...) {
   das_effort_strata(as_das_df(x), ...)
 }
 
 #' @name das_effort_strata
+#' @export
 das_effort_strata.das_df <- function(x, strata.files, ...) {
   # Check that none of the strata overlap
   strata.list <- lapply(strata.files, .das_pts2poly_vertices) #duplication, oh well

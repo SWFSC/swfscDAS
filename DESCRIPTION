@@ -5,7 +5,7 @@ Authors@R:
     person("Sam", "Woodman", email = "sam.woodman@noaa.gov", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6071-8186"))
 Description: Process and summarize DAS data files. 
     These files are typically, but do not have to be 
-    DAS <https://swfsc-publications.fisheries.noaa.gov/publications/TM/SWFSC/NOAA-TM-NMFS-SWFSC-305.PDF> data
+    DAS <https://repository.library.noaa.gov/view/noaa/3174> data
     produced by the Southwest Fisheries Science Center (SWFSC) program 'WinCruz'.
     This package standardizes and streamlines basic DAS data processing,
     and includes a PDF with the DAS data format requirements expected by the package.
@@ -34,3 +34,4 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.0.0
