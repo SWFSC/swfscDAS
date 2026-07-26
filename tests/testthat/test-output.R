@@ -1,4 +1,4 @@
-y.read <- das_read(system.file("das_sample.das", package = "swfscDAS"))
+y.read <- das_read(system.file("extdata", "das_sample.das", package = "swfscDAS"))
 y.proc <- das_process(y.read)
 
 

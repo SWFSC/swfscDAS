@@ -11,34 +11,33 @@
 #'   Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 #'   (case-sensitive). The default is all of these event codes
 #'
-#' @details DAS events contain specific information in the 'Data#' columns,
-#'   with the information depending on the event code for that row.
-#'   The output data frame contains columns with this specific information
-#'   extracted to dedicated columns as described below.
-#'   This function recognizes the following types of sightings:
-#'   marine mammal sightings (event codes "S", "K", or "M"),
-#'   marine mammal resights (codes "s", "k", "m"),
-#'   marine mammal subgroup sightings (code "G"),
-#'   marine mammal subgroup resights (code "g"),
-#'   turtle sightings (code "t"),
-#'   pinniped sightings (code "p"),
-#'   and fishing vessel sightings (code "F").
-#'   Warnings are printed if all S, K, M, and G events (and only these events) are not
-#'   followed by an A event and at least one numeric event.
-#'   See \code{\link{das_format_pdf}} for more information about events and event formats.
-#'   Of specific note - sperm whale sightings (species code 046) often contain additional estimates
-#'   recorded as "C" events immediately following the S, A, and numeric events.
-#'   Because these estimates are recorded as"C" events, they are NOT included in the
-#'   \code{das_sight} calculations or output for any \code{return.format}
+#' @details
+#' DAS events contain specific information in the 'Data#' columns, with the
+#' information depending on the event code for that row. The output data frame
+#' contains columns with this specific information extracted to dedicated
+#' columns as described below. This function recognizes the following types of
+#' sightings: marine mammal sightings (event codes "S", "K", or "M"), marine
+#' mammal resights (codes "s", "k", "m"), marine mammal subgroup sightings (code
+#' "G"), marine mammal subgroup resights (code "g"), turtle sightings (code
+#' "t"), pinniped sightings (code "p"), and fishing vessel sightings (code "F").
+#' Warnings are printed if all S, K, M, and G events (and only these events) are
+#' not followed by an A event and at least one numeric event. See
+#' \code{\link{das_format_pdf}} for more information about events and event
+#' formats. Of specific note - sperm whale sightings (species code 046) often
+#' contain additional estimates recorded as "C" events immediately following the
+#' S, A, and numeric events. Because these estimates are recorded as"C" events,
+#' they are NOT included in the \code{das_sight} calculations or output for any
+#' \code{return.format}
 #'
-#'   The \code{return.events} argument simply provides a shortcut for
-#'   filtering the output of \code{das_sight} by event codes
+#' The \code{return.events} argument simply provides a shortcut for filtering
+#' the output of \code{das_sight} by event codes
 #'
-#'   Abbreviations used in output column names: Gs = group size, Sp = species,
-#'   Nm = nautical mile, Perc = percentage, Prob = probable,
-#'   GsSchool = school-level group size info
+#' Abbreviations used in output column names: Gs = group size, Sp = species, Nm
+#' = nautical mile, Perc = percentage, Prob = probable, GsSchool = school-level
+#' group size info
 #'
-#'   This function makes the following assumptions, and alterations to the raw DAS data:
+#' This function makes the following assumptions, and alterations to the raw DAS
+#' data:
 #'   \itemize{
 #'     \item "A" events immediately following an S/K/M/G event have
 #'     the same sighting number (Data1 value) as the S/K/M/G event
@@ -57,16 +56,18 @@
 #'       'TurtleAge', and 'TurtleCapt'
 #'   }
 #'
-#' @return Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
-#'   and 2) columns with sighting information extracted from 'Data#' columns.
-#'   See \code{\link{das_format_pdf}} for more information the sighting information.
-#'   If \code{return.format} is "default", then there is one row for each species of each sighting event;
-#'   if \code{return.format} is "wide", then there is one row for each sighting event;
-#'   if \code{return.format} is "complete", then there is one row for every
-#'   group size estimate for each sighting event (excluding sperm whale "C" events - see the Details section).
+#' @return
+#' Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
+#' and 2) columns with sighting information extracted from 'Data#' columns. See
+#' \code{\link{das_format_pdf}} for more information the sighting information.
+#' If \code{return.format} is "default", then there is one row for each species
+#' of each sighting event; if \code{return.format} is "wide", then there is one
+#' row for each sighting event; if \code{return.format} is "complete", then
+#' there is one row for every group size estimate for each sighting event
+#' (excluding sperm whale "C" events - see the Details section).
 #'
-#'   The format-specific columns are described in their respective sections.
-#'   The following sighting information columns are included in all return formats:
+#' The format-specific columns are described in their respective sections. The
+#' following sighting information columns are included in all return formats:
 #'
 #'   \tabular{lll}{
 #'     \emph{Sighting information}                \tab \emph{Column name} \tab \emph{Notes} \cr
@@ -97,26 +98,31 @@
 #'     Perpendicular distance (km) to sighting    \tab PerpDistKm   \tab Calculated via \code{(abs(sin(Bearing*pi/180) * DistNm) * 1.852)}
 #'   }
 #'
-#'   SightNoDaily is a running count of the number of S/K/M/G sightings that occurred on each day.
-#'   It is formatted as 'YYYYMMDD'_'running count', e.g. "20050101_1".
+#' SightNoDaily is a running count of the number of S/K/M/G sightings that
+#' occurred on each day. It is formatted as 'YYYYMMDD'_'running count', e.g.
+#' "20050101_1".
 #'
-#'   The GsSchoolBest, GsSchoolHigh, and GsSchoolLow columns are either:
-#'   1) the arithmetic mean across observer estimates, for the "default" and "wide" formats, or
-#'   2) the individual observer estimates, for the "complete" format.
-#'   Note that for non-"complete" formats, \code{na.rm = TRUE} is used when calculating the mean,
-#'   and thus blank elements of estimates (but not the whole incomplete estimate) are ignored.
+#' The GsSchoolBest, GsSchoolHigh, and GsSchoolLow columns are either: 1) the
+#' arithmetic mean across observer estimates, for the "default" and "wide"
+#' formats, or 2) the individual observer estimates, for the "complete" format.
+#' Note that for non-"complete" formats, \code{na.rm = TRUE} is used when
+#' calculating the mean, and thus blank elements of estimates (but not the whole
+#' incomplete estimate) are ignored.
 #'
-#'   To convert the perpendicular distance back to nautical miles,
-#'   one would divide PerpDistKm by 1.852
+#' To convert the perpendicular distance back to nautical miles, one would
+#' divide PerpDistKm by 1.852
 #'
 #' @section The "default" format output:
-#'   This output data frame contains 'long' sighting data, meaning there is one row for each species of each sighting event.
-#'   The GsSp... columns are calculated as follows:
-#'   for each species and for each observer estimate, the best/high/low school size estimate is multiplied by the applicable species percent estimate.
-#'   The values are grouped by species and then averaged to get single GsSpBest, GsSpHigh, and GsSpLow values for each species.
-#'   (using \code{\link[base]{mean}} with \code{na.rm = TRUE})
+#' This output data frame contains 'long' sighting data, meaning there is one
+#' row for each species of each sighting event. The GsSp... columns are
+#' calculated as follows: for each species and for each observer estimate, the
+#' best/high/low school size estimate is multiplied by the applicable species
+#' percent estimate. The values are grouped by species and then averaged to get
+#' single GsSpBest, GsSpHigh, and GsSpLow values for each species. (using
+#' \code{\link[base]{mean}} with \code{na.rm = TRUE})
 #'
-#'   Sighting information columns/formats present specifically in the "default" format output:
+#' Sighting information columns/formats present specifically in the "default"
+#' format output:
 #'   \tabular{lll}{
 #'     \emph{Sighting information} \tab \emph{Column name} \tab \emph{Notes}\cr
 #'     Species code          \tab SpCode \tab Boat type or mammal, turtle, or pinniped species codes\cr
@@ -129,24 +135,26 @@
 #'       The product of the arithmetic means of GsSchoolLow and the corresponding species percentage\cr
 #'   }
 #'
-#'   Note that for the above calculations,
-#'   the GsSchoolX value and corresponding species percentages were each
-#'   averaged across observers, using \code{na.rm = TRUE},
-#'   before being multiplied to calculate GsSpX. For example, in the workflow:
-#'   \code{GsSpBest1 = mean(.data$Data2, na.rm = TRUE) * mean(.data$Data5, na.rm = TRUE)}
+#' Note that for the above calculations, the GsSchoolX value and corresponding
+#'   species percentages were each averaged across observers, using \code{na.rm
+#'   = TRUE}, before being multiplied to calculate GsSpX. For example, in the
+#'   workflow: \code{GsSpBest1 = mean(.data$Data2, na.rm = TRUE) *
+#'   mean(.data$Data5, na.rm = TRUE)}
 #'
 #' @section The "wide" and "complete" format outputs:
-#'   The "wide" and "complete" options have very similar columns in their output date frames.
-#'   There are two main differences: 1) the "wide" format has one row for each sighting event,
-#'   while the complete format has a row for every observer estimate for each sightings, and thus
-#'   2) in the "wide" format, all numeric information for which there are multiple observer estimates
-#'   (school group size, species percentage, etc.) are averaged across estimated via
-#'   an arithmetic mean (using \code{\link[base]{mean}} with \code{na.rm = TRUE})
+#' The "wide" and "complete" options have very similar columns in their output
+#' date frames. There are two main differences: 1) the "wide" format has one row
+#' for each sighting event, while the complete format has a row for every
+#' observer estimate for each sightings, and thus 2) in the "wide" format, all
+#' numeric information for which there are multiple observer estimates (school
+#' group size, species percentage, etc.) are averaged across estimated via an
+#' arithmetic mean (using \code{\link[base]{mean}} with \code{na.rm = TRUE})
 #'
-#'   With these formats, note that the species/type code and group size for
-#'   turtle, pinniped, and boat sightings are in their own column
+#' With these formats, note that the species/type code and group size for
+#' turtle, pinniped, and boat sightings are in their own column
 #'
-#'   Sighting information columns present in the "wide" and "complete" format outputs:
+#' Sighting information columns present in the "wide" and "complete" format
+#' outputs:
 #'   \tabular{lll}{
 #'     \emph{Sighting information}  \tab \emph{Column name}  \tab \emph{Notes}                            \cr
 #'     Observer code - estimate     \tab ObsEstimate         \tab See below                               \cr
@@ -175,16 +183,16 @@
 #'     Number of boats              \tab BoatGs              \tab \code{NA} for non-"F" events
 #'   }
 #'
-#'   ObsEstimate refers to the code of the observer that made the corresponding estimate.
-#'   For the "wide" format, ObsEstimate is a list-column of all of the observer codes
-#'   that provided an estimate.
-#'   Also in the "wide" format, the GsSpBest# columns are the product of
-#'   the means of GsSchoolBest and the corresponding species percentage
-#'   (see the Default section for calculation details).
-#'   These numbers, 1 to 4, correspond to the order of the data as it appears in the DAS file
+#' ObsEstimate refers to the code of the observer that made the corresponding
+#' estimate. For the "wide" format, ObsEstimate is a list-column of all of the
+#' observer codes that provided an estimate. Also in the "wide" format, the
+#' GsSpBest# columns are the product of the means of GsSchoolBest and the
+#' corresponding species percentage (see the Default section for calculation
+#' details). These numbers, 1 to 4, correspond to the order of the data as it
+#' appears in the DAS file
 #'
 #' @examples
-#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 #' y.proc <- das_process(y)
 #'
 #' das_sight(y.proc)

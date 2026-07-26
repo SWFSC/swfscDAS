@@ -122,7 +122,7 @@
 #'   of R and E events
 #'
 #' @examples
-#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 #' das_process(y)
 #'
 #' y.read <- das_read(y)

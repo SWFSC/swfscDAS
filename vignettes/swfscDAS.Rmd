@@ -29,7 +29,7 @@ In DAS data, an event is only recorded when something changes or happens, which 
 This package includes a sample DAS file, which we will use in this document
 
 ```{r data}
-y <- system.file("das_sample.das", package = "swfscDAS")
+y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 head(readLines(y))
 ```
 
@@ -140,7 +140,7 @@ This package contains several methods to incorporate strata into your DAS data p
 First, `das_intersects_strata` allows you to add columns to data frames indicating if a point intersects one or more strata polygons. You can pass this function either a data frame or a list. If a list then it must be the output of `das_effort` or `das_effort_sight`, and the function will use the segment midpoints to determine if a segment (and associated sightings) intersected each stratum.
 
 ```{r strata_int}
-stratum.file <- system.file("das_sample_stratum.csv", package = "swfscDAS")
+stratum.file <- system.file("extdata", "das_sample_stratum.csv", package = "swfscDAS")
 y.eff.sight.strata <- das_intersects_strata(y.eff.sight, list(InPoly = stratum.file))
 
 glimpse(y.eff.sight.strata$segdata)

@@ -23,10 +23,10 @@
 #'   See the Examples section for an example where the two methods give the same output.
 #'   Note that the longest continuous effort section in the sample data is ~22km.
 #'
-#' @return See \code{\link{das_chop_equallength}}. The randpicks values will all be \code{NA}
+#' @return See [das_chop_equallength()]. The randpicks values will all be `NA`
 #'
 #' @examples
-#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 #' y.proc <- das_process(y)
 #'
 #' y.eff1 <- das_effort(y.proc, method = "equallength", seg.km = 25, num.cores = 1)

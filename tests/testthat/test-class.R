@@ -1,5 +1,5 @@
 test_that("functions return expected das_ classes", {
-  y.read <- das_read(system.file("das_sample.das", package = "swfscDAS"))
+  y.read <- das_read(system.file("extdata", "das_sample.das", package = "swfscDAS"))
   y.proc <- das_process(y.read)
   y.sight <- das_sight(y.proc)
 
@@ -10,7 +10,7 @@ test_that("functions return expected das_ classes", {
 
 
 test_that("as_das_ functions work as expected", {
-  y.read <- das_read(system.file("das_sample.das", package = "swfscDAS"))
+  y.read <- das_read(system.file("extdata", "das_sample.das", package = "swfscDAS"))
   y.proc <- das_process(y.read)
 
   y.read1 <- y.read2 <- y.read3 <- y.read
