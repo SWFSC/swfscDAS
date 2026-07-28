@@ -71,11 +71,13 @@ Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
 Speed (ship speed, knots)     \tab SpdKt     \tab Event: N; Column: Data2\cr
 Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr
 Swell height (ft)             \tab SwellHght \tab Event: V; Column: Data2\cr
+Swell direction (degrees)     \tab SwellDir  \tab Event: V; Column: Data3\cr
 Wind speed (knots)            \tab WindSpdKt \tab Event: V; Column: Data5\cr
 Rain/fog/haze code            \tab RainFog   \tab Event: W; Column: Data1\cr
 Horizontal sun (clock system) \tab HorizSun  \tab Event: W; Column: Data2\cr
 Vertical sun (clock system)   \tab VertSun   \tab Event: W; Column: Data3\cr
 Glare                         \tab Glare     \tab HorizSun and VertSun\cr
+Wind direction (degrees)      \tab WindDir   \tab Event: W; Column: Data4\cr
 Visibility (nm)               \tab Vis       \tab Event: W; Column: Data5\cr
 Left observer                 \tab ObsL      \tab Event: P; Column: Data1\cr
 Data recorder                 \tab Rec       \tab Event: P; Column: Data2\cr
