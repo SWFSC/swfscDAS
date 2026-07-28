@@ -46,7 +46,7 @@ This function should only be called by \code{\link[=das_effort]{das_effort()}}, 
 should not be called by users in their personal scripts. Practically
 speaking, this functions splits the effort line wherever it crosses a stratum
 line. This point of intersection is interpolated; specifically, it is
-determined using \code{\link[sf:geos_binary_ops]{sf::st_intersection()}}. Thus, any effort will be first
+determined using \code{\link[sf:st_intersection]{sf::st_intersection()}}. Thus, any effort will be first
 split at these effort-stratum boundary intersection points, and then using
 the specified method (e.g. condition).
 }

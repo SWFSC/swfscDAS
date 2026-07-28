@@ -9,11 +9,11 @@ das_format_pdf(file, ...)
 \arguments{
 \item{file}{character, the name of the file where the PDF will be saved}
 
-\item{...}{passed on to \code{\link[base:files]{base::file.copy()}};
+\item{...}{passed on to \code{\link[base:file.copy]{base::file.copy()}};
 might included named argument \code{overwrite}}
 }
 \value{
-output of \code{\link[base:files]{base::file.copy()}}; \code{TRUE} if writing of file was successful,
+output of \code{\link[base:file.copy]{base::file.copy()}}; \code{TRUE} if writing of file was successful,
 and \code{FALSE} otherwise
 }
 \description{
@@ -21,7 +21,7 @@ Save the PDF document describing the DAS format required by \code{swfscDAS}
 to a specified file
 }
 \details{
-A wrapper function for \code{\link[base:files]{base::file.copy()}}. This function saves the PDF
+A wrapper function for \code{\link[base:file.copy]{base::file.copy()}}. This function saves the PDF
 document describing the DAS data format requirements by copying the PDF
 document located at\code{system.file("DAS_Format.pdf", package = "swfscDAS")} to
 \code{file}

@@ -65,7 +65,7 @@ Determine if swfscDAS outputs intersect with strata polygons
 }
 \details{
 Assigns DAS event points or segment midpoints to strata polygons using
-\code{\link[sf:geos_binary_pred]{sf::st_intersects()}}.
+\code{\link[sf:st_intersects]{sf::st_intersects()}}.
 
 If \code{x} is a list, then 1) it must be the output of
 \code{\link{das_effort}} or \code{\link{das_effort_sight}} and 2) the segment

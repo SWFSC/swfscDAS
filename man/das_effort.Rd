@@ -37,7 +37,7 @@ Can be "condition", "equallength", "section", or any partial match thereof
 \item{conditions}{character vector of names of conditions to include in
 segdata output. These values must be column names from the output of
 \code{\link{das_process}}, e.g. 'Bft', 'SwellHght', etc. If \code{method ==
-  "condition"}, then these also are the conditions which trigger segment
+"condition"}, then these also are the conditions which trigger segment
 chopping when they change. Only the following conditions can be used for
 chopping: 'Bft', 'SwellHght', 'RainFog', 'HorizSun', 'VertSun', 'Glare',
 'Vis', 'Course', 'SpdKt'}
