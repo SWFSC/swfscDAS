@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Introduction to swfscDAS • swfscDAS</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to swfscDAS">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">swfscDAS</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
       <h1>Introduction to swfscDAS</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/swfsc/swfscDAS/blob/v0.6.4/vignettes/swfscDAS.Rmd" class="external-link"><code>vignettes/swfscDAS.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/swfsc/swfscDAS/blob/main/vignettes/swfscDAS.Rmd" class="external-link"><code>vignettes/swfscDAS.Rmd</code></a></small>
       <div class="d-none name"><code>swfscDAS.Rmd</code></div>
     </div>
 
@@ -88,7 +88,7 @@ out event-specific information from the Data (Field) columns.</p>
 <p>This package includes a sample DAS file, which we will use in this
 document</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"das_sample.das"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"das_sample.das"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/readLines.html" class="external-link">readLines</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "1  B.062739 011313 N39:19.22 W137:36.26 1000    c    5    Y                              "</span></span>
 <span><span class="co">#&gt; [2] "2  R.062739 011313 N39:19.22 W137:36.26    S                                             "</span></span>
@@ -594,7 +594,7 @@ list then it must be the output of <code>das_effort</code> or
 midpoints to determine if a segment (and associated sightings)
 intersected each stratum.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">stratum.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"das_sample_stratum.csv"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">stratum.file</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"das_sample_stratum.csv"</span>, package <span class="op">=</span> <span class="st">"swfscDAS"</span><span class="op">)</span></span>
 <span><span class="va">y.eff.sight.strata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/das_intersects_strata.html">das_intersects_strata</a></span><span class="op">(</span><span class="va">y.eff.sight</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>InPoly <span class="op">=</span> <span class="va">stratum.file</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">y.eff.sight.strata</span><span class="op">$</span><span class="va">segdata</span><span class="op">)</span></span>
@@ -710,17 +710,18 @@ with keywords</p>
 <span><span class="co">#&gt; $ line_num    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 71<span style="color: #949494;">, </span>81<span style="color: #949494;">, </span>186<span style="color: #949494;">, </span>218<span style="color: #949494;">, </span>241</span></span>
 <span><span class="co">#&gt; $ comment_str <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> " Well?              "<span style="color: #949494;">, </span>" going left to avoid          "<span style="color: #949494;">, </span>…</span></span>
 <span></span>
-<span><span class="va">y.comm</span><span class="op">[</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">y.comm</span><span class="op">$</span><span class="va">comment_str</span>, <span class="st">"gear"</span><span class="op">)</span>, <span class="op">]</span> <span class="co">#Could also use grepl() here</span></span>
-<span><span class="co">#&gt;     Event            DateTime    Lat      Lon OnEffort Cruise Mode OffsetGMT</span></span>
-<span><span class="co">#&gt; 238     C 2013-01-14 11:37:27 41.016 -135.578    FALSE   1000    C         5</span></span>
-<span><span class="co">#&gt;     EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun</span></span>
-<span><span class="co">#&gt; 238       S        2     35   9.5   2         1         5       3       NA</span></span>
-<span><span class="co">#&gt;     VertSun Glare Vis ObsL Rec ObsR ObsInd Data1 Data2 Data3 Data4 Data5 Data6</span></span>
-<span><span class="co">#&gt; 238      NA    NA   4  149 125  208   &lt;NA&gt;  cros sing  fishi ng ge ar     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt;     Data7 Data8      Data9 Data10 Data11 Data12 EffortDot EventNum</span></span>
-<span><span class="co">#&gt; 238  &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE       11</span></span>
-<span><span class="co">#&gt;           file_das line_num                         comment_str</span></span>
-<span><span class="co">#&gt; 238 das_sample.das      241  crossing fishing gear</span></span></code></pre></div>
+<span><span class="va">y.comm</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">comment_str</span>, <span class="st">"gear"</span><span class="op">)</span><span class="op">)</span> <span class="co">#Could also use grepl() here</span></span>
+<span><span class="co">#&gt;   Event            DateTime    Lat      Lon OnEffort Cruise Mode OffsetGMT</span></span>
+<span><span class="co">#&gt; 1     C 2013-01-14 11:37:27 41.016 -135.578    FALSE   1000    C         5</span></span>
+<span><span class="co">#&gt;   EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun</span></span>
+<span><span class="co">#&gt; 1       S        2     35   9.5   2         1         5       3       NA</span></span>
+<span><span class="co">#&gt;   VertSun Glare Vis ObsL Rec ObsR ObsInd Data1 Data2 Data3 Data4 Data5 Data6</span></span>
+<span><span class="co">#&gt; 1      NA    NA   4  149 125  208   &lt;NA&gt;  cros sing  fishi ng ge ar     &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   Data7 Data8      Data9 Data10 Data11 Data12 EffortDot EventNum       file_das</span></span>
+<span><span class="co">#&gt; 1  &lt;NA&gt;  &lt;NA&gt;              &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;     FALSE       11 das_sample.das</span></span>
+<span><span class="co">#&gt;   line_num                         comment_str</span></span>
+<span><span class="co">#&gt; 1      241  crossing fishing gear</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -733,7 +734,7 @@ with keywords</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

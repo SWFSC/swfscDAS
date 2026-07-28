@@ -1,0 +1,73 @@
+# Joining DAS outputs with external data
+
+``` r
+
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+library(readr)
+library(swfscDAS)
+```
+
+It is common when processing DAS data to use a text-based DAT file to
+provide additional information. For instance, Ships.dat is used to
+determine the ship code based on cruise number, while SpCodes.dat is
+used to match species codes to species names. In this document, we
+examine how to read in DAT files into R and join them with DAS data. If
+the exact format of Ships.dat or SpCodes.dat changes in the future, you
+can change the code introduced in this document to match the new format.
+Also note that you can use this workflow to join processed DAS data with
+data from any file type.
+
+## Data
+
+First we read in and process the sample DAS data
+
+``` r
+
+y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
+y.proc <- das_process(y)
+y.sight <- das_sight(y.proc, return.format = "default")
+```
+
+This package includes Ships_sample.dat and SpCodes_sample.dat files,
+which have the same format as the commonly used Ships.dat and
+SpCodes.dat files. Because these DAT files are fixed width text files,
+we use the `read_fwf` function from the `readr` package to read the DAT
+files into data frames. You could also use the `read.fwf` file from base
+R. Note that the `data.frame` call is not necessary if you are
+comfortable working with tibbles.
+
+``` r
+
+ships.df <- data.frame(read_fwf(
+  system.file("extdata", "Ship_sample.dat", package = "swfscDAS"), 
+  col_positions = fwf_widths(c(6, NA), col_names = c("Cruise", "Ship")),
+  col_types = cols(Cruise = col_double(), Ship = col_character()),
+  trim_ws = TRUE
+), stringsAsFactors = FALSE)
+
+spcodes.file <- system.file("extdata", "SpCodes.dat", package = "swfscDAS")
+spcodes.df <- das_spcodes_read(spcodes.file)
+```
+
+## Join data
+
+Now that we have both the DAS data and external data in data frames, we
+can use the the dplyr package, and specifically the `left_join`
+function, to combine the data
+
+``` r
+
+# Ship 
+y.proc.ship <- left_join(y.proc, ships.df, by = "Cruise")
+
+# Species code
+y.sight.spcodes <- left_join(y.sight, spcodes.df, by = "SpCode")
+```
