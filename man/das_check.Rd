@@ -76,7 +76,9 @@ Course                   \tab N             \tab Data1          \tab Can be conv
 Speed                    \tab N             \tab Data2          \tab Can be converted to a numeric value                                       \cr
 Beaufort                 \tab V             \tab Data1          \tab Must be a whole number between 0 and 9                                    \cr
 Swell height             \tab V             \tab Data2          \tab Can be converted to a numeric value                                       \cr
+Swell direction          \tab V             \tab Data3          \tab Can be converted to a numeric value                                       \cr
 Wind speed               \tab V             \tab Data5          \tab Can be converted to a numeric value                                       \cr
+Wind direction           \tab W             \tab Data4          \tab Can be converted to a numeric value                                       \cr
 Rain or fog              \tab W             \tab Data1          \tab Must be between 0 and 5 and either a whole number or have decimal value .5\cr
 Horizontal sun           \tab W             \tab Data2          \tab Must be a whole number between 0 and 12                                   \cr
 Vertical sun             \tab W             \tab Data3          \tab Must be a whole number between 0 and 12                                   \cr

@@ -10,7 +10,7 @@
 
 * Moved example data files to an 'extdata' folder within 'inst'
 
-* Update link to NOAA Tech Memo describing DAS data; now (https://repository.library.noaa.gov/view/noaa/3174)[https://repository.library.noaa.gov/view/noaa/3174](#17)
+* Update link to NOAA Tech Memo describing DAS data; now [https://repository.library.noaa.gov/view/noaa/3174](#17)
 
 * Update roxygen to use markdown, fix documentation issues related to upgrade to roxygen2 v8.0
 
