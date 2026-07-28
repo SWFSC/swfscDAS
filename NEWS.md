@@ -6,6 +6,8 @@
 
 * Changed the argument name in `das_check` of the user-provided SpCodes file from `sp.codes` to `sp.codes.file`. Also added a `sp.codes.skip` argument to pass to `das_spcodes_read`
 
+* Added 'SwellDir' (Event V, Data 3) and 'WindDir' (Event W, Data 4) to the output of `das_process` (#21)
+
 * Moved example data files to an 'extdata' folder within 'inst'
 
 * Update link to NOAA Tech Memo describing DAS data; now (https://repository.library.noaa.gov/view/noaa/3174)[https://repository.library.noaa.gov/view/noaa/3174](#17)
