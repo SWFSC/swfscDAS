@@ -44,7 +44,7 @@
 #'   the sightings that were included in the effort segment summaries
 #'
 #' @examples
-#' y <- system.file("das_sample.das", package = "swfscDAS")
+#' y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 #' y.proc <- das_process(y)
 #' y.eff.cond <- das_effort(
 #'   y.proc, method = "condition", conditions = "Bft", seg.min.km = 0.05,

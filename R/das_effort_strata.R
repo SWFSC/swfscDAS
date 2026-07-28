@@ -6,41 +6,42 @@
 #'   or a data frame that can be coerced to class \code{das_df}
 #' @param ... ignored
 #' @param strata.files list of path(s) of the stratum CSV file(s);
-#'   see \code{\link{das_effort}}
+#'   see [das_effort()]
 #'
-#' @details This function should only be called by \code{\link{das_effort}},
-#'   i.e. it should not be called by users in their personal scripts.
-#'   Practically speaking, this functions splits the effort line wherever it crosses a stratum line.
-#'   This point of intersection is interpolated;
-#'   specifically, it is determined using \code{\link[sf:geos_binary_ops]{st_intersection}}.
-#'   Thus, any effort will be first split at these effort-stratum boundary intersection points,
-#'   and then using the specified method (e.g. condition).
+#' @details
+#' This function should only be called by [das_effort()], i.e. it
+#' should not be called by users in their personal scripts. Practically
+#' speaking, this functions splits the effort line wherever it crosses a stratum
+#' line. This point of intersection is interpolated; specifically, it is
+#' determined using [sf::st_intersection()]. Thus, any effort will be first
+#' split at these effort-stratum boundary intersection points, and then using
+#' the specified method (e.g. condition).
 #'
-#' @return The data frame x, with 1) columns added that
-#'   indicate a) if the point was in a particular stratum (see \code{\link{das_intersects_strata}}), and
-#'   b) the index of the stratum in \code{strata.files}
-#'   (column name 'stratum'; 0 if the point intersects with no strata), and
-#'   2) two rows added for each strata crossing
-#'   that occurs between something other than an E and R.
-#'   These rows are necessary because of how \code{das_effort} processes effort.
-#'   The added rows are the same as the event previous to the strata crossing, except:
-#'   \itemize{
-#'     \item They have the event code "strataE" and "strataR", respectively
-#'     \item Their coordinates are the coordinates of the intersection of
-#'       the effort line and the stratum boundary
-#'     \item Their 'idx_eff' values are plus 0.4 and 0.5, respectively
-#'     \item The second added row has the same stratum info as the point
-#'       immediately after the stratum boundary crossing
-#'   }
+#' @return
+#' The data frame x, with 1) columns added that indicate a) if the point was in
+#' a particular stratum (see [das_intersects_strata()]), and b) the index of the
+#' stratum in \code{strata.files} (column name 'stratum'; 0 if the point
+#' intersects with no strata), and 2) two rows added for each strata crossing
+#' that occurs between something other than an E and R. These rows are necessary
+#' because of how \code{das_effort} processes effort. The added rows are the
+#' same as the event previous to the strata crossing, except:
+#' * They have the event code "strataE" and "strataR", respectively
+#' * Their coordinates are the coordinates of the intersection of
+#'     the effort line and the stratum boundary
+#' * Their 'idx_eff' values are plus 0.4 and 0.5, respectively
+#' * The second added row has the same stratum info as the point
+#'     immediately after the stratum boundary crossing
 
 das_effort_strata <- function(x, ...) UseMethod("das_effort_strata")
 
 #' @name das_effort_strata
+#' @export
 das_effort_strata.data.frame <- function(x, ...) {
   das_effort_strata(as_das_df(x), ...)
 }
 
 #' @name das_effort_strata
+#' @export
 das_effort_strata.das_df <- function(x, strata.files, ...) {
   # Check that none of the strata overlap
   strata.list <- lapply(strata.files, .das_pts2poly_vertices) #duplication, oh well

@@ -1,6 +1,8 @@
 test_that("das_check no error output", {
-  y.check <- das_check(system.file("das_sample.das", package = "swfscDAS"),
-                      print.cruise.nums = FALSE)
+  y.check <- das_check(
+    system.file("extdata", "das_sample.das", package = "swfscDAS"),
+    print.cruise.nums = FALSE
+  )
 
   exp.df <- data.frame(
     File = NA, LineNum = NA, CruiseNum = NA, ID = NA,

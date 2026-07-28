@@ -16,16 +16,16 @@ as_das_dfr(x)
 \item{x}{an object to be coerced to class \code{das_dfr}}
 }
 \value{
-An object of class `das_dfr`
+An object of class \code{das_dfr}
 }
 \description{
 Check if an object is of class \code{das_dfr}, or coerce it if possible.
 }
 \details{
 Only data frames can be coerced to an object of class \code{das_dfr}.
-  If \code{x} does not have column names and classes as specified in \code{\link{das_dfr-class}},
-  then the function returns an error message detailing the first column that does not
-  meet the requirements of a \code{das_dfr} object.
+If \code{x} does not have column names and classes as specified in \code{\link{das_dfr-class}},
+then the function returns an error message detailing the first column that does not
+meet the requirements of a \code{das_dfr} object.
 }
 \seealso{
 \code{\link{das_dfr-class}}

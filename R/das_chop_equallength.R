@@ -74,8 +74,8 @@
 #'   \code{x} (i.e., using the same DAS data) in the future. Note that when
 #'   saving with \code{\link[utils:read.table]{write.csv}}, users must specify
 #'   \code{row.names = FALSE} so that the CSV file only has two columns. For an
-#'   example randpicks file, see \code{system.file("das_sample_randpicks.csv",
-#'   package = "swfscDAS")}
+#'   example randpicks file, see
+#'   `system.file("extdata", "das_sample_randpicks.csv", package = "swfscDAS")`
 #'
 #'   If the column \code{dist_from_prev} does not exist, the distance between
 #'   subsequent events is calculated as described in \code{\link{das_effort}}

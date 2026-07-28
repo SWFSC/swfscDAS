@@ -1,4 +1,4 @@
-y <- system.file("das_sample.das", package = "swfscDAS")
+y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
 
 y.read <- das_read(y, skip = 20, tz = "GMT")
 y.proc <- das_process(y.read, reset.effort = FALSE)

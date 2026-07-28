@@ -1,8 +1,8 @@
 test_that("effort distance and sightings are the same with or without strata splitting", {
-  y <- system.file("das_sample.das", package = "swfscDAS")
+  y <- system.file("extdata", "das_sample.das", package = "swfscDAS")
   y.proc <- das_process(y)
-  stratum.file <- system.file("das_sample_stratum.csv", package = "swfscDAS")
-  # y.rand <- system.file("das_sample_randpicks.csv", package = "swfscDAS")
+  stratum.file <- system.file("extdata", "das_sample_stratum.csv", package = "swfscDAS")
+  # y.rand <- system.file("extdata", "das_sample_randpicks.csv", package = "swfscDAS")
 
   # Using "condition" method
   eff.cond.nostrata <- das_effort(
