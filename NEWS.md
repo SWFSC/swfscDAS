@@ -8,13 +8,15 @@
 
 * Added 'SwellDir' (Event V, Data 3) and 'WindDir' (Event W, Data 4) to the output of `das_process` (#21)
 
+* Changed behavor of `das_effort` when the `seg0.drop` argument is `TRUE`. Now, for segments with distance traveled <=0.1 km, either a) they are dropped if they have no associated sighting events are dropped, or b) if they have associated sightings they are kept and given a distance of 0.1km. This behavior matches historical SWFSC segment chopping logic. (#22)
+
 * Moved example data files to an 'extdata' folder within 'inst'
 
 * Update link to NOAA Tech Memo describing DAS data; now [https://repository.library.noaa.gov/view/noaa/3174](#17)
 
 * Update roxygen to use markdown, fix documentation issues related to upgrade to roxygen2 v8.0
 
-* Added the SpCodes.dat file from [`CruzPlot`](https://github.com/SWFSC/CruzPlot) to 'inst' to have available as a default
+* Added the SpCodes.dat file (from [`CruzPlot`](https://github.com/SWFSC/CruzPlot)) to 'inst' to have available as a default
 
 
 # swfscDAS 0.6.4
