@@ -209,7 +209,7 @@ das_effort.das_df <- function(
   # Prep for chop functions
 
   # Remove comments if specified
-  if (is.null(event.touse) & comment.drop) x <- x %>% filter(.data$Event != "C")
+  if (is.null(event.touse) & comment.drop) x <- x |> filter(.data$Event != "C")
 
   # Add index column for adding back in ? and 1:8 events, and extract those events
   x$idx_eff <- seq_len(nrow(x))
@@ -230,9 +230,9 @@ das_effort.das_df <- function(
 
   x.oneff.all <- x[x.oneff.which, ]
 
-  x.oneff <- x.oneff.all %>% filter(!(.data$Event %in% event.tmp) )
-  x.oneff.tmp <- x.oneff.all %>%
-    filter(.data$Event %in% event.tmp) %>%
+  x.oneff <- x.oneff.all |> filter(!(.data$Event %in% event.tmp) )
+  x.oneff.tmp <- x.oneff.all |>
+    filter(.data$Event %in% event.tmp) |>
     mutate(cont_eff_section = NA, dist_from_prev = NA, seg_idx = NA, segnum = NA)
 
   rownames(x.oneff) <- rownames(x.oneff.tmp) <- NULL
@@ -248,12 +248,12 @@ das_effort.das_df <- function(
     stop("Error in row numbers - please report this as an issue")
 
   # Filter for specified events, if applicable
-  if (!is.null(event.touse)) x.oneff <- x.oneff %>% filter(.data$Event %in% event.touse)
+  if (!is.null(event.touse)) x.oneff <- x.oneff |> filter(.data$Event %in% event.touse)
 
 
   # Verbosely remove remaining data without Lat/Lon/DateTime info
   if (any(is.na(x.oneff$Lat) | is.na(x.oneff$Lon) | is.na(x.oneff$DateTime))) {
-    x.nacheck <- x.oneff %>%
+    x.nacheck <- x.oneff |>
       mutate(ll_dt_na = is.na(.data$Lat) | is.na(.data$Lon) | is.na(.data$DateTime),
              eff_na = .data$ll_dt_na & (.data$Event %in% c("R", "E")),
              sight_na = .data$ll_dt_na & (.data$Event %in% c("S", "K", "M", "G", "t", "A")))
@@ -273,7 +273,7 @@ das_effort.das_df <- function(
            .print_file_line(x.nacheck$file_das, x.nacheck$line_num, which(x.nacheck$sight_na)))
 
     # Remove events with NA lat/lon/dt info
-    x.oneff <- x.oneff %>% filter(!is.na(.data$Lat) & !is.na(.data$Lon) & !is.na(.data$DateTime))
+    x.oneff <- x.oneff |> filter(!is.na(.data$Lat) & !is.na(.data$Lon) & !is.na(.data$DateTime))
     message(paste0("There were ", sum(x.nacheck$ll_dt_na), " on effort ",
                    ifelse(comment.drop, "(non-C) ", ""), "events ",
                    "with NA Lat/Lon/DateTime values that will ignored ",
@@ -309,17 +309,17 @@ das_effort.das_df <- function(
   # If specified, verbosely remove cont eff sections with length <=0.1,
   # and no sighting events
   if (seg0.drop) {
-    x.ces.summ <- x.oneff %>%
-      group_by(.data$cont_eff_section) %>%
+    x.ces.summ <- x.oneff |>
+      group_by(.data$cont_eff_section) |>
       summarise(dist_sum = sum(.data$dist_from_prev[-1]),
                 has_sight = any(c("S", "K", "M", "G", "t") %in% .data$Event),
                 line_min = min(.data$line_num))
 
-    ces.keep <- x.ces.summ %>%
-      filter(.data$has_sight | .data$dist_sum > 0.1) %>%
+    ces.keep <- x.ces.summ |>
+      filter(.data$has_sight | .data$dist_sum > 0.1) |>
       pull(cont_eff_section)
 
-    x.oneff <- x.oneff %>%
+    x.oneff <- x.oneff |>
       filter(.data$cont_eff_section %in% ces.keep)
 
     # Recalculate cont eff section index
@@ -359,17 +359,17 @@ das_effort.das_df <- function(
 
   # Add strata info to segdata as needed - easiest to do this here
   if (!is.null(strata.files)) {
-    x.strata.summ <- x.eff %>%
-      group_by(.data$segnum) %>%
+    x.strata.summ <- x.eff |>
+      group_by(.data$segnum) |>
       summarise(strata_which = unique(.data$strata_which),
                 stratum = ifelse(.data$strata_which == 0, NA,
-                                 names(strata.files)[.data$strata_which])) %>%
+                                 names(strata.files)[.data$strata_which])) |>
       select("segnum", "stratum")
     if (nrow(x.strata.summ) != nrow(segdata))
       stop("Error processing strata and segdata - please report this as an issue")
 
-    segdata <- segdata %>% left_join(x.strata.summ, by = "segnum")
-    x.eff <- x.eff %>% select(-!!c(names(strata.files), "strata_which"))
+    segdata <- segdata |> left_join(x.strata.summ, by = "segnum")
+    x.eff <- x.eff |> select(-!!c(names(strata.files), "strata_which"))
   }
 
   # Check that things are as expected
@@ -388,33 +388,33 @@ das_effort.das_df <- function(
   # Only for sightinfo groupsizes, and thus no segdata info doesn't matter
   if (nrow(x.oneff.tmp) > 0) x.eff <- bind_rows(x.eff, x.oneff.tmp)
 
-  x.eff.all <- x.eff %>%
-    arrange(.data$idx_eff) %>%
+  x.eff.all <- x.eff |>
+    arrange(.data$idx_eff) |>
     select(-"idx_eff")
 
 
   #----------------------------------------------------------------------------
   #----------------------------------------------------------------------------
   # Summarize sightings
-  sightinfo <- x.eff.all %>%
+  sightinfo <- x.eff.all |>
     left_join(select(segdata, "segnum", "mlat", "mlon"),
-              by = "segnum") %>%
-    das_sight(returnformat = "default") %>%
+              by = "segnum") |>
+    das_sight(returnformat = "default") |>
     mutate(included = (.data$Bft <= 5 & .data$OnEffort & .data$ObsStd),
-           included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
+           included = ifelse(is.na(.data$included), FALSE, .data$included)) |>
     select(-c("dist_from_prev", "cont_eff_section"))
 
   # Clean and return
-  segdata <- segdata %>% select(-"seg_idx")
+  segdata <- segdata |> select(-"seg_idx")
   # If seg0.drop, then change '0' distances to 0.1
   if (seg0.drop) {
-    segdata <- segdata %>%
+    segdata <- segdata |>
       mutate(dist = if_else(dist < 0.1, 0.1, dist))
   }
 
-  sightinfo <- sightinfo %>%
-    mutate(year = year(.data$DateTime)) %>%
-    select(-"seg_idx") %>%
+  sightinfo <- sightinfo |>
+    mutate(year = year(.data$DateTime)) |>
+    select(-"seg_idx") |>
     select("segnum", "mlat", "mlon", "Event", "DateTime", "year", everything())
 
   list(segdata = segdata, sightinfo = sightinfo, randpicks = randpicks)

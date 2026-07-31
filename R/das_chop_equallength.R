@@ -251,16 +251,16 @@ das_chop_equallength.das_df <- function(x,
   segdata <- data.frame(
     do.call(rbind, lapply(eff.chop.list, function(i) i[["das.df.segdata"]])),
     stringsAsFactors = FALSE
-  ) %>%
+  ) |>
     mutate(segnum = seq_along(.data$file),
-           dist = round(.data$dist, 4)) %>%
+           dist = round(.data$dist, 4)) |>
     select("segnum", everything())
 
   ### Each das data point, along with segnum
   x.eff <- data.frame(
     do.call(rbind, lapply(eff.chop.list, function(i) i[["das.df"]])),
     stringsAsFactors = FALSE
-  ) %>%
+  ) |>
     left_join(segdata[, c("seg_idx", "segnum")], by = "seg_idx")
 
   ### Message about segments with length 0

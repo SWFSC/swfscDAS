@@ -34,9 +34,9 @@ names.cols <- c(
 x <- data.frame(
   Event = "B", EffortDot = TRUE, DateTime = dt1, Lat = lat1, Lon = lon1,
   Data1 = "1", Data2 = "C", Data3 = "7", Data4 = "Y", Data5 = NA, Data6 = NA, Data7 = NA, Data8 = NA, Data9 = NA
-) %>%
+) |>
   add_row(Event = "R", EffortDot = TRUE, DateTime = dt1, Lat = lat1, Lon = lon1,
-          Data1 = "1", Data2 = "C", Data3 = "7", Data4 = "Y", Data5 = NA, Data6 = NA, Data7 = NA, Data8 = NA, Data9 = NA) %>%
+          Data1 = "1", Data2 = "C", Data3 = "7", Data4 = "Y", Data5 = NA, Data6 = NA, Data7 = NA, Data8 = NA, Data9 = NA) |>
   mutate(EventNum = NA, file_das = "das_unit.das", line_num = seq_along(.))
 
 

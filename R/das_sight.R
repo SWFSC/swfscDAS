@@ -226,8 +226,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   event.sight <- c("S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F")
   event.sight.info <- c("A", "?", 1:8)
 
-  sight.df <- x %>%
-    filter(.data$Event %in% c(event.sight, event.sight.info)) %>%
+  sight.df <- x |>
+    filter(.data$Event %in% c(event.sight, event.sight.info)) |>
     mutate(sight_cumsum = cumsum(.data$Event %in% event.sight))
 
 
@@ -260,8 +260,8 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   #--------------------------------------------------------
   ### Data that is in all sighting events
   # SightNo is left as character because of entries such as "408A"
-  sight.info.all <- sight.df %>%
-    filter(.data$Event %in% event.sight) %>%
+  sight.info.all <- sight.df |>
+    filter(.data$Event %in% event.sight) |>
     mutate(SightNo = case_when(.data$Event %in% c("S", "K", "M") ~ .data$Data1,
                                .data$Event %in% c("G", "g") ~ .data$Data1,
                                .data$Event %in% c("s", "k", "m") ~ .data$Data1),
@@ -298,33 +298,33 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
                .data$Event == "g" ~ .data$Data4,
                .data$Event == "t" ~ .data$Data4,
                .data$Event == "p" ~ .data$Data4,
-               .data$Event == "F" ~ .data$Data3))) %>%
-    group_by(day(.data$DateTime)) %>%
+               .data$Event == "F" ~ .data$Data3))) |>
+    group_by(day(.data$DateTime)) |>
     mutate(SightNoDaily = paste(base::format(.data$DateTime, "%Y%m%d"),
                                 cumsum(.data$Event %in% c("S", "K", "M", "G")),
                                 sep = "_"),
            SightNoDaily = if_else(.data$Event %in% c("S", "K", "M", "G"),
-                                  .data$SightNoDaily, NA_character_)) %>%
-    ungroup() %>%
+                                  .data$SightNoDaily, NA_character_)) |>
+    ungroup() |>
     select("sight_cumsum", "SightNo", "Subgroup", "SightNoDaily",
            "Obs", "ObsStd", "Bearing", "Reticle", "DistNm")
 
 
   #--------------------------------------------------------
   ### Marine mammal (+subgroup) sightings; Events S, K, M, G
-  sight.info.skmg1 <- sight.df %>%
-    filter(.data$Event %in% c("S", "K", "M", "G")) %>%
+  sight.info.skmg1 <- sight.df |>
+    filter(.data$Event %in% c("S", "K", "M", "G")) |>
     mutate(Cue = if_else(.data$Event == "G", NA_real_, as.numeric(.data$Data3)),
            Method = as.numeric(.data$Data4),
            CalibSchool = toupper(.data$Data10),
            PhotosAerial = toupper(.data$Data11),
-           Biopsy = toupper(.data$Data12)) %>%
+           Biopsy = toupper(.data$Data12)) |>
     select("sight_cumsum", "Cue", "Method",
            "CalibSchool", "PhotosAerial", "Biopsy")
 
   # Data from A row
-  sight.info.skmg2 <- sight.df %>%
-    filter(.data$Event =="A") %>%
+  sight.info.skmg2 <- sight.df |>
+    filter(.data$Event =="A") |>
     mutate(Photos = toupper(.data$Data3),
            Birds = toupper(.data$Data4),
            nSp = unlist(
@@ -332,15 +332,15 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
                       function(d5, d6, d7, d8) {
                         sum(!is.na(c(d5, d6, d7, d8)))
                       })),
-           Mixed = .data$nSp > 1) %>%
+           Mixed = .data$nSp > 1) |>
     select("sight_cumsum", "Photos", "Birds", "nSp", "Mixed",
            SpCode1 = "Data5", SpCode2 = "Data6",
            SpCode3 = "Data7", SpCode4 = "Data8")
 
   # Data from ? row, if any
-  sight.info.skmg3 <- sight.df %>%
-    filter(.data$Event %in% c("?")) %>%
-    group_by(.data$sight_cumsum) %>%
+  sight.info.skmg3 <- sight.df |>
+    filter(.data$Event %in% c("?")) |>
+    group_by(.data$sight_cumsum) |>
     reframe(Prob = TRUE,
             SpCodeProb1 = .data$Data5, SpCodeProb2 = .data$Data6,
             SpCodeProb3 = .data$Data7, SpCodeProb4 = .data$Data8)
@@ -348,27 +348,27 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
   # Data from numeric events (groupsize and composition estimates)
   sight.info.skmg4 <- if (return.format == "complete") {
-    sight.df %>%
-      filter(.data$Event %in% as.character(1:8)) %>%
+    sight.df |>
+      filter(.data$Event %in% as.character(1:8)) |>
       mutate(SpPerc1 = as.numeric(.data$Data5),
              SpPerc2 = as.numeric(.data$Data6),
              SpPerc3 = as.numeric(.data$Data7),
              SpPerc4 = as.numeric(.data$Data8),
              GsSchoolBest = as.numeric(.data$Data2),
              GsSchoolHigh = as.numeric(.data$Data3),
-             GsSchoolLow = as.numeric(.data$Data4)) %>%
+             GsSchoolLow = as.numeric(.data$Data4)) |>
       select("sight_cumsum", ObsEstimate = "Data1",
              "SpPerc1", "SpPerc2", "SpPerc3", "SpPerc4",
              "GsSchoolBest", "GsSchoolHigh", "GsSchoolLow")
 
   } else {
-    sight.df %>%
-      filter(.data$Event %in% as.character(1:8)) %>%
+    sight.df |>
+      filter(.data$Event %in% as.character(1:8)) |>
       mutate(Data2 = as.numeric(.data$Data2), Data3 = as.numeric(.data$Data3),
              Data4 = as.numeric(.data$Data4), Data5 = as.numeric(.data$Data5),
              Data6 = as.numeric(.data$Data6), Data7 = as.numeric(.data$Data7),
-             Data8 = as.numeric(.data$Data8)) %>%
-      group_by(.data$sight_cumsum) %>%
+             Data8 = as.numeric(.data$Data8)) |>
+      group_by(.data$sight_cumsum) |>
       reframe(ObsEstimate = list(.data$Data1),
               SpPerc1 = mean_narm(.data$Data5),
               SpPerc2 = mean_narm(.data$Data6),
@@ -413,11 +413,11 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     sum(duplicated(sight.info.skmg3$sight_cumsum)) == 0
   )
 
-  sight.info.skmg <- sight.info.skmg1 %>%
-    left_join(sight.info.skmg2, by = "sight_cumsum") %>%
-    left_join(sight.info.skmg3, by = "sight_cumsum") %>%
-    left_join(sight.info.skmg4, by = "sight_cumsum") %>%
-    mutate(Prob = ifelse(is.na(.data$Prob), FALSE, .data$Prob)) %>%
+  sight.info.skmg <- sight.info.skmg1 |>
+    left_join(sight.info.skmg2, by = "sight_cumsum") |>
+    left_join(sight.info.skmg3, by = "sight_cumsum") |>
+    left_join(sight.info.skmg4, by = "sight_cumsum") |>
+    mutate(Prob = ifelse(is.na(.data$Prob), FALSE, .data$Prob)) |>
     select("sight_cumsum", "Cue", "Method", "Photos", "Birds", "CalibSchool",
            "PhotosAerial", "Biopsy", "Prob", "nSp", "Mixed", "ObsEstimate",
            starts_with("SpCode"), starts_with("SpCodeProb"),
@@ -431,40 +431,40 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
   #--------------------------------------------------------
   ### Marine mammal (+subgroup) resights; Events s, k, m
-  sight.info.resight <- sight.df %>%
-    filter(.data$Event %in% c("s", "k", "m")) %>%
-    mutate(CourseSchool = as.numeric(.data$Data5)) %>%
+  sight.info.resight <- sight.df |>
+    filter(.data$Event %in% c("s", "k", "m")) |>
+    mutate(CourseSchool = as.numeric(.data$Data5)) |>
     select("sight_cumsum", "CourseSchool")
 
 
   #--------------------------------------------------------
   ### Turtle sightings; Events t
-  sight.info.t <- sight.df %>%
-    filter(.data$Event == "t") %>%
+  sight.info.t <- sight.df |>
+    filter(.data$Event == "t") |>
     mutate(TurtleSp = .data$Data2,
            TurtleGs = as.numeric(.data$Data5),
            TurtleJFR = .data$Data6,
            TurtleAge = toupper(.data$Data8),
-           TurtleCapt = toupper(.data$Data9)) %>%
+           TurtleCapt = toupper(.data$Data9)) |>
     select("sight_cumsum", "TurtleSp", "TurtleGs",
            "TurtleJFR", "TurtleAge", "TurtleCapt")
 
 
   #--------------------------------------------------------
   ### Pinnipeds; event p
-  sight.info.p <- sight.df %>%
-    filter(.data$Event == "p") %>%
+  sight.info.p <- sight.df |>
+    filter(.data$Event == "p") |>
     mutate(PinnipedSp = .data$Data2,
-           PinnipedGs = as.numeric(.data$Data5)) %>%
+           PinnipedGs = as.numeric(.data$Data5)) |>
     select("sight_cumsum", "PinnipedSp", "PinnipedGs")
 
 
   #--------------------------------------------------------
   ### Fishing boats; Events F
-  sight.info.f <- sight.df %>%
-    filter(.data$Event == "F") %>%
+  sight.info.f <- sight.df |>
+    filter(.data$Event == "F") |>
     mutate(BoatType = .data$Data5,
-           BoatGs = as.numeric(.data$Data6)) %>%
+           BoatGs = as.numeric(.data$Data6)) |>
     select("sight_cumsum", "BoatType", "BoatGs")
 
 
@@ -473,16 +473,16 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
   #--------------------------------------------------------
   ### Formatting for all options - now done for wide and complete
-  to.return <- sight.df %>%
-    filter(.data$Event %in% event.sight) %>%
+  to.return <- sight.df |>
+    filter(.data$Event %in% event.sight) |>
     select(-c("Data1", "Data2", "Data3", "Data4", "Data5", "Data6",
-              "Data7", "Data8", "Data9", "Data10", "Data11", "Data12")) %>%
-    left_join(sight.info.all, by = "sight_cumsum") %>%
-    left_join(sight.info.skmg, by = "sight_cumsum") %>%
-    left_join(sight.info.resight, by = "sight_cumsum") %>%
-    left_join(sight.info.t, by = "sight_cumsum") %>%
-    left_join(sight.info.p, by = "sight_cumsum") %>%
-    left_join(sight.info.f, by = "sight_cumsum") %>%
+              "Data7", "Data8", "Data9", "Data10", "Data11", "Data12")) |>
+    left_join(sight.info.all, by = "sight_cumsum") |>
+    left_join(sight.info.skmg, by = "sight_cumsum") |>
+    left_join(sight.info.resight, by = "sight_cumsum") |>
+    left_join(sight.info.t, by = "sight_cumsum") |>
+    left_join(sight.info.p, by = "sight_cumsum") |>
+    left_join(sight.info.f, by = "sight_cumsum") |>
     select(-"sight_cumsum")
 
 
@@ -492,9 +492,9 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     # Split multi-species sightings into multiple rows as necessary
     to.return$idx <- seq_len(nrow(to.return))
 
-    to.return.multi <- to.return %>%
-      filter(.data$Event %in% c("S", "K", "M", "G")) %>%
-      group_by(.data$idx) %>%
+    to.return.multi <- to.return |>
+      filter(.data$Event %in% c("S", "K", "M", "G")) |>
+      group_by(.data$idx) |>
       summarise(Sp1_list = list(c(.data$SpCode1, .data$SpCodeProb1, .data$GsSpBest1,
                                   .data$GsSpHigh1, .data$GsSpLow1)),
                 Sp2_list = list(c(.data$SpCode2, .data$SpCodeProb2, .data$GsSpBest2,
@@ -502,17 +502,17 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
                 Sp3_list = list(c(.data$SpCode3, .data$SpCodeProb3, .data$GsSpBest3,
                                   .data$GsSpHigh3, .data$GsSpLow3)),
                 Sp4_list = list(c(.data$SpCode4, .data$SpCodeProb4, .data$GsSpBest4,
-                                  .data$GsSpHigh4, .data$GsSpLow4))) %>%
+                                  .data$GsSpHigh4, .data$GsSpLow4))) |>
       pivot_longer(c("Sp1_list", "Sp2_list", "Sp3_list", "Sp4_list"),
                    names_to = "sp_list_name", values_to = "sp_list",
-                   values_drop_na = TRUE) %>%
+                   values_drop_na = TRUE) |>
       mutate(SpCode = map_chr(.data$sp_list, function(i) i[1]),
              SpCodeProb = map_chr(.data$sp_list, function(i) i[2]),
              GsSpBest = as.numeric(map_chr(.data$sp_list, function(i) i[3])),
              GsSpHigh = as.numeric(map_chr(.data$sp_list, function(i) i[4])),
-             GsSpLow = as.numeric(map_chr(.data$sp_list, function(i) i[5]))) %>%
-      filter(!is.na(.data$SpCode)) %>%
-      select("idx", "SpCode", "SpCodeProb", "GsSpBest", "GsSpHigh", "GsSpLow") %>%
+             GsSpLow = as.numeric(map_chr(.data$sp_list, function(i) i[5]))) |>
+      filter(!is.na(.data$SpCode)) |>
+      select("idx", "SpCode", "SpCodeProb", "GsSpBest", "GsSpHigh", "GsSpLow") |>
       arrange(.data$idx)
 
     # Names and order of columns to return
@@ -528,16 +528,16 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
     )
 
     # Finalize return data frame, consolidating columns as possible
-    to.return <- to.return %>%
+    to.return <- to.return |>
       select(-c("SpCode1", "SpCode2", "SpCode3", "SpCode4",
                 "SpCodeProb1", "SpCodeProb2", "SpCodeProb3", "SpCodeProb4",
                 "SpPerc1", "SpPerc2", "SpPerc3", "SpPerc4",
                 "GsSpBest1", "GsSpBest2", "GsSpBest3", "GsSpBest4",
                 "GsSpHigh1", "GsSpHigh2", "GsSpHigh3", "GsSpHigh4",
-                "GsSpLow1", "GsSpLow2", "GsSpLow3", "GsSpLow4")) %>%
-      full_join(to.return.multi, by = "idx") %>%
-      arrange(.data$idx) %>%
-      select(!!sight.names) %>%
+                "GsSpLow1", "GsSpLow2", "GsSpLow3", "GsSpLow4")) |>
+      full_join(to.return.multi, by = "idx") |>
+      arrange(.data$idx) |>
+      select(!!sight.names) |>
       mutate(SpCode = case_when(.data$Event %in% c("S", "K", "M", "G") ~ .data$SpCode,
                                 .data$Event == "t" ~ .data$TurtleSp,
                                 .data$Event == "p" ~ .data$PinnipedSp,
@@ -549,7 +549,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
                                       .data$Event == "F" ~ .data$BoatGs,
                                       TRUE ~ NA_real_),
              GsSpBest = if_else(.data$Event %in% c("t", "p", "F"),
-                                .data$GsSchoolBest, .data$GsSpBest)) %>%
+                                .data$GsSchoolBest, .data$GsSpBest)) |>
       select(-c("TurtleSp", "TurtleGs", "PinnipedSp", "PinnipedGs",
                 "BoatType", "BoatGs"))
   }
@@ -557,7 +557,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
   #--------------------------------------------------------
   ### Calculate perp dist and return
-  to.return %>%
-    mutate(PerpDistKm = abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852) %>%
+  to.return |>
+    mutate(PerpDistKm = abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852) |>
     filter(.data$Event %in% return.events)
 }

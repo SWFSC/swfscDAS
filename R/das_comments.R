@@ -59,5 +59,5 @@ das_comments.das_dfr <- function(x) {
     paste(na.omit(i), collapse = "")
   })
 
-  x.c %>% mutate(comment_str = unname(x.c.c))
+  x.c |> mutate(comment_str = unname(x.c.c))
 }

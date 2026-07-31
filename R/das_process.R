@@ -251,22 +251,22 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
 
   #----------------------------------------------------------------------------
   ### Extract GMT Offsets for dates + cruise numbers
-  x.offset <- x %>%
-    filter(.data$Event == "B") %>%
+  x.offset <- x |>
+    filter(.data$Event == "B") |>
     mutate(Date = as.Date(.data$DateTime, tz = ""),
            Cruise = as.numeric(.data$Data1),
-           OffsetGMT = as.integer(.data$Data3)) %>%
-    select("Date", "Cruise", "OffsetGMT") %>%
+           OffsetGMT = as.integer(.data$Data3)) |>
+    select("Date", "Cruise", "OffsetGMT") |>
     distinct()
 
-  x.offset.summ <- x.offset %>%
-    group_by(.data$Date, .data$Cruise) %>%
+  x.offset.summ <- x.offset |>
+    group_by(.data$Date, .data$Cruise) |>
     summarise(offsetgmt_uq = n_distinct(.data$OffsetGMT))
 
 
 
   if (any(x.offset.summ$offsetgmt_uq != 1)) {
-    x.offset.mult <- x.offset.summ %>% filter(.data$offsetgmt_uq > 1)
+    x.offset.mult <- x.offset.summ |> filter(.data$offsetgmt_uq > 1)
     warning("The following dates + cruise numbers have multiple OffsetGMT ",
             "values (Field 3 of B events), and thus the OffsetGMT column ",
             "will contain only NAs in the output data frame:\n",
@@ -429,19 +429,19 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
     event.tmp <- c("?", 1:8)
     x$a_idx <- cumsum(x$Event == "A")
     x$idx <- seq_along(x$Event)
-    x.key <- x %>%
-      filter(.data$Event == "A") %>%
+    x.key <- x |>
+      filter(.data$Event == "A") |>
       select("a_idx", "DateTime", "Lat", "Lon")
-    x.tmp <- x %>%
-      filter(.data$Event %in% event.tmp) %>%
-      select(-c("DateTime", "Lat", "Lon")) %>%
-      left_join(x.key, by = "a_idx") %>%
+    x.tmp <- x |>
+      filter(.data$Event %in% event.tmp) |>
+      select(-c("DateTime", "Lat", "Lon")) |>
+      left_join(x.key, by = "a_idx") |>
       select(!!names(x))
 
-    x <- x %>%
-      filter(!(.data$Event %in% event.tmp)) %>%
-      bind_rows(x.tmp) %>%
-      arrange(.data$idx) %>%
+    x <- x |>
+      filter(!(.data$Event %in% event.tmp)) |>
+      bind_rows(x.tmp) |>
+      arrange(.data$idx) |>
       select(-c("idx", "a_idx"))
     rm(x.key, x.tmp)
   }
@@ -458,10 +458,10 @@ das_process.das_dfr <- function(x, days.gap = 20, reset.event = TRUE,
     paste0("Data", 1:12), "EffortDot", "EventNum", "file_das", "line_num"
   )
 
-  data.frame(x, tmp, stringsAsFactors = FALSE) %>%
-    mutate(Date = as.Date(.data$DateTime, tz = "")) %>%
-    left_join(x.offset, by = c("Cruise", "Date")) %>%
-    select(!!cols.tokeep) %>%
+  data.frame(x, tmp, stringsAsFactors = FALSE) |>
+    mutate(Date = as.Date(.data$DateTime, tz = "")) |>
+    left_join(x.offset, by = c("Cruise", "Date")) |>
+    select(!!cols.tokeep) |>
     as_das_df()
 }
 

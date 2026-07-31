@@ -70,7 +70,7 @@ raw_das_fwf <- function(x, file, data9len = 100) {
 
   ### Process output of das_read
   na.paste <- c("NA", "NANA", "NANANA")
-  x.proc <- x %>%
+  x.proc <- x |>
     mutate(EffortDot = ifelse(EffortDot, ".", " "),
            tm_hms = paste0(chr_z(hour(DateTime)), chr_z(minute(DateTime)),
                            chr_z(second(DateTime))),

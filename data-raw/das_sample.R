@@ -44,9 +44,9 @@ source("data-raw/das_sample_funcs.R")
 idx1 <- head(which(x.orig$Event == "B"), 1)
 idx2 <- tail(which(x.orig$Event == "E"), 1)
 
-x <- x.orig %>%
+x <- x.orig |>
   # Slice from first B event to before last E event
-  slice(idx1:idx2) %>%
+  slice(idx1:idx2) |>
   # Adjust dates and lat/lons
   mutate(DateTime = DateTime + days(round(runif(1, min = 5, max = 10) * 365, 0)),
          Lat = Lat + runif(1, min = 30, max = 40),
@@ -63,8 +63,8 @@ x <- x.orig %>%
 
 # Set cruise number and remove a specific comments
 stopifnot(x$Event[which(grepl("j3", x$Data3))] == "C") #x[165, ]
-x <- x %>%
-  mutate(Data1 = ifelse(Event == "B", 1000, Data1)) %>%
+x <- x |>
+  mutate(Data1 = ifelse(Event == "B", 1000, Data1)) |>
   slice(-which(grepl("j3", x$Data3)))
 
 

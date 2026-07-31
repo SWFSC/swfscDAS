@@ -12,8 +12,8 @@ test_that("The column classes of the das_sight 'default' output are the same whe
   y.sight <- dplyr::filter(das_sight(y.proc, return.format = "default"),
                                Event == "ZZ")
 
-  y.sight0 <- y.proc %>%
-    filter(!(Event %in% event.sight)) %>%
+  y.sight0 <- y.proc |>
+    filter(!(Event %in% event.sight)) |>
     das_sight(return.format = "default")
 
   expect_identical(y.sight, y.sight0)
@@ -24,8 +24,8 @@ test_that("The column classes of the das_sight 'wide' output, are the same wheth
   y.sight <- dplyr::filter(das_sight(y.proc, return.format = "wide"),
                                Event == "ZZ")
 
-  y.sight0 <- y.proc %>%
-    filter(!(Event %in% event.sight)) %>%
+  y.sight0 <- y.proc |>
+    filter(!(Event %in% event.sight)) |>
     das_sight(return.format = "wide")
 
   expect_identical(y.sight, y.sight0)
@@ -36,8 +36,8 @@ test_that("The column classes of the das_sight 'complete' output are the same wh
   y.sight <- dplyr::filter(das_sight(y.proc, return.format = "complete"),
                                Event == "ZZ")
 
-  y.sight0 <- y.proc %>%
-    filter(!(Event %in% event.sight)) %>%
+  y.sight0 <- y.proc |>
+    filter(!(Event %in% event.sight)) |>
     das_sight(return.format = "complete")
 
   expect_identical(y.sight, y.sight0)

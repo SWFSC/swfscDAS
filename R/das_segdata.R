@@ -112,9 +112,9 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
             "continuous effort section ", section.id, ":\n",
             paste(df.out1.cols, collapse  = ", "))
 
-  df.out1 <- x %>%
-    select(!!df.out1.cols) %>%
-    select(file = "file_das", everything()) %>%
+  df.out1 <- x |>
+    select(!!df.out1.cols) |>
+    select(file = "file_das", everything()) |>
     slice(n()) #use n() instead of 1 b/c some vars may be NA in first line
 
 
@@ -125,7 +125,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
   )
 
   #----------------------------------------------------------------------------
-  segdata.all %>%
+  segdata.all |>
     select("seg_idx", "section_id", "section_sub_id", "file", "stlin", "endlin",
            "lat1", "lon1", "DateTime1", "lat2", "lon2", "DateTime2",
            "mlat", "mlon", "mDateTime", "dist", "year", "month", "day", "mtime",
@@ -223,11 +223,11 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
         mlat = startpt.curr[1], mlon = startpt.curr[2], mDateTime = mean(c(startdt.curr, enddt.curr)),
         dist = 0,
         stringsAsFactors = FALSE
-      ) %>%
+      ) |>
         mutate(mtime = strftime(.data$mDateTime, format = "%H:%M:%S",
                                 tz = tz(.data$mDateTime)),
                year = year(.data$mDateTime), month = month(.data$mDateTime),
-               day = day(.data$mDateTime)) %>%
+               day = day(.data$mDateTime)) |>
         bind_cols(df.out1, conditions.list.df)
 
     } else {
@@ -326,8 +326,8 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
 
                 } else {
                   #.segdata_aggr() throws an error if not character or numeric
-                  tmp <- k.list[[k]] %>%
-                    filter(!is.na(.data$val)) %>%
+                  tmp <- k.list[[k]] |>
+                    filter(!is.na(.data$val)) |>
                     mutate(val_frac = .data$val * .data$dist)
 
                   if (nrow(tmp) == 0) NA else sum(tmp$val_frac) / sum(tmp$dist)
@@ -341,10 +341,10 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
           } else if (segdata.method == "maxdist") {
             conditions.list.df <- data.frame(
               lapply(names(conditions.list), function(k, k.list) {
-                tmp <- k.list[[k]] %>%
-                  filter(!is.na(.data$val)) %>%
-                  group_by(.data$val) %>%
-                  summarise(dist_sum = sum(as.numeric(.data$dist))) %>%
+                tmp <- k.list[[k]] |>
+                  filter(!is.na(.data$val)) |>
+                  group_by(.data$val) |>
+                  summarise(dist_sum = sum(as.numeric(.data$dist))) |>
                   arrange(desc(.data$dist_sum), .data$val)
 
                 if (nrow(tmp) == 0) NA else tmp$val[1]
@@ -373,11 +373,11 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
             mlat = midpt.curr[1], mlon = midpt.curr[2], mDateTime = mean(c(startdt.curr, enddt.curr)),
             dist = seg.lengths[subseg.curr],
             stringsAsFactors = FALSE
-          ) %>%
+          ) |>
             mutate(mtime = strftime(.data$mDateTime, format = "%H:%M:%S",
                                     tz = tz(.data$mDateTime)),
                    year = year(.data$mDateTime), month = month(.data$mDateTime),
-                   day = day(.data$mDateTime)) %>%
+                   day = day(.data$mDateTime)) |>
             bind_cols(df.out1, conditions.list.df)
 
           segdata.all <- rbind(segdata.all, segdata)
@@ -426,7 +426,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
 
   #--------------------------------------------------------------------------
   # Ensure longitudes are between -180 and 180, and return
-  segdata.all %>%
+  segdata.all |>
     mutate(lon1 = ifelse(.greater(.data$lon1, 180), .data$lon1 - 360, .data$lon1),
            lon1 = ifelse(.less(.data$lon1, -180), .data$lon1 + 360, .data$lon1),
            lon2 = ifelse(.greater(.data$lon2, 180), .data$lon2 - 360, .data$lon2),

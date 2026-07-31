@@ -48,14 +48,14 @@
       identical(is.na(y.df[[1]]), is.na(y.df[[2]]))
     )
 
-    y.df <- y.df %>% select(c(1, 2))
+    y.df <- y.df |> select(c(1, 2))
     names(y.df) <- c("lon", "lat")
 
     if (anyNA(y.df$lon)) {
-      obj.list <- y.df %>%
-        mutate(na_sum = cumsum(is.na(.data$lon) & is.na(.data$lat))) %>%
-        filter(!is.na(.data$lon) & !is.na(.data$lat)) %>%
-        group_by(.data$na_sum) %>%
+      obj.list <- y.df |>
+        mutate(na_sum = cumsum(is.na(.data$lon) & is.na(.data$lat))) |>
+        filter(!is.na(.data$lon) & !is.na(.data$lat)) |>
+        group_by(.data$na_sum) |>
         summarise(temp = list(
           st_polygon(list(matrix(c(.data$lon, .data$lat), ncol = 2)))
         ))

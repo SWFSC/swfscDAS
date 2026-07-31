@@ -133,7 +133,7 @@ das_check <- function(
   x.lines <- substr(do.call(c, x.lines.list), 4, 39)
 
   message("Processing DAS file")
-  x.proc <- suppressWarnings(das_process(x)) %>%
+  x.proc <- suppressWarnings(das_process(x)) |>
     left_join(select(x, "file_das", "line_num", "idx"),
               by = c('file_das', "line_num"))
   x.proc <- as_das_df(x.proc)
@@ -188,7 +188,7 @@ das_check <- function(
 
 
   ### Check lat/lon coordinates - NA events are ignored
-  # x.proc.ll <- x.proc %>% filter(!(Event %in% c("?", 1:8)))
+  # x.proc.ll <- x.proc |> filter(!(Event %in% c("?", 1:8)))
   lat.which <- which(!between(x.proc$Lat, -90, 90))
   lon.which <- which(!between(x.proc$Lat, -180, 1800))
 
@@ -242,23 +242,23 @@ das_check <- function(
   }
 
   # Create data frame with prev_columns
-  x.proc.prev <- x.proc %>%
+  x.proc.prev <- x.proc |>
     mutate(Event_prev = lag(.data$Event),
            OnEffort_prev = lag(.data$OnEffort))
 
   # 2) All R events occur while off effort, or after a B event that occurs while off effort
-  br.r.which <- x.proc.prev %>%
+  br.r.which <- x.proc.prev |>
     filter((.data$Event == "R" & .data$OnEffort_prev & .data$Event_prev != "B") |
-             (.data$Event == "B" & .data$OnEffort_prev)) %>%
-    select("idx") %>%
-    unlist() %>%
+             (.data$Event == "B" & .data$OnEffort_prev)) |>
+    select("idx") |>
+    unlist() |>
     unname()
 
   # 3) All E events occur while on effort
-  e.which <- x.proc.prev %>%
-    filter(.data$Event == "E" & !.data$OnEffort_prev) %>%
-    select("idx") %>%
-    unlist() %>%
+  e.which <- x.proc.prev |>
+    filter(.data$Event == "E" & !.data$OnEffort_prev) |>
+    select("idx") |>
+    unlist() |>
     unname()
 
 
@@ -293,11 +293,11 @@ das_check <- function(
     Extra_data = substr(x.lines, 100, max(nchar(x.lines))),
     idx = seq_along(x.lines),
     stringsAsFactors = FALSE
-  ) %>%
-    filter(!(.data$Event %in% c("C", "*", "#"))) %>%
+  ) |>
+    filter(!(.data$Event %in% c("C", "*", "#"))) |>
     mutate(Extra_data = trimws(.data$Extra_data, which = "both"))
 
-  x.tmp.filt.data <- x.tmp.filt %>% select(starts_with("Data"))
+  x.tmp.filt.data <- x.tmp.filt |> select(starts_with("Data"))
 
   x.tmp.which <- lapply(1:ncol(x.tmp.filt.data), function(i) {
     x1 <- trimws(x.tmp.filt.data[[i]], which = "left")
