@@ -1,7 +1,5 @@
 # swfscDAS 0.7.0.9000
 
-* Updated package dependency to require R >= 4.1
-
 * Fix bug in `das_process` of incorrect OffsetGMT values, stemming from `as.Date` using 'UTC' tz by default (#16)
 
 * Added an exported function `das_spcodes_read` for consistent reading of shipboard SpCode files
@@ -19,6 +17,8 @@
 * Update roxygen to use markdown, fix documentation issues related to upgrade to roxygen2 v8.0
 
 * Added the SpCodes.dat file (from [`CruzPlot`](https://github.com/SWFSC/CruzPlot)) to 'inst' to have available as a default
+
+* Changed to using R native pip, and updated package dependency to require R >= 4.1
 
 
 # swfscDAS 0.6.4
