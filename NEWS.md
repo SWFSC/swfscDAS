@@ -1,5 +1,7 @@
 # swfscDAS 0.7.0.9000
 
+* Updated package dependency to require R >= 4.1
+
 * Fix bug in `das_process` of incorrect OffsetGMT values, stemming from `as.Date` using 'UTC' tz by default (#16)
 
 * Added an exported function `das_spcodes_read` for consistent reading of shipboard SpCode files
