@@ -36,6 +36,7 @@
 #'   lengths; overrides \code{comment.drop}. If \code{NULL} (the default), then
 #'   all on effort events are used. If used, this argument must include at least
 #'   R, E, S, and A events, and cannot include ? or 1:8 events
+#' @param gs.sp.min1 passed directly to \code{\link{das_sight}}
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL}, which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}. Using 1 core likely will
@@ -178,9 +179,11 @@ das_effort.das_df <- function(
     seg0.drop = FALSE,
     comment.drop = FALSE,
     event.touse = NULL,
+    gs.sp.min1 = FALSE,
     num.cores = NULL,
     ...
 ) {
+
   #----------------------------------------------------------------------------
   # Input checks
   if (!(inherits(seg0.drop, "logical") & inherits(comment.drop, "logical")))
@@ -400,23 +403,30 @@ das_effort.das_df <- function(
   sightinfo <- x.eff.all %>%
     left_join(select(segdata, "segnum", "mlat", "mlon"),
               by = "segnum") %>%
-    das_sight(returnformat = "default") %>%
+    das_sight(return.format = "default",
+              gs.sp.min1 = gs.sp.min1) %>%
     mutate(included = (.data$Bft <= 5 & .data$OnEffort & .data$ObsStd),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-c("dist_from_prev", "cont_eff_section"))
 
   # Clean and return
   segdata <- segdata %>% select(-"seg_idx")
-  # If seg0.drop, then change '0' distances to 0.1
+  # If seg0.drop, then set minimum distance to 0.1
   if (seg0.drop) {
     segdata <- segdata %>%
-      mutate(dist = if_else(.data$dist < 0.1, 0.1, .data$dist))
+      mutate(dist = pmax(.data$dist, 0.1))
   }
 
   sightinfo <- sightinfo %>%
     mutate(year = year(.data$DateTime)) %>%
     select(-"seg_idx") %>%
     select("segnum", "mlat", "mlon", "Event", "DateTime", "year", everything())
+
+  # browser()
+  # if (TODO) {
+  #   sightinfo <- sightinfo %>%
+  #     mutate(across(starts_with("GsSp"), ~ pmax(.x, 1)))
+  # }
 
   list(segdata = segdata, sightinfo = sightinfo, randpicks = randpicks)
 }
