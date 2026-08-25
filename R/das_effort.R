@@ -233,7 +233,8 @@ das_effort.das_df <- function(
   x.oneff <- x.oneff.all %>% filter(!(.data$Event %in% event.tmp) )
   x.oneff.tmp <- x.oneff.all %>%
     filter(.data$Event %in% event.tmp) %>%
-    mutate(cont_eff_section = NA, dist_from_prev = NA, seg_idx = NA, segnum = NA)
+    mutate(cont_eff_section = NA, dist_from_prev = NA,
+           seg_idx = NA, segnum = NA)
 
   rownames(x.oneff) <- rownames(x.oneff.tmp) <- NULL
 
@@ -317,7 +318,7 @@ das_effort.das_df <- function(
 
     ces.keep <- x.ces.summ %>%
       filter(.data$has_sight | .data$dist_sum > 0.1) %>%
-      pull(cont_eff_section)
+      pull(.data$cont_eff_section)
 
     x.oneff <- x.oneff %>%
       filter(.data$cont_eff_section %in% ces.keep)
@@ -409,7 +410,7 @@ das_effort.das_df <- function(
   # If seg0.drop, then change '0' distances to 0.1
   if (seg0.drop) {
     segdata <- segdata %>%
-      mutate(dist = if_else(dist < 0.1, 0.1, dist))
+      mutate(dist = if_else(.data$dist < 0.1, 0.1, .data$dist))
   }
 
   sightinfo <- sightinfo %>%
