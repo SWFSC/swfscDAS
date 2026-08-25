@@ -191,17 +191,18 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
       conditions.list.df <- data.frame(
         lapply(names(conditions.list), function(k, das.df) {
           val.out <- unique(na.omit(das.df[[k]]))
-          if (length(val.out) > 1)
+          if (length(val.out) > 1) {
             warning("The continuous effort section with section_id ",
                     section.id, " has a distance of 0, ",
                     "and multiple values for condition ", k,
-                    ". Only the first element will be output",
+                    ". The final value of this condition ",
+                    "will be provided in the output",
                     immediate. = TRUE)
-          if (length(val.out) == 0) NA else val.out
+          }
+          if (length(val.out) == 0) NA else tail(val.out, 1)
         }, das.df = das.df)
       )
       names(conditions.list.df) <- conditions.names
-
       enddt.curr <- tail(das.df$DateTime, 1)
 
       # ### Message printed in das_chop_equallength, outside of parallel calls
