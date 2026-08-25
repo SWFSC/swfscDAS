@@ -1,6 +1,8 @@
 # swfscDAS 0.7.0.9000
 
-* Fix bug in `das_process` of incorrect OffsetGMT values, stemming from `as.Date` using 'UTC' tz by default (#16)
+* Fixed bug in `das_process` of incorrect OffsetGMT values, stemming from `as.Date` using 'UTC' tz by default (#16)
+
+* Fixed bug in `das_segdata` to actually only use the last condition value for a segment of lenght 0 (#27)
 
 * Added an exported function `das_spcodes_read` for consistent reading of shipboard SpCode files
 
