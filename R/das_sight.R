@@ -10,6 +10,9 @@
 #' @param return.events character; event codes included in the output.
 #'   Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 #'   (case-sensitive). The default is all of these event codes
+#' @param gs.sp.min1 logical; flag indicating whether species group size columns
+#'   will be set to a minimum value of 1 (TRUE) or maintain the raw values
+#'   (FALSE, default). See the 'Details' section below
 #'
 #' @details
 #' DAS events contain specific information in the 'Data#' columns, with the
@@ -34,7 +37,15 @@
 #'
 #' Abbreviations used in output column names: Gs = group size, Sp = species, Nm
 #' = nautical mile, Perc = percentage, Prob = probable, GsSchool = school-level
-#' group size info
+#' group size info, GsSp = species-level group size info.
+#'
+#' Species group sizes are calculated as the product of the arithmetic mean of
+#' the corresponding school group size and the species percentage. These values
+#' are reported in 'GsSp...' columns for 'default' and 'wide' output formats.
+#' Sometimes, however, these species group size estimates may be less than 1,
+#' depending on how the means work out across different observers. If
+#' \code{gs.sp.min1} is \code{TRUE}, any values in 'GsSp...' columns that are
+#' less than 1 are set to 1, via e.g. \code{\link{pmin}(GsSpBest, 1)}
 #'
 #' This function makes the following assumptions, and alterations to the raw DAS
 #' data:
@@ -211,9 +222,13 @@ das_sight.data.frame <- function(x, ...) {
 
 #' @name das_sight
 #' @export
-das_sight.das_df <- function(x, return.format = c("default", "wide", "complete"),
-                             return.events = c("S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"),
-                             ...) {
+das_sight.das_df <- function(
+    x,
+    return.format = c("default", "wide", "complete"),
+    return.events = c("S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"),
+    gs.sp.min1 = FALSE,
+    ...
+) {
   mean_narm <- function(i) mean(i, na.rm = TRUE)
 
   #----------------------------------------------------------------------------
@@ -226,6 +241,7 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
   event.sight <- c("S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F")
   event.sight.info <- c("A", "?", 1:8)
 
+  # browser()
   sight.df <- x %>%
     filter(.data$Event %in% c(event.sight, event.sight.info)) %>%
     mutate(sight_cumsum = cumsum(.data$Event %in% event.sight))
@@ -556,7 +572,12 @@ das_sight.das_df <- function(x, return.format = c("default", "wide", "complete")
 
 
   #--------------------------------------------------------
-  ### Calculate perp dist and return
+  ### Calculate perp dist, adjust GsSp..., and return
+  if (gs.sp.min1) {
+    to.return <- to.return %>%
+      mutate(across(starts_with("GsSp"), ~ pmax(.x, 1)))
+  }
+
   to.return %>%
     mutate(PerpDistKm = abs(sin(.data$Bearing*pi/180) * .data$DistNm) * 1.852) %>%
     filter(.data$Event %in% return.events)

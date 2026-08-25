@@ -47,7 +47,9 @@
 #'   Speed                    \tab N             \tab Data2          \tab Can be converted to a numeric value                                       \cr
 #'   Beaufort                 \tab V             \tab Data1          \tab Must be a whole number between 0 and 9                                    \cr
 #'   Swell height             \tab V             \tab Data2          \tab Can be converted to a numeric value                                       \cr
+#'   Swell direction          \tab V             \tab Data3          \tab Can be converted to a numeric value                                       \cr
 #'   Wind speed               \tab V             \tab Data5          \tab Can be converted to a numeric value                                       \cr
+#'   Wind direction           \tab W             \tab Data4          \tab Can be converted to a numeric value                                       \cr
 #'   Rain or fog              \tab W             \tab Data1          \tab Must be between 0 and 5 and either a whole number or have decimal value .5\cr
 #'   Horizontal sun           \tab W             \tab Data2          \tab Must be a whole number between 0 and 12                                   \cr
 #'   Vertical sun             \tab W             \tab Data3          \tab Must be a whole number between 0 and 12                                   \cr
@@ -413,9 +415,17 @@ das_check <- function(
   idx.v.2 <- .check_numeric(x, "V", "Data2")
   txt.v.2 <- "Swell height (Data2 of V events) cannot be converted to a numeric"
 
+  # Swell direction
+  idx.v.2 <- .check_numeric(x, "V", "Data3")
+  txt.v.2 <- "Swell direction (Data3 of V events) cannot be converted to a numeric"
+
   # Wind speed
   idx.v.5 <- .check_numeric(x, "V", "Data5")
   txt.v.5 <- "Wind speed (Data5 of V events) cannot be converted to a numeric"
+
+  # Wind direction
+  idx.v.5 <- .check_numeric(x, "W", "Data4")
+  txt.v.5 <- "Wind direction (Data4 of W events) cannot be converted to a numeric"
 
   # RainFog
   rf.acc <- c(seq(0, 5, by = 0.5), sprintf("%02d", 1:5), NA)
