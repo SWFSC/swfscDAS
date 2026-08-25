@@ -19,6 +19,7 @@ das_effort(x, ...)
   seg0.drop = FALSE,
   comment.drop = FALSE,
   event.touse = NULL,
+  gs.sp.min1 = FALSE,
   num.cores = NULL,
   ...
 )
@@ -68,6 +69,8 @@ chopping. Default is \code{FALSE}}
 lengths; overrides \code{comment.drop}. If \code{NULL} (the default), then
 all on effort events are used. If used, this argument must include at least
 R, E, S, and A events, and cannot include ? or 1:8 events}
+
+\item{gs.sp.min1}{passed directly to \code{\link{das_sight}}}
 
 \item{num.cores}{Number of CPUs to over which to distribute computations.
 Defaults to \code{NULL}, which uses one fewer than the number of cores

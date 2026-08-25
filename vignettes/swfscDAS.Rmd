@@ -133,7 +133,7 @@ glimpse(y.eff.sight$segdata)
 glimpse(y.eff.sight$sightinfo)
 ```
 
-Note that `das_effort` contains several arguments that allow for more control over segmentation steps. These arguments include `seg0.drop` (to drop segments of length <=0.1 with no sightings), `comment.drop` (should positions from comment events be used when segment chopping) and `event.touse` (which events to use when determining segment lengths). See the function documentation (`?das_effort`) for more details.
+Note that `das_effort` contains several arguments that allow for more control over segmentation steps. These arguments include `seg0.drop` (to drop segments of length <=0.1 with no sightings), `comment.drop` (should positions from comment events be used when segment chopping), and `event.touse` (which events to use when determining segment lengths). See the function documentation (`?das_effort`) for more details. Additionally, for group size calibration work, users can use the `gs.sp.min1` argument to specify if species group size values should have a minimum value of 1.
 
 ## Strata
 

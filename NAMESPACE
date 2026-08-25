@@ -60,6 +60,7 @@ export(das_spcodes_read)
 export(distance_greatcircle)
 export(randpicks_convert)
 importFrom(dplyr,
+  across,
   add_row,
   arrange,
   between,
