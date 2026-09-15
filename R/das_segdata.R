@@ -100,7 +100,7 @@ das_segdata.das_df <- function(x, conditions, segdata.method = c("avg", "maxdist
   # Prep stuff - get the info that is consistent for the entire effort length
   # ymd determined below to be safe
   df.out1.cols <- c("file_das", "Cruise", "Mode", "OffsetGMT",
-                    "EffType", "ESWsides")
+                    "EffType", "ESWsides", "Trackline")
 
   # <=1 accounts for when all
   df.out1.check <- vapply(df.out1.cols, function(i) {

@@ -43,6 +43,7 @@
 #'   Echo sounder             \tab B             \tab Data4          \tab Must be one of Y, N, y, n, or NA (blank)                                  \cr
 #'   Effort type              \tab R             \tab Data1          \tab Must be one of F, N, S, or NA (blank)                                     \cr
 #'   ESW sides                \tab R             \tab Data2          \tab Effective strip width; must be one of F, H, or NA (blank)                 \cr
+#'   Trackline number         \tab R             \tab Data3          \tab Trackline number, represented as a character                              \cr
 #'   Course                   \tab N             \tab Data1          \tab Can be converted to a numeric value                                       \cr
 #'   Speed                    \tab N             \tab Data2          \tab Can be converted to a numeric value                                       \cr
 #'   Beaufort                 \tab V             \tab Data1          \tab Must be a whole number between 0 and 9                                    \cr
@@ -338,7 +339,7 @@ das_check <- function(
   txt.e.na <- "E events should only have data in the Data1 column"
 
   # R events
-  idx.r.na <- .check_isna(x, c("R"), paste0("Data", 3:9))
+  idx.r.na <- .check_isna(x, c("R"), paste0("Data", 4:9))
   txt.r.na <- "R events should only have data in the Data1-2 columns"
 
   # N events

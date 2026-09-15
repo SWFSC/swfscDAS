@@ -4,7 +4,8 @@ y.proc <- das_process(y.read)
 
 exp.proc.name <- c(
   "Event", "DateTime", "Lat", "Lon", "OnEffort",
-  "Cruise", "Mode", "OffsetGMT", "EffType", "ESWsides", "Course", "SpdKt",
+  "Cruise", "Mode", "OffsetGMT", "EffType", "ESWsides", "Trackline",
+  "Course", "SpdKt",
   "Bft", "SwellHght", "SwellDir", "WindSpdKt", "WindDir",
   "RainFog", "HorizSun", "VertSun", "Glare", "Vis",
   "ObsL", "Rec", "ObsR", "ObsInd",
@@ -89,6 +90,7 @@ test_that("das_process output has expected column names and classes", {
     OffsetGMT = "integer",
     EffType = "character",
     ESWsides = "numeric",
+    Trackline = "character",
     Course = "numeric",
     SpdKt = "numeric",
     Bft = "numeric",
