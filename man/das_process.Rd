@@ -67,6 +67,7 @@ Effort mode                   \tab Mode      \tab Event: B; Column: Data2\cr
 GMT offset of DateTime data   \tab OffsetGMT \tab Event: B; Column: Data3\cr
 Effort type                   \tab EffType   \tab Event: R; Column: Data1\cr
 Number of sides with observer \tab ESWSide   \tab Event: R; Column: Data2\cr
+Trackline number              \tab Trackline \tab Event: R; Column: Data3\cr
 Course (ship direction)       \tab Course    \tab Event: N; Column: Data1\cr
 Speed (ship speed, knots)     \tab SpdKt     \tab Event: N; Column: Data2\cr
 Beaufort sea state            \tab Bft       \tab Event: V; Column: Data1\cr

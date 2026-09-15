@@ -72,6 +72,7 @@ Mode                     \tab B             \tab Data2          \tab Must be one
 Echo sounder             \tab B             \tab Data4          \tab Must be one of Y, N, y, n, or NA (blank)                                  \cr
 Effort type              \tab R             \tab Data1          \tab Must be one of F, N, S, or NA (blank)                                     \cr
 ESW sides                \tab R             \tab Data2          \tab Effective strip width; must be one of F, H, or NA (blank)                 \cr
+Trackline number         \tab R             \tab Data3          \tab Trackline number, represented as a character                              \cr
 Course                   \tab N             \tab Data1          \tab Can be converted to a numeric value                                       \cr
 Speed                    \tab N             \tab Data2          \tab Can be converted to a numeric value                                       \cr
 Beaufort                 \tab V             \tab Data1          \tab Must be a whole number between 0 and 9                                    \cr
