@@ -14,6 +14,8 @@
 
 * Added optional argument `gs.sp.min1` to `das_sight`, to allow the user to choose to set the minimum value for all non-NA species group size values to 1. This functionality is important for  group size calibration efforts. Users can also specify this argument in `das_effort`, where it is passed to `das_sight` when creating the sightinfo data frame (#26)
 
+* Added 'Trackline' (Event R, Data 3)to the output of `das_process` (#10)
+
 * Moved example data files to an 'extdata' folder within 'inst'
 
 * Update link to NOAA Tech Memo describing DAS data; now [https://repository.library.noaa.gov/view/noaa/3174](#17)
