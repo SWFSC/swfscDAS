@@ -83,7 +83,9 @@ NULL
 #'     SpdKt     \tab "numeric"\cr
 #'     Bft       \tab "numeric"\cr
 #'     SwellHght \tab "numeric"\cr
+#'     SwellDir  \tab "numeric"\cr
 #'     WindSpdKt \tab "numeric"\cr
+#'     WindDir   \tab "numeric"\cr
 #'     RainFog   \tab "numeric"\cr
 #'     HorizSun  \tab "numeric"\cr
 #'     VertSun   \tab "numeric"\cr

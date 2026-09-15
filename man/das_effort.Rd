@@ -19,6 +19,7 @@ das_effort(x, ...)
   seg0.drop = FALSE,
   comment.drop = FALSE,
   event.touse = NULL,
+  gs.sp.min1 = FALSE,
   num.cores = NULL,
   ...
 )
@@ -52,9 +53,13 @@ lat/lon coordinates. Can be "greatcircle", "lawofcosines", "haversine",
 "vincenty", or any partial match thereof (case sensitive). Default is
 "greatcircle"}
 
-\item{seg0.drop}{logical; flag indicating whether or not to drop segments of
-length 0 that contain no sighting (S, K, M, G, t) events. Default is
-\code{FALSE}}
+\item{seg0.drop}{logical; flag indicating whether or not to drop 'short'
+segments that contain no sighting (S, K, M, G, t) events. In this case,
+'short' segments are defined as segments with a distance traveled of
+<=0.1km. Additionally, any 'short' segments with both a distance traveled
+of <=0.1km and one (or more) sightings will have a 'calculated' distance of
+\code{0.1} in the segdata output. This matches historical SWFSC segment chopping
+logic. Default is \code{FALSE}}
 
 \item{comment.drop}{logical; flag indicating if comments ("C" events) should
 be ignored (i.e. position information should not be used) when segment
@@ -64,6 +69,8 @@ chopping. Default is \code{FALSE}}
 lengths; overrides \code{comment.drop}. If \code{NULL} (the default), then
 all on effort events are used. If used, this argument must include at least
 R, E, S, and A events, and cannot include ? or 1:8 events}
+
+\item{gs.sp.min1}{passed directly to \code{\link{das_sight}}}
 
 \item{num.cores}{Number of CPUs to over which to distribute computations.
 Defaults to \code{NULL}, which uses one fewer than the number of cores

@@ -133,6 +133,8 @@ glimpse(y.eff.sight$segdata)
 glimpse(y.eff.sight$sightinfo)
 ```
 
+Note that `das_effort` contains several arguments that allow for more control over segmentation steps. These arguments include `seg0.drop` (to drop segments of length <=0.1 with no sightings), `comment.drop` (should positions from comment events be used when segment chopping), and `event.touse` (which events to use when determining segment lengths). See the function documentation (`?das_effort`) for more details. Additionally, for group size calibration work, users can use the `gs.sp.min1` argument to specify if species group size values should have a minimum value of 1.
+
 ## Strata
 
 This package contains several methods to incorporate strata into your DAS data processing: `das_intersects_strata` for assigning points to strata and `das_effort` for chopping effort lines by strata. These functions contain a 'strata.files' argument, which expects a (named) list of paths to CSV files; names are automatically generated if not provided. These files must have headers, longitude values in column one and latitude values in column two, and be closed polygons.

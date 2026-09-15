@@ -14,6 +14,7 @@ das_sight(x, ...)
   x,
   return.format = c("default", "wide", "complete"),
   return.events = c("S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"),
+  gs.sp.min1 = FALSE,
   ...
 )
 }
@@ -29,6 +30,10 @@ or any partial match thereof (case sensitive). Formats described below}
 \item{return.events}{character; event codes included in the output.
 Must be one or more of: "S", "K", "M", "G", "s", "k", "m", "g", "t", "p", "F"
 (case-sensitive). The default is all of these event codes}
+
+\item{gs.sp.min1}{logical; flag indicating whether species group size columns
+will be set to a minimum value of 1 (TRUE) or maintain the raw values
+(FALSE, default). See the 'Details' section below}
 }
 \value{
 Data frame with 1) the columns from \code{x}, excluding the 'Data#' columns,
@@ -112,7 +117,15 @@ the output of \code{das_sight} by event codes
 
 Abbreviations used in output column names: Gs = group size, Sp = species, Nm
 = nautical mile, Perc = percentage, Prob = probable, GsSchool = school-level
-group size info
+group size info, GsSp = species-level group size info.
+
+Species group sizes are calculated as the product of the arithmetic mean of
+the corresponding school group size and the species percentage. These values
+are reported in 'GsSp...' columns for 'default' and 'wide' output formats.
+Sometimes, however, these species group size estimates may be less than 1,
+depending on how the means work out across different observers. If
+\code{gs.sp.min1} is \code{TRUE}, any values in 'GsSp...' columns that are
+less than 1 are set to 1, via e.g. \code{\link{pmin}(GsSpBest, 1)}
 
 This function makes the following assumptions, and alterations to the raw DAS
 data:

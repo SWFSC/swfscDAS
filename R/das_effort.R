@@ -22,9 +22,13 @@
 #'   lat/lon coordinates. Can be "greatcircle", "lawofcosines", "haversine",
 #'   "vincenty", or any partial match thereof (case sensitive). Default is
 #'   "greatcircle"
-#' @param seg0.drop logical; flag indicating whether or not to drop segments of
-#'   length 0 that contain no sighting (S, K, M, G, t) events. Default is
-#'   \code{FALSE}
+#' @param seg0.drop logical; flag indicating whether or not to drop 'short'
+#'   segments that contain no sighting (S, K, M, G, t) events. In this case,
+#'   'short' segments are defined as segments with a distance traveled of
+#'   <=0.1km. Additionally, any 'short' segments with both a distance traveled
+#'   of <=0.1km and one (or more) sightings will have a 'calculated' distance of
+#'   `0.1` in the segdata output. This matches historical SWFSC segment chopping
+#'   logic. Default is \code{FALSE}
 #' @param comment.drop logical; flag indicating if comments ("C" events) should
 #'   be ignored (i.e. position information should not be used) when segment
 #'   chopping. Default is \code{FALSE}
@@ -32,6 +36,7 @@
 #'   lengths; overrides \code{comment.drop}. If \code{NULL} (the default), then
 #'   all on effort events are used. If used, this argument must include at least
 #'   R, E, S, and A events, and cannot include ? or 1:8 events
+#' @param gs.sp.min1 passed directly to \code{\link{das_sight}}
 #' @param num.cores Number of CPUs to over which to distribute computations.
 #'   Defaults to \code{NULL}, which uses one fewer than the number of cores
 #'   reported by \code{\link[parallel]{detectCores}}. Using 1 core likely will
@@ -166,12 +171,19 @@ das_effort.data.frame <- function(x, ...) {
 #' @name das_effort
 #' @export
 das_effort.das_df <- function(
-    x, method = c("condition", "equallength", "section"),
-    conditions = NULL, strata.files = NULL,
+    x,
+    method = c("condition", "equallength", "section"),
+    conditions = NULL,
+    strata.files = NULL,
     distance.method = c("greatcircle", "lawofcosines", "haversine", "vincenty"),
-    seg0.drop = FALSE, comment.drop = FALSE, event.touse = NULL,
-    num.cores = NULL, ...
+    seg0.drop = FALSE,
+    comment.drop = FALSE,
+    event.touse = NULL,
+    gs.sp.min1 = FALSE,
+    num.cores = NULL,
+    ...
 ) {
+
   #----------------------------------------------------------------------------
   # Input checks
   if (!(inherits(seg0.drop, "logical") & inherits(comment.drop, "logical")))
@@ -224,7 +236,8 @@ das_effort.das_df <- function(
   x.oneff <- x.oneff.all %>% filter(!(.data$Event %in% event.tmp) )
   x.oneff.tmp <- x.oneff.all %>%
     filter(.data$Event %in% event.tmp) %>%
-    mutate(cont_eff_section = NA, dist_from_prev = NA, seg_idx = NA, segnum = NA)
+    mutate(cont_eff_section = NA, dist_from_prev = NA,
+           seg_idx = NA, segnum = NA)
 
   rownames(x.oneff) <- rownames(x.oneff.tmp) <- NULL
 
@@ -297,17 +310,23 @@ das_effort.das_df <- function(
   # Determine continuous effort sections
   x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% c("R", "strataR"))
 
-  # If specified, verbosely remove cont eff sections with length 0 and no sighting events
+  # If specified, verbosely remove cont eff sections with length <=0.1,
+  # and no sighting events
   if (seg0.drop) {
     x.ces.summ <- x.oneff %>%
       group_by(.data$cont_eff_section) %>%
       summarise(dist_sum = sum(.data$dist_from_prev[-1]),
                 has_sight = any(c("S", "K", "M", "G", "t") %in% .data$Event),
                 line_min = min(.data$line_num))
-    ces.keep <- filter(x.ces.summ, .data$has_sight | .data$dist_sum > 0)[["cont_eff_section"]]
 
-    x.oneff <- x.oneff %>% filter(.data$cont_eff_section %in% ces.keep)
+    ces.keep <- x.ces.summ %>%
+      filter(.data$has_sight | .data$dist_sum > 0.1) %>%
+      pull(.data$cont_eff_section)
 
+    x.oneff <- x.oneff %>%
+      filter(.data$cont_eff_section %in% ces.keep)
+
+    # Recalculate cont eff section index
     x.oneff$cont_eff_section <- cumsum(x.oneff$Event %in% c("R", "strataR"))
 
     message(paste("There were", nrow(x.ces.summ) - length(ces.keep),
@@ -316,7 +335,7 @@ das_effort.das_df <- function(
     rm(x.ces.summ, ces.keep)
   }
 
-  if (length(unique(x.oneff$cont_eff_section)) != sum(x.oneff$Event %in% c("R", "strataR")) |
+  if (n_distinct(x.oneff$cont_eff_section) != sum(x.oneff$Event %in% c("R", "strataR")) |
       max(x.oneff$cont_eff_section) != sum(x.oneff$Event %in% c("R", "strataR")))
     stop("Error in processing continuous effort sections - ",
          "please report this as an issue")
@@ -384,18 +403,30 @@ das_effort.das_df <- function(
   sightinfo <- x.eff.all %>%
     left_join(select(segdata, "segnum", "mlat", "mlon"),
               by = "segnum") %>%
-    das_sight(returnformat = "default") %>%
+    das_sight(return.format = "default",
+              gs.sp.min1 = gs.sp.min1) %>%
     mutate(included = (.data$Bft <= 5 & .data$OnEffort & .data$ObsStd),
            included = ifelse(is.na(.data$included), FALSE, .data$included)) %>%
     select(-c("dist_from_prev", "cont_eff_section"))
 
   # Clean and return
   segdata <- segdata %>% select(-"seg_idx")
+  # If seg0.drop, then set minimum distance to 0.1
+  if (seg0.drop) {
+    segdata <- segdata %>%
+      mutate(dist = pmax(.data$dist, 0.1))
+  }
 
   sightinfo <- sightinfo %>%
     mutate(year = year(.data$DateTime)) %>%
     select(-"seg_idx") %>%
     select("segnum", "mlat", "mlon", "Event", "DateTime", "year", everything())
+
+  # browser()
+  # if (TODO) {
+  #   sightinfo <- sightinfo %>%
+  #     mutate(across(starts_with("GsSp"), ~ pmax(.x, 1)))
+  # }
 
   list(segdata = segdata, sightinfo = sightinfo, randpicks = randpicks)
 }
