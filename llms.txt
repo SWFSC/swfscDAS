@@ -33,10 +33,10 @@ You can install the developmental version of `swfscDAS` from
 ``` r
 
 # install.packages("pak")
-pak::install_github("swfsc/swfscDAS")
+pak::pkg_install("swfsc/swfscDAS")
 ```
 
-Note that `pak` is recommended here because of occassional issues using
+Note that `pak` is recommended here because of occasional issues using
 `remotes` from government computers.
 
 ## DAS data format
