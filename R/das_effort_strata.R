@@ -69,9 +69,9 @@ das_effort_strata.das_df <- function(x, strata.files, ...) {
     strata.list.lines <-  lapply(strata.list.poly, st_cast, "LINESTRING")
 
     pts.toadd <- lapply(rev(strata.new.todo), function(i, das.df, strata.list.lines) {
-      das.df.curr <- das.df %>% slice(i-1, i)
-      pts.sf <- das.df.curr %>%
-        mutate(Lon_sf = .data$Lon, Lat_sf = .data$Lat) %>%
+      das.df.curr <- das.df |> slice(i-1, i)
+      pts.sf <- das.df.curr |>
+        mutate(Lon_sf = .data$Lon, Lat_sf = .data$Lat) |>
         st_as_sf(coords = c("Lon_sf", "Lat_sf"), crs = 4326, agr = "constant")
 
       # Convert both effort and strata poly to lines
@@ -90,19 +90,19 @@ das_effort_strata.das_df <- function(x, strata.files, ...) {
       # 'New' point will have same data as i-1 b/c we haven't made it to i yet
       idx.eff <- das.df.curr$idx_eff[1]
       df.out2 <- bind_cols(
-        das.df.curr %>% select("Event":"line_num") %>% slice(1),
-        das.df.curr %>% select("idx_eff":"strata_which") %>% slice(2)
+        das.df.curr |> select("Event":"line_num") |> slice(1),
+        das.df.curr |> select("idx_eff":"strata_which") |> slice(2)
       )
 
-      das.df.curr %>%
-        slice(1) %>%
-        bind_rows(df.out2) %>%
+      das.df.curr |>
+        slice(1) |>
+        bind_rows(df.out2) |>
         mutate(Event = c("strataE", "strataR"), Lon = das.poly.coords[1], Lat = das.poly.coords[2],
                idx_eff = c(idx.eff+0.4, idx.eff+0.5))
     }, das.df = x.strata, strata.list.lines = strata.list.lines)
 
     for (i.idx in seq_along(pts.toadd)) {
-      x.strata <- x.strata %>%
+      x.strata <- x.strata |>
         add_row(pts.toadd[[i.idx]], .before = rev(strata.new.todo)[i.idx])
     }
 

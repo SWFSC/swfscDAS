@@ -94,7 +94,6 @@ importFrom(lubridate,
   tz,
   year
 )
-importFrom(magrittr,"%>%")
 importFrom(methods,setOldClass)
 importFrom(parallel,
   clusterExport,

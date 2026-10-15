@@ -22,12 +22,12 @@
 #' @export
 randpicks_convert <- function(x.randpicks, x.segdata, seg.km) {
   # For each continuous effort section, determine the number of segments
-  x.segdata.summ <- x.segdata %>%
-    mutate(cont_eff_sect = cumsum(.data$stlin == 1)) %>%
-    group_by(.data$cont_eff_sect) %>%
+  x.segdata.summ <- x.segdata |>
+    mutate(cont_eff_sect = cumsum(.data$stlin == 1)) |>
+    group_by(.data$cont_eff_sect) |>
     summarise(count = n(),
               dist_sum = sum(.data$dist))
-  x.summ.check <- x.segdata.summ %>%
+  x.summ.check <- x.segdata.summ |>
     mutate(dist_max = .data$count * seg.km + 0.5 * seg.km,
            dist_check = .data$dist_max >= .data$dist_sum)
 
@@ -44,14 +44,14 @@ randpicks_convert <- function(x.randpicks, x.segdata, seg.km) {
 
 
   # Prep segdata summary info for joining with randpicks
-  rand.out <- x.segdata.summ %>%
-    filter(.data$dist_sum > seg.km) %>%
-    bind_cols(x.randpicks) %>%
+  rand.out <- x.segdata.summ |>
+    filter(.data$dist_sum > seg.km) |>
+    bind_cols(x.randpicks) |>
     mutate(pos_value = ceiling(.data$RandPick * .data$count))
 
   # 'Expand' randpicks data to include all continuous effort sections
-  x.segdata.summ %>%
-    select(effort_section = "cont_eff_sect") %>%
-    left_join(rand.out, by = c("effort_section" = "cont_eff_sect")) %>%
+  x.segdata.summ |>
+    select(effort_section = "cont_eff_sect") |>
+    left_join(rand.out, by = c("effort_section" = "cont_eff_sect")) |>
     select("effort_section", randpicks = "pos_value")
 }
