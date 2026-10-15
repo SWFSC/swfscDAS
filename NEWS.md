@@ -24,6 +24,8 @@
 
 * Added the SpCodes.dat file (from [`CruzPlot`](https://github.com/SWFSC/CruzPlot)) to 'inst' to have available as a default
 
+* Changed to using R native pipe, and updated package dependency to require R >= 4.1
+
 
 # swfscDAS 0.6.4
 
