@@ -4,6 +4,7 @@
 
 [![CRAN version](https://www.r-pkg.org/badges/version/swfscDAS)](https://cran.r-project.org/package=swfscDAS)
 [![R-CMD-check](https://github.com/swfsc/swfscDAS/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/swfsc/swfscDAS/actions/workflows/R-CMD-check.yaml)
+[![A software badge showing that this tool has passed the FIT quality checks](https://img.shields.io/badge/FIT_quality_checks-passed-759A06)](https://nmfs-ost.github.io/noaa-fit)
 <!-- badges: end -->
 
 This package contains functions designed for processing and analyzing shipboard DAS data. This package was originally designed to handle [DAS data](https://repository.library.noaa.gov/view/noaa/3174) collected using WinCruz, the ship-based line-transect data collection software developed by the Southwest Fisheries Science Center. However, the `swfscDAS` package can be used by anyone who has collected DAS data that meets the format requirements described in the ['DAS data format'](#DAS-data-format) section below, for instance to process decades of available NOAA Fisheries DAS survey data.
