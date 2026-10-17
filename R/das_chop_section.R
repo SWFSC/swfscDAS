@@ -80,15 +80,15 @@ das_chop_section.das_df <- function(x, conditions, distance.method = NULL,
     randpicks = NA
   )
 
-  x.summ <- x %>%
+  x.summ <- x |>
     mutate(ces_dup = duplicated(.data$cont_eff_section),
-           dist_from_prev_sect = ifelse(.data$ces_dup, .data$dist_from_prev, NA)) %>%
-    group_by(.data$cont_eff_section) %>%
+           dist_from_prev_sect = ifelse(.data$ces_dup, .data$dist_from_prev, NA)) |>
+    group_by(.data$cont_eff_section) |>
     summarise(dist_sum = sum(.data$dist_from_prev_sect, na.rm = TRUE))
 
   # Call das_chop_equallength using max section length + 1
   das_chop_equallength(
-    x %>% select(-"cont_eff_section"),
+    x |> select(-"cont_eff_section"),
     conditions = conditions,
     seg.km = max(x.summ$dist_sum) + 1, randpicks.load = randpicks.df,
     num.cores = num.cores

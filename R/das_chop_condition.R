@@ -179,9 +179,9 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   segdata <- data.frame(
     do.call(rbind, lapply(eff.chop.list, function(i) i[["das.df.segdata"]])),
     stringsAsFactors = FALSE
-  ) %>%
+  ) |>
     mutate(segnum = seq_along(.data$seg_idx),
-           dist = round(.data$dist, 4)) %>%
+           dist = round(.data$dist, 4)) |>
     select("segnum", "seg_idx", everything())
 
   ### Segment lengths
@@ -191,8 +191,8 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   x.eff <- data.frame(
     do.call(rbind, lapply(eff.chop.list, function(i) i[["das.df"]])),
     stringsAsFactors = FALSE
-  ) %>%
-    left_join(segdata[, c("seg_idx", "segnum")], by = "seg_idx") %>%
+  ) |>
+    left_join(segdata[, c("seg_idx", "segnum")], by = "seg_idx") |>
     select(-"dist_to_next")
 
   ### Message about segments that were combined
@@ -261,11 +261,11 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   #   even if the last segment is < seg.min.km.
   #   Because of indexing method, the last break point will still be
   #   removed to join the final two segments if necessary
-  d.pre <- das.df %>%
-    group_by(.data$effort_seg_pre) %>%
+  d.pre <- das.df |>
+    group_by(.data$effort_seg_pre) |>
     summarise(idx_start = min(.data$idx),
               idx_end = max(.data$idx),
-              dist_length = sum(.data$dist_to_next)) %>%
+              dist_length = sum(.data$dist_to_next)) |>
     slice(-n())
 
   # == 0 check is here in case seg.min.km is 0
@@ -283,15 +283,15 @@ das_chop_condition.das_df <- function(x, conditions, seg.min.km = 0.1,
   effort.seg <- rep(FALSE, nrow(das.df))
   effort.seg[cond.idx] <- TRUE
 
-  das.df <- das.df %>%
-    select(-c("effort_seg_pre", "idx")) %>%
+  das.df <- das.df |>
+    select(-c("effort_seg_pre", "idx")) |>
     mutate(seg_idx = paste(i, cumsum(effort.seg), sep = "_"))
 
 
   #------------------------------------------------------
   ### Calculate lengths of effort segments
-  das.df.dist.summ <- das.df %>%
-    group_by(.data$seg_idx) %>%
+  das.df.dist.summ <- das.df |>
+    group_by(.data$seg_idx) |>
     summarise(sum_dist = sum(.data$dist_to_next))
 
   seg.lengths <- das.df.dist.summ$sum_dist

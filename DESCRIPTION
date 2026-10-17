@@ -11,11 +11,10 @@ Description: Process and summarize DAS data files.
     and includes a PDF with the DAS data format requirements expected by the package.
 URL: https://swfsc.github.io/swfscDAS/, https://github.com/swfsc/swfscDAS/
 BugReports: https://github.com/swfsc/swfscDAS/issues/
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.1.0)
 Imports:
     dplyr (>= 1.1.0), 
     lubridate, 
-    magrittr,
     methods, 
     parallel, 
     purrr, 
@@ -33,4 +32,4 @@ License: Apache License (== 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1

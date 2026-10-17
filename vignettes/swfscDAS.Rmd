@@ -71,9 +71,9 @@ table(y.proc$Event)
 table(y.proc$Bft)
 
 # Filter for R and E events to extract lat/lon points
-y.proc %>% 
-  filter(Event %in% c("R", "E")) %>% 
-  select(Event, Lat, Lon, Cruise, Mode, EffType) %>% 
+y.proc |> 
+  filter(Event %in% c("R", "E")) |> 
+  select(Event, Lat, Lon, Cruise, Mode, EffType) |> 
   head()
 ```
 
@@ -83,18 +83,18 @@ The `swfscDAS` package does contain specific functions for extracting and/or sum
 
 ```{r sight}
 y.sight <- das_sight(y.proc, return.format = "default")
-y.sight %>% 
-  select(Event, SightNo:PerpDistKm) %>% 
+y.sight |> 
+  select(Event, SightNo:PerpDistKm) |> 
   glimpse()
 
 y.sight.wide <- das_sight(y.proc, return.format = "wide")
-y.sight.wide %>% 
-  select(Event, SightNo:PerpDistKm) %>% 
+y.sight.wide |> 
+  select(Event, SightNo:PerpDistKm) |> 
   glimpse()
 
 y.sight.complete <- das_sight(y.proc, return.format = "complete")
-y.sight.complete %>% 
-  select(Event, SightNo:PerpDistKm) %>% 
+y.sight.complete |> 
+  select(Event, SightNo:PerpDistKm) |> 
   glimpse()
 ```
 
@@ -104,7 +104,7 @@ You can also easily filter or subset the sighting data for the desired event cod
 y.sight.sg <- das_sight(y.proc, return.events = c("S", "G"))
 
 # Note that this is equivalent to:
-y.sight.sg2 <- das_sight(y.proc) %>% filter(Event %in% c("S", "G"))
+y.sight.sg2 <- das_sight(y.proc) |> filter(Event %in% c("S", "G"))
 ```
 
 ## Effort
@@ -132,6 +132,8 @@ glimpse(y.eff.sight$segdata)
 
 glimpse(y.eff.sight$sightinfo)
 ```
+
+Note that `das_effort` contains several arguments that allow for more control over segmentation steps. These arguments include `seg0.drop` (to drop segments of length <=0.1 with no sightings), `comment.drop` (should positions from comment events be used when segment chopping), and `event.touse` (which events to use when determining segment lengths). See the function documentation (`?das_effort`) for more details. Additionally, for group size calibration work, users can use the `gs.sp.min1` argument to specify if species group size values should have a minimum value of 1.
 
 ## Strata
 
@@ -171,6 +173,6 @@ In addition, you can use `das_comments` to generate comment strings. This is par
 y.comm <- das_comments(y.proc)
 glimpse(select(y.comm, Event, line_num, comment_str))
 
-y.comm %>% 
+y.comm |> 
   filter(str_detect(comment_str, "gear")) #Could also use grepl() here
 ```
