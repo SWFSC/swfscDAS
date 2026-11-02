@@ -104,11 +104,14 @@ that the following is true:
 | Echo sounder | B | Data4 | Must be one of Y, N, y, n, or NA (blank) |
 | Effort type | R | Data1 | Must be one of F, N, S, or NA (blank) |
 | ESW sides | R | Data2 | Effective strip width; must be one of F, H, or NA (blank) |
+| Trackline number | R | Data3 | Trackline number, represented as a character |
 | Course | N | Data1 | Can be converted to a numeric value |
 | Speed | N | Data2 | Can be converted to a numeric value |
 | Beaufort | V | Data1 | Must be a whole number between 0 and 9 |
 | Swell height | V | Data2 | Can be converted to a numeric value |
+| Swell direction | V | Data3 | Can be converted to a numeric value |
 | Wind speed | V | Data5 | Can be converted to a numeric value |
+| Wind direction | W | Data4 | Can be converted to a numeric value |
 | Rain or fog | W | Data1 | Must be between 0 and 5 and either a whole number or have decimal value .5 |
 | Horizontal sun | W | Data2 | Must be a whole number between 0 and 12 |
 | Vertical sun | W | Data3 | Must be a whole number between 0 and 12 |

@@ -117,7 +117,7 @@ glimpse(y.read)
 y.proc <- das_process(y)
 glimpse(y.proc)
 #> Rows: 256
-#> Columns: 40
+#> Columns: 43
 #> $ Event     <chr> "B", "R", "P", "V", "N", "W", "V", "W", "W", "*", "P", "V", …
 #> $ DateTime  <dttm> 2013-01-13 06:27:39, 2013-01-13 06:27:39, 2013-01-13 06:27:…
 #> $ Lat       <dbl> 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, 39.32033, …
@@ -128,11 +128,14 @@ glimpse(y.proc)
 #> $ OffsetGMT <int> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, …
 #> $ EffType   <chr> NA, "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "…
 #> $ ESWsides  <dbl> NA, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…
+#> $ Trackline <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
 #> $ Course    <dbl> NA, NA, NA, NA, 23, 23, 23, 23, 23, 23, 23, 23, 25, 25, 25, …
 #> $ SpdKt     <dbl> NA, NA, NA, NA, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 9.8, 10.2…
 #> $ Bft       <dbl> NA, NA, NA, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
 #> $ SwellHght <dbl> NA, NA, NA, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, …
+#> $ SwellDir  <dbl> NA, NA, NA, 230, 230, 230, 230, 230, 230, 230, 230, 230, 230…
 #> $ WindSpdKt <dbl> NA, NA, NA, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, …
+#> $ WindDir   <dbl> NA, NA, NA, NA, NA, 250, 250, 257, 257, 257, 257, 257, 257, …
 #> $ RainFog   <dbl> NA, NA, NA, NA, NA, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
 #> $ HorizSun  <dbl> NA, NA, NA, NA, NA, NA, NA, 2, NA, NA, NA, NA, NA, NA, NA, N…
 #> $ VertSun   <dbl> NA, NA, NA, NA, NA, NA, NA, 3, NA, NA, NA, NA, NA, NA, NA, N…
@@ -183,9 +186,9 @@ table(y.proc$Bft)
 #>  94 120
 
 # Filter for R and E events to extract lat/lon points
-y.proc %>% 
-  filter(Event %in% c("R", "E")) %>% 
-  select(Event, Lat, Lon, Cruise, Mode, EffType) %>% 
+y.proc |> 
+  filter(Event %in% c("R", "E")) |> 
+  select(Event, Lat, Lon, Cruise, Mode, EffType) |> 
   head()
 #>   Event      Lat       Lon Cruise Mode EffType
 #> 1     R 39.32033 -137.6043   1000    C       S
@@ -216,8 +219,8 @@ method than the arithmetic mean (e.g. the geometric mean)
 ``` r
 
 y.sight <- das_sight(y.proc, return.format = "default")
-y.sight %>% 
-  select(Event, SightNo:PerpDistKm) %>% 
+y.sight |> 
+  select(Event, SightNo:PerpDistKm) |> 
   glimpse()
 #> Rows: 25
 #> Columns: 32
@@ -255,8 +258,8 @@ y.sight %>%
 #> $ PerpDistKm   <dbl> 1.525631e+00, 3.075807e+00, 4.593917e-01, 1.452712e-01, 7…
 
 y.sight.wide <- das_sight(y.proc, return.format = "wide")
-y.sight.wide %>% 
-  select(Event, SightNo:PerpDistKm) %>% 
+y.sight.wide |> 
+  select(Event, SightNo:PerpDistKm) |> 
   glimpse()
 #> Rows: 22
 #> Columns: 58
@@ -320,8 +323,8 @@ y.sight.wide %>%
 #> $ PerpDistKm   <dbl> 1.525631e+00, 3.075807e+00, 4.593917e-01, 1.452712e-01, 7…
 
 y.sight.complete <- das_sight(y.proc, return.format = "complete")
-y.sight.complete %>% 
-  select(Event, SightNo:PerpDistKm) %>% 
+y.sight.complete |> 
+  select(Event, SightNo:PerpDistKm) |> 
   glimpse()
 #> Rows: 37
 #> Columns: 46
@@ -381,7 +384,7 @@ event code(s)
 y.sight.sg <- das_sight(y.proc, return.events = c("S", "G"))
 
 # Note that this is equivalent to:
-y.sight.sg2 <- das_sight(y.proc) %>% filter(Event %in% c("S", "G"))
+y.sight.sg2 <- das_sight(y.proc) |> filter(Event %in% c("S", "G"))
 ```
 
 ## Effort
@@ -434,7 +437,7 @@ y.eff.sight <- das_effort_sight(y.eff, sp.codes = c("018", "076"))
 
 glimpse(y.eff.sight$segdata)
 #> Rows: 20
-#> Columns: 32
+#> Columns: 33
 #> $ segnum           <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16…
 #> $ section_id       <int> 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 6, 6, 7, 7, 8,…
 #> $ section_sub_id   <dbl> 1, 1, 2, 1, 2, 3, 4, 5, 6, 7, 1, 2, 1, 1, 2, 1, 2, 1,…
@@ -460,6 +463,7 @@ glimpse(y.eff.sight$segdata)
 #> $ OffsetGMT        <int> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…
 #> $ EffType          <chr> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"…
 #> $ ESWsides         <dbl> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…
+#> $ Trackline        <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
 #> $ maxdistBft       <dbl> 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 3, 2, 2,…
 #> $ maxdistSwellHght <dbl> 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…
 #> $ maxdistVis       <dbl> 6.0, 6.0, 5.5, 5.5, 6.0, 6.0, 5.5, 4.5, 3.5, 2.5, 5.8…
@@ -470,7 +474,7 @@ glimpse(y.eff.sight$segdata)
 
 glimpse(y.eff.sight$sightinfo)
 #> Rows: 13
-#> Columns: 64
+#> Columns: 67
 #> $ segnum       <int> 1, 3, 4, 13, 13, 15, 17, 18, 18, 20, 20, 20, 20
 #> $ mlat         <dbl> 39.34377, 39.47435, 39.61433, 40.20895, 40.20895, 40.3483…
 #> $ mlon         <dbl> -137.5930, -137.5493, -137.4327, -137.1531, -137.1531, -1…
@@ -485,11 +489,14 @@ glimpse(y.eff.sight$sightinfo)
 #> $ OffsetGMT    <int> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 #> $ EffType      <chr> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S…
 #> $ ESWsides     <dbl> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+#> $ Trackline    <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 #> $ Course       <dbl> 25, 26, 27, 20, 20, 16, 25, 30, 30, 23, 23, 23, 23
 #> $ SpdKt        <dbl> 10.2, 9.7, 9.0, 9.3, 9.3, 8.9, 8.9, 9.5, 9.5, 9.6, 9.6, 9…
 #> $ Bft          <dbl> 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2
 #> $ SwellHght    <dbl> 3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 1, 1, 1
+#> $ SwellDir     <dbl> 230, 230, 230, 230, 230, 230, 230, 230, 230, 35, 35, 35, …
 #> $ WindSpdKt    <dbl> 10, 10, 10, 6, 6, 6, 6, 6, 6, 5, 5, 5, 5
+#> $ WindDir      <dbl> 257, 257, 257, 257, 257, 243, 243, 243, 243, 40, 40, 40, …
 #> $ RainFog      <dbl> 1, 3, 1, 1, 1, 1, 1, 1, 1, 3, 3, 3, 3
 #> $ HorizSun     <dbl> NA, 2, 2, 8, 8, 9, 8, 8, 8, NA, NA, NA, NA
 #> $ VertSun      <dbl> NA, 2, 2, 1, 1, 1, 2, 2, 2, NA, NA, NA, NA
@@ -537,6 +544,17 @@ glimpse(y.eff.sight$sightinfo)
 #> $ included     <lgl> TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FAL…
 ```
 
+Note that `das_effort` contains several arguments that allow for more
+control over segmentation steps. These arguments include `seg0.drop` (to
+drop segments of length \<=0.1 with no sightings), `comment.drop`
+(should positions from comment events be used when segment chopping),
+and `event.touse` (which events to use when determining segment
+lengths). See the function documentation
+([`?das_effort`](https://swfsc.github.io/swfscDAS/reference/das_effort.md))
+for more details. Additionally, for group size calibration work, users
+can use the `gs.sp.min1` argument to specify if species group size
+values should have a minimum value of 1.
+
 ## Strata
 
 This package contains several methods to incorporate strata into your
@@ -561,7 +579,7 @@ y.eff.sight.strata <- das_intersects_strata(y.eff.sight, list(InPoly = stratum.f
 
 glimpse(y.eff.sight.strata$segdata)
 #> Rows: 20
-#> Columns: 33
+#> Columns: 34
 #> $ segnum           <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16…
 #> $ section_id       <int> 1, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 5, 6, 6, 7, 7, 8,…
 #> $ section_sub_id   <dbl> 1, 1, 2, 1, 2, 3, 4, 5, 6, 7, 1, 2, 1, 1, 2, 1, 2, 1,…
@@ -587,6 +605,7 @@ glimpse(y.eff.sight.strata$segdata)
 #> $ OffsetGMT        <int> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,…
 #> $ EffType          <chr> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"…
 #> $ ESWsides         <dbl> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,…
+#> $ Trackline        <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
 #> $ maxdistBft       <dbl> 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 3, 3, 3, 3, 2, 3, 2, 2,…
 #> $ maxdistSwellHght <dbl> 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,…
 #> $ maxdistVis       <dbl> 6.0, 6.0, 5.5, 5.5, 6.0, 6.0, 5.5, 4.5, 3.5, 2.5, 5.8…
@@ -627,7 +646,7 @@ y.eff.strata.condition <- das_effort(
 
 glimpse(y.eff.strata.section$segdata)
 #> Rows: 10
-#> Columns: 34
+#> Columns: 35
 #> $ segnum         <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 #> $ section_id     <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 #> $ section_sub_id <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
@@ -653,6 +672,7 @@ glimpse(y.eff.strata.section$segdata)
 #> $ OffsetGMT      <int> 5, 5, 5, 5, 5, 5, 5, 5, 5, 5
 #> $ EffType        <chr> "S", "S", "S", "S", "S", "S", "S", "S", "S", "S"
 #> $ ESWsides       <dbl> 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+#> $ Trackline      <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
 #> $ avgBft         <dbl> 3.000000, 3.000000, 2.500835, 3.000000, 3.000000, 2.47…
 #> $ avgSwellHght   <dbl> 3, 3, 3, 3, 3, 3, 3, 3, 1, 1
 #> $ avgHorizSun    <dbl> 2.000000, 2.000000, 2.000000, 12.000000, 8.000000, 8.52…
@@ -679,16 +699,16 @@ glimpse(select(y.comm, Event, line_num, comment_str))
 #> $ line_num    <int> 71, 81, 186, 218, 241
 #> $ comment_str <chr> " Well?              ", " going left to avoid          ", …
 
-y.comm %>% 
+y.comm |> 
   filter(str_detect(comment_str, "gear")) #Could also use grepl() here
 #>   Event            DateTime    Lat      Lon OnEffort Cruise Mode OffsetGMT
 #> 1     C 2013-01-14 11:37:27 41.016 -135.578    FALSE   1000    C         5
-#>   EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun
-#> 1       S        2     35   9.5   2         1         5       3       NA
-#>   VertSun Glare Vis ObsL Rec ObsR ObsInd Data1 Data2 Data3 Data4 Data5 Data6
-#> 1      NA    NA   4  149 125  208   <NA>  cros sing  fishi ng ge ar     <NA>
-#>   Data7 Data8      Data9 Data10 Data11 Data12 EffortDot EventNum       file_das
-#> 1  <NA>  <NA>              <NA>   <NA>   <NA>     FALSE       11 das_sample.das
-#>   line_num                         comment_str
-#> 1      241  crossing fishing gear
+#>   EffType ESWsides Trackline Course SpdKt Bft SwellHght SwellDir WindSpdKt
+#> 1       S        2      <NA>     35   9.5   2         1       35         5
+#>   WindDir RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd Data1 Data2
+#> 1      40       3       NA      NA    NA   4  149 125  208   <NA>  cros sing 
+#>   Data3 Data4 Data5 Data6 Data7 Data8      Data9 Data10 Data11 Data12 EffortDot
+#> 1 fishi ng ge ar     <NA>  <NA>  <NA>              <NA>   <NA>   <NA>     FALSE
+#>   EventNum       file_das line_num                         comment_str
+#> 1       11 das_sample.das      241  crossing fishing gear
 ```

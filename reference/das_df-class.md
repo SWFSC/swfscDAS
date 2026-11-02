@@ -46,7 +46,9 @@ column names and classes:
 | SpdKt         | "numeric"              |
 | Bft           | "numeric"              |
 | SwellHght     | "numeric"              |
+| SwellDir      | "numeric"              |
 | WindSpdKt     | "numeric"              |
+| WindDir       | "numeric"              |
 | RainFog       | "numeric"              |
 | HorizSun      | "numeric"              |
 | VertSun       | "numeric"              |

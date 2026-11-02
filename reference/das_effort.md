@@ -20,6 +20,7 @@ das_effort(
   seg0.drop = FALSE,
   comment.drop = FALSE,
   event.touse = NULL,
+  gs.sp.min1 = FALSE,
   num.cores = NULL,
   ...
 )
@@ -70,8 +71,13 @@ das_effort(
 
 - seg0.drop:
 
-  logical; flag indicating whether or not to drop segments of length 0
-  that contain no sighting (S, K, M, G, t) events. Default is `FALSE`
+  logical; flag indicating whether or not to drop 'short' segments that
+  contain no sighting (S, K, M, G, t) events. In this case, 'short'
+  segments are defined as segments with a distance traveled of \<=0.1km.
+  Additionally, any 'short' segments with both a distance traveled of
+  \<=0.1km and one (or more) sightings will have a 'calculated' distance
+  of `0.1` in the segdata output. This matches historical SWFSC segment
+  chopping logic. Default is `FALSE`
 
 - comment.drop:
 
@@ -85,6 +91,11 @@ das_effort(
   overrides `comment.drop`. If `NULL` (the default), then all on effort
   events are used. If used, this argument must include at least R, E, S,
   and A events, and cannot include ? or 1:8 events
+
+- gs.sp.min1:
+
+  passed directly to
+  [`das_sight`](https://swfsc.github.io/swfscDAS/reference/das_sight.md)
 
 - num.cores:
 
@@ -276,48 +287,48 @@ das_effort(
 #> lat17 40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
 #> lat18 41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
 #> lat19 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
-#>       Cruise Mode OffsetGMT EffType ESWsides maxdistBft maxdistSwellHght
-#> lat     1000    C         5       S        2          3                3
-#> lat7    1000    C         5       S        2          3                3
-#> lat1    1000    C         5       S        2          3                3
-#> lat8    1000    C         5       S        2          3                3
-#> lat11   1000    C         5       S        2          3                3
-#> lat2    1000    C         5       S        2          2                3
-#> lat3    1000    C         5       S        2          2                3
-#> lat4    1000    C         5       S        2          2                3
-#> lat5    1000    C         5       S        2          2                3
-#> lat6    1000    C         5       S        2          2                3
-#> lat9    1000    C         5       S        2          3                3
-#> lat12   1000    C         5       S        2          3                3
-#> lat10   1000    C         5       S        2          3                3
-#> lat13   1000    C         5       S        2          3                3
-#> lat14   1000    C         5       S        2          2                3
-#> lat15   1000    C         5       S        2          3                3
-#> lat16   1000    C         5       S        2          2                3
-#> lat17   1000    C         5       S        2          2                3
-#> lat18   1000    C         5       S        2          2                1
-#> lat19   1000    C         5       S        2          2                1
-#>       maxdistVis
-#> lat          6.0
-#> lat7         6.0
-#> lat1         5.5
-#> lat8         5.5
-#> lat11        6.0
-#> lat2         6.0
-#> lat3         5.5
-#> lat4         4.5
-#> lat5         3.5
-#> lat6         2.5
-#> lat9         5.8
-#> lat12        6.0
-#> lat10        6.0
-#> lat13        6.0
-#> lat14        6.0
-#> lat15        6.0
-#> lat16        6.0
-#> lat17        6.0
-#> lat18        4.0
-#> lat19        4.0
+#>       Cruise Mode OffsetGMT EffType ESWsides Trackline maxdistBft
+#> lat     1000    C         5       S        2      <NA>          3
+#> lat7    1000    C         5       S        2      <NA>          3
+#> lat1    1000    C         5       S        2      <NA>          3
+#> lat8    1000    C         5       S        2      <NA>          3
+#> lat11   1000    C         5       S        2      <NA>          3
+#> lat2    1000    C         5       S        2      <NA>          2
+#> lat3    1000    C         5       S        2      <NA>          2
+#> lat4    1000    C         5       S        2      <NA>          2
+#> lat5    1000    C         5       S        2      <NA>          2
+#> lat6    1000    C         5       S        2      <NA>          2
+#> lat9    1000    C         5       S        2      <NA>          3
+#> lat12   1000    C         5       S        2      <NA>          3
+#> lat10   1000    C         5       S        2      <NA>          3
+#> lat13   1000    C         5       S        2      <NA>          3
+#> lat14   1000    C         5       S        2      <NA>          2
+#> lat15   1000    C         5       S        2      <NA>          3
+#> lat16   1000    C         5       S        2      <NA>          2
+#> lat17   1000    C         5       S        2      <NA>          2
+#> lat18   1000    C         5       S        2      <NA>          2
+#> lat19   1000    C         5       S        2      <NA>          2
+#>       maxdistSwellHght maxdistVis
+#> lat                  3        6.0
+#> lat7                 3        6.0
+#> lat1                 3        5.5
+#> lat8                 3        5.5
+#> lat11                3        6.0
+#> lat2                 3        6.0
+#> lat3                 3        5.5
+#> lat4                 3        4.5
+#> lat5                 3        3.5
+#> lat6                 3        2.5
+#> lat9                 3        5.8
+#> lat12                3        6.0
+#> lat10                3        6.0
+#> lat13                3        6.0
+#> lat14                3        6.0
+#> lat15                3        6.0
+#> lat16                3        6.0
+#> lat17                3        6.0
+#> lat18                1        4.0
+#> lat19                1        4.0
 #> 
 #> $sightinfo
 #>    segnum     mlat      mlon Event            DateTime year      Lat       Lon
@@ -335,111 +346,111 @@ das_effort(
 #> 12     20 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #> 13     20 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #> 14     20 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Course SpdKt Bft SwellHght
-#> 1      TRUE   1000    C         5       S        2     25  10.2   3         3
-#> 2      TRUE   1000    C         5       S        2     26   9.7   3         3
-#> 3      TRUE   1000    C         5       S        2     27   9.0   3         3
-#> 4      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 5      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 6      TRUE   1000    C         5       S        2     16   8.9   2         3
-#> 7      TRUE   1000    C         5       S        2     25   8.9   2         3
-#> 8      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 9      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 10     TRUE   1000    C         5       S        2     35   9.5   2         1
-#> 11     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 12     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 13     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 14     TRUE   1000    C         5       S        2     23   9.6   2         1
-#>    WindSpdKt RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot
-#> 1         10       1       NA      NA    NA 6.0  208 280  001   <NA>      TRUE
-#> 2         10       3        2       2 FALSE 5.5  125 208  280   <NA>      TRUE
-#> 3         10       1        2       2 FALSE 5.5  001 126  149   <NA>      TRUE
-#> 4          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 5          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 6          6       1        9       1 FALSE 6.0  125 208  280   <NA>      TRUE
-#> 7          6       1        8       2 FALSE 6.0  149 125  208   <NA>      TRUE
-#> 8          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 9          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 10         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 11         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 12         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 13         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 14         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#>    EventNum       file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd
-#> 1        15 das_sample.das       15    1406     <NA>   20130113_1 208   TRUE
-#> 2        35 das_sample.das       38    1407     <NA>   20130113_2 125   TRUE
-#> 3        59 das_sample.das       65    <NA>     <NA>         <NA> 280  FALSE
-#> 4       131 das_sample.das      137    <NA>     <NA>         <NA> 228  FALSE
-#> 5       136 das_sample.das      142    1408     <NA>   20130113_3 280   TRUE
-#> 6       153 das_sample.das      162    <NA>     <NA>         <NA> 231  FALSE
-#> 7       167 das_sample.das      176    1409     <NA>   20130113_4 149   TRUE
-#> 8       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 9       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 10        8 das_sample.das      238    <NA>     <NA>         <NA> 149   TRUE
-#> 11       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 12       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 13       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#> 14       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#>    Bearing Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial
-#> 1      309     2.8   1.06   3      4      N     N        <NA>         <NA>
-#> 2      326     0.4   2.97   3      4      Y     N        <NA>         <NA>
-#> 3      120      NA   0.03  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 4      300      NA   0.02  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 5      270    14.0   0.28   3      4      N     N        <NA>         <NA>
-#> 6       45      NA   0.05  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 7      344     0.2   3.68   3      4      Y     Y        <NA>         <NA>
-#> 8       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 9       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 10     309     1.7   1.47  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 11     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 12     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 13      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#> 14      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#>    Biopsy  Prob nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh
-#> 1    <NA> FALSE   1 FALSE    018       <NA>           NA           NA
-#> 2    <NA> FALSE   1 FALSE    076       <NA>      8.00000        14.00
-#> 3    <NA>    NA  NA    NA     LV       <NA>      1.00000           NA
-#> 4    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 5    <NA> FALSE   1 FALSE    037       <NA>     10.66667        20.00
-#> 6    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 7    <NA> FALSE   1 FALSE    016       <NA>     46.66667        79.00
-#> 8    <NA> FALSE   2  TRUE    013       <NA>     41.75000        72.75
-#> 9    <NA> FALSE   2  TRUE    016       <NA>     41.75000        72.75
-#> 10   <NA>    NA  NA    NA   <NA>       <NA>           NA           NA
-#> 11   <NA> FALSE   2  TRUE    018       <NA>    151.50000       249.00
-#> 12   <NA> FALSE   2  TRUE    277       <NA>    151.50000       249.00
-#> 13   <NA>  TRUE   2  TRUE    016        016     21.25000        37.75
-#> 14   <NA>  TRUE   2  TRUE    277        016     21.25000        37.75
-#>    GsSchoolLow  GsSpBest GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge
-#> 1    42.333333        NA       NA  42.333333           NA      <NA>      <NA>
-#> 2     5.666667   8.00000  14.0000   5.666667           NA      <NA>      <NA>
-#> 3           NA   1.00000       NA         NA           NA      <NA>         A
-#> 4           NA   1.00000       NA         NA           NA      <NA>         J
-#> 5    10.666667  10.66667  20.0000  10.666667           NA      <NA>      <NA>
-#> 6           NA   1.00000       NA         NA           NA      <NA>         A
-#> 7    46.666667  46.66667  79.0000  46.666667           NA      <NA>      <NA>
-#> 8    41.750000  30.06000  52.3800  30.060000           NA      <NA>      <NA>
-#> 9    41.750000  11.69000  20.3700  11.690000           NA      <NA>      <NA>
-#> 10          NA        NA       NA         NA           NA      <NA>      <NA>
-#> 11  151.500000 128.77500 211.6500 128.775000           NA      <NA>      <NA>
-#> 12  151.500000  22.72500  37.3500  22.725000           NA      <NA>      <NA>
-#> 13   21.250000  15.08750  26.8025  15.087500           NA      <NA>      <NA>
-#> 14   21.250000   6.16250  10.9475   6.162500           NA      <NA>      <NA>
-#>    TurtleCapt PerpDistKm included
-#> 1        <NA> 1.52563078     TRUE
-#> 2        <NA> 3.07580701     TRUE
-#> 3           N 0.04811637    FALSE
-#> 4           N 0.03207758    FALSE
-#> 5        <NA> 0.51856000     TRUE
-#> 6        <NA> 0.06547809    FALSE
-#> 7        <NA> 1.87856781     TRUE
-#> 8        <NA> 2.88891582     TRUE
-#> 9        <NA> 2.88891582     TRUE
-#> 10       <NA> 2.11573325     TRUE
-#> 11       <NA> 0.10601569     TRUE
-#> 12       <NA> 0.10601569     TRUE
-#> 13       <NA> 2.54265727     TRUE
-#> 14       <NA> 2.54265727     TRUE
+#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Trackline Course SpdKt Bft
+#> 1      TRUE   1000    C         5       S        2      <NA>     25  10.2   3
+#> 2      TRUE   1000    C         5       S        2      <NA>     26   9.7   3
+#> 3      TRUE   1000    C         5       S        2      <NA>     27   9.0   3
+#> 4      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 5      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 6      TRUE   1000    C         5       S        2      <NA>     16   8.9   2
+#> 7      TRUE   1000    C         5       S        2      <NA>     25   8.9   2
+#> 8      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 9      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 10     TRUE   1000    C         5       S        2      <NA>     35   9.5   2
+#> 11     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 12     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 13     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 14     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#>    SwellHght SwellDir WindSpdKt WindDir RainFog HorizSun VertSun Glare Vis ObsL
+#> 1          3      230        10     257       1       NA      NA    NA 6.0  208
+#> 2          3      230        10     257       3        2       2 FALSE 5.5  125
+#> 3          3      230        10     257       1        2       2 FALSE 5.5  001
+#> 4          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 5          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 6          3      230         6     243       1        9       1 FALSE 6.0  125
+#> 7          3      230         6     243       1        8       2 FALSE 6.0  149
+#> 8          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 9          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 10         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 11         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 12         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 13         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 14         1       35         5      40       3       NA      NA    NA 4.0  149
+#>    Rec ObsR ObsInd EffortDot EventNum       file_das line_num SightNo Subgroup
+#> 1  280  001   <NA>      TRUE       15 das_sample.das       15    1406     <NA>
+#> 2  208  280   <NA>      TRUE       35 das_sample.das       38    1407     <NA>
+#> 3  126  149   <NA>      TRUE       59 das_sample.das       65    <NA>     <NA>
+#> 4  001  126   <NA>      TRUE      131 das_sample.das      137    <NA>     <NA>
+#> 5  001  126   <NA>      TRUE      136 das_sample.das      142    1408     <NA>
+#> 6  208  280   <NA>      TRUE      153 das_sample.das      162    <NA>     <NA>
+#> 7  125  208   <NA>      TRUE      167 das_sample.das      176    1409     <NA>
+#> 8  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 9  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 10 125  208   <NA>      TRUE        8 das_sample.das      238    <NA>     <NA>
+#> 11 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 12 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 13 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#> 14 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#>    SightNoDaily Obs ObsStd Bearing Reticle DistNm Cue Method Photos Birds
+#> 1    20130113_1 208   TRUE     309     2.8   1.06   3      4      N     N
+#> 2    20130113_2 125   TRUE     326     0.4   2.97   3      4      Y     N
+#> 3          <NA> 280  FALSE     120      NA   0.03  NA     NA   <NA>  <NA>
+#> 4          <NA> 228  FALSE     300      NA   0.02  NA     NA   <NA>  <NA>
+#> 5    20130113_3 280   TRUE     270    14.0   0.28   3      4      N     N
+#> 6          <NA> 231  FALSE      45      NA   0.05  NA     NA   <NA>  <NA>
+#> 7    20130113_4 149   TRUE     344     0.2   3.68   3      4      Y     Y
+#> 8    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 9    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 10         <NA> 149   TRUE     309     1.7   1.47  NA     NA   <NA>  <NA>
+#> 11   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 12   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 13   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#> 14   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#>    CalibSchool PhotosAerial Biopsy  Prob nSp Mixed SpCode SpCodeProb
+#> 1         <NA>         <NA>   <NA> FALSE   1 FALSE    018       <NA>
+#> 2         <NA>         <NA>   <NA> FALSE   1 FALSE    076       <NA>
+#> 3         <NA>         <NA>   <NA>    NA  NA    NA     LV       <NA>
+#> 4         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 5         <NA>         <NA>   <NA> FALSE   1 FALSE    037       <NA>
+#> 6         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 7         <NA>         <NA>   <NA> FALSE   1 FALSE    016       <NA>
+#> 8         <NA>         <NA>   <NA> FALSE   2  TRUE    013       <NA>
+#> 9         <NA>         <NA>   <NA> FALSE   2  TRUE    016       <NA>
+#> 10        <NA>         <NA>   <NA>    NA  NA    NA   <NA>       <NA>
+#> 11        <NA>         <NA>   <NA> FALSE   2  TRUE    018       <NA>
+#> 12        <NA>         <NA>   <NA> FALSE   2  TRUE    277       <NA>
+#> 13        <NA>         <NA>   <NA>  TRUE   2  TRUE    016        016
+#> 14        <NA>         <NA>   <NA>  TRUE   2  TRUE    277        016
+#>    GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest GsSpHigh    GsSpLow
+#> 1            NA           NA   42.333333        NA       NA  42.333333
+#> 2       8.00000        14.00    5.666667   8.00000  14.0000   5.666667
+#> 3       1.00000           NA          NA   1.00000       NA         NA
+#> 4       1.00000           NA          NA   1.00000       NA         NA
+#> 5      10.66667        20.00   10.666667  10.66667  20.0000  10.666667
+#> 6       1.00000           NA          NA   1.00000       NA         NA
+#> 7      46.66667        79.00   46.666667  46.66667  79.0000  46.666667
+#> 8      41.75000        72.75   41.750000  30.06000  52.3800  30.060000
+#> 9      41.75000        72.75   41.750000  11.69000  20.3700  11.690000
+#> 10           NA           NA          NA        NA       NA         NA
+#> 11    151.50000       249.00  151.500000 128.77500 211.6500 128.775000
+#> 12    151.50000       249.00  151.500000  22.72500  37.3500  22.725000
+#> 13     21.25000        37.75   21.250000  15.08750  26.8025  15.087500
+#> 14     21.25000        37.75   21.250000   6.16250  10.9475   6.162500
+#>    CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm included
+#> 1            NA      <NA>      <NA>       <NA> 1.52563078     TRUE
+#> 2            NA      <NA>      <NA>       <NA> 3.07580701     TRUE
+#> 3            NA      <NA>         A          N 0.04811637    FALSE
+#> 4            NA      <NA>         J          N 0.03207758    FALSE
+#> 5            NA      <NA>      <NA>       <NA> 0.51856000     TRUE
+#> 6            NA      <NA>         A       <NA> 0.06547809    FALSE
+#> 7            NA      <NA>      <NA>       <NA> 1.87856781     TRUE
+#> 8            NA      <NA>      <NA>       <NA> 2.88891582     TRUE
+#> 9            NA      <NA>      <NA>       <NA> 2.88891582     TRUE
+#> 10           NA      <NA>      <NA>       <NA> 2.11573325     TRUE
+#> 11           NA      <NA>      <NA>       <NA> 0.10601569     TRUE
+#> 12           NA      <NA>      <NA>       <NA> 0.10601569     TRUE
+#> 13           NA      <NA>      <NA>       <NA> 2.54265727     TRUE
+#> 14           NA      <NA>      <NA>       <NA> 2.54265727     TRUE
 #> 
 #> $randpicks
 #> NULL
@@ -481,28 +492,28 @@ das_effort(y.proc, method = "section", num.cores = 1)
 #> lat7 40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
 #> lat8 41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
 #> lat9 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
-#>      Cruise Mode OffsetGMT EffType ESWsides   avgBft avgSwellHght avgHorizSun
-#> lat    1000    C         5       S        2 3.000000            3    2.000000
-#> lat1   1000    C         5       S        2 3.000000            3    2.000000
-#> lat2   1000    C         5       S        2 2.500835            3    2.000000
-#> lat3   1000    C         5       S        2 3.000000            3   12.000000
-#> lat4   1000    C         5       S        2 3.000000            3    8.000000
-#> lat5   1000    C         5       S        2 2.479576            3    8.520424
-#> lat6   1000    C         5       S        2 2.682617            3    8.000000
-#> lat7   1000    C         5       S        2 2.000000            3    8.000000
-#> lat8   1000    C         5       S        2 2.000000            1          NA
-#> lat9   1000    C         5       S        2 2.000000            1          NA
-#>      avgVertSun avgGlare   avgVis avgCourse avgSpdKt
-#> lat           3        0 6.000000  23.56198 9.912395
-#> lat1          2        0 5.686447  27.11868 9.476263
-#> lat2          2        0 5.090748  95.65614 9.287725
-#> lat3         12        0 5.974103  34.61155 9.428340
-#> lat4          1        0 6.000000  20.43919 9.343919
-#> lat5          1        0 6.000000  16.47958 9.091830
-#> lat6          2        0 6.000000  25.00000 8.900000
-#> lat7          2        0 6.000000  30.00000 9.500000
-#> lat8         NA       NA 4.000000  35.00000 9.500000
-#> lat9         NA       NA 4.000000  23.00000 9.600000
+#>      Cruise Mode OffsetGMT EffType ESWsides Trackline   avgBft avgSwellHght
+#> lat    1000    C         5       S        2      <NA> 3.000000            3
+#> lat1   1000    C         5       S        2      <NA> 3.000000            3
+#> lat2   1000    C         5       S        2      <NA> 2.500835            3
+#> lat3   1000    C         5       S        2      <NA> 3.000000            3
+#> lat4   1000    C         5       S        2      <NA> 3.000000            3
+#> lat5   1000    C         5       S        2      <NA> 2.479576            3
+#> lat6   1000    C         5       S        2      <NA> 2.682617            3
+#> lat7   1000    C         5       S        2      <NA> 2.000000            3
+#> lat8   1000    C         5       S        2      <NA> 2.000000            1
+#> lat9   1000    C         5       S        2      <NA> 2.000000            1
+#>      avgHorizSun avgVertSun avgGlare   avgVis avgCourse avgSpdKt
+#> lat     2.000000          3        0 6.000000  23.56198 9.912395
+#> lat1    2.000000          2        0 5.686447  27.11868 9.476263
+#> lat2    2.000000          2        0 5.090748  95.65614 9.287725
+#> lat3   12.000000         12        0 5.974103  34.61155 9.428340
+#> lat4    8.000000          1        0 6.000000  20.43919 9.343919
+#> lat5    8.520424          1        0 6.000000  16.47958 9.091830
+#> lat6    8.000000          2        0 6.000000  25.00000 8.900000
+#> lat7    8.000000          2        0 6.000000  30.00000 9.500000
+#> lat8          NA         NA       NA 4.000000  35.00000 9.500000
+#> lat9          NA         NA       NA 4.000000  23.00000 9.600000
 #> 
 #> $sightinfo
 #>    segnum     mlat      mlon Event            DateTime year      Lat       Lon
@@ -520,111 +531,111 @@ das_effort(y.proc, method = "section", num.cores = 1)
 #> 12     10 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #> 13     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #> 14     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Course SpdKt Bft SwellHght
-#> 1      TRUE   1000    C         5       S        2     25  10.2   3         3
-#> 2      TRUE   1000    C         5       S        2     26   9.7   3         3
-#> 3      TRUE   1000    C         5       S        2     27   9.0   3         3
-#> 4      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 5      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 6      TRUE   1000    C         5       S        2     16   8.9   2         3
-#> 7      TRUE   1000    C         5       S        2     25   8.9   2         3
-#> 8      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 9      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 10     TRUE   1000    C         5       S        2     35   9.5   2         1
-#> 11     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 12     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 13     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 14     TRUE   1000    C         5       S        2     23   9.6   2         1
-#>    WindSpdKt RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot
-#> 1         10       1       NA      NA    NA 6.0  208 280  001   <NA>      TRUE
-#> 2         10       3        2       2 FALSE 5.5  125 208  280   <NA>      TRUE
-#> 3         10       1        2       2 FALSE 5.5  001 126  149   <NA>      TRUE
-#> 4          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 5          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 6          6       1        9       1 FALSE 6.0  125 208  280   <NA>      TRUE
-#> 7          6       1        8       2 FALSE 6.0  149 125  208   <NA>      TRUE
-#> 8          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 9          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 10         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 11         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 12         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 13         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 14         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#>    EventNum       file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd
-#> 1        15 das_sample.das       15    1406     <NA>   20130113_1 208   TRUE
-#> 2        35 das_sample.das       38    1407     <NA>   20130113_2 125   TRUE
-#> 3        59 das_sample.das       65    <NA>     <NA>         <NA> 280  FALSE
-#> 4       131 das_sample.das      137    <NA>     <NA>         <NA> 228  FALSE
-#> 5       136 das_sample.das      142    1408     <NA>   20130113_3 280   TRUE
-#> 6       153 das_sample.das      162    <NA>     <NA>         <NA> 231  FALSE
-#> 7       167 das_sample.das      176    1409     <NA>   20130113_4 149   TRUE
-#> 8       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 9       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 10        8 das_sample.das      238    <NA>     <NA>         <NA> 149   TRUE
-#> 11       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 12       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 13       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#> 14       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#>    Bearing Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial
-#> 1      309     2.8   1.06   3      4      N     N        <NA>         <NA>
-#> 2      326     0.4   2.97   3      4      Y     N        <NA>         <NA>
-#> 3      120      NA   0.03  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 4      300      NA   0.02  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 5      270    14.0   0.28   3      4      N     N        <NA>         <NA>
-#> 6       45      NA   0.05  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 7      344     0.2   3.68   3      4      Y     Y        <NA>         <NA>
-#> 8       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 9       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 10     309     1.7   1.47  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 11     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 12     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 13      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#> 14      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#>    Biopsy  Prob nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh
-#> 1    <NA> FALSE   1 FALSE    018       <NA>           NA           NA
-#> 2    <NA> FALSE   1 FALSE    076       <NA>      8.00000        14.00
-#> 3    <NA>    NA  NA    NA     LV       <NA>      1.00000           NA
-#> 4    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 5    <NA> FALSE   1 FALSE    037       <NA>     10.66667        20.00
-#> 6    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 7    <NA> FALSE   1 FALSE    016       <NA>     46.66667        79.00
-#> 8    <NA> FALSE   2  TRUE    013       <NA>     41.75000        72.75
-#> 9    <NA> FALSE   2  TRUE    016       <NA>     41.75000        72.75
-#> 10   <NA>    NA  NA    NA   <NA>       <NA>           NA           NA
-#> 11   <NA> FALSE   2  TRUE    018       <NA>    151.50000       249.00
-#> 12   <NA> FALSE   2  TRUE    277       <NA>    151.50000       249.00
-#> 13   <NA>  TRUE   2  TRUE    016        016     21.25000        37.75
-#> 14   <NA>  TRUE   2  TRUE    277        016     21.25000        37.75
-#>    GsSchoolLow  GsSpBest GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge
-#> 1    42.333333        NA       NA  42.333333           NA      <NA>      <NA>
-#> 2     5.666667   8.00000  14.0000   5.666667           NA      <NA>      <NA>
-#> 3           NA   1.00000       NA         NA           NA      <NA>         A
-#> 4           NA   1.00000       NA         NA           NA      <NA>         J
-#> 5    10.666667  10.66667  20.0000  10.666667           NA      <NA>      <NA>
-#> 6           NA   1.00000       NA         NA           NA      <NA>         A
-#> 7    46.666667  46.66667  79.0000  46.666667           NA      <NA>      <NA>
-#> 8    41.750000  30.06000  52.3800  30.060000           NA      <NA>      <NA>
-#> 9    41.750000  11.69000  20.3700  11.690000           NA      <NA>      <NA>
-#> 10          NA        NA       NA         NA           NA      <NA>      <NA>
-#> 11  151.500000 128.77500 211.6500 128.775000           NA      <NA>      <NA>
-#> 12  151.500000  22.72500  37.3500  22.725000           NA      <NA>      <NA>
-#> 13   21.250000  15.08750  26.8025  15.087500           NA      <NA>      <NA>
-#> 14   21.250000   6.16250  10.9475   6.162500           NA      <NA>      <NA>
-#>    TurtleCapt PerpDistKm included
-#> 1        <NA> 1.52563078     TRUE
-#> 2        <NA> 3.07580701     TRUE
-#> 3           N 0.04811637    FALSE
-#> 4           N 0.03207758    FALSE
-#> 5        <NA> 0.51856000     TRUE
-#> 6        <NA> 0.06547809    FALSE
-#> 7        <NA> 1.87856781     TRUE
-#> 8        <NA> 2.88891582     TRUE
-#> 9        <NA> 2.88891582     TRUE
-#> 10       <NA> 2.11573325     TRUE
-#> 11       <NA> 0.10601569     TRUE
-#> 12       <NA> 0.10601569     TRUE
-#> 13       <NA> 2.54265727     TRUE
-#> 14       <NA> 2.54265727     TRUE
+#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Trackline Course SpdKt Bft
+#> 1      TRUE   1000    C         5       S        2      <NA>     25  10.2   3
+#> 2      TRUE   1000    C         5       S        2      <NA>     26   9.7   3
+#> 3      TRUE   1000    C         5       S        2      <NA>     27   9.0   3
+#> 4      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 5      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 6      TRUE   1000    C         5       S        2      <NA>     16   8.9   2
+#> 7      TRUE   1000    C         5       S        2      <NA>     25   8.9   2
+#> 8      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 9      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 10     TRUE   1000    C         5       S        2      <NA>     35   9.5   2
+#> 11     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 12     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 13     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 14     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#>    SwellHght SwellDir WindSpdKt WindDir RainFog HorizSun VertSun Glare Vis ObsL
+#> 1          3      230        10     257       1       NA      NA    NA 6.0  208
+#> 2          3      230        10     257       3        2       2 FALSE 5.5  125
+#> 3          3      230        10     257       1        2       2 FALSE 5.5  001
+#> 4          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 5          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 6          3      230         6     243       1        9       1 FALSE 6.0  125
+#> 7          3      230         6     243       1        8       2 FALSE 6.0  149
+#> 8          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 9          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 10         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 11         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 12         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 13         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 14         1       35         5      40       3       NA      NA    NA 4.0  149
+#>    Rec ObsR ObsInd EffortDot EventNum       file_das line_num SightNo Subgroup
+#> 1  280  001   <NA>      TRUE       15 das_sample.das       15    1406     <NA>
+#> 2  208  280   <NA>      TRUE       35 das_sample.das       38    1407     <NA>
+#> 3  126  149   <NA>      TRUE       59 das_sample.das       65    <NA>     <NA>
+#> 4  001  126   <NA>      TRUE      131 das_sample.das      137    <NA>     <NA>
+#> 5  001  126   <NA>      TRUE      136 das_sample.das      142    1408     <NA>
+#> 6  208  280   <NA>      TRUE      153 das_sample.das      162    <NA>     <NA>
+#> 7  125  208   <NA>      TRUE      167 das_sample.das      176    1409     <NA>
+#> 8  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 9  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 10 125  208   <NA>      TRUE        8 das_sample.das      238    <NA>     <NA>
+#> 11 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 12 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 13 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#> 14 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#>    SightNoDaily Obs ObsStd Bearing Reticle DistNm Cue Method Photos Birds
+#> 1    20130113_1 208   TRUE     309     2.8   1.06   3      4      N     N
+#> 2    20130113_2 125   TRUE     326     0.4   2.97   3      4      Y     N
+#> 3          <NA> 280  FALSE     120      NA   0.03  NA     NA   <NA>  <NA>
+#> 4          <NA> 228  FALSE     300      NA   0.02  NA     NA   <NA>  <NA>
+#> 5    20130113_3 280   TRUE     270    14.0   0.28   3      4      N     N
+#> 6          <NA> 231  FALSE      45      NA   0.05  NA     NA   <NA>  <NA>
+#> 7    20130113_4 149   TRUE     344     0.2   3.68   3      4      Y     Y
+#> 8    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 9    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 10         <NA> 149   TRUE     309     1.7   1.47  NA     NA   <NA>  <NA>
+#> 11   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 12   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 13   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#> 14   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#>    CalibSchool PhotosAerial Biopsy  Prob nSp Mixed SpCode SpCodeProb
+#> 1         <NA>         <NA>   <NA> FALSE   1 FALSE    018       <NA>
+#> 2         <NA>         <NA>   <NA> FALSE   1 FALSE    076       <NA>
+#> 3         <NA>         <NA>   <NA>    NA  NA    NA     LV       <NA>
+#> 4         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 5         <NA>         <NA>   <NA> FALSE   1 FALSE    037       <NA>
+#> 6         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 7         <NA>         <NA>   <NA> FALSE   1 FALSE    016       <NA>
+#> 8         <NA>         <NA>   <NA> FALSE   2  TRUE    013       <NA>
+#> 9         <NA>         <NA>   <NA> FALSE   2  TRUE    016       <NA>
+#> 10        <NA>         <NA>   <NA>    NA  NA    NA   <NA>       <NA>
+#> 11        <NA>         <NA>   <NA> FALSE   2  TRUE    018       <NA>
+#> 12        <NA>         <NA>   <NA> FALSE   2  TRUE    277       <NA>
+#> 13        <NA>         <NA>   <NA>  TRUE   2  TRUE    016        016
+#> 14        <NA>         <NA>   <NA>  TRUE   2  TRUE    277        016
+#>    GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest GsSpHigh    GsSpLow
+#> 1            NA           NA   42.333333        NA       NA  42.333333
+#> 2       8.00000        14.00    5.666667   8.00000  14.0000   5.666667
+#> 3       1.00000           NA          NA   1.00000       NA         NA
+#> 4       1.00000           NA          NA   1.00000       NA         NA
+#> 5      10.66667        20.00   10.666667  10.66667  20.0000  10.666667
+#> 6       1.00000           NA          NA   1.00000       NA         NA
+#> 7      46.66667        79.00   46.666667  46.66667  79.0000  46.666667
+#> 8      41.75000        72.75   41.750000  30.06000  52.3800  30.060000
+#> 9      41.75000        72.75   41.750000  11.69000  20.3700  11.690000
+#> 10           NA           NA          NA        NA       NA         NA
+#> 11    151.50000       249.00  151.500000 128.77500 211.6500 128.775000
+#> 12    151.50000       249.00  151.500000  22.72500  37.3500  22.725000
+#> 13     21.25000        37.75   21.250000  15.08750  26.8025  15.087500
+#> 14     21.25000        37.75   21.250000   6.16250  10.9475   6.162500
+#>    CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm included
+#> 1            NA      <NA>      <NA>       <NA> 1.52563078     TRUE
+#> 2            NA      <NA>      <NA>       <NA> 3.07580701     TRUE
+#> 3            NA      <NA>         A          N 0.04811637    FALSE
+#> 4            NA      <NA>         J          N 0.03207758    FALSE
+#> 5            NA      <NA>      <NA>       <NA> 0.51856000     TRUE
+#> 6            NA      <NA>         A       <NA> 0.06547809    FALSE
+#> 7            NA      <NA>      <NA>       <NA> 1.87856781     TRUE
+#> 8            NA      <NA>      <NA>       <NA> 2.88891582     TRUE
+#> 9            NA      <NA>      <NA>       <NA> 2.88891582     TRUE
+#> 10           NA      <NA>      <NA>       <NA> 2.11573325     TRUE
+#> 11           NA      <NA>      <NA>       <NA> 0.10601569     TRUE
+#> 12           NA      <NA>      <NA>       <NA> 0.10601569     TRUE
+#> 13           NA      <NA>      <NA>       <NA> 2.54265727     TRUE
+#> 14           NA      <NA>      <NA>       <NA> 2.54265727     TRUE
 #> 
 #> $randpicks
 #>    effort_section randpicks
@@ -690,34 +701,34 @@ das_effort(
 #> lat8  40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
 #> lat9  41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
 #> lat10 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
-#>       Cruise Mode OffsetGMT EffType ESWsides   avgBft avgSwellHght avgHorizSun
-#> lat     1000    C         5       S        2 3.000000            3    2.000000
-#> lat2    1000    C         5       S        2 3.000000            3          NA
-#> lat1    1000    C         5       S        2 3.000000            3    2.000000
-#> lat3    1000    C         5       S        2 3.000000            3    2.000000
-#> lat11   1000    C         5       S        2 2.078121            3    2.000000
-#> lat4    1000    C         5       S        2 3.000000            3   12.000000
-#> lat12   1000    C         5       S        2 3.000000            3   12.000000
-#> lat5    1000    C         5       S        2 3.000000            3    8.000000
-#> lat6    1000    C         5       S        2 2.479576            3    8.520424
-#> lat7    1000    C         5       S        2 2.682617            3    8.000000
-#> lat8    1000    C         5       S        2 2.000000            3    8.000000
-#> lat9    1000    C         5       S        2 2.000000            1          NA
-#> lat10   1000    C         5       S        2 2.000000            1          NA
-#>       avgVertSun avgGlare   avgVis avgCourse avgSpdKt
-#> lat            3        0 6.000000  23.56198 9.912395
-#> lat2          NA       NA 5.952398  28.71439 9.157122
-#> lat1           2        0 5.500000  26.00000 9.700000
-#> lat3           2        0 5.500000  27.00000 9.000000
-#> lat11          2        0 4.744176 153.79707 9.531382
-#> lat4          12        0 5.941191  34.11787 9.570596
-#> lat12         12        0 6.000000  35.00000 9.316406
-#> lat5           1        0 6.000000  20.43919 9.343919
-#> lat6           1        0 6.000000  16.47958 9.091830
-#> lat7           2        0 6.000000  25.00000 8.900000
-#> lat8           2        0 6.000000  30.00000 9.500000
-#> lat9          NA       NA 4.000000  35.00000 9.500000
-#> lat10         NA       NA 4.000000  23.00000 9.600000
+#>       Cruise Mode OffsetGMT EffType ESWsides Trackline   avgBft avgSwellHght
+#> lat     1000    C         5       S        2      <NA> 3.000000            3
+#> lat2    1000    C         5       S        2      <NA> 3.000000            3
+#> lat1    1000    C         5       S        2      <NA> 3.000000            3
+#> lat3    1000    C         5       S        2      <NA> 3.000000            3
+#> lat11   1000    C         5       S        2      <NA> 2.078121            3
+#> lat4    1000    C         5       S        2      <NA> 3.000000            3
+#> lat12   1000    C         5       S        2      <NA> 3.000000            3
+#> lat5    1000    C         5       S        2      <NA> 3.000000            3
+#> lat6    1000    C         5       S        2      <NA> 2.479576            3
+#> lat7    1000    C         5       S        2      <NA> 2.682617            3
+#> lat8    1000    C         5       S        2      <NA> 2.000000            3
+#> lat9    1000    C         5       S        2      <NA> 2.000000            1
+#> lat10   1000    C         5       S        2      <NA> 2.000000            1
+#>       avgHorizSun avgVertSun avgGlare   avgVis avgCourse avgSpdKt
+#> lat      2.000000          3        0 6.000000  23.56198 9.912395
+#> lat2           NA         NA       NA 5.952398  28.71439 9.157122
+#> lat1     2.000000          2        0 5.500000  26.00000 9.700000
+#> lat3     2.000000          2        0 5.500000  27.00000 9.000000
+#> lat11    2.000000          2        0 4.744176 153.79707 9.531382
+#> lat4    12.000000         12        0 5.941191  34.11787 9.570596
+#> lat12   12.000000         12        0 6.000000  35.00000 9.316406
+#> lat5     8.000000          1        0 6.000000  20.43919 9.343919
+#> lat6     8.520424          1        0 6.000000  16.47958 9.091830
+#> lat7     8.000000          2        0 6.000000  25.00000 8.900000
+#> lat8     8.000000          2        0 6.000000  30.00000 9.500000
+#> lat9           NA         NA       NA 4.000000  35.00000 9.500000
+#> lat10          NA         NA       NA 4.000000  23.00000 9.600000
 #> 
 #> $sightinfo
 #>    segnum     mlat      mlon Event            DateTime year      Lat       Lon
@@ -735,111 +746,111 @@ das_effort(
 #> 12     13 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #> 13     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #> 14     13 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Course SpdKt Bft SwellHght
-#> 1      TRUE   1000    C         5       S        2     25  10.2   3         3
-#> 2      TRUE   1000    C         5       S        2     26   9.7   3         3
-#> 3      TRUE   1000    C         5       S        2     27   9.0   3         3
-#> 4      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 5      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 6      TRUE   1000    C         5       S        2     16   8.9   2         3
-#> 7      TRUE   1000    C         5       S        2     25   8.9   2         3
-#> 8      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 9      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 10     TRUE   1000    C         5       S        2     35   9.5   2         1
-#> 11     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 12     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 13     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 14     TRUE   1000    C         5       S        2     23   9.6   2         1
-#>    WindSpdKt RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot
-#> 1         10       1       NA      NA    NA 6.0  208 280  001   <NA>      TRUE
-#> 2         10       3        2       2 FALSE 5.5  125 208  280   <NA>      TRUE
-#> 3         10       1        2       2 FALSE 5.5  001 126  149   <NA>      TRUE
-#> 4          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 5          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 6          6       1        9       1 FALSE 6.0  125 208  280   <NA>      TRUE
-#> 7          6       1        8       2 FALSE 6.0  149 125  208   <NA>      TRUE
-#> 8          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 9          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 10         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 11         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 12         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 13         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 14         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#>    EventNum       file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd
-#> 1        15 das_sample.das       15    1406     <NA>   20130113_1 208   TRUE
-#> 2        35 das_sample.das       38    1407     <NA>   20130113_2 125   TRUE
-#> 3        59 das_sample.das       65    <NA>     <NA>         <NA> 280  FALSE
-#> 4       131 das_sample.das      137    <NA>     <NA>         <NA> 228  FALSE
-#> 5       136 das_sample.das      142    1408     <NA>   20130113_3 280   TRUE
-#> 6       153 das_sample.das      162    <NA>     <NA>         <NA> 231  FALSE
-#> 7       167 das_sample.das      176    1409     <NA>   20130113_4 149   TRUE
-#> 8       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 9       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 10        8 das_sample.das      238    <NA>     <NA>         <NA> 149   TRUE
-#> 11       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 12       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 13       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#> 14       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#>    Bearing Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial
-#> 1      309     2.8   1.06   3      4      N     N        <NA>         <NA>
-#> 2      326     0.4   2.97   3      4      Y     N        <NA>         <NA>
-#> 3      120      NA   0.03  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 4      300      NA   0.02  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 5      270    14.0   0.28   3      4      N     N        <NA>         <NA>
-#> 6       45      NA   0.05  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 7      344     0.2   3.68   3      4      Y     Y        <NA>         <NA>
-#> 8       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 9       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 10     309     1.7   1.47  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 11     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 12     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 13      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#> 14      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#>    Biopsy  Prob nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh
-#> 1    <NA> FALSE   1 FALSE    018       <NA>           NA           NA
-#> 2    <NA> FALSE   1 FALSE    076       <NA>      8.00000        14.00
-#> 3    <NA>    NA  NA    NA     LV       <NA>      1.00000           NA
-#> 4    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 5    <NA> FALSE   1 FALSE    037       <NA>     10.66667        20.00
-#> 6    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 7    <NA> FALSE   1 FALSE    016       <NA>     46.66667        79.00
-#> 8    <NA> FALSE   2  TRUE    013       <NA>     41.75000        72.75
-#> 9    <NA> FALSE   2  TRUE    016       <NA>     41.75000        72.75
-#> 10   <NA>    NA  NA    NA   <NA>       <NA>           NA           NA
-#> 11   <NA> FALSE   2  TRUE    018       <NA>    151.50000       249.00
-#> 12   <NA> FALSE   2  TRUE    277       <NA>    151.50000       249.00
-#> 13   <NA>  TRUE   2  TRUE    016        016     21.25000        37.75
-#> 14   <NA>  TRUE   2  TRUE    277        016     21.25000        37.75
-#>    GsSchoolLow  GsSpBest GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge
-#> 1    42.333333        NA       NA  42.333333           NA      <NA>      <NA>
-#> 2     5.666667   8.00000  14.0000   5.666667           NA      <NA>      <NA>
-#> 3           NA   1.00000       NA         NA           NA      <NA>         A
-#> 4           NA   1.00000       NA         NA           NA      <NA>         J
-#> 5    10.666667  10.66667  20.0000  10.666667           NA      <NA>      <NA>
-#> 6           NA   1.00000       NA         NA           NA      <NA>         A
-#> 7    46.666667  46.66667  79.0000  46.666667           NA      <NA>      <NA>
-#> 8    41.750000  30.06000  52.3800  30.060000           NA      <NA>      <NA>
-#> 9    41.750000  11.69000  20.3700  11.690000           NA      <NA>      <NA>
-#> 10          NA        NA       NA         NA           NA      <NA>      <NA>
-#> 11  151.500000 128.77500 211.6500 128.775000           NA      <NA>      <NA>
-#> 12  151.500000  22.72500  37.3500  22.725000           NA      <NA>      <NA>
-#> 13   21.250000  15.08750  26.8025  15.087500           NA      <NA>      <NA>
-#> 14   21.250000   6.16250  10.9475   6.162500           NA      <NA>      <NA>
-#>    TurtleCapt PerpDistKm included
-#> 1        <NA> 1.52563078     TRUE
-#> 2        <NA> 3.07580701     TRUE
-#> 3           N 0.04811637    FALSE
-#> 4           N 0.03207758    FALSE
-#> 5        <NA> 0.51856000     TRUE
-#> 6        <NA> 0.06547809    FALSE
-#> 7        <NA> 1.87856781     TRUE
-#> 8        <NA> 2.88891582     TRUE
-#> 9        <NA> 2.88891582     TRUE
-#> 10       <NA> 2.11573325     TRUE
-#> 11       <NA> 0.10601569     TRUE
-#> 12       <NA> 0.10601569     TRUE
-#> 13       <NA> 2.54265727     TRUE
-#> 14       <NA> 2.54265727     TRUE
+#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Trackline Course SpdKt Bft
+#> 1      TRUE   1000    C         5       S        2      <NA>     25  10.2   3
+#> 2      TRUE   1000    C         5       S        2      <NA>     26   9.7   3
+#> 3      TRUE   1000    C         5       S        2      <NA>     27   9.0   3
+#> 4      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 5      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 6      TRUE   1000    C         5       S        2      <NA>     16   8.9   2
+#> 7      TRUE   1000    C         5       S        2      <NA>     25   8.9   2
+#> 8      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 9      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 10     TRUE   1000    C         5       S        2      <NA>     35   9.5   2
+#> 11     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 12     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 13     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 14     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#>    SwellHght SwellDir WindSpdKt WindDir RainFog HorizSun VertSun Glare Vis ObsL
+#> 1          3      230        10     257       1       NA      NA    NA 6.0  208
+#> 2          3      230        10     257       3        2       2 FALSE 5.5  125
+#> 3          3      230        10     257       1        2       2 FALSE 5.5  001
+#> 4          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 5          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 6          3      230         6     243       1        9       1 FALSE 6.0  125
+#> 7          3      230         6     243       1        8       2 FALSE 6.0  149
+#> 8          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 9          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 10         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 11         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 12         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 13         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 14         1       35         5      40       3       NA      NA    NA 4.0  149
+#>    Rec ObsR ObsInd EffortDot EventNum       file_das line_num SightNo Subgroup
+#> 1  280  001   <NA>      TRUE       15 das_sample.das       15    1406     <NA>
+#> 2  208  280   <NA>      TRUE       35 das_sample.das       38    1407     <NA>
+#> 3  126  149   <NA>      TRUE       59 das_sample.das       65    <NA>     <NA>
+#> 4  001  126   <NA>      TRUE      131 das_sample.das      137    <NA>     <NA>
+#> 5  001  126   <NA>      TRUE      136 das_sample.das      142    1408     <NA>
+#> 6  208  280   <NA>      TRUE      153 das_sample.das      162    <NA>     <NA>
+#> 7  125  208   <NA>      TRUE      167 das_sample.das      176    1409     <NA>
+#> 8  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 9  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 10 125  208   <NA>      TRUE        8 das_sample.das      238    <NA>     <NA>
+#> 11 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 12 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 13 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#> 14 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#>    SightNoDaily Obs ObsStd Bearing Reticle DistNm Cue Method Photos Birds
+#> 1    20130113_1 208   TRUE     309     2.8   1.06   3      4      N     N
+#> 2    20130113_2 125   TRUE     326     0.4   2.97   3      4      Y     N
+#> 3          <NA> 280  FALSE     120      NA   0.03  NA     NA   <NA>  <NA>
+#> 4          <NA> 228  FALSE     300      NA   0.02  NA     NA   <NA>  <NA>
+#> 5    20130113_3 280   TRUE     270    14.0   0.28   3      4      N     N
+#> 6          <NA> 231  FALSE      45      NA   0.05  NA     NA   <NA>  <NA>
+#> 7    20130113_4 149   TRUE     344     0.2   3.68   3      4      Y     Y
+#> 8    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 9    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 10         <NA> 149   TRUE     309     1.7   1.47  NA     NA   <NA>  <NA>
+#> 11   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 12   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 13   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#> 14   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#>    CalibSchool PhotosAerial Biopsy  Prob nSp Mixed SpCode SpCodeProb
+#> 1         <NA>         <NA>   <NA> FALSE   1 FALSE    018       <NA>
+#> 2         <NA>         <NA>   <NA> FALSE   1 FALSE    076       <NA>
+#> 3         <NA>         <NA>   <NA>    NA  NA    NA     LV       <NA>
+#> 4         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 5         <NA>         <NA>   <NA> FALSE   1 FALSE    037       <NA>
+#> 6         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 7         <NA>         <NA>   <NA> FALSE   1 FALSE    016       <NA>
+#> 8         <NA>         <NA>   <NA> FALSE   2  TRUE    013       <NA>
+#> 9         <NA>         <NA>   <NA> FALSE   2  TRUE    016       <NA>
+#> 10        <NA>         <NA>   <NA>    NA  NA    NA   <NA>       <NA>
+#> 11        <NA>         <NA>   <NA> FALSE   2  TRUE    018       <NA>
+#> 12        <NA>         <NA>   <NA> FALSE   2  TRUE    277       <NA>
+#> 13        <NA>         <NA>   <NA>  TRUE   2  TRUE    016        016
+#> 14        <NA>         <NA>   <NA>  TRUE   2  TRUE    277        016
+#>    GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest GsSpHigh    GsSpLow
+#> 1            NA           NA   42.333333        NA       NA  42.333333
+#> 2       8.00000        14.00    5.666667   8.00000  14.0000   5.666667
+#> 3       1.00000           NA          NA   1.00000       NA         NA
+#> 4       1.00000           NA          NA   1.00000       NA         NA
+#> 5      10.66667        20.00   10.666667  10.66667  20.0000  10.666667
+#> 6       1.00000           NA          NA   1.00000       NA         NA
+#> 7      46.66667        79.00   46.666667  46.66667  79.0000  46.666667
+#> 8      41.75000        72.75   41.750000  30.06000  52.3800  30.060000
+#> 9      41.75000        72.75   41.750000  11.69000  20.3700  11.690000
+#> 10           NA           NA          NA        NA       NA         NA
+#> 11    151.50000       249.00  151.500000 128.77500 211.6500 128.775000
+#> 12    151.50000       249.00  151.500000  22.72500  37.3500  22.725000
+#> 13     21.25000        37.75   21.250000  15.08750  26.8025  15.087500
+#> 14     21.25000        37.75   21.250000   6.16250  10.9475   6.162500
+#>    CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm included
+#> 1            NA      <NA>      <NA>       <NA> 1.52563078     TRUE
+#> 2            NA      <NA>      <NA>       <NA> 3.07580701     TRUE
+#> 3            NA      <NA>         A          N 0.04811637    FALSE
+#> 4            NA      <NA>         J          N 0.03207758    FALSE
+#> 5            NA      <NA>      <NA>       <NA> 0.51856000     TRUE
+#> 6            NA      <NA>         A       <NA> 0.06547809    FALSE
+#> 7            NA      <NA>      <NA>       <NA> 1.87856781     TRUE
+#> 8            NA      <NA>      <NA>       <NA> 2.88891582     TRUE
+#> 9            NA      <NA>      <NA>       <NA> 2.88891582     TRUE
+#> 10           NA      <NA>      <NA>       <NA> 2.11573325     TRUE
+#> 11           NA      <NA>      <NA>       <NA> 0.10601569     TRUE
+#> 12           NA      <NA>      <NA>       <NA> 0.10601569     TRUE
+#> 13           NA      <NA>      <NA>       <NA> 2.54265727     TRUE
+#> 14           NA      <NA>      <NA>       <NA> 2.54265727     TRUE
 #> 
 #> $randpicks
 #>    effort_section randpicks
@@ -897,28 +908,28 @@ das_effort(
 #> 8  40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
 #> 9  41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
 #> 10 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
-#>    Cruise Mode OffsetGMT EffType ESWsides   avgBft avgSwellHght avgHorizSun
-#> 1    1000    C         5       S        2 3.000000            3    2.000000
-#> 2    1000    C         5       S        2 3.000000            3    2.000000
-#> 3    1000    C         5       S        2 2.500835            3    2.000000
-#> 4    1000    C         5       S        2 3.000000            3   12.000000
-#> 5    1000    C         5       S        2 3.000000            3    8.000000
-#> 6    1000    C         5       S        2 2.479576            3    8.520424
-#> 7    1000    C         5       S        2 2.682617            3    8.000000
-#> 8    1000    C         5       S        2 2.000000            3    8.000000
-#> 9    1000    C         5       S        2 2.000000            1          NA
-#> 10   1000    C         5       S        2 2.000000            1          NA
-#>    avgVertSun avgGlare   avgVis avgCourse avgSpdKt  stratum
-#> 1           3        0 6.000000  23.56198 9.912395     <NA>
-#> 2           2        0 5.686447  27.11868 9.476263     <NA>
-#> 3           2        0 5.090748  95.65614 9.287725     <NA>
-#> 4          12        0 5.974103  34.61155 9.428340     <NA>
-#> 5           1        0 6.000000  20.43919 9.343919 Stratum1
-#> 6           1        0 6.000000  16.47958 9.091830 Stratum1
-#> 7           2        0 6.000000  25.00000 8.900000 Stratum1
-#> 8           2        0 6.000000  30.00000 9.500000 Stratum1
-#> 9          NA       NA 4.000000  35.00000 9.500000 Stratum1
-#> 10         NA       NA 4.000000  23.00000 9.600000 Stratum1
+#>    Cruise Mode OffsetGMT EffType ESWsides Trackline   avgBft avgSwellHght
+#> 1    1000    C         5       S        2      <NA> 3.000000            3
+#> 2    1000    C         5       S        2      <NA> 3.000000            3
+#> 3    1000    C         5       S        2      <NA> 2.500835            3
+#> 4    1000    C         5       S        2      <NA> 3.000000            3
+#> 5    1000    C         5       S        2      <NA> 3.000000            3
+#> 6    1000    C         5       S        2      <NA> 2.479576            3
+#> 7    1000    C         5       S        2      <NA> 2.682617            3
+#> 8    1000    C         5       S        2      <NA> 2.000000            3
+#> 9    1000    C         5       S        2      <NA> 2.000000            1
+#> 10   1000    C         5       S        2      <NA> 2.000000            1
+#>    avgHorizSun avgVertSun avgGlare   avgVis avgCourse avgSpdKt  stratum
+#> 1     2.000000          3        0 6.000000  23.56198 9.912395     <NA>
+#> 2     2.000000          2        0 5.686447  27.11868 9.476263     <NA>
+#> 3     2.000000          2        0 5.090748  95.65614 9.287725     <NA>
+#> 4    12.000000         12        0 5.974103  34.61155 9.428340     <NA>
+#> 5     8.000000          1        0 6.000000  20.43919 9.343919 Stratum1
+#> 6     8.520424          1        0 6.000000  16.47958 9.091830 Stratum1
+#> 7     8.000000          2        0 6.000000  25.00000 8.900000 Stratum1
+#> 8     8.000000          2        0 6.000000  30.00000 9.500000 Stratum1
+#> 9           NA         NA       NA 4.000000  35.00000 9.500000 Stratum1
+#> 10          NA         NA       NA 4.000000  23.00000 9.600000 Stratum1
 #> 
 #> $sightinfo
 #>    segnum     mlat      mlon Event            DateTime year      Lat       Lon
@@ -936,111 +947,111 @@ das_effort(
 #> 12     10 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #> 13     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #> 14     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Course SpdKt Bft SwellHght
-#> 1      TRUE   1000    C         5       S        2     25  10.2   3         3
-#> 2      TRUE   1000    C         5       S        2     26   9.7   3         3
-#> 3      TRUE   1000    C         5       S        2     27   9.0   3         3
-#> 4      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 5      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 6      TRUE   1000    C         5       S        2     16   8.9   2         3
-#> 7      TRUE   1000    C         5       S        2     25   8.9   2         3
-#> 8      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 9      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 10     TRUE   1000    C         5       S        2     35   9.5   2         1
-#> 11     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 12     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 13     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 14     TRUE   1000    C         5       S        2     23   9.6   2         1
-#>    WindSpdKt RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot
-#> 1         10       1       NA      NA    NA 6.0  208 280  001   <NA>      TRUE
-#> 2         10       3        2       2 FALSE 5.5  125 208  280   <NA>      TRUE
-#> 3         10       1        2       2 FALSE 5.5  001 126  149   <NA>      TRUE
-#> 4          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 5          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 6          6       1        9       1 FALSE 6.0  125 208  280   <NA>      TRUE
-#> 7          6       1        8       2 FALSE 6.0  149 125  208   <NA>      TRUE
-#> 8          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 9          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 10         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 11         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 12         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 13         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 14         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#>    EventNum       file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd
-#> 1        15 das_sample.das       15    1406     <NA>   20130113_1 208   TRUE
-#> 2        35 das_sample.das       38    1407     <NA>   20130113_2 125   TRUE
-#> 3        59 das_sample.das       65    <NA>     <NA>         <NA> 280  FALSE
-#> 4       131 das_sample.das      137    <NA>     <NA>         <NA> 228  FALSE
-#> 5       136 das_sample.das      142    1408     <NA>   20130113_3 280   TRUE
-#> 6       153 das_sample.das      162    <NA>     <NA>         <NA> 231  FALSE
-#> 7       167 das_sample.das      176    1409     <NA>   20130113_4 149   TRUE
-#> 8       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 9       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 10        8 das_sample.das      238    <NA>     <NA>         <NA> 149   TRUE
-#> 11       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 12       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 13       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#> 14       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#>    Bearing Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial
-#> 1      309     2.8   1.06   3      4      N     N        <NA>         <NA>
-#> 2      326     0.4   2.97   3      4      Y     N        <NA>         <NA>
-#> 3      120      NA   0.03  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 4      300      NA   0.02  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 5      270    14.0   0.28   3      4      N     N        <NA>         <NA>
-#> 6       45      NA   0.05  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 7      344     0.2   3.68   3      4      Y     Y        <NA>         <NA>
-#> 8       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 9       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 10     309     1.7   1.47  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 11     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 12     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 13      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#> 14      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#>    Biopsy  Prob nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh
-#> 1    <NA> FALSE   1 FALSE    018       <NA>           NA           NA
-#> 2    <NA> FALSE   1 FALSE    076       <NA>      8.00000        14.00
-#> 3    <NA>    NA  NA    NA     LV       <NA>      1.00000           NA
-#> 4    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 5    <NA> FALSE   1 FALSE    037       <NA>     10.66667        20.00
-#> 6    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 7    <NA> FALSE   1 FALSE    016       <NA>     46.66667        79.00
-#> 8    <NA> FALSE   2  TRUE    013       <NA>     41.75000        72.75
-#> 9    <NA> FALSE   2  TRUE    016       <NA>     41.75000        72.75
-#> 10   <NA>    NA  NA    NA   <NA>       <NA>           NA           NA
-#> 11   <NA> FALSE   2  TRUE    018       <NA>    151.50000       249.00
-#> 12   <NA> FALSE   2  TRUE    277       <NA>    151.50000       249.00
-#> 13   <NA>  TRUE   2  TRUE    016        016     21.25000        37.75
-#> 14   <NA>  TRUE   2  TRUE    277        016     21.25000        37.75
-#>    GsSchoolLow  GsSpBest GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge
-#> 1    42.333333        NA       NA  42.333333           NA      <NA>      <NA>
-#> 2     5.666667   8.00000  14.0000   5.666667           NA      <NA>      <NA>
-#> 3           NA   1.00000       NA         NA           NA      <NA>         A
-#> 4           NA   1.00000       NA         NA           NA      <NA>         J
-#> 5    10.666667  10.66667  20.0000  10.666667           NA      <NA>      <NA>
-#> 6           NA   1.00000       NA         NA           NA      <NA>         A
-#> 7    46.666667  46.66667  79.0000  46.666667           NA      <NA>      <NA>
-#> 8    41.750000  30.06000  52.3800  30.060000           NA      <NA>      <NA>
-#> 9    41.750000  11.69000  20.3700  11.690000           NA      <NA>      <NA>
-#> 10          NA        NA       NA         NA           NA      <NA>      <NA>
-#> 11  151.500000 128.77500 211.6500 128.775000           NA      <NA>      <NA>
-#> 12  151.500000  22.72500  37.3500  22.725000           NA      <NA>      <NA>
-#> 13   21.250000  15.08750  26.8025  15.087500           NA      <NA>      <NA>
-#> 14   21.250000   6.16250  10.9475   6.162500           NA      <NA>      <NA>
-#>    TurtleCapt PerpDistKm included
-#> 1        <NA> 1.52563078     TRUE
-#> 2        <NA> 3.07580701     TRUE
-#> 3           N 0.04811637    FALSE
-#> 4           N 0.03207758    FALSE
-#> 5        <NA> 0.51856000     TRUE
-#> 6        <NA> 0.06547809    FALSE
-#> 7        <NA> 1.87856781     TRUE
-#> 8        <NA> 2.88891582     TRUE
-#> 9        <NA> 2.88891582     TRUE
-#> 10       <NA> 2.11573325     TRUE
-#> 11       <NA> 0.10601569     TRUE
-#> 12       <NA> 0.10601569     TRUE
-#> 13       <NA> 2.54265727     TRUE
-#> 14       <NA> 2.54265727     TRUE
+#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Trackline Course SpdKt Bft
+#> 1      TRUE   1000    C         5       S        2      <NA>     25  10.2   3
+#> 2      TRUE   1000    C         5       S        2      <NA>     26   9.7   3
+#> 3      TRUE   1000    C         5       S        2      <NA>     27   9.0   3
+#> 4      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 5      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 6      TRUE   1000    C         5       S        2      <NA>     16   8.9   2
+#> 7      TRUE   1000    C         5       S        2      <NA>     25   8.9   2
+#> 8      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 9      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 10     TRUE   1000    C         5       S        2      <NA>     35   9.5   2
+#> 11     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 12     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 13     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 14     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#>    SwellHght SwellDir WindSpdKt WindDir RainFog HorizSun VertSun Glare Vis ObsL
+#> 1          3      230        10     257       1       NA      NA    NA 6.0  208
+#> 2          3      230        10     257       3        2       2 FALSE 5.5  125
+#> 3          3      230        10     257       1        2       2 FALSE 5.5  001
+#> 4          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 5          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 6          3      230         6     243       1        9       1 FALSE 6.0  125
+#> 7          3      230         6     243       1        8       2 FALSE 6.0  149
+#> 8          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 9          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 10         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 11         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 12         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 13         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 14         1       35         5      40       3       NA      NA    NA 4.0  149
+#>    Rec ObsR ObsInd EffortDot EventNum       file_das line_num SightNo Subgroup
+#> 1  280  001   <NA>      TRUE       15 das_sample.das       15    1406     <NA>
+#> 2  208  280   <NA>      TRUE       35 das_sample.das       38    1407     <NA>
+#> 3  126  149   <NA>      TRUE       59 das_sample.das       65    <NA>     <NA>
+#> 4  001  126   <NA>      TRUE      131 das_sample.das      137    <NA>     <NA>
+#> 5  001  126   <NA>      TRUE      136 das_sample.das      142    1408     <NA>
+#> 6  208  280   <NA>      TRUE      153 das_sample.das      162    <NA>     <NA>
+#> 7  125  208   <NA>      TRUE      167 das_sample.das      176    1409     <NA>
+#> 8  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 9  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 10 125  208   <NA>      TRUE        8 das_sample.das      238    <NA>     <NA>
+#> 11 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 12 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 13 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#> 14 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#>    SightNoDaily Obs ObsStd Bearing Reticle DistNm Cue Method Photos Birds
+#> 1    20130113_1 208   TRUE     309     2.8   1.06   3      4      N     N
+#> 2    20130113_2 125   TRUE     326     0.4   2.97   3      4      Y     N
+#> 3          <NA> 280  FALSE     120      NA   0.03  NA     NA   <NA>  <NA>
+#> 4          <NA> 228  FALSE     300      NA   0.02  NA     NA   <NA>  <NA>
+#> 5    20130113_3 280   TRUE     270    14.0   0.28   3      4      N     N
+#> 6          <NA> 231  FALSE      45      NA   0.05  NA     NA   <NA>  <NA>
+#> 7    20130113_4 149   TRUE     344     0.2   3.68   3      4      Y     Y
+#> 8    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 9    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 10         <NA> 149   TRUE     309     1.7   1.47  NA     NA   <NA>  <NA>
+#> 11   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 12   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 13   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#> 14   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#>    CalibSchool PhotosAerial Biopsy  Prob nSp Mixed SpCode SpCodeProb
+#> 1         <NA>         <NA>   <NA> FALSE   1 FALSE    018       <NA>
+#> 2         <NA>         <NA>   <NA> FALSE   1 FALSE    076       <NA>
+#> 3         <NA>         <NA>   <NA>    NA  NA    NA     LV       <NA>
+#> 4         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 5         <NA>         <NA>   <NA> FALSE   1 FALSE    037       <NA>
+#> 6         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 7         <NA>         <NA>   <NA> FALSE   1 FALSE    016       <NA>
+#> 8         <NA>         <NA>   <NA> FALSE   2  TRUE    013       <NA>
+#> 9         <NA>         <NA>   <NA> FALSE   2  TRUE    016       <NA>
+#> 10        <NA>         <NA>   <NA>    NA  NA    NA   <NA>       <NA>
+#> 11        <NA>         <NA>   <NA> FALSE   2  TRUE    018       <NA>
+#> 12        <NA>         <NA>   <NA> FALSE   2  TRUE    277       <NA>
+#> 13        <NA>         <NA>   <NA>  TRUE   2  TRUE    016        016
+#> 14        <NA>         <NA>   <NA>  TRUE   2  TRUE    277        016
+#>    GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest GsSpHigh    GsSpLow
+#> 1            NA           NA   42.333333        NA       NA  42.333333
+#> 2       8.00000        14.00    5.666667   8.00000  14.0000   5.666667
+#> 3       1.00000           NA          NA   1.00000       NA         NA
+#> 4       1.00000           NA          NA   1.00000       NA         NA
+#> 5      10.66667        20.00   10.666667  10.66667  20.0000  10.666667
+#> 6       1.00000           NA          NA   1.00000       NA         NA
+#> 7      46.66667        79.00   46.666667  46.66667  79.0000  46.666667
+#> 8      41.75000        72.75   41.750000  30.06000  52.3800  30.060000
+#> 9      41.75000        72.75   41.750000  11.69000  20.3700  11.690000
+#> 10           NA           NA          NA        NA       NA         NA
+#> 11    151.50000       249.00  151.500000 128.77500 211.6500 128.775000
+#> 12    151.50000       249.00  151.500000  22.72500  37.3500  22.725000
+#> 13     21.25000        37.75   21.250000  15.08750  26.8025  15.087500
+#> 14     21.25000        37.75   21.250000   6.16250  10.9475   6.162500
+#>    CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm included
+#> 1            NA      <NA>      <NA>       <NA> 1.52563078     TRUE
+#> 2            NA      <NA>      <NA>       <NA> 3.07580701     TRUE
+#> 3            NA      <NA>         A          N 0.04811637    FALSE
+#> 4            NA      <NA>         J          N 0.03207758    FALSE
+#> 5            NA      <NA>      <NA>       <NA> 0.51856000     TRUE
+#> 6            NA      <NA>         A       <NA> 0.06547809    FALSE
+#> 7            NA      <NA>      <NA>       <NA> 1.87856781     TRUE
+#> 8            NA      <NA>      <NA>       <NA> 2.88891582     TRUE
+#> 9            NA      <NA>      <NA>       <NA> 2.88891582     TRUE
+#> 10           NA      <NA>      <NA>       <NA> 2.11573325     TRUE
+#> 11           NA      <NA>      <NA>       <NA> 0.10601569     TRUE
+#> 12           NA      <NA>      <NA>       <NA> 0.10601569     TRUE
+#> 13           NA      <NA>      <NA>       <NA> 2.54265727     TRUE
+#> 14           NA      <NA>      <NA>       <NA> 2.54265727     TRUE
 #> 
 #> $randpicks
 #>    effort_section randpicks

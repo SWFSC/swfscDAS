@@ -138,28 +138,28 @@ das_intersects_strata(y.eff, list(InPoly = stratum.file), x.lon = "Lon", x.lat =
 #> lat7 40.52365 -137.0524 2013-01-13 17:00:37  0.4016 2013     1  13 17:00:37
 #> lat8 41.00151 -135.5881 2013-01-14 11:30:58  3.5940 2013     1  14 11:30:58
 #> lat9 41.03500 -135.5671 2013-01-14 11:45:33  2.7600 2013     1  14 11:45:33
-#>      Cruise Mode OffsetGMT EffType ESWsides   avgBft avgSwellHght avgHorizSun
-#> lat    1000    C         5       S        2 3.000000            3    2.000000
-#> lat1   1000    C         5       S        2 3.000000            3    2.000000
-#> lat2   1000    C         5       S        2 2.500835            3    2.000000
-#> lat3   1000    C         5       S        2 3.000000            3   12.000000
-#> lat4   1000    C         5       S        2 3.000000            3    8.000000
-#> lat5   1000    C         5       S        2 2.479576            3    8.520424
-#> lat6   1000    C         5       S        2 2.682617            3    8.000000
-#> lat7   1000    C         5       S        2 2.000000            3    8.000000
-#> lat8   1000    C         5       S        2 2.000000            1          NA
-#> lat9   1000    C         5       S        2 2.000000            1          NA
-#>      avgVertSun avgGlare   avgVis avgCourse avgSpdKt InPoly
-#> lat           3        0 6.000000  23.56198 9.912395      0
-#> lat1          2        0 5.686447  27.11868 9.476263      0
-#> lat2          2        0 5.090748  95.65614 9.287725      0
-#> lat3         12        0 5.974103  34.61155 9.428340      0
-#> lat4          1        0 6.000000  20.43919 9.343919      1
-#> lat5          1        0 6.000000  16.47958 9.091830      1
-#> lat6          2        0 6.000000  25.00000 8.900000      1
-#> lat7          2        0 6.000000  30.00000 9.500000      1
-#> lat8         NA       NA 4.000000  35.00000 9.500000      1
-#> lat9         NA       NA 4.000000  23.00000 9.600000      1
+#>      Cruise Mode OffsetGMT EffType ESWsides Trackline   avgBft avgSwellHght
+#> lat    1000    C         5       S        2      <NA> 3.000000            3
+#> lat1   1000    C         5       S        2      <NA> 3.000000            3
+#> lat2   1000    C         5       S        2      <NA> 2.500835            3
+#> lat3   1000    C         5       S        2      <NA> 3.000000            3
+#> lat4   1000    C         5       S        2      <NA> 3.000000            3
+#> lat5   1000    C         5       S        2      <NA> 2.479576            3
+#> lat6   1000    C         5       S        2      <NA> 2.682617            3
+#> lat7   1000    C         5       S        2      <NA> 2.000000            3
+#> lat8   1000    C         5       S        2      <NA> 2.000000            1
+#> lat9   1000    C         5       S        2      <NA> 2.000000            1
+#>      avgHorizSun avgVertSun avgGlare   avgVis avgCourse avgSpdKt InPoly
+#> lat     2.000000          3        0 6.000000  23.56198 9.912395      0
+#> lat1    2.000000          2        0 5.686447  27.11868 9.476263      0
+#> lat2    2.000000          2        0 5.090748  95.65614 9.287725      0
+#> lat3   12.000000         12        0 5.974103  34.61155 9.428340      0
+#> lat4    8.000000          1        0 6.000000  20.43919 9.343919      1
+#> lat5    8.520424          1        0 6.000000  16.47958 9.091830      1
+#> lat6    8.000000          2        0 6.000000  25.00000 8.900000      1
+#> lat7    8.000000          2        0 6.000000  30.00000 9.500000      1
+#> lat8          NA         NA       NA 4.000000  35.00000 9.500000      1
+#> lat9          NA         NA       NA 4.000000  23.00000 9.600000      1
 #> 
 #> $sightinfo
 #>    segnum     mlat      mlon Event            DateTime year      Lat       Lon
@@ -177,111 +177,111 @@ das_intersects_strata(y.eff, list(InPoly = stratum.file), x.lon = "Lon", x.lat =
 #> 12     10 41.03500 -135.5671     S 2013-01-14 11:47:51 2013 41.04017 -135.5635
 #> 13     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
 #> 14     10 41.03500 -135.5671     S 2013-01-14 11:49:14 2013 41.04333 -135.5615
-#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Course SpdKt Bft SwellHght
-#> 1      TRUE   1000    C         5       S        2     25  10.2   3         3
-#> 2      TRUE   1000    C         5       S        2     26   9.7   3         3
-#> 3      TRUE   1000    C         5       S        2     27   9.0   3         3
-#> 4      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 5      TRUE   1000    C         5       S        2     20   9.3   3         3
-#> 6      TRUE   1000    C         5       S        2     16   8.9   2         3
-#> 7      TRUE   1000    C         5       S        2     25   8.9   2         3
-#> 8      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 9      TRUE   1000    C         5       S        2     30   9.5   2         3
-#> 10     TRUE   1000    C         5       S        2     35   9.5   2         1
-#> 11     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 12     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 13     TRUE   1000    C         5       S        2     23   9.6   2         1
-#> 14     TRUE   1000    C         5       S        2     23   9.6   2         1
-#>    WindSpdKt RainFog HorizSun VertSun Glare Vis ObsL Rec ObsR ObsInd EffortDot
-#> 1         10       1       NA      NA    NA 6.0  208 280  001   <NA>      TRUE
-#> 2         10       3        2       2 FALSE 5.5  125 208  280   <NA>      TRUE
-#> 3         10       1        2       2 FALSE 5.5  001 126  149   <NA>      TRUE
-#> 4          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 5          6       1        8       1 FALSE 6.0  280 001  126   <NA>      TRUE
-#> 6          6       1        9       1 FALSE 6.0  125 208  280   <NA>      TRUE
-#> 7          6       1        8       2 FALSE 6.0  149 125  208   <NA>      TRUE
-#> 8          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 9          6       1        8       2 FALSE 6.0  126 149  125   <NA>      TRUE
-#> 10         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 11         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 12         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 13         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#> 14         5       3       NA      NA    NA 4.0  149 125  208   <NA>      TRUE
-#>    EventNum       file_das line_num SightNo Subgroup SightNoDaily Obs ObsStd
-#> 1        15 das_sample.das       15    1406     <NA>   20130113_1 208   TRUE
-#> 2        35 das_sample.das       38    1407     <NA>   20130113_2 125   TRUE
-#> 3        59 das_sample.das       65    <NA>     <NA>         <NA> 280  FALSE
-#> 4       131 das_sample.das      137    <NA>     <NA>         <NA> 228  FALSE
-#> 5       136 das_sample.das      142    1408     <NA>   20130113_3 280   TRUE
-#> 6       153 das_sample.das      162    <NA>     <NA>         <NA> 231  FALSE
-#> 7       167 das_sample.das      176    1409     <NA>   20130113_4 149   TRUE
-#> 8       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 9       181 das_sample.das      193    1410     <NA>   20130113_5 125   TRUE
-#> 10        8 das_sample.das      238    <NA>     <NA>         <NA> 149   TRUE
-#> 11       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 12       18 das_sample.das      248    1412     <NA>   20130114_1 149   TRUE
-#> 13       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#> 14       20 das_sample.das      252    1413     <NA>   20130114_2 208   TRUE
-#>    Bearing Reticle DistNm Cue Method Photos Birds CalibSchool PhotosAerial
-#> 1      309     2.8   1.06   3      4      N     N        <NA>         <NA>
-#> 2      326     0.4   2.97   3      4      Y     N        <NA>         <NA>
-#> 3      120      NA   0.03  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 4      300      NA   0.02  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 5      270    14.0   0.28   3      4      N     N        <NA>         <NA>
-#> 6       45      NA   0.05  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 7      344     0.2   3.68   3      4      Y     Y        <NA>         <NA>
-#> 8       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 9       70     1.4   1.66   3      4      Y     N        <NA>         <NA>
-#> 10     309     1.7   1.47  NA     NA   <NA>  <NA>        <NA>         <NA>
-#> 11     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 12     359     0.3   3.28   2      4      Y     N        <NA>         <NA>
-#> 13      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#> 14      38     0.8   2.23   3      4      Y     N        <NA>         <NA>
-#>    Biopsy  Prob nSp Mixed SpCode SpCodeProb GsSchoolBest GsSchoolHigh
-#> 1    <NA> FALSE   1 FALSE    018       <NA>           NA           NA
-#> 2    <NA> FALSE   1 FALSE    076       <NA>      8.00000        14.00
-#> 3    <NA>    NA  NA    NA     LV       <NA>      1.00000           NA
-#> 4    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 5    <NA> FALSE   1 FALSE    037       <NA>     10.66667        20.00
-#> 6    <NA>    NA  NA    NA     DC       <NA>      1.00000           NA
-#> 7    <NA> FALSE   1 FALSE    016       <NA>     46.66667        79.00
-#> 8    <NA> FALSE   2  TRUE    013       <NA>     41.75000        72.75
-#> 9    <NA> FALSE   2  TRUE    016       <NA>     41.75000        72.75
-#> 10   <NA>    NA  NA    NA   <NA>       <NA>           NA           NA
-#> 11   <NA> FALSE   2  TRUE    018       <NA>    151.50000       249.00
-#> 12   <NA> FALSE   2  TRUE    277       <NA>    151.50000       249.00
-#> 13   <NA>  TRUE   2  TRUE    016        016     21.25000        37.75
-#> 14   <NA>  TRUE   2  TRUE    277        016     21.25000        37.75
-#>    GsSchoolLow  GsSpBest GsSpHigh    GsSpLow CourseSchool TurtleJFR TurtleAge
-#> 1    42.333333        NA       NA  42.333333           NA      <NA>      <NA>
-#> 2     5.666667   8.00000  14.0000   5.666667           NA      <NA>      <NA>
-#> 3           NA   1.00000       NA         NA           NA      <NA>         A
-#> 4           NA   1.00000       NA         NA           NA      <NA>         J
-#> 5    10.666667  10.66667  20.0000  10.666667           NA      <NA>      <NA>
-#> 6           NA   1.00000       NA         NA           NA      <NA>         A
-#> 7    46.666667  46.66667  79.0000  46.666667           NA      <NA>      <NA>
-#> 8    41.750000  30.06000  52.3800  30.060000           NA      <NA>      <NA>
-#> 9    41.750000  11.69000  20.3700  11.690000           NA      <NA>      <NA>
-#> 10          NA        NA       NA         NA           NA      <NA>      <NA>
-#> 11  151.500000 128.77500 211.6500 128.775000           NA      <NA>      <NA>
-#> 12  151.500000  22.72500  37.3500  22.725000           NA      <NA>      <NA>
-#> 13   21.250000  15.08750  26.8025  15.087500           NA      <NA>      <NA>
-#> 14   21.250000   6.16250  10.9475   6.162500           NA      <NA>      <NA>
-#>    TurtleCapt PerpDistKm included InPoly
-#> 1        <NA> 1.52563078     TRUE      0
-#> 2        <NA> 3.07580701     TRUE      0
-#> 3           N 0.04811637    FALSE      0
-#> 4           N 0.03207758    FALSE      1
-#> 5        <NA> 0.51856000     TRUE      1
-#> 6        <NA> 0.06547809    FALSE      1
-#> 7        <NA> 1.87856781     TRUE      1
-#> 8        <NA> 2.88891582     TRUE      1
-#> 9        <NA> 2.88891582     TRUE      1
-#> 10       <NA> 2.11573325     TRUE      1
-#> 11       <NA> 0.10601569     TRUE      1
-#> 12       <NA> 0.10601569     TRUE      1
-#> 13       <NA> 2.54265727     TRUE      1
-#> 14       <NA> 2.54265727     TRUE      1
+#>    OnEffort Cruise Mode OffsetGMT EffType ESWsides Trackline Course SpdKt Bft
+#> 1      TRUE   1000    C         5       S        2      <NA>     25  10.2   3
+#> 2      TRUE   1000    C         5       S        2      <NA>     26   9.7   3
+#> 3      TRUE   1000    C         5       S        2      <NA>     27   9.0   3
+#> 4      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 5      TRUE   1000    C         5       S        2      <NA>     20   9.3   3
+#> 6      TRUE   1000    C         5       S        2      <NA>     16   8.9   2
+#> 7      TRUE   1000    C         5       S        2      <NA>     25   8.9   2
+#> 8      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 9      TRUE   1000    C         5       S        2      <NA>     30   9.5   2
+#> 10     TRUE   1000    C         5       S        2      <NA>     35   9.5   2
+#> 11     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 12     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 13     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#> 14     TRUE   1000    C         5       S        2      <NA>     23   9.6   2
+#>    SwellHght SwellDir WindSpdKt WindDir RainFog HorizSun VertSun Glare Vis ObsL
+#> 1          3      230        10     257       1       NA      NA    NA 6.0  208
+#> 2          3      230        10     257       3        2       2 FALSE 5.5  125
+#> 3          3      230        10     257       1        2       2 FALSE 5.5  001
+#> 4          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 5          3      230         6     257       1        8       1 FALSE 6.0  280
+#> 6          3      230         6     243       1        9       1 FALSE 6.0  125
+#> 7          3      230         6     243       1        8       2 FALSE 6.0  149
+#> 8          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 9          3      230         6     243       1        8       2 FALSE 6.0  126
+#> 10         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 11         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 12         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 13         1       35         5      40       3       NA      NA    NA 4.0  149
+#> 14         1       35         5      40       3       NA      NA    NA 4.0  149
+#>    Rec ObsR ObsInd EffortDot EventNum       file_das line_num SightNo Subgroup
+#> 1  280  001   <NA>      TRUE       15 das_sample.das       15    1406     <NA>
+#> 2  208  280   <NA>      TRUE       35 das_sample.das       38    1407     <NA>
+#> 3  126  149   <NA>      TRUE       59 das_sample.das       65    <NA>     <NA>
+#> 4  001  126   <NA>      TRUE      131 das_sample.das      137    <NA>     <NA>
+#> 5  001  126   <NA>      TRUE      136 das_sample.das      142    1408     <NA>
+#> 6  208  280   <NA>      TRUE      153 das_sample.das      162    <NA>     <NA>
+#> 7  125  208   <NA>      TRUE      167 das_sample.das      176    1409     <NA>
+#> 8  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 9  149  125   <NA>      TRUE      181 das_sample.das      193    1410     <NA>
+#> 10 125  208   <NA>      TRUE        8 das_sample.das      238    <NA>     <NA>
+#> 11 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 12 125  208   <NA>      TRUE       18 das_sample.das      248    1412     <NA>
+#> 13 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#> 14 125  208   <NA>      TRUE       20 das_sample.das      252    1413     <NA>
+#>    SightNoDaily Obs ObsStd Bearing Reticle DistNm Cue Method Photos Birds
+#> 1    20130113_1 208   TRUE     309     2.8   1.06   3      4      N     N
+#> 2    20130113_2 125   TRUE     326     0.4   2.97   3      4      Y     N
+#> 3          <NA> 280  FALSE     120      NA   0.03  NA     NA   <NA>  <NA>
+#> 4          <NA> 228  FALSE     300      NA   0.02  NA     NA   <NA>  <NA>
+#> 5    20130113_3 280   TRUE     270    14.0   0.28   3      4      N     N
+#> 6          <NA> 231  FALSE      45      NA   0.05  NA     NA   <NA>  <NA>
+#> 7    20130113_4 149   TRUE     344     0.2   3.68   3      4      Y     Y
+#> 8    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 9    20130113_5 125   TRUE      70     1.4   1.66   3      4      Y     N
+#> 10         <NA> 149   TRUE     309     1.7   1.47  NA     NA   <NA>  <NA>
+#> 11   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 12   20130114_1 149   TRUE     359     0.3   3.28   2      4      Y     N
+#> 13   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#> 14   20130114_2 208   TRUE      38     0.8   2.23   3      4      Y     N
+#>    CalibSchool PhotosAerial Biopsy  Prob nSp Mixed SpCode SpCodeProb
+#> 1         <NA>         <NA>   <NA> FALSE   1 FALSE    018       <NA>
+#> 2         <NA>         <NA>   <NA> FALSE   1 FALSE    076       <NA>
+#> 3         <NA>         <NA>   <NA>    NA  NA    NA     LV       <NA>
+#> 4         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 5         <NA>         <NA>   <NA> FALSE   1 FALSE    037       <NA>
+#> 6         <NA>         <NA>   <NA>    NA  NA    NA     DC       <NA>
+#> 7         <NA>         <NA>   <NA> FALSE   1 FALSE    016       <NA>
+#> 8         <NA>         <NA>   <NA> FALSE   2  TRUE    013       <NA>
+#> 9         <NA>         <NA>   <NA> FALSE   2  TRUE    016       <NA>
+#> 10        <NA>         <NA>   <NA>    NA  NA    NA   <NA>       <NA>
+#> 11        <NA>         <NA>   <NA> FALSE   2  TRUE    018       <NA>
+#> 12        <NA>         <NA>   <NA> FALSE   2  TRUE    277       <NA>
+#> 13        <NA>         <NA>   <NA>  TRUE   2  TRUE    016        016
+#> 14        <NA>         <NA>   <NA>  TRUE   2  TRUE    277        016
+#>    GsSchoolBest GsSchoolHigh GsSchoolLow  GsSpBest GsSpHigh    GsSpLow
+#> 1            NA           NA   42.333333        NA       NA  42.333333
+#> 2       8.00000        14.00    5.666667   8.00000  14.0000   5.666667
+#> 3       1.00000           NA          NA   1.00000       NA         NA
+#> 4       1.00000           NA          NA   1.00000       NA         NA
+#> 5      10.66667        20.00   10.666667  10.66667  20.0000  10.666667
+#> 6       1.00000           NA          NA   1.00000       NA         NA
+#> 7      46.66667        79.00   46.666667  46.66667  79.0000  46.666667
+#> 8      41.75000        72.75   41.750000  30.06000  52.3800  30.060000
+#> 9      41.75000        72.75   41.750000  11.69000  20.3700  11.690000
+#> 10           NA           NA          NA        NA       NA         NA
+#> 11    151.50000       249.00  151.500000 128.77500 211.6500 128.775000
+#> 12    151.50000       249.00  151.500000  22.72500  37.3500  22.725000
+#> 13     21.25000        37.75   21.250000  15.08750  26.8025  15.087500
+#> 14     21.25000        37.75   21.250000   6.16250  10.9475   6.162500
+#>    CourseSchool TurtleJFR TurtleAge TurtleCapt PerpDistKm included InPoly
+#> 1            NA      <NA>      <NA>       <NA> 1.52563078     TRUE      0
+#> 2            NA      <NA>      <NA>       <NA> 3.07580701     TRUE      0
+#> 3            NA      <NA>         A          N 0.04811637    FALSE      0
+#> 4            NA      <NA>         J          N 0.03207758    FALSE      1
+#> 5            NA      <NA>      <NA>       <NA> 0.51856000     TRUE      1
+#> 6            NA      <NA>         A       <NA> 0.06547809    FALSE      1
+#> 7            NA      <NA>      <NA>       <NA> 1.87856781     TRUE      1
+#> 8            NA      <NA>      <NA>       <NA> 2.88891582     TRUE      1
+#> 9            NA      <NA>      <NA>       <NA> 2.88891582     TRUE      1
+#> 10           NA      <NA>      <NA>       <NA> 2.11573325     TRUE      1
+#> 11           NA      <NA>      <NA>       <NA> 0.10601569     TRUE      1
+#> 12           NA      <NA>      <NA>       <NA> 0.10601569     TRUE      1
+#> 13           NA      <NA>      <NA>       <NA> 2.54265727     TRUE      1
+#> 14           NA      <NA>      <NA>       <NA> 2.54265727     TRUE      1
 #> 
 #> $randpicks
 #>    effort_section randpicks
@@ -555,1039 +555,1039 @@ das_intersects_strata(y.proc, list(stratum.file))
 #> 254     3 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C         5
 #> 255     4 2013-01-14 11:49:14 41.04333 -135.5615     TRUE   1000    C         5
 #> 256     E 2013-01-14 11:50:29 41.04600 -135.5595    FALSE   1000    C         5
-#>     EffType ESWsides Course SpdKt Bft SwellHght WindSpdKt RainFog HorizSun
-#> 1      <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 2         S        2     NA    NA  NA        NA        NA      NA       NA
-#> 3         S        2     NA    NA  NA        NA        NA      NA       NA
-#> 4         S        2     NA    NA   3         3        10      NA       NA
-#> 5         S        2     23   9.8   3         3        10      NA       NA
-#> 6         S        2     23   9.8   3         3        10       1       NA
-#> 7         S        2     23   9.8   3         3        10       1       NA
-#> 8         S        2     23   9.8   3         3        10       1        2
-#> 9         S        2     23   9.8   3         3        10       1       NA
-#> 10        S        2     23   9.8   3         3        10       1       NA
-#> 11        S        2     23   9.8   3         3        10       1       NA
-#> 12        S        2     23   9.8   3         3        10       1       NA
-#> 13        S        2     25  10.2   3         3        10       1       NA
-#> 14        S        2     25  10.2   3         3        10       1       NA
-#> 15        S        2     25  10.2   3         3        10       1       NA
-#> 16        S        2     25  10.2   3         3        10       1       NA
-#> 17        S        2     25  10.2   3         3        10       1       NA
-#> 18        S        2     25  10.2   3         3        10       1       NA
-#> 19        S        2     25  10.2   3         3        10       1       NA
-#> 20        S        2     25  10.2   3         3        10       1       NA
-#> 21        S        2     25  10.2   3         3        10       1       NA
-#> 22        S        2     25  10.2   3         3        10       1       NA
-#> 23        S        2     NA    NA  NA        NA        NA      NA       NA
-#> 24        S        2     NA    NA  NA        NA        NA      NA       NA
-#> 25        S        2     NA    NA   3         3        10      NA       NA
-#> 26        S        2     29   9.1   3         3        10      NA       NA
-#> 27        S        2     29   9.1   3         3        10       1       NA
-#> 28        S        2     29   9.1   3         3        10       1       NA
-#> 29        S        2     29   9.1   3         3        10       1       NA
-#> 30        S        2     29   9.1   3         3        10       1       NA
-#> 31        S        2     29   9.1   3         3        10       1       NA
-#> 32        S        2     26   9.7   3         3        10       1       NA
-#> 33        S        2     26   9.7   3         3        10       3       NA
-#> 34        S        2     26   9.7   3         3        10       3       NA
-#> 35        S        2     26   9.7   3         3        10       3       NA
-#> 36        S        2     26   9.7   3         3        10       3        2
-#> 37        S        2     26   9.7   3         3        10       3        2
-#> 38        S        2     26   9.7   3         3        10       3        2
-#> 39        S        2     26   9.7   3         3        10       3        2
-#> 40        S        2     26   9.7   3         3        10       3        2
-#> 41        S        2     26   9.7   3         3        10       3        2
-#> 42        S        2     26   9.7   3         3        10       3        2
-#> 43        S        2     26   9.7   3         3        10       3        2
-#> 44        S        2     26   9.7   3         3        10       3        2
-#> 45        S        2     26   9.7   3         3        10       3        2
-#> 46        S        2     26   9.7   3         3        10       3        2
-#> 47        S        2     26   9.7   3         3        10       3        2
-#> 48        S        2     26   9.7   3         3        10       3        2
-#> 49        S        2     26   9.7   3         3        10       3        2
-#> 50        S        2     26   9.7   3         3        10       3        2
-#> 51        S        2     26   9.7   3         3        10       3        2
-#> 52        S        2     26   9.7   3         3        10       3        2
-#> 53        S        2     26   9.7   3         3        10       3        2
-#> 54        S        2     26   9.7   3         3        10       3        2
-#> 55        S        2     26   9.7   3         3        10       3        2
-#> 56        S        2     26   9.7   3         3        10       3        2
-#> 57        S        2     26   9.7   3         3        10       3        2
-#> 58        S        2     26   9.7   3         3        10       3        2
-#> 59        S        2     NA    NA  NA        NA        NA      NA       NA
-#> 60        S        2     NA    NA  NA        NA        NA      NA       NA
-#> 61        S        2     NA    NA   3         3        10      NA       NA
-#> 62        S        2     27   9.0   3         3        10      NA       NA
-#> 63        S        2     27   9.0   3         3        10       1        2
-#> 64        S        2     27   9.0   3         3        10       1        2
-#> 65        S        2     27   9.0   3         3        10       1        2
-#> 66        S        2     27   9.0   3         3        10       1        2
-#> 67        S        2     27   9.0   3         3        10       1        2
-#> 68        S        2     27   9.0   3         3        10       1        2
-#> 69        S        2     27   9.0   3         3        10       1        2
-#> 70        S        2     27   9.0   2         3         8       1        2
-#> 71        S        2     27   9.0   2         3         8       1        2
-#> 72        S        2     27   9.0   2         3         8       1        2
-#> 73        S        2     27   9.0   2         3         6       1        2
-#> 74        S        2     23  10.0   2         3         6       1        2
-#> 75        S        2     23  10.0   2         3         6       3       NA
-#> 76        S        2     23  10.0   2         3         6       3       NA
-#> 77        S        2     23  10.0   2         3         6       3       NA
-#> 78        S        2     23  10.0   2         3         6       3       NA
-#> 79        S        2     23  10.0   2         3         6       3       NA
-#> 80        S        2    352   9.3   2         3         6       3       NA
-#> 81        S        2    352   9.3   2         3         6       3       NA
-#> 82        S        2    352   9.3   2         3         6       3       NA
-#> 83        S        2    352   9.3   2         3         6       3       NA
-#> 84        S        2    352   9.3   2         3         6       3       NA
-#> 85        S        2    352   9.3   2         3         6       3       NA
-#> 86        S        2    352   9.3   2         3         6       3       NA
-#> 87        S        2    335  10.1   2         3         6       3       NA
-#> 88        S        2    335  10.1   2         3         6       3       NA
-#> 89        S        2    335  10.1   2         3         6       3       NA
-#> 90        S        2    335  10.1   2         3         6       3       NA
-#> 91        S        2    335  10.1   2         3         6       3       NA
-#> 92        S        2    335  10.1   2         3         6       3       NA
-#> 93        S        2    335  10.1   2         3         6       3       NA
-#> 94        S        2    335  10.1   2         3         6       3       NA
-#> 95        S        2    335  10.1   2         3         6       3       NA
-#> 96        S        2    335  10.1   2         3         6       3       NA
-#> 97        S        2    335  10.1   2         3         6       3       NA
-#> 98        S        2     NA    NA  NA        NA        NA      NA       NA
-#> 99        S        2     NA    NA  NA        NA        NA      NA       NA
-#> 100       S        2     NA    NA   3         3         9      NA       NA
-#> 101       S        2     32   9.5   3         3         9      NA       NA
-#> 102       S        2     32   9.5   3         3         9       3       NA
-#> 103       S        2     32   9.5   3         3         9       3       NA
-#> 104       S        2     32   9.5   3         3         9       3       NA
-#> 105       S        2     32   9.5   3         3         9       3       NA
-#> 106       S        2     35   9.6   3         3         9       3       NA
-#> 107       S        2     35   9.6   3         3         9       1       NA
-#> 108       S        2     35   9.6   3         3         9       1       NA
-#> 109       S        2     35   9.6   3         3         9       1       12
-#> 110       S        2     35   9.6   3         3         9       1       12
-#> 111       S        2     35   9.6   3         3         9       1       12
-#> 112       S        2     35   9.6   3         3         9       1       12
-#> 113       S        2     35   9.6   3         3         9       1       12
-#> 114       S        2     35   9.6   3         3         9       1       12
-#> 115       S        2     35   9.2   3         3         9       1       12
-#> 116       S        2     35   9.2   3         3         9       1       12
-#> 117       S        2     35   9.2   3         3         9       1       12
-#> 118       S        2     35   9.2   3         3         9       1       12
-#> 119       S        2     35   9.2   3         3         9       1       12
-#> 120       S        2     35   9.2   3         3         9       1       12
-#> 121       S        2     35   9.2   3         3         9       1       12
-#> 122       S        2     35   9.2   3         3         9       1       12
-#> 123       S        2     35   9.2   3         3         9       1       12
-#> 124       S        2     35   9.2   3         3         9       1       12
-#> 125       S        2     35   9.2   3         3         9       1       12
-#> 126       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 127       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 128       S        2     NA    NA   3         3         9      NA       NA
-#> 129       S        2     22   9.5   3         3         9      NA       NA
-#> 130       S        2     22   9.5   3         3         9       1        8
-#> 131       S        2     22   9.5   3         3         9       1        8
-#> 132       S        2     22   9.5   3         3         9       1        8
-#> 133       S        2     22   9.5   3         3         6       1        8
-#> 134       S        2     20   9.3   3         3         6       1        8
-#> 135       S        2     20   9.3   3         3         6       1        8
-#> 136       S        2     20   9.3   3         3         6       1        8
-#> 137       S        2     20   9.3   3         3         6       1        8
-#> 138       S        2     20   9.3   3         3         6       1        8
-#> 139       S        2     20   9.3   3         3         6       1        8
-#> 140       S        2     20   9.3   3         3         6       1        8
-#> 141       S        2     20   9.3   3         3         6       1        8
-#> 142       S        2     20   9.3   3         3         6       1        8
-#> 143       S        2     20   9.3   3         3         6       1        8
-#> 144       S        2     20   9.3   3         3         6       1        8
-#> 145       S        2     20   9.3   3         3         6       1        8
-#> 146       S        2     20   9.3   3         3         6       1        8
-#> 147       S        2     20   9.3   3         3         6       1        8
-#> 148       S        2     20   9.3   3         3         6       1        8
-#> 149       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 150       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 151       S        2     NA    NA   3         3         6      NA       NA
-#> 152       S        2     17   9.3   3         3         6      NA       NA
-#> 153       S        2     17   9.3   3         3         6       1        8
-#> 154       S        2     17   9.3   3         3         6       1        8
-#> 155       S        2     17   9.3   3         3         6       1        8
-#> 156       S        2     17   9.3   3         3         6       1        8
-#> 157       S        2     17   9.3   2         3         6       1        8
-#> 158       S        2     16   8.9   2         3         6       1        8
-#> 159       S        2     16   8.9   2         3         6       1        9
-#> 160       S        2     16   8.9   2         3         6       1        9
-#> 161       S        2     16   8.9   2         3         6       1        9
-#> 162       S        2     16   8.9   2         3         6       1        9
-#> 163       S        2     16   8.9   2         3         6       1        9
-#> 164       S        2     16   8.9   2         3         6       1        9
-#> 165       S        2     16   8.9   2         3         6       1        9
-#> 166       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 167       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 168       S        2     NA    NA   3         3         8      NA       NA
-#> 169       S        2     25   8.9   3         3         8      NA       NA
-#> 170       S        2     25   8.9   3         3         8       1        8
-#> 171       S        2     25   8.9   3         3         8       1        8
-#> 172       S        2     25   8.9   3         3         8       1        8
-#> 173       S        2     25   8.9   2         3         6       1        8
-#> 174       S        2     25   8.9   2         3         6       1        8
-#> 175       S        2     25   8.9   2         3         6       1        8
-#> 176       S        2     25   8.9   2         3         6       1        8
-#> 177       S        2     25   8.9   2         3         6       1        8
-#> 178       S        2     25   8.9   2         3         6       1        8
-#> 179       S        2     25   8.9   2         3         6       1        8
-#> 180       S        2     25   8.9   2         3         6       1        8
-#> 181       S        2     25   8.9   2         3         6       1        8
-#> 182       S        2     25   8.9   2         3         6       1        8
-#> 183       S        2     25   8.9   2         3         6       1        8
-#> 184       S        2     25   8.9   2         3         6       1        8
-#> 185       S        2     25   8.9   2         3         6       1        8
-#> 186       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 187       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 188       S        2     NA    NA   2         3         6      NA       NA
-#> 189       S        2     30   9.5   2         3         6      NA       NA
-#> 190       S        2     30   9.5   2         3         6       1        8
-#> 191       S        2     30   9.5   2         3         6       1        8
-#> 192       S        2     30   9.5   2         3         6       1        8
-#> 193       S        2     30   9.5   2         3         6       1        8
-#> 194       S        2     30   9.5   2         3         6       1        8
-#> 195       S        2     30   9.5   2         3         6       1        8
-#> 196       S        2     30   9.5   2         3         6       1        8
-#> 197       S        2     30   9.5   2         3         6       1        8
-#> 198       S        2     30   9.5   2         3         6       1        8
-#> 199       S        2     30   9.5   2         3         6       1        8
-#> 200       S        2     30   9.5   2         3         6       1        8
-#> 201       S        2     30   9.5   2         3         6       1        8
-#> 202       S        2     30   9.5   2         3         6       1        8
-#> 203       S        2     30   9.5   2         3         6       1        8
-#> 204       S        2     30   9.5   2         3         6       1        8
-#> 205       S        2     30   9.5   2         3         6       1        8
-#> 206       S        2     30   9.5   2         3         6       1        8
-#> 207       S        2     30   9.5   2         3         6       1        8
-#> 208    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 209    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 210    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 211    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 212    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 213    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 214    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 215    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 216    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 217    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 218    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 219    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 220    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 221    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 222    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 223    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 224    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 225    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 226    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 227    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 228    <NA>       NA     NA    NA  NA        NA        NA      NA       NA
-#> 229       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 230       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 231       S        2     NA    NA   2         1         5      NA       NA
-#> 232       S        2     35   9.5   2         1         5      NA       NA
-#> 233       S        2     35   9.5   2         1         5       3       NA
-#> 234       S        2     35   9.5   2         1         5       3       NA
-#> 235       S        2     35   9.5   2         1         5       3       NA
-#> 236       S        2     35   9.5   2         1         5       3       NA
-#> 237       S        2     35   9.5   2         1         5       3       NA
-#> 238       S        2     35   9.5   2         1         5       3       NA
-#> 239       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 240       S        2     NA    NA  NA        NA        NA      NA       NA
-#> 241       S        2     NA    NA   2         1         5      NA       NA
-#> 242       S        2     23   9.6   2         1         5      NA       NA
-#> 243       S        2     23   9.6   2         1         5       3       NA
-#> 244       S        2     23   9.6   2         1         5       3       NA
-#> 245       S        2     23   9.6   2         1         5       3       NA
-#> 246       S        2     23   9.6   2         1         5       3       NA
-#> 247       S        2     23   9.6   2         1         5       3       NA
-#> 248       S        2     23   9.6   2         1         5       3       NA
-#> 249       S        2     23   9.6   2         1         5       3       NA
-#> 250       S        2     23   9.6   2         1         5       3       NA
-#> 251       S        2     23   9.6   2         1         5       3       NA
-#> 252       S        2     23   9.6   2         1         5       3       NA
-#> 253       S        2     23   9.6   2         1         5       3       NA
-#> 254       S        2     23   9.6   2         1         5       3       NA
-#> 255       S        2     23   9.6   2         1         5       3       NA
-#> 256       S        2     23   9.6   2         1         5       3       NA
-#>     VertSun Glare Vis ObsL  Rec ObsR ObsInd Data1 Data2 Data3 Data4 Data5 Data6
-#> 1        NA    NA  NA <NA> <NA> <NA>   <NA>  1000     c     5     Y  <NA>  <NA>
-#> 2        NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 3        NA    NA  NA  280  001  126   <NA>   280   001   126  <NA>  <NA>  <NA>
-#> 4        NA    NA  NA  280  001  126   <NA>     3    03   230  <NA>  10.0  <NA>
-#> 5        NA    NA  NA  280  001  126   <NA>   023  09.8  <NA>  <NA>  <NA>  <NA>
-#> 6        NA    NA 6.0  280  001  126   <NA>     1  <NA>  <NA>   250   6.0  <NA>
-#> 7        NA    NA 6.0  280  001  126   <NA>     3    03   230  <NA>  10.0  <NA>
-#> 8         3 FALSE 6.0  280  001  126   <NA>     1    02    03   257   6.0  <NA>
-#> 9        NA    NA 6.0  280  001  126   <NA>     1  <NA>  <NA>   257   6.0  <NA>
-#> 10       NA    NA 6.0  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 11       NA    NA 6.0  208  280  001   <NA>   208   280   001  <NA>  <NA>  <NA>
-#> 12       NA    NA 6.0  208  280  001   <NA>     3    03   230  <NA>  10.0  <NA>
-#> 13       NA    NA 6.0  208  280  001   <NA>   025  10.2  <NA>  <NA>  <NA>  <NA>
-#> 14       NA    NA 6.0  208  280  001   <NA>     1  <NA>  <NA>   257   6.0  <NA>
-#> 15       NA    NA 6.0  208  280  001   <NA>  1406   208     3     4   309   2.8
-#> 16       NA    NA 6.0  208  280  001   <NA>  1406  <NA>     N     N   018  <NA>
-#> 17       NA    NA 6.0  208  280  001   <NA>   280  <NA>  <NA>    43   100  <NA>
-#> 18       NA    NA 6.0  208  280  001   <NA>   001  <NA>  <NA>    36   100  <NA>
-#> 19       NA    NA 6.0  208  280  001   <NA>   208  <NA>  <NA>    48   100  <NA>
-#> 20       NA    NA 6.0  208  280  001   <NA>     C  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 21       NA    NA 6.0  208  280  001   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 22       NA    NA 6.0  208  280  001   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 23       NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 24       NA    NA  NA  208  280  001   <NA>   208   280   001  <NA>  <NA>  <NA>
-#> 25       NA    NA  NA  208  280  001   <NA>     3    03   230  <NA>  10.0  <NA>
-#> 26       NA    NA  NA  208  280  001   <NA>   029  09.1  <NA>  <NA>  <NA>  <NA>
-#> 27       NA    NA 6.0  208  280  001   <NA>     1  <NA>  <NA>   257   6.0  <NA>
-#> 28       NA    NA 6.0  208  280  001   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 29       NA    NA 6.0  208  280  001   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 30       NA    NA 6.0  125  208  280   <NA>   125   208   280  <NA>  <NA>  <NA>
-#> 31       NA    NA 6.0  125  208  280   <NA>     3    03   230  <NA>  10.0  <NA>
-#> 32       NA    NA 6.0  125  208  280   <NA>   026  09.7  <NA>  <NA>  <NA>  <NA>
-#> 33       NA    NA 5.5  125  208  280   <NA>     3  <NA>  <NA>   257   5.5  <NA>
-#> 34       NA    NA 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 35       NA    NA 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 36        2 FALSE 5.5  125  208  280   <NA>     3    02    02   257   5.5  <NA>
-#> 37        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 38        2 FALSE 5.5  125  208  280   <NA>  1407   125     3     4   326   0.4
-#> 39        2 FALSE 5.5  125  208  280   <NA>  1407  <NA>     Y     N   076  <NA>
-#> 40        2 FALSE 5.5  125  208  280   <NA>   280     6    10     6   100  <NA>
-#> 41        2 FALSE 5.5  125  208  280   <NA>   001     9    10     2   100  <NA>
-#> 42        2 FALSE 5.5  125  208  280   <NA>   125     9    22     9   100  <NA>
-#> 43        2 FALSE 5.5  125  208  280   <NA>     C  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 44        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 45        2 FALSE 5.5  125  208  280   <NA>  1407   011   2.0   1.3  <NA>  <NA>
-#> 46        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 47        2 FALSE 5.5  125  208  280   <NA>  1407   005   3.5   0.9  <NA>  <NA>
-#> 48        2 FALSE 5.5  125  208  280   <NA>  1407   050  <NA>   0.5  <NA>  <NA>
-#> 49        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 50        2 FALSE 5.5  125  208  280   <NA>  1407   071   4.5   0.7   100  <NA>
-#> 51        2 FALSE 5.5  125  208  280   <NA>  1407   104   4.5   0.7   100  <NA>
-#> 52        2 FALSE 5.5  125  208  280   <NA>  1407   002   2.2   1.3  <NA>  <NA>
-#> 53        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 54        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 55        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 56        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 57        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 58        2 FALSE 5.5  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 59       NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 60       NA    NA  NA  001  126  149   <NA>   001   126   149  <NA>  <NA>  <NA>
-#> 61       NA    NA  NA  001  126  149   <NA>     3    03   230  <NA>  10.0  <NA>
-#> 62       NA    NA  NA  001  126  149   <NA>   027  09.0  <NA>  <NA>  <NA>  <NA>
-#> 63        2 FALSE 5.5  001  126  149   <NA>     1    02    02   257   5.5  <NA>
-#> 64        2 FALSE 5.5  001  126  149   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 65        2 FALSE 5.5  001  126  149   <NA>   280    LV   120  0.03     1  <NA>
-#> 66        2 FALSE 5.5  001  126  149   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 67        2 FALSE 5.5  001  126  149   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 68        2 FALSE 5.5  001  126  149   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 69        2 FALSE 6.0  001  126  149   <NA>     1    02    02   257   6.0  <NA>
-#> 70        2 FALSE 6.0  001  126  149   <NA>     2    03   230  <NA>  08.0  <NA>
-#> 71        2 FALSE 6.0  001  126  149   <NA>  Well ?      <NA>  <NA>  <NA>  <NA>
-#> 72        2 FALSE 6.0  280  001  126   <NA>   280   001   126  <NA>  <NA>  <NA>
-#> 73        2 FALSE 6.0  280  001  126   <NA>     2    03   230  <NA>  06.0  <NA>
-#> 74        2 FALSE 6.0  280  001  126   <NA>   023  10.0  <NA>  <NA>  <NA>  <NA>
-#> 75       NA    NA 5.5  280  001  126   <NA>     3  <NA>  <NA>   257   5.5  <NA>
-#> 76       NA    NA 5.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 77       NA    NA 5.5  280  001  126   <NA>     2    03   230  <NA>  06.0  <NA>
-#> 78       NA    NA 4.5  280  001  126   <NA>     3  <NA>  <NA>   257   4.5  <NA>
-#> 79       NA    NA 4.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 80       NA    NA 4.5  280  001  126   <NA>   352  09.3  <NA>  <NA>  <NA>  <NA>
-#> 81       NA    NA 4.5  280  001  126   <NA>  goin g lef t to  avoid  <NA>  <NA>
-#> 82       NA    NA 4.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 83       NA    NA 3.5  280  001  126   <NA>     3  <NA>  <NA>   257   3.5  <NA>
-#> 84       NA    NA 2.5  280  001  126   <NA>     3  <NA>  <NA>   257   2.5  <NA>
-#> 85       NA    NA 2.5  280  001  126   <NA>   280   001   126  <NA>  <NA>  <NA>
-#> 86       NA    NA 2.5  280  001  126   <NA>     2    03   230  <NA>  06.0  <NA>
-#> 87       NA    NA 2.5  280  001  126   <NA>   335  10.1  <NA>  <NA>  <NA>  <NA>
-#> 88       NA    NA 2.5  280  001  126   <NA>     3  <NA>  <NA>   257   2.5  <NA>
-#> 89       NA    NA 2.5  280  001  126   <NA>     W  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 90       NA    NA 2.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 91       NA    NA 2.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 92       NA    NA 2.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 93       NA    NA 2.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 94       NA    NA 2.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 95       NA    NA 2.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 96       NA    NA 2.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 97       NA    NA 2.5  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 98       NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 99       NA    NA  NA  125  208  280   <NA>   125   208   280  <NA>  <NA>  <NA>
-#> 100      NA    NA  NA  125  208  280   <NA>     3    03   230  <NA>  09.0  <NA>
-#> 101      NA    NA  NA  125  208  280   <NA>   032  09.5  <NA>  <NA>  <NA>  <NA>
-#> 102      NA    NA 5.8  125  208  280   <NA>     3  <NA>  <NA>   257   5.8  <NA>
-#> 103      NA    NA 5.8  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 104      NA    NA 5.8  149  125  208   <NA>   149   125   208  <NA>  <NA>  <NA>
-#> 105      NA    NA 5.8  149  125  208   <NA>     3    03   230  <NA>  09.0  <NA>
-#> 106      NA    NA 5.8  149  125  208   <NA>   035  09.6  <NA>  <NA>  <NA>  <NA>
-#> 107      NA    NA 6.0  149  125  208   <NA>     1  <NA>  <NA>   257   6.0  <NA>
-#> 108      NA    NA 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 109      12 FALSE 6.0  149  125  208   <NA>     1    12    12   257   6.0  <NA>
-#> 110      12 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 111      12 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 112      12 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 113      12 FALSE 6.0  126  149  125   <NA>   126   149   125  <NA>  <NA>  <NA>
-#> 114      12 FALSE 6.0  126  149  125   <NA>     3    03   230  <NA>  09.0  <NA>
-#> 115      12 FALSE 6.0  126  149  125   <NA>   035  09.2  <NA>  <NA>  <NA>  <NA>
-#> 116      12 FALSE 6.0  126  149  125   <NA>     1    12    12   257   6.0  <NA>
-#> 117      12 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 118      12 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 119      12 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 120      12 FALSE 6.0  126  149  125   <NA>     U  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 121      12 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 122      12 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 123      12 FALSE 6.0  126  149  125   <NA>   149    DC   270  0.03     2  <NA>
-#> 124      12 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 125      12 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 126      NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 127      NA    NA  NA  001  126  149   <NA>   001   126   149  <NA>  <NA>  <NA>
-#> 128      NA    NA  NA  001  126  149   <NA>     3    03   230  <NA>  09.0  <NA>
-#> 129      NA    NA  NA  001  126  149   <NA>   022  09.5  <NA>  <NA>  <NA>  <NA>
-#> 130       1 FALSE 6.0  001  126  149   <NA>     1    08    01   257   6.0  <NA>
-#> 131       1 FALSE 6.0  001  126  149   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 132       1 FALSE 6.0  280  001  126   <NA>   280   001   126  <NA>  <NA>  <NA>
-#> 133       1 FALSE 6.0  280  001  126   <NA>     3    03   230  <NA>  06.0  <NA>
-#> 134       1 FALSE 6.0  280  001  126   <NA>   020  09.3  <NA>  <NA>  <NA>  <NA>
-#> 135       1 FALSE 6.0  280  001  126   <NA>     1    08    01   257   6.0  <NA>
-#> 136       1 FALSE 6.0  280  001  126   <NA>   228    DC   300  0.02     1  <NA>
-#> 137       1 FALSE 6.0  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 138       1 FALSE 6.0  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 139       1 FALSE 6.0  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 140       1 FALSE 6.0  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 141       1 FALSE 6.0  280  001  126   <NA>  1408   280     3     4   270  14.0
-#> 142       1 FALSE 6.0  280  001  126   <NA>  1408  <NA>     N     N   037  <NA>
-#> 143       1 FALSE 6.0  280  001  126   <NA>   280    11    24    11   100  <NA>
-#> 144       1 FALSE 6.0  280  001  126   <NA>   001    12    23    12   100  <NA>
-#> 145       1 FALSE 6.0  280  001  126   <NA>   126     9    13     9   100  <NA>
-#> 146       1 FALSE 6.0  280  001  126   <NA>     C  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 147       1 FALSE 6.0  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 148       1 FALSE 6.0  280  001  126   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 149      NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 150      NA    NA  NA  208  280  001   <NA>   208   280   001  <NA>  <NA>  <NA>
-#> 151      NA    NA  NA  208  280  001   <NA>     3    03   230  <NA>  06.0  <NA>
-#> 152      NA    NA  NA  208  280  001   <NA>   017  09.3  <NA>  <NA>  <NA>  <NA>
-#> 153       1 FALSE 6.0  208  280  001   <NA>     1    08    01   257   6.0  <NA>
-#> 154       1 FALSE 6.0  208  280  001   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 155       1 FALSE 6.0  208  280  001   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 156       1 FALSE 6.0  125  208  280   <NA>   125   208   280  <NA>  <NA>  <NA>
-#> 157       1 FALSE 6.0  125  208  280   <NA>     2    03   230  <NA>  06.0  <NA>
-#> 158       1 FALSE 6.0  125  208  280   <NA>   016  08.9  <NA>  <NA>  <NA>  <NA>
-#> 159       1 FALSE 6.0  125  208  280   <NA>     1    09    01   243   6.0  <NA>
-#> 160       1 FALSE 6.0  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 161       1 FALSE 6.0  125  208  280   <NA>   231    DC   045  0.05     1  <NA>
-#> 162       1 FALSE 6.0  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 163       1 FALSE 6.0  125  208  280   <NA>     X  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 164       1 FALSE 6.0  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 165       1 FALSE 6.0  125  208  280   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 166      NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 167      NA    NA  NA  149  125  208   <NA>   149   125   208  <NA>  <NA>  <NA>
-#> 168      NA    NA  NA  149  125  208   <NA>     3    03   230  <NA>  08.0  <NA>
-#> 169      NA    NA  NA  149  125  208   <NA>   025  08.9  <NA>  <NA>  <NA>  <NA>
-#> 170       2 FALSE 6.0  149  125  208   <NA>     1    08    02   243   6.0  <NA>
-#> 171       2 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 172       2 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 173       2 FALSE 6.0  149  125  208   <NA>     2    03   230  <NA>  06.0  <NA>
-#> 174       2 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 175       2 FALSE 6.0  149  125  208   <NA>  1409   149     3     4   344   0.2
-#> 176       2 FALSE 6.0  149  125  208   <NA>  1409  <NA>     Y     Y   016  <NA>
-#> 177       2 FALSE 6.0  149  125  208   <NA>   125    46    90    46   100  <NA>
-#> 178       2 FALSE 6.0  149  125  208   <NA>   149    28    65    28   100  <NA>
-#> 179       2 FALSE 6.0  149  125  208   <NA>   208    66    82    66   100  <NA>
-#> 180       2 FALSE 6.0  149  125  208   <NA>     C  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 181       2 FALSE 6.0  149  125  208   <NA>  1409   356   0.4   3.0  <NA>  <NA>
-#> 182       2 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 183       2 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 184       2 FALSE 6.0  149  125  208   <NA>  off  effor t aft er th e sig hting
-#> 185       2 FALSE 6.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 186      NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 187      NA    NA  NA  126  149  125   <NA>   126   149   125  <NA>  <NA>  <NA>
-#> 188      NA    NA  NA  126  149  125   <NA>     2    03   230  <NA>  06.0  <NA>
-#> 189      NA    NA  NA  126  149  125   <NA>   030  09.5  <NA>  <NA>  <NA>  <NA>
-#> 190       2 FALSE 6.0  126  149  125   <NA>     1    08    02   243   6.0  <NA>
-#> 191       2 FALSE 6.0  126  149  125   <NA>  1410   125     3     4   070   1.4
-#> 192       2 FALSE 6.0  126  149  125   <NA>  1410  <NA>     Y     N   013   016
-#> 193       2 FALSE 6.0  126  149  125   <NA>   280    37    72    37    68    32
-#> 194       2 FALSE 6.0  126  149  125   <NA>   125    35    74    35    75    25
-#> 195       2 FALSE 6.0  126  149  125   <NA>   149    29    52    29    65    35
-#> 196       2 FALSE 6.0  126  149  125   <NA>   126    66    93    66    80    20
-#> 197       2 FALSE 6.0  126  149  125   <NA>     C  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 198       2 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 199       2 FALSE 6.0  126  149  125   <NA>   280    DC   042  0.23     2     F
-#> 200       2 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 201       2 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 202       2 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 203       2 FALSE 6.0  126  149  125   <NA>   099    LV   180  0.01     1  <NA>
-#> 204       2 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 205       2 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 206       2 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 207       2 FALSE 6.0  126  149  125   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 208      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 209      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 210      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 211      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 212      NA    NA  NA <NA> <NA> <NA>   <NA>  1411   280     3     1   000  <NA>
-#> 213      NA    NA  NA <NA> <NA> <NA>   <NA>  1411  <NA>     N     N   075  <NA>
-#> 214      NA    NA  NA <NA> <NA> <NA>   <NA>   280  <NA>  <NA>  <NA>   100  <NA>
-#> 215      NA    NA  NA <NA> <NA> <NA>   <NA>  off  effor t, fi rst s een b y CO 
-#> 216      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 217      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 218      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 219      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 220      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 221      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 222      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 223      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 224      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 225      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 226      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 227      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 228      NA    NA  NA <NA> <NA> <NA>   <NA>  1000     c     5     Y  <NA>  <NA>
-#> 229      NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 230      NA    NA  NA  149  125  208   <NA>   149   125   208  <NA>  <NA>  <NA>
-#> 231      NA    NA  NA  149  125  208   <NA>     2    01   035  <NA>  05.0  <NA>
-#> 232      NA    NA  NA  149  125  208   <NA>   035  09.5  <NA>  <NA>  <NA>  <NA>
-#> 233      NA    NA 4.0  149  125  208   <NA>     3  <NA>  <NA>   040   4.0  <NA>
-#> 234      NA    NA 4.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 235      NA    NA 4.0  149  125  208   <NA>   149   309  1.47   1.7  <NA>  <NA>
-#> 236      NA    NA 4.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 237      NA    NA 4.0  149  125  208   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 238      NA    NA 4.0  149  125  208   <NA>  cros sing  fishi ng ge ar     <NA>
-#> 239      NA    NA  NA <NA> <NA> <NA>   <NA>     S  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 240      NA    NA  NA  149  125  208   <NA>   149   125   208  <NA>  <NA>  <NA>
-#> 241      NA    NA  NA  149  125  208   <NA>     2    01   035  <NA>  05.0  <NA>
-#> 242      NA    NA  NA  149  125  208   <NA>   023  09.6  <NA>  <NA>  <NA>  <NA>
-#> 243      NA    NA 4.0  149  125  208   <NA>     3  <NA>  <NA>   040   4.0  <NA>
-#> 244      NA    NA 4.0  149  125  208   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>
-#> 245      NA    NA 4.0  149  125  208   <NA>  1412   149     2     4   359   0.3
-#> 246      NA    NA 4.0  149  125  208   <NA>  1412  <NA>     Y     N   018   277
-#> 247      NA    NA 4.0  149  125  208   <NA>   149   183   328   183    80    20
-#> 248      NA    NA 4.0  149  125  208   <NA>   126   120   170   120    90    10
-#> 249      NA    NA 4.0  149  125  208   <NA>  1413   208     3     4   038   0.8
-#> 250      NA    NA 4.0  149  125  208   <NA>  1413  <NA>     Y     N   016   277
-#> 251      NA    NA 4.0  149  125  208   <NA>  1413  <NA>  <NA>  <NA>   016   016
-#> 252      NA    NA 4.0  149  125  208   <NA>   125    21    60    21    60    40
-#> 253      NA    NA 4.0  149  125  208   <NA>   208    16    20    16    56    44
-#> 254      NA    NA 4.0  149  125  208   <NA>   149    12    18    12    70    30
-#> 255      NA    NA 4.0  149  125  208   <NA>   126    36    53    36    98     2
-#> 256      NA    NA 4.0  149  125  208   <NA>     C  <NA>  <NA>  <NA>  <NA>  <NA>
-#>     Data7 Data8      Data9 Data10 Data11 Data12 EffortDot EventNum
-#> 1    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        1
-#> 2    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        2
-#> 3    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        3
-#> 4    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        4
-#> 5    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        5
-#> 6    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        6
-#> 7    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        7
-#> 8    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        8
-#> 9    <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        9
-#> 10   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       10
-#> 11   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       11
-#> 12   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       12
-#> 13   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       13
-#> 14   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       14
-#> 15   1.06   013       <NA>   <NA>   <NA>   <NA>      TRUE       15
-#> 16   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       16
-#> 17   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 18   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 19   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 20   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       17
-#> 21   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       18
-#> 22   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       19
-#> 23   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       20
-#> 24   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       21
-#> 25   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       22
-#> 26   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       23
-#> 27   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       24
-#> 28   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       25
-#> 29   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       26
-#> 30   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       27
-#> 31   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       28
-#> 32   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       29
-#> 33   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       30
-#> 34   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       31
-#> 35   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       32
-#> 36   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       33
-#> 37   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       34
-#> 38   2.97   037       <NA>   <NA>   <NA>   <NA>      TRUE       35
-#> 39   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       36
-#> 40   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 41   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 42   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 43   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       37
-#> 44   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       38
-#> 45   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       39
-#> 46   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       40
-#> 47   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       41
-#> 48   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       42
-#> 49   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       43
-#> 50   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       44
-#> 51   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       45
-#> 52   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       46
-#> 53   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       47
-#> 54   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       48
-#> 55   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       49
-#> 56   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       50
-#> 57   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       51
-#> 58   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       52
-#> 59   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       53
-#> 60   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       54
-#> 61   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       55
-#> 62   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       56
-#> 63   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       57
-#> 64   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       58
-#> 65   <NA>     a          n   <NA>   <NA>   <NA>      TRUE       59
-#> 66   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       60
-#> 67   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       61
-#> 68   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       62
-#> 69   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       63
-#> 70   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       64
-#> 71   <NA>  <NA>              <NA>   <NA>   <NA>      TRUE       65
-#> 72   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       66
-#> 73   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       67
-#> 74   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       68
-#> 75   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       69
-#> 76   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       70
-#> 77   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       71
-#> 78   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       72
-#> 79   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       73
-#> 80   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       74
-#> 81   <NA>  <NA>              <NA>   <NA>   <NA>      TRUE       75
-#> 82   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       77
-#> 83   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       78
-#> 84   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       79
-#> 85   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       80
-#> 86   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       81
-#> 87   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       82
-#> 88   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       83
-#> 89   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       84
-#> 90   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       85
-#> 91   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       86
-#> 92   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       87
-#> 93   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       88
-#> 94   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       89
-#> 95   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       90
-#> 96   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       91
-#> 97   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       92
-#> 98   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       93
-#> 99   <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       94
-#> 100  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       95
-#> 101  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       96
-#> 102  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       97
-#> 103  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       98
-#> 104  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       99
-#> 105  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      100
-#> 106  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      101
-#> 107  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      102
-#> 108  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      103
-#> 109  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      104
-#> 110  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      105
-#> 111  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      106
-#> 112  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      107
-#> 113  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      108
-#> 114  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      109
-#> 115  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      110
-#> 116  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      111
-#> 117  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      112
-#> 118  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      113
-#> 119  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      114
-#> 120  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      115
-#> 121  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      116
-#> 122  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      117
-#> 123  <NA>     a          n   <NA>   <NA>   <NA>     FALSE      118
-#> 124  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      119
-#> 125  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      120
-#> 126  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      121
-#> 127  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      122
-#> 128  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      123
-#> 129  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      124
-#> 130  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      125
-#> 131  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      126
-#> 132  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      127
-#> 133  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      128
-#> 134  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      129
-#> 135  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      130
-#> 136  <NA>     j          n   <NA>   <NA>   <NA>      TRUE      131
-#> 137  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      132
-#> 138  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      133
-#> 139  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      134
-#> 140  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      135
-#> 141  0.28   015       <NA>   <NA>   <NA>   <NA>      TRUE      136
-#> 142  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      137
-#> 143  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 144  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 145  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 146  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      138
-#> 147  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      139
-#> 148  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      140
-#> 149  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      141
-#> 150  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      142
-#> 151  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      143
-#> 152  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      144
-#> 153  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      145
-#> 154  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      146
-#> 155  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      147
-#> 156  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      148
-#> 157  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      149
-#> 158  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      150
-#> 159  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      151
-#> 160  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      152
-#> 161  <NA>     a       <NA>   <NA>   <NA>   <NA>      TRUE      153
-#> 162  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      154
-#> 163  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      155
-#> 164  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      156
-#> 165  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      157
-#> 166  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      158
-#> 167  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      159
-#> 168  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      160
-#> 169  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      161
-#> 170  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      162
-#> 171  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      163
-#> 172  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      164
-#> 173  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      165
-#> 174  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      166
-#> 175  3.68   002       <NA>   <NA>   <NA>   <NA>      TRUE      167
-#> 176  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      168
-#> 177  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 178  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 179  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 180  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      169
-#> 181  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      170
-#> 182  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      171
-#> 183  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      172
-#> 184  <NA>  <NA>              <NA>   <NA>   <NA>     FALSE      174
-#> 185  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      175
-#> 186  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      176
-#> 187  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      177
-#> 188  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      178
-#> 189  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      179
-#> 190  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      180
-#> 191  1.66   036       <NA>   <NA>   <NA>   <NA>      TRUE      181
-#> 192  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE      182
-#> 193  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 194  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 195  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 196  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 197  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      183
-#> 198  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      185
-#> 199  17.0     A          Y   <NA>   <NA>   <NA>     FALSE      186
-#> 200  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      187
-#> 201  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      188
-#> 202  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      189
-#> 203  <NA>     A          N   <NA>   <NA>   <NA>     FALSE      190
-#> 204  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      191
-#> 205  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      192
-#> 206  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      193
-#> 207  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      194
-#> 208  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      195
-#> 209  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      196
-#> 210  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      197
-#> 211  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      198
-#> 212  0.00   018       <NA>   <NA>   <NA>   <NA>     FALSE      199
-#> 213  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      200
-#> 214  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 215 while  ridi ng bow      w       <NA>   <NA>     FALSE      201
-#> 216  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      202
-#> 217  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      203
-#> 218  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      204
-#> 219  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      205
-#> 220  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      206
-#> 221  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      207
-#> 222  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      208
-#> 223  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      209
-#> 224  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      210
-#> 225  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      211
-#> 226  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      212
-#> 227  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE      213
-#> 228  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        1
-#> 229  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        2
-#> 230  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        3
-#> 231  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        4
-#> 232  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        5
-#> 233  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        6
-#> 234  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        7
-#> 235  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        8
-#> 236  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE        9
-#> 237  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       10
-#> 238  <NA>  <NA>              <NA>   <NA>   <NA>     FALSE       11
-#> 239  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       12
-#> 240  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       13
-#> 241  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       14
-#> 242  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       15
-#> 243  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       16
-#> 244  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       17
-#> 245  3.28   018       <NA>   <NA>   <NA>   <NA>      TRUE       18
-#> 246  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       19
-#> 247  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 248  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 249  2.23   018       <NA>   <NA>   <NA>   <NA>      TRUE       20
-#> 250  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>      TRUE       21
-#> 251  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 252  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 253  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 254  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 255  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE     <NA>
-#> 256  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>     FALSE       22
-#>           file_das line_num InPoly1
-#> 1   das_sample.das        1       0
-#> 2   das_sample.das        2       0
-#> 3   das_sample.das        3       0
-#> 4   das_sample.das        4       0
-#> 5   das_sample.das        5       0
-#> 6   das_sample.das        6       0
-#> 7   das_sample.das        7       0
-#> 8   das_sample.das        8       0
-#> 9   das_sample.das        9       0
-#> 10  das_sample.das       10       0
-#> 11  das_sample.das       11       0
-#> 12  das_sample.das       12       0
-#> 13  das_sample.das       13       0
-#> 14  das_sample.das       14       0
-#> 15  das_sample.das       15       0
-#> 16  das_sample.das       16       0
-#> 17  das_sample.das       17       0
-#> 18  das_sample.das       18       0
-#> 19  das_sample.das       19       0
-#> 20  das_sample.das       20       0
-#> 21  das_sample.das       21       0
-#> 22  das_sample.das       22       0
-#> 23  das_sample.das       23       0
-#> 24  das_sample.das       24       0
-#> 25  das_sample.das       25       0
-#> 26  das_sample.das       26       0
-#> 27  das_sample.das       27       0
-#> 28  das_sample.das       28       0
-#> 29  das_sample.das       29       0
-#> 30  das_sample.das       30       0
-#> 31  das_sample.das       31       0
-#> 32  das_sample.das       32       0
-#> 33  das_sample.das       33       0
-#> 34  das_sample.das       34       0
-#> 35  das_sample.das       35       0
-#> 36  das_sample.das       36       0
-#> 37  das_sample.das       37       0
-#> 38  das_sample.das       38       0
-#> 39  das_sample.das       39       0
-#> 40  das_sample.das       40       0
-#> 41  das_sample.das       41       0
-#> 42  das_sample.das       42       0
-#> 43  das_sample.das       43       0
-#> 44  das_sample.das       44       0
-#> 45  das_sample.das       45       0
-#> 46  das_sample.das       46       0
-#> 47  das_sample.das       47       0
-#> 48  das_sample.das       48       0
-#> 49  das_sample.das       49       0
-#> 50  das_sample.das       50       0
-#> 51  das_sample.das       51       0
-#> 52  das_sample.das       52       0
-#> 53  das_sample.das       53       0
-#> 54  das_sample.das       54       0
-#> 55  das_sample.das       55       0
-#> 56  das_sample.das       56       0
-#> 57  das_sample.das       57       0
-#> 58  das_sample.das       58       0
-#> 59  das_sample.das       59       0
-#> 60  das_sample.das       60       0
-#> 61  das_sample.das       61       0
-#> 62  das_sample.das       62       0
-#> 63  das_sample.das       63       0
-#> 64  das_sample.das       64       0
-#> 65  das_sample.das       65       0
-#> 66  das_sample.das       66       0
-#> 67  das_sample.das       67       0
-#> 68  das_sample.das       68       0
-#> 69  das_sample.das       69       0
-#> 70  das_sample.das       70       0
-#> 71  das_sample.das       71       0
-#> 72  das_sample.das       72       0
-#> 73  das_sample.das       73       0
-#> 74  das_sample.das       74       0
-#> 75  das_sample.das       75       0
-#> 76  das_sample.das       76       0
-#> 77  das_sample.das       77       0
-#> 78  das_sample.das       78       0
-#> 79  das_sample.das       79       0
-#> 80  das_sample.das       80       0
-#> 81  das_sample.das       81       0
-#> 82  das_sample.das       83       0
-#> 83  das_sample.das       84       0
-#> 84  das_sample.das       85       0
-#> 85  das_sample.das       86       0
-#> 86  das_sample.das       87       0
-#> 87  das_sample.das       88       0
-#> 88  das_sample.das       89       0
-#> 89  das_sample.das       90       0
-#> 90  das_sample.das       91       0
-#> 91  das_sample.das       92       0
-#> 92  das_sample.das       93       0
-#> 93  das_sample.das       94       0
-#> 94  das_sample.das       95       0
-#> 95  das_sample.das       96       0
-#> 96  das_sample.das       97       0
-#> 97  das_sample.das       98       0
-#> 98  das_sample.das       99       0
-#> 99  das_sample.das      100       0
-#> 100 das_sample.das      101       0
-#> 101 das_sample.das      102       0
-#> 102 das_sample.das      103       0
-#> 103 das_sample.das      104       0
-#> 104 das_sample.das      105       0
-#> 105 das_sample.das      106       0
-#> 106 das_sample.das      107       0
-#> 107 das_sample.das      108       0
-#> 108 das_sample.das      109       0
-#> 109 das_sample.das      110       0
-#> 110 das_sample.das      111       0
-#> 111 das_sample.das      112       0
-#> 112 das_sample.das      113       0
-#> 113 das_sample.das      114       0
-#> 114 das_sample.das      115       0
-#> 115 das_sample.das      116       0
-#> 116 das_sample.das      117       0
-#> 117 das_sample.das      118       0
-#> 118 das_sample.das      119       0
-#> 119 das_sample.das      120       0
-#> 120 das_sample.das      121       0
-#> 121 das_sample.das      122       0
-#> 122 das_sample.das      123       0
-#> 123 das_sample.das      124       0
-#> 124 das_sample.das      125       1
-#> 125 das_sample.das      126       1
-#> 126 das_sample.das      127       1
-#> 127 das_sample.das      128       1
-#> 128 das_sample.das      129       1
-#> 129 das_sample.das      130       1
-#> 130 das_sample.das      131       1
-#> 131 das_sample.das      132       1
-#> 132 das_sample.das      133       1
-#> 133 das_sample.das      134       1
-#> 134 das_sample.das      135       1
-#> 135 das_sample.das      136       1
-#> 136 das_sample.das      137       1
-#> 137 das_sample.das      138       1
-#> 138 das_sample.das      139       1
-#> 139 das_sample.das      140       1
-#> 140 das_sample.das      141       1
-#> 141 das_sample.das      142       1
-#> 142 das_sample.das      143       1
-#> 143 das_sample.das      144       1
-#> 144 das_sample.das      145       1
-#> 145 das_sample.das      146       1
-#> 146 das_sample.das      147       1
-#> 147 das_sample.das      148       1
-#> 148 das_sample.das      149       1
-#> 149 das_sample.das      150       1
-#> 150 das_sample.das      151       1
-#> 151 das_sample.das      152       1
-#> 152 das_sample.das      153       1
-#> 153 das_sample.das      154       1
-#> 154 das_sample.das      155       1
-#> 155 das_sample.das      156       1
-#> 156 das_sample.das      157       1
-#> 157 das_sample.das      158       1
-#> 158 das_sample.das      159       1
-#> 159 das_sample.das      160       1
-#> 160 das_sample.das      161       1
-#> 161 das_sample.das      162       1
-#> 162 das_sample.das      163       1
-#> 163 das_sample.das      164       1
-#> 164 das_sample.das      165       1
-#> 165 das_sample.das      166       1
-#> 166 das_sample.das      167       1
-#> 167 das_sample.das      168       1
-#> 168 das_sample.das      169       1
-#> 169 das_sample.das      170       1
-#> 170 das_sample.das      171       1
-#> 171 das_sample.das      172       1
-#> 172 das_sample.das      173       1
-#> 173 das_sample.das      174       1
-#> 174 das_sample.das      175       1
-#> 175 das_sample.das      176       1
-#> 176 das_sample.das      177       1
-#> 177 das_sample.das      178       1
-#> 178 das_sample.das      179       1
-#> 179 das_sample.das      180       1
-#> 180 das_sample.das      181       1
-#> 181 das_sample.das      182       1
-#> 182 das_sample.das      183       1
-#> 183 das_sample.das      184       1
-#> 184 das_sample.das      186       1
-#> 185 das_sample.das      187       1
-#> 186 das_sample.das      188       1
-#> 187 das_sample.das      189       1
-#> 188 das_sample.das      190       1
-#> 189 das_sample.das      191       1
-#> 190 das_sample.das      192       1
-#> 191 das_sample.das      193       1
-#> 192 das_sample.das      194       1
-#> 193 das_sample.das      195       1
-#> 194 das_sample.das      196       1
-#> 195 das_sample.das      197       1
-#> 196 das_sample.das      198       1
-#> 197 das_sample.das      199       1
-#> 198 das_sample.das      201       1
-#> 199 das_sample.das      202       1
-#> 200 das_sample.das      203       1
-#> 201 das_sample.das      204       1
-#> 202 das_sample.das      205       1
-#> 203 das_sample.das      206       1
-#> 204 das_sample.das      207       1
-#> 205 das_sample.das      208       1
-#> 206 das_sample.das      209       1
-#> 207 das_sample.das      210       1
-#> 208 das_sample.das      211       1
-#> 209 das_sample.das      212       1
-#> 210 das_sample.das      213       1
-#> 211 das_sample.das      214       1
-#> 212 das_sample.das      215       1
-#> 213 das_sample.das      216       1
-#> 214 das_sample.das      217       1
-#> 215 das_sample.das      218       1
-#> 216 das_sample.das      219       1
-#> 217 das_sample.das      220       1
-#> 218 das_sample.das      221       1
-#> 219 das_sample.das      222       1
-#> 220 das_sample.das      223       1
-#> 221 das_sample.das      224       1
-#> 222 das_sample.das      225       1
-#> 223 das_sample.das      226       1
-#> 224 das_sample.das      227       1
-#> 225 das_sample.das      228       1
-#> 226 das_sample.das      229       1
-#> 227 das_sample.das      230       1
-#> 228 das_sample.das      231       1
-#> 229 das_sample.das      232       1
-#> 230 das_sample.das      233       1
-#> 231 das_sample.das      234       1
-#> 232 das_sample.das      235       1
-#> 233 das_sample.das      236       1
-#> 234 das_sample.das      237       1
-#> 235 das_sample.das      238       1
-#> 236 das_sample.das      239       1
-#> 237 das_sample.das      240       1
-#> 238 das_sample.das      241       1
-#> 239 das_sample.das      242       1
-#> 240 das_sample.das      243       1
-#> 241 das_sample.das      244       1
-#> 242 das_sample.das      245       1
-#> 243 das_sample.das      246       1
-#> 244 das_sample.das      247       1
-#> 245 das_sample.das      248       1
-#> 246 das_sample.das      249       1
-#> 247 das_sample.das      250       1
-#> 248 das_sample.das      251       1
-#> 249 das_sample.das      252       1
-#> 250 das_sample.das      253       1
-#> 251 das_sample.das      254       1
-#> 252 das_sample.das      255       1
-#> 253 das_sample.das      256       1
-#> 254 das_sample.das      257       1
-#> 255 das_sample.das      258       1
-#> 256 das_sample.das      259       1
+#>     EffType ESWsides Trackline Course SpdKt Bft SwellHght SwellDir WindSpdKt
+#> 1      <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 2         S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 3         S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 4         S        2      <NA>     NA    NA   3         3      230        10
+#> 5         S        2      <NA>     23   9.8   3         3      230        10
+#> 6         S        2      <NA>     23   9.8   3         3      230        10
+#> 7         S        2      <NA>     23   9.8   3         3      230        10
+#> 8         S        2      <NA>     23   9.8   3         3      230        10
+#> 9         S        2      <NA>     23   9.8   3         3      230        10
+#> 10        S        2      <NA>     23   9.8   3         3      230        10
+#> 11        S        2      <NA>     23   9.8   3         3      230        10
+#> 12        S        2      <NA>     23   9.8   3         3      230        10
+#> 13        S        2      <NA>     25  10.2   3         3      230        10
+#> 14        S        2      <NA>     25  10.2   3         3      230        10
+#> 15        S        2      <NA>     25  10.2   3         3      230        10
+#> 16        S        2      <NA>     25  10.2   3         3      230        10
+#> 17        S        2      <NA>     25  10.2   3         3      230        10
+#> 18        S        2      <NA>     25  10.2   3         3      230        10
+#> 19        S        2      <NA>     25  10.2   3         3      230        10
+#> 20        S        2      <NA>     25  10.2   3         3      230        10
+#> 21        S        2      <NA>     25  10.2   3         3      230        10
+#> 22        S        2      <NA>     25  10.2   3         3      230        10
+#> 23        S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 24        S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 25        S        2      <NA>     NA    NA   3         3      230        10
+#> 26        S        2      <NA>     29   9.1   3         3      230        10
+#> 27        S        2      <NA>     29   9.1   3         3      230        10
+#> 28        S        2      <NA>     29   9.1   3         3      230        10
+#> 29        S        2      <NA>     29   9.1   3         3      230        10
+#> 30        S        2      <NA>     29   9.1   3         3      230        10
+#> 31        S        2      <NA>     29   9.1   3         3      230        10
+#> 32        S        2      <NA>     26   9.7   3         3      230        10
+#> 33        S        2      <NA>     26   9.7   3         3      230        10
+#> 34        S        2      <NA>     26   9.7   3         3      230        10
+#> 35        S        2      <NA>     26   9.7   3         3      230        10
+#> 36        S        2      <NA>     26   9.7   3         3      230        10
+#> 37        S        2      <NA>     26   9.7   3         3      230        10
+#> 38        S        2      <NA>     26   9.7   3         3      230        10
+#> 39        S        2      <NA>     26   9.7   3         3      230        10
+#> 40        S        2      <NA>     26   9.7   3         3      230        10
+#> 41        S        2      <NA>     26   9.7   3         3      230        10
+#> 42        S        2      <NA>     26   9.7   3         3      230        10
+#> 43        S        2      <NA>     26   9.7   3         3      230        10
+#> 44        S        2      <NA>     26   9.7   3         3      230        10
+#> 45        S        2      <NA>     26   9.7   3         3      230        10
+#> 46        S        2      <NA>     26   9.7   3         3      230        10
+#> 47        S        2      <NA>     26   9.7   3         3      230        10
+#> 48        S        2      <NA>     26   9.7   3         3      230        10
+#> 49        S        2      <NA>     26   9.7   3         3      230        10
+#> 50        S        2      <NA>     26   9.7   3         3      230        10
+#> 51        S        2      <NA>     26   9.7   3         3      230        10
+#> 52        S        2      <NA>     26   9.7   3         3      230        10
+#> 53        S        2      <NA>     26   9.7   3         3      230        10
+#> 54        S        2      <NA>     26   9.7   3         3      230        10
+#> 55        S        2      <NA>     26   9.7   3         3      230        10
+#> 56        S        2      <NA>     26   9.7   3         3      230        10
+#> 57        S        2      <NA>     26   9.7   3         3      230        10
+#> 58        S        2      <NA>     26   9.7   3         3      230        10
+#> 59        S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 60        S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 61        S        2      <NA>     NA    NA   3         3      230        10
+#> 62        S        2      <NA>     27   9.0   3         3      230        10
+#> 63        S        2      <NA>     27   9.0   3         3      230        10
+#> 64        S        2      <NA>     27   9.0   3         3      230        10
+#> 65        S        2      <NA>     27   9.0   3         3      230        10
+#> 66        S        2      <NA>     27   9.0   3         3      230        10
+#> 67        S        2      <NA>     27   9.0   3         3      230        10
+#> 68        S        2      <NA>     27   9.0   3         3      230        10
+#> 69        S        2      <NA>     27   9.0   3         3      230        10
+#> 70        S        2      <NA>     27   9.0   2         3      230         8
+#> 71        S        2      <NA>     27   9.0   2         3      230         8
+#> 72        S        2      <NA>     27   9.0   2         3      230         8
+#> 73        S        2      <NA>     27   9.0   2         3      230         6
+#> 74        S        2      <NA>     23  10.0   2         3      230         6
+#> 75        S        2      <NA>     23  10.0   2         3      230         6
+#> 76        S        2      <NA>     23  10.0   2         3      230         6
+#> 77        S        2      <NA>     23  10.0   2         3      230         6
+#> 78        S        2      <NA>     23  10.0   2         3      230         6
+#> 79        S        2      <NA>     23  10.0   2         3      230         6
+#> 80        S        2      <NA>    352   9.3   2         3      230         6
+#> 81        S        2      <NA>    352   9.3   2         3      230         6
+#> 82        S        2      <NA>    352   9.3   2         3      230         6
+#> 83        S        2      <NA>    352   9.3   2         3      230         6
+#> 84        S        2      <NA>    352   9.3   2         3      230         6
+#> 85        S        2      <NA>    352   9.3   2         3      230         6
+#> 86        S        2      <NA>    352   9.3   2         3      230         6
+#> 87        S        2      <NA>    335  10.1   2         3      230         6
+#> 88        S        2      <NA>    335  10.1   2         3      230         6
+#> 89        S        2      <NA>    335  10.1   2         3      230         6
+#> 90        S        2      <NA>    335  10.1   2         3      230         6
+#> 91        S        2      <NA>    335  10.1   2         3      230         6
+#> 92        S        2      <NA>    335  10.1   2         3      230         6
+#> 93        S        2      <NA>    335  10.1   2         3      230         6
+#> 94        S        2      <NA>    335  10.1   2         3      230         6
+#> 95        S        2      <NA>    335  10.1   2         3      230         6
+#> 96        S        2      <NA>    335  10.1   2         3      230         6
+#> 97        S        2      <NA>    335  10.1   2         3      230         6
+#> 98        S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 99        S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 100       S        2      <NA>     NA    NA   3         3      230         9
+#> 101       S        2      <NA>     32   9.5   3         3      230         9
+#> 102       S        2      <NA>     32   9.5   3         3      230         9
+#> 103       S        2      <NA>     32   9.5   3         3      230         9
+#> 104       S        2      <NA>     32   9.5   3         3      230         9
+#> 105       S        2      <NA>     32   9.5   3         3      230         9
+#> 106       S        2      <NA>     35   9.6   3         3      230         9
+#> 107       S        2      <NA>     35   9.6   3         3      230         9
+#> 108       S        2      <NA>     35   9.6   3         3      230         9
+#> 109       S        2      <NA>     35   9.6   3         3      230         9
+#> 110       S        2      <NA>     35   9.6   3         3      230         9
+#> 111       S        2      <NA>     35   9.6   3         3      230         9
+#> 112       S        2      <NA>     35   9.6   3         3      230         9
+#> 113       S        2      <NA>     35   9.6   3         3      230         9
+#> 114       S        2      <NA>     35   9.6   3         3      230         9
+#> 115       S        2      <NA>     35   9.2   3         3      230         9
+#> 116       S        2      <NA>     35   9.2   3         3      230         9
+#> 117       S        2      <NA>     35   9.2   3         3      230         9
+#> 118       S        2      <NA>     35   9.2   3         3      230         9
+#> 119       S        2      <NA>     35   9.2   3         3      230         9
+#> 120       S        2      <NA>     35   9.2   3         3      230         9
+#> 121       S        2      <NA>     35   9.2   3         3      230         9
+#> 122       S        2      <NA>     35   9.2   3         3      230         9
+#> 123       S        2      <NA>     35   9.2   3         3      230         9
+#> 124       S        2      <NA>     35   9.2   3         3      230         9
+#> 125       S        2      <NA>     35   9.2   3         3      230         9
+#> 126       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 127       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 128       S        2      <NA>     NA    NA   3         3      230         9
+#> 129       S        2      <NA>     22   9.5   3         3      230         9
+#> 130       S        2      <NA>     22   9.5   3         3      230         9
+#> 131       S        2      <NA>     22   9.5   3         3      230         9
+#> 132       S        2      <NA>     22   9.5   3         3      230         9
+#> 133       S        2      <NA>     22   9.5   3         3      230         6
+#> 134       S        2      <NA>     20   9.3   3         3      230         6
+#> 135       S        2      <NA>     20   9.3   3         3      230         6
+#> 136       S        2      <NA>     20   9.3   3         3      230         6
+#> 137       S        2      <NA>     20   9.3   3         3      230         6
+#> 138       S        2      <NA>     20   9.3   3         3      230         6
+#> 139       S        2      <NA>     20   9.3   3         3      230         6
+#> 140       S        2      <NA>     20   9.3   3         3      230         6
+#> 141       S        2      <NA>     20   9.3   3         3      230         6
+#> 142       S        2      <NA>     20   9.3   3         3      230         6
+#> 143       S        2      <NA>     20   9.3   3         3      230         6
+#> 144       S        2      <NA>     20   9.3   3         3      230         6
+#> 145       S        2      <NA>     20   9.3   3         3      230         6
+#> 146       S        2      <NA>     20   9.3   3         3      230         6
+#> 147       S        2      <NA>     20   9.3   3         3      230         6
+#> 148       S        2      <NA>     20   9.3   3         3      230         6
+#> 149       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 150       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 151       S        2      <NA>     NA    NA   3         3      230         6
+#> 152       S        2      <NA>     17   9.3   3         3      230         6
+#> 153       S        2      <NA>     17   9.3   3         3      230         6
+#> 154       S        2      <NA>     17   9.3   3         3      230         6
+#> 155       S        2      <NA>     17   9.3   3         3      230         6
+#> 156       S        2      <NA>     17   9.3   3         3      230         6
+#> 157       S        2      <NA>     17   9.3   2         3      230         6
+#> 158       S        2      <NA>     16   8.9   2         3      230         6
+#> 159       S        2      <NA>     16   8.9   2         3      230         6
+#> 160       S        2      <NA>     16   8.9   2         3      230         6
+#> 161       S        2      <NA>     16   8.9   2         3      230         6
+#> 162       S        2      <NA>     16   8.9   2         3      230         6
+#> 163       S        2      <NA>     16   8.9   2         3      230         6
+#> 164       S        2      <NA>     16   8.9   2         3      230         6
+#> 165       S        2      <NA>     16   8.9   2         3      230         6
+#> 166       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 167       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 168       S        2      <NA>     NA    NA   3         3      230         8
+#> 169       S        2      <NA>     25   8.9   3         3      230         8
+#> 170       S        2      <NA>     25   8.9   3         3      230         8
+#> 171       S        2      <NA>     25   8.9   3         3      230         8
+#> 172       S        2      <NA>     25   8.9   3         3      230         8
+#> 173       S        2      <NA>     25   8.9   2         3      230         6
+#> 174       S        2      <NA>     25   8.9   2         3      230         6
+#> 175       S        2      <NA>     25   8.9   2         3      230         6
+#> 176       S        2      <NA>     25   8.9   2         3      230         6
+#> 177       S        2      <NA>     25   8.9   2         3      230         6
+#> 178       S        2      <NA>     25   8.9   2         3      230         6
+#> 179       S        2      <NA>     25   8.9   2         3      230         6
+#> 180       S        2      <NA>     25   8.9   2         3      230         6
+#> 181       S        2      <NA>     25   8.9   2         3      230         6
+#> 182       S        2      <NA>     25   8.9   2         3      230         6
+#> 183       S        2      <NA>     25   8.9   2         3      230         6
+#> 184       S        2      <NA>     25   8.9   2         3      230         6
+#> 185       S        2      <NA>     25   8.9   2         3      230         6
+#> 186       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 187       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 188       S        2      <NA>     NA    NA   2         3      230         6
+#> 189       S        2      <NA>     30   9.5   2         3      230         6
+#> 190       S        2      <NA>     30   9.5   2         3      230         6
+#> 191       S        2      <NA>     30   9.5   2         3      230         6
+#> 192       S        2      <NA>     30   9.5   2         3      230         6
+#> 193       S        2      <NA>     30   9.5   2         3      230         6
+#> 194       S        2      <NA>     30   9.5   2         3      230         6
+#> 195       S        2      <NA>     30   9.5   2         3      230         6
+#> 196       S        2      <NA>     30   9.5   2         3      230         6
+#> 197       S        2      <NA>     30   9.5   2         3      230         6
+#> 198       S        2      <NA>     30   9.5   2         3      230         6
+#> 199       S        2      <NA>     30   9.5   2         3      230         6
+#> 200       S        2      <NA>     30   9.5   2         3      230         6
+#> 201       S        2      <NA>     30   9.5   2         3      230         6
+#> 202       S        2      <NA>     30   9.5   2         3      230         6
+#> 203       S        2      <NA>     30   9.5   2         3      230         6
+#> 204       S        2      <NA>     30   9.5   2         3      230         6
+#> 205       S        2      <NA>     30   9.5   2         3      230         6
+#> 206       S        2      <NA>     30   9.5   2         3      230         6
+#> 207       S        2      <NA>     30   9.5   2         3      230         6
+#> 208    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 209    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 210    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 211    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 212    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 213    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 214    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 215    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 216    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 217    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 218    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 219    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 220    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 221    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 222    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 223    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 224    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 225    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 226    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 227    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 228    <NA>       NA      <NA>     NA    NA  NA        NA       NA        NA
+#> 229       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 230       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 231       S        2      <NA>     NA    NA   2         1       35         5
+#> 232       S        2      <NA>     35   9.5   2         1       35         5
+#> 233       S        2      <NA>     35   9.5   2         1       35         5
+#> 234       S        2      <NA>     35   9.5   2         1       35         5
+#> 235       S        2      <NA>     35   9.5   2         1       35         5
+#> 236       S        2      <NA>     35   9.5   2         1       35         5
+#> 237       S        2      <NA>     35   9.5   2         1       35         5
+#> 238       S        2      <NA>     35   9.5   2         1       35         5
+#> 239       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 240       S        2      <NA>     NA    NA  NA        NA       NA        NA
+#> 241       S        2      <NA>     NA    NA   2         1       35         5
+#> 242       S        2      <NA>     23   9.6   2         1       35         5
+#> 243       S        2      <NA>     23   9.6   2         1       35         5
+#> 244       S        2      <NA>     23   9.6   2         1       35         5
+#> 245       S        2      <NA>     23   9.6   2         1       35         5
+#> 246       S        2      <NA>     23   9.6   2         1       35         5
+#> 247       S        2      <NA>     23   9.6   2         1       35         5
+#> 248       S        2      <NA>     23   9.6   2         1       35         5
+#> 249       S        2      <NA>     23   9.6   2         1       35         5
+#> 250       S        2      <NA>     23   9.6   2         1       35         5
+#> 251       S        2      <NA>     23   9.6   2         1       35         5
+#> 252       S        2      <NA>     23   9.6   2         1       35         5
+#> 253       S        2      <NA>     23   9.6   2         1       35         5
+#> 254       S        2      <NA>     23   9.6   2         1       35         5
+#> 255       S        2      <NA>     23   9.6   2         1       35         5
+#> 256       S        2      <NA>     23   9.6   2         1       35         5
+#>     WindDir RainFog HorizSun VertSun Glare Vis ObsL  Rec ObsR ObsInd Data1
+#> 1        NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  1000
+#> 2        NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 3        NA      NA       NA      NA    NA  NA  280  001  126   <NA>   280
+#> 4        NA      NA       NA      NA    NA  NA  280  001  126   <NA>     3
+#> 5        NA      NA       NA      NA    NA  NA  280  001  126   <NA>   023
+#> 6       250       1       NA      NA    NA 6.0  280  001  126   <NA>     1
+#> 7       250       1       NA      NA    NA 6.0  280  001  126   <NA>     3
+#> 8       257       1        2       3 FALSE 6.0  280  001  126   <NA>     1
+#> 9       257       1       NA      NA    NA 6.0  280  001  126   <NA>     1
+#> 10      257       1       NA      NA    NA 6.0  280  001  126   <NA>  <NA>
+#> 11      257       1       NA      NA    NA 6.0  208  280  001   <NA>   208
+#> 12      257       1       NA      NA    NA 6.0  208  280  001   <NA>     3
+#> 13      257       1       NA      NA    NA 6.0  208  280  001   <NA>   025
+#> 14      257       1       NA      NA    NA 6.0  208  280  001   <NA>     1
+#> 15      257       1       NA      NA    NA 6.0  208  280  001   <NA>  1406
+#> 16      257       1       NA      NA    NA 6.0  208  280  001   <NA>  1406
+#> 17      257       1       NA      NA    NA 6.0  208  280  001   <NA>   280
+#> 18      257       1       NA      NA    NA 6.0  208  280  001   <NA>   001
+#> 19      257       1       NA      NA    NA 6.0  208  280  001   <NA>   208
+#> 20      257       1       NA      NA    NA 6.0  208  280  001   <NA>     C
+#> 21      257       1       NA      NA    NA 6.0  208  280  001   <NA>  <NA>
+#> 22      257       1       NA      NA    NA 6.0  208  280  001   <NA>  <NA>
+#> 23       NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 24       NA      NA       NA      NA    NA  NA  208  280  001   <NA>   208
+#> 25       NA      NA       NA      NA    NA  NA  208  280  001   <NA>     3
+#> 26       NA      NA       NA      NA    NA  NA  208  280  001   <NA>   029
+#> 27      257       1       NA      NA    NA 6.0  208  280  001   <NA>     1
+#> 28      257       1       NA      NA    NA 6.0  208  280  001   <NA>  <NA>
+#> 29      257       1       NA      NA    NA 6.0  208  280  001   <NA>  <NA>
+#> 30      257       1       NA      NA    NA 6.0  125  208  280   <NA>   125
+#> 31      257       1       NA      NA    NA 6.0  125  208  280   <NA>     3
+#> 32      257       1       NA      NA    NA 6.0  125  208  280   <NA>   026
+#> 33      257       3       NA      NA    NA 5.5  125  208  280   <NA>     3
+#> 34      257       3       NA      NA    NA 5.5  125  208  280   <NA>  <NA>
+#> 35      257       3       NA      NA    NA 5.5  125  208  280   <NA>  <NA>
+#> 36      257       3        2       2 FALSE 5.5  125  208  280   <NA>     3
+#> 37      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 38      257       3        2       2 FALSE 5.5  125  208  280   <NA>  1407
+#> 39      257       3        2       2 FALSE 5.5  125  208  280   <NA>  1407
+#> 40      257       3        2       2 FALSE 5.5  125  208  280   <NA>   280
+#> 41      257       3        2       2 FALSE 5.5  125  208  280   <NA>   001
+#> 42      257       3        2       2 FALSE 5.5  125  208  280   <NA>   125
+#> 43      257       3        2       2 FALSE 5.5  125  208  280   <NA>     C
+#> 44      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 45      257       3        2       2 FALSE 5.5  125  208  280   <NA>  1407
+#> 46      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 47      257       3        2       2 FALSE 5.5  125  208  280   <NA>  1407
+#> 48      257       3        2       2 FALSE 5.5  125  208  280   <NA>  1407
+#> 49      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 50      257       3        2       2 FALSE 5.5  125  208  280   <NA>  1407
+#> 51      257       3        2       2 FALSE 5.5  125  208  280   <NA>  1407
+#> 52      257       3        2       2 FALSE 5.5  125  208  280   <NA>  1407
+#> 53      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 54      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 55      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 56      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 57      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 58      257       3        2       2 FALSE 5.5  125  208  280   <NA>  <NA>
+#> 59       NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 60       NA      NA       NA      NA    NA  NA  001  126  149   <NA>   001
+#> 61       NA      NA       NA      NA    NA  NA  001  126  149   <NA>     3
+#> 62       NA      NA       NA      NA    NA  NA  001  126  149   <NA>   027
+#> 63      257       1        2       2 FALSE 5.5  001  126  149   <NA>     1
+#> 64      257       1        2       2 FALSE 5.5  001  126  149   <NA>  <NA>
+#> 65      257       1        2       2 FALSE 5.5  001  126  149   <NA>   280
+#> 66      257       1        2       2 FALSE 5.5  001  126  149   <NA>  <NA>
+#> 67      257       1        2       2 FALSE 5.5  001  126  149   <NA>  <NA>
+#> 68      257       1        2       2 FALSE 5.5  001  126  149   <NA>  <NA>
+#> 69      257       1        2       2 FALSE 6.0  001  126  149   <NA>     1
+#> 70      257       1        2       2 FALSE 6.0  001  126  149   <NA>     2
+#> 71      257       1        2       2 FALSE 6.0  001  126  149   <NA>  Well
+#> 72      257       1        2       2 FALSE 6.0  280  001  126   <NA>   280
+#> 73      257       1        2       2 FALSE 6.0  280  001  126   <NA>     2
+#> 74      257       1        2       2 FALSE 6.0  280  001  126   <NA>   023
+#> 75      257       3       NA      NA    NA 5.5  280  001  126   <NA>     3
+#> 76      257       3       NA      NA    NA 5.5  280  001  126   <NA>  <NA>
+#> 77      257       3       NA      NA    NA 5.5  280  001  126   <NA>     2
+#> 78      257       3       NA      NA    NA 4.5  280  001  126   <NA>     3
+#> 79      257       3       NA      NA    NA 4.5  280  001  126   <NA>  <NA>
+#> 80      257       3       NA      NA    NA 4.5  280  001  126   <NA>   352
+#> 81      257       3       NA      NA    NA 4.5  280  001  126   <NA>  goin
+#> 82      257       3       NA      NA    NA 4.5  280  001  126   <NA>  <NA>
+#> 83      257       3       NA      NA    NA 3.5  280  001  126   <NA>     3
+#> 84      257       3       NA      NA    NA 2.5  280  001  126   <NA>     3
+#> 85      257       3       NA      NA    NA 2.5  280  001  126   <NA>   280
+#> 86      257       3       NA      NA    NA 2.5  280  001  126   <NA>     2
+#> 87      257       3       NA      NA    NA 2.5  280  001  126   <NA>   335
+#> 88      257       3       NA      NA    NA 2.5  280  001  126   <NA>     3
+#> 89      257       3       NA      NA    NA 2.5  280  001  126   <NA>     W
+#> 90      257       3       NA      NA    NA 2.5  280  001  126   <NA>  <NA>
+#> 91      257       3       NA      NA    NA 2.5  280  001  126   <NA>  <NA>
+#> 92      257       3       NA      NA    NA 2.5  280  001  126   <NA>  <NA>
+#> 93      257       3       NA      NA    NA 2.5  280  001  126   <NA>  <NA>
+#> 94      257       3       NA      NA    NA 2.5  280  001  126   <NA>  <NA>
+#> 95      257       3       NA      NA    NA 2.5  280  001  126   <NA>  <NA>
+#> 96      257       3       NA      NA    NA 2.5  280  001  126   <NA>  <NA>
+#> 97      257       3       NA      NA    NA 2.5  280  001  126   <NA>  <NA>
+#> 98       NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 99       NA      NA       NA      NA    NA  NA  125  208  280   <NA>   125
+#> 100      NA      NA       NA      NA    NA  NA  125  208  280   <NA>     3
+#> 101      NA      NA       NA      NA    NA  NA  125  208  280   <NA>   032
+#> 102     257       3       NA      NA    NA 5.8  125  208  280   <NA>     3
+#> 103     257       3       NA      NA    NA 5.8  125  208  280   <NA>  <NA>
+#> 104     257       3       NA      NA    NA 5.8  149  125  208   <NA>   149
+#> 105     257       3       NA      NA    NA 5.8  149  125  208   <NA>     3
+#> 106     257       3       NA      NA    NA 5.8  149  125  208   <NA>   035
+#> 107     257       1       NA      NA    NA 6.0  149  125  208   <NA>     1
+#> 108     257       1       NA      NA    NA 6.0  149  125  208   <NA>  <NA>
+#> 109     257       1       12      12 FALSE 6.0  149  125  208   <NA>     1
+#> 110     257       1       12      12 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 111     257       1       12      12 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 112     257       1       12      12 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 113     257       1       12      12 FALSE 6.0  126  149  125   <NA>   126
+#> 114     257       1       12      12 FALSE 6.0  126  149  125   <NA>     3
+#> 115     257       1       12      12 FALSE 6.0  126  149  125   <NA>   035
+#> 116     257       1       12      12 FALSE 6.0  126  149  125   <NA>     1
+#> 117     257       1       12      12 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 118     257       1       12      12 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 119     257       1       12      12 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 120     257       1       12      12 FALSE 6.0  126  149  125   <NA>     U
+#> 121     257       1       12      12 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 122     257       1       12      12 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 123     257       1       12      12 FALSE 6.0  126  149  125   <NA>   149
+#> 124     257       1       12      12 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 125     257       1       12      12 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 126      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 127      NA      NA       NA      NA    NA  NA  001  126  149   <NA>   001
+#> 128      NA      NA       NA      NA    NA  NA  001  126  149   <NA>     3
+#> 129      NA      NA       NA      NA    NA  NA  001  126  149   <NA>   022
+#> 130     257       1        8       1 FALSE 6.0  001  126  149   <NA>     1
+#> 131     257       1        8       1 FALSE 6.0  001  126  149   <NA>  <NA>
+#> 132     257       1        8       1 FALSE 6.0  280  001  126   <NA>   280
+#> 133     257       1        8       1 FALSE 6.0  280  001  126   <NA>     3
+#> 134     257       1        8       1 FALSE 6.0  280  001  126   <NA>   020
+#> 135     257       1        8       1 FALSE 6.0  280  001  126   <NA>     1
+#> 136     257       1        8       1 FALSE 6.0  280  001  126   <NA>   228
+#> 137     257       1        8       1 FALSE 6.0  280  001  126   <NA>  <NA>
+#> 138     257       1        8       1 FALSE 6.0  280  001  126   <NA>  <NA>
+#> 139     257       1        8       1 FALSE 6.0  280  001  126   <NA>  <NA>
+#> 140     257       1        8       1 FALSE 6.0  280  001  126   <NA>  <NA>
+#> 141     257       1        8       1 FALSE 6.0  280  001  126   <NA>  1408
+#> 142     257       1        8       1 FALSE 6.0  280  001  126   <NA>  1408
+#> 143     257       1        8       1 FALSE 6.0  280  001  126   <NA>   280
+#> 144     257       1        8       1 FALSE 6.0  280  001  126   <NA>   001
+#> 145     257       1        8       1 FALSE 6.0  280  001  126   <NA>   126
+#> 146     257       1        8       1 FALSE 6.0  280  001  126   <NA>     C
+#> 147     257       1        8       1 FALSE 6.0  280  001  126   <NA>  <NA>
+#> 148     257       1        8       1 FALSE 6.0  280  001  126   <NA>  <NA>
+#> 149      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 150      NA      NA       NA      NA    NA  NA  208  280  001   <NA>   208
+#> 151      NA      NA       NA      NA    NA  NA  208  280  001   <NA>     3
+#> 152      NA      NA       NA      NA    NA  NA  208  280  001   <NA>   017
+#> 153     257       1        8       1 FALSE 6.0  208  280  001   <NA>     1
+#> 154     257       1        8       1 FALSE 6.0  208  280  001   <NA>  <NA>
+#> 155     257       1        8       1 FALSE 6.0  208  280  001   <NA>  <NA>
+#> 156     257       1        8       1 FALSE 6.0  125  208  280   <NA>   125
+#> 157     257       1        8       1 FALSE 6.0  125  208  280   <NA>     2
+#> 158     257       1        8       1 FALSE 6.0  125  208  280   <NA>   016
+#> 159     243       1        9       1 FALSE 6.0  125  208  280   <NA>     1
+#> 160     243       1        9       1 FALSE 6.0  125  208  280   <NA>  <NA>
+#> 161     243       1        9       1 FALSE 6.0  125  208  280   <NA>   231
+#> 162     243       1        9       1 FALSE 6.0  125  208  280   <NA>  <NA>
+#> 163     243       1        9       1 FALSE 6.0  125  208  280   <NA>     X
+#> 164     243       1        9       1 FALSE 6.0  125  208  280   <NA>  <NA>
+#> 165     243       1        9       1 FALSE 6.0  125  208  280   <NA>  <NA>
+#> 166      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 167      NA      NA       NA      NA    NA  NA  149  125  208   <NA>   149
+#> 168      NA      NA       NA      NA    NA  NA  149  125  208   <NA>     3
+#> 169      NA      NA       NA      NA    NA  NA  149  125  208   <NA>   025
+#> 170     243       1        8       2 FALSE 6.0  149  125  208   <NA>     1
+#> 171     243       1        8       2 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 172     243       1        8       2 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 173     243       1        8       2 FALSE 6.0  149  125  208   <NA>     2
+#> 174     243       1        8       2 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 175     243       1        8       2 FALSE 6.0  149  125  208   <NA>  1409
+#> 176     243       1        8       2 FALSE 6.0  149  125  208   <NA>  1409
+#> 177     243       1        8       2 FALSE 6.0  149  125  208   <NA>   125
+#> 178     243       1        8       2 FALSE 6.0  149  125  208   <NA>   149
+#> 179     243       1        8       2 FALSE 6.0  149  125  208   <NA>   208
+#> 180     243       1        8       2 FALSE 6.0  149  125  208   <NA>     C
+#> 181     243       1        8       2 FALSE 6.0  149  125  208   <NA>  1409
+#> 182     243       1        8       2 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 183     243       1        8       2 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 184     243       1        8       2 FALSE 6.0  149  125  208   <NA>  off 
+#> 185     243       1        8       2 FALSE 6.0  149  125  208   <NA>  <NA>
+#> 186      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 187      NA      NA       NA      NA    NA  NA  126  149  125   <NA>   126
+#> 188      NA      NA       NA      NA    NA  NA  126  149  125   <NA>     2
+#> 189      NA      NA       NA      NA    NA  NA  126  149  125   <NA>   030
+#> 190     243       1        8       2 FALSE 6.0  126  149  125   <NA>     1
+#> 191     243       1        8       2 FALSE 6.0  126  149  125   <NA>  1410
+#> 192     243       1        8       2 FALSE 6.0  126  149  125   <NA>  1410
+#> 193     243       1        8       2 FALSE 6.0  126  149  125   <NA>   280
+#> 194     243       1        8       2 FALSE 6.0  126  149  125   <NA>   125
+#> 195     243       1        8       2 FALSE 6.0  126  149  125   <NA>   149
+#> 196     243       1        8       2 FALSE 6.0  126  149  125   <NA>   126
+#> 197     243       1        8       2 FALSE 6.0  126  149  125   <NA>     C
+#> 198     243       1        8       2 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 199     243       1        8       2 FALSE 6.0  126  149  125   <NA>   280
+#> 200     243       1        8       2 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 201     243       1        8       2 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 202     243       1        8       2 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 203     243       1        8       2 FALSE 6.0  126  149  125   <NA>   099
+#> 204     243       1        8       2 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 205     243       1        8       2 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 206     243       1        8       2 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 207     243       1        8       2 FALSE 6.0  126  149  125   <NA>  <NA>
+#> 208      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 209      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 210      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 211      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 212      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  1411
+#> 213      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  1411
+#> 214      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>   280
+#> 215      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  off 
+#> 216      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 217      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 218      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 219      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 220      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 221      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 222      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 223      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 224      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 225      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 226      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 227      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  <NA>
+#> 228      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>  1000
+#> 229      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 230      NA      NA       NA      NA    NA  NA  149  125  208   <NA>   149
+#> 231      NA      NA       NA      NA    NA  NA  149  125  208   <NA>     2
+#> 232      NA      NA       NA      NA    NA  NA  149  125  208   <NA>   035
+#> 233      40       3       NA      NA    NA 4.0  149  125  208   <NA>     3
+#> 234      40       3       NA      NA    NA 4.0  149  125  208   <NA>  <NA>
+#> 235      40       3       NA      NA    NA 4.0  149  125  208   <NA>   149
+#> 236      40       3       NA      NA    NA 4.0  149  125  208   <NA>  <NA>
+#> 237      40       3       NA      NA    NA 4.0  149  125  208   <NA>     S
+#> 238      40       3       NA      NA    NA 4.0  149  125  208   <NA>  cros
+#> 239      NA      NA       NA      NA    NA  NA <NA> <NA> <NA>   <NA>     S
+#> 240      NA      NA       NA      NA    NA  NA  149  125  208   <NA>   149
+#> 241      NA      NA       NA      NA    NA  NA  149  125  208   <NA>     2
+#> 242      NA      NA       NA      NA    NA  NA  149  125  208   <NA>   023
+#> 243      40       3       NA      NA    NA 4.0  149  125  208   <NA>     3
+#> 244      40       3       NA      NA    NA 4.0  149  125  208   <NA>  <NA>
+#> 245      40       3       NA      NA    NA 4.0  149  125  208   <NA>  1412
+#> 246      40       3       NA      NA    NA 4.0  149  125  208   <NA>  1412
+#> 247      40       3       NA      NA    NA 4.0  149  125  208   <NA>   149
+#> 248      40       3       NA      NA    NA 4.0  149  125  208   <NA>   126
+#> 249      40       3       NA      NA    NA 4.0  149  125  208   <NA>  1413
+#> 250      40       3       NA      NA    NA 4.0  149  125  208   <NA>  1413
+#> 251      40       3       NA      NA    NA 4.0  149  125  208   <NA>  1413
+#> 252      40       3       NA      NA    NA 4.0  149  125  208   <NA>   125
+#> 253      40       3       NA      NA    NA 4.0  149  125  208   <NA>   208
+#> 254      40       3       NA      NA    NA 4.0  149  125  208   <NA>   149
+#> 255      40       3       NA      NA    NA 4.0  149  125  208   <NA>   126
+#> 256      40       3       NA      NA    NA 4.0  149  125  208   <NA>     C
+#>     Data2 Data3 Data4 Data5 Data6 Data7 Data8      Data9 Data10 Data11 Data12
+#> 1       c     5     Y  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 2    <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 3     001   126  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 4      03   230  <NA>  10.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 5    09.8  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 6    <NA>  <NA>   250   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 7      03   230  <NA>  10.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 8      02    03   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 9    <NA>  <NA>   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 10   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 11    280   001  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 12     03   230  <NA>  10.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 13   10.2  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 14   <NA>  <NA>   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 15    208     3     4   309   2.8  1.06   013       <NA>   <NA>   <NA>   <NA>
+#> 16   <NA>     N     N   018  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 17   <NA>  <NA>    43   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 18   <NA>  <NA>    36   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 19   <NA>  <NA>    48   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 20   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 21   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 22   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 23   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 24    280   001  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 25     03   230  <NA>  10.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 26   09.1  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 27   <NA>  <NA>   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 28   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 29   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 30    208   280  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 31     03   230  <NA>  10.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 32   09.7  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 33   <NA>  <NA>   257   5.5  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 34   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 35   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 36     02    02   257   5.5  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 37   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 38    125     3     4   326   0.4  2.97   037       <NA>   <NA>   <NA>   <NA>
+#> 39   <NA>     Y     N   076  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 40      6    10     6   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 41      9    10     2   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 42      9    22     9   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 43   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 44   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 45    011   2.0   1.3  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 46   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 47    005   3.5   0.9  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 48    050  <NA>   0.5  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 49   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 50    071   4.5   0.7   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 51    104   4.5   0.7   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 52    002   2.2   1.3  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 53   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 54   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 55   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 56   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 57   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 58   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 59   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 60    126   149  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 61     03   230  <NA>  10.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 62   09.0  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 63     02    02   257   5.5  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 64   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 65     LV   120  0.03     1  <NA>  <NA>     a          n   <NA>   <NA>   <NA>
+#> 66   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 67   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 68   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 69     02    02   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 70     03   230  <NA>  08.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 71  ?      <NA>  <NA>  <NA>  <NA>  <NA>  <NA>              <NA>   <NA>   <NA>
+#> 72    001   126  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 73     03   230  <NA>  06.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 74   10.0  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 75   <NA>  <NA>   257   5.5  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 76   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 77     03   230  <NA>  06.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 78   <NA>  <NA>   257   4.5  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 79   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 80   09.3  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 81  g lef t to  avoid  <NA>  <NA>  <NA>  <NA>              <NA>   <NA>   <NA>
+#> 82   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 83   <NA>  <NA>   257   3.5  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 84   <NA>  <NA>   257   2.5  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 85    001   126  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 86     03   230  <NA>  06.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 87   10.1  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 88   <NA>  <NA>   257   2.5  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 89   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 90   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 91   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 92   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 93   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 94   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 95   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 96   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 97   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 98   <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 99    208   280  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 100    03   230  <NA>  09.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 101  09.5  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 102  <NA>  <NA>   257   5.8  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 103  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 104   125   208  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 105    03   230  <NA>  09.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 106  09.6  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 107  <NA>  <NA>   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 108  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 109    12    12   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 110  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 111  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 112  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 113   149   125  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 114    03   230  <NA>  09.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 115  09.2  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 116    12    12   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 117  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 118  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 119  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 120  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 121  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 122  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 123    DC   270  0.03     2  <NA>  <NA>     a          n   <NA>   <NA>   <NA>
+#> 124  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 125  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 126  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 127   126   149  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 128    03   230  <NA>  09.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 129  09.5  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 130    08    01   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 131  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 132   001   126  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 133    03   230  <NA>  06.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 134  09.3  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 135    08    01   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 136    DC   300  0.02     1  <NA>  <NA>     j          n   <NA>   <NA>   <NA>
+#> 137  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 138  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 139  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 140  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 141   280     3     4   270  14.0  0.28   015       <NA>   <NA>   <NA>   <NA>
+#> 142  <NA>     N     N   037  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 143    11    24    11   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 144    12    23    12   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 145     9    13     9   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 146  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 147  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 148  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 149  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 150   280   001  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 151    03   230  <NA>  06.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 152  09.3  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 153    08    01   257   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 154  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 155  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 156   208   280  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 157    03   230  <NA>  06.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 158  08.9  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 159    09    01   243   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 160  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 161    DC   045  0.05     1  <NA>  <NA>     a       <NA>   <NA>   <NA>   <NA>
+#> 162  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 163  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 164  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 165  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 166  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 167   125   208  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 168    03   230  <NA>  08.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 169  08.9  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 170    08    02   243   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 171  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 172  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 173    03   230  <NA>  06.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 174  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 175   149     3     4   344   0.2  3.68   002       <NA>   <NA>   <NA>   <NA>
+#> 176  <NA>     Y     Y   016  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 177    46    90    46   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 178    28    65    28   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 179    66    82    66   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 180  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 181   356   0.4   3.0  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 182  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 183  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 184 effor t aft er th e sig hting  <NA>  <NA>              <NA>   <NA>   <NA>
+#> 185  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 186  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 187   149   125  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 188    03   230  <NA>  06.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 189  09.5  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 190    08    02   243   6.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 191   125     3     4   070   1.4  1.66   036       <NA>   <NA>   <NA>   <NA>
+#> 192  <NA>     Y     N   013   016  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 193    37    72    37    68    32  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 194    35    74    35    75    25  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 195    29    52    29    65    35  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 196    66    93    66    80    20  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 197  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 198  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 199    DC   042  0.23     2     F  17.0     A          Y   <NA>   <NA>   <NA>
+#> 200  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 201  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 202  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 203    LV   180  0.01     1  <NA>  <NA>     A          N   <NA>   <NA>   <NA>
+#> 204  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 205  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 206  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 207  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 208  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 209  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 210  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 211  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 212   280     3     1   000  <NA>  0.00   018       <NA>   <NA>   <NA>   <NA>
+#> 213  <NA>     N     N   075  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 214  <NA>  <NA>  <NA>   100  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 215 effor t, fi rst s een b y CO  while  ridi ng bow      w       <NA>   <NA>
+#> 216  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 217  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 218  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 219  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 220  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 221  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 222  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 223  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 224  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 225  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 226  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 227  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 228     c     5     Y  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 229  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 230   125   208  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 231    01   035  <NA>  05.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 232  09.5  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 233  <NA>  <NA>   040   4.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 234  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 235   309  1.47   1.7  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 236  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 237  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 238 sing  fishi ng ge ar     <NA>  <NA>  <NA>              <NA>   <NA>   <NA>
+#> 239  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 240   125   208  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 241    01   035  <NA>  05.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 242  09.6  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 243  <NA>  <NA>   040   4.0  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 244  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 245   149     2     4   359   0.3  3.28   018       <NA>   <NA>   <NA>   <NA>
+#> 246  <NA>     Y     N   018   277  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 247   183   328   183    80    20  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 248   120   170   120    90    10  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 249   208     3     4   038   0.8  2.23   018       <NA>   <NA>   <NA>   <NA>
+#> 250  <NA>     Y     N   016   277  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 251  <NA>  <NA>  <NA>   016   016  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 252    21    60    21    60    40  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 253    16    20    16    56    44  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 254    12    18    12    70    30  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 255    36    53    36    98     2  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#> 256  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>  <NA>       <NA>   <NA>   <NA>   <NA>
+#>     EffortDot EventNum       file_das line_num InPoly1
+#> 1        TRUE        1 das_sample.das        1       0
+#> 2        TRUE        2 das_sample.das        2       0
+#> 3        TRUE        3 das_sample.das        3       0
+#> 4        TRUE        4 das_sample.das        4       0
+#> 5        TRUE        5 das_sample.das        5       0
+#> 6        TRUE        6 das_sample.das        6       0
+#> 7        TRUE        7 das_sample.das        7       0
+#> 8        TRUE        8 das_sample.das        8       0
+#> 9        TRUE        9 das_sample.das        9       0
+#> 10       TRUE       10 das_sample.das       10       0
+#> 11       TRUE       11 das_sample.das       11       0
+#> 12       TRUE       12 das_sample.das       12       0
+#> 13       TRUE       13 das_sample.das       13       0
+#> 14       TRUE       14 das_sample.das       14       0
+#> 15       TRUE       15 das_sample.das       15       0
+#> 16       TRUE       16 das_sample.das       16       0
+#> 17      FALSE     <NA> das_sample.das       17       0
+#> 18      FALSE     <NA> das_sample.das       18       0
+#> 19      FALSE     <NA> das_sample.das       19       0
+#> 20      FALSE       17 das_sample.das       20       0
+#> 21      FALSE       18 das_sample.das       21       0
+#> 22      FALSE       19 das_sample.das       22       0
+#> 23       TRUE       20 das_sample.das       23       0
+#> 24       TRUE       21 das_sample.das       24       0
+#> 25       TRUE       22 das_sample.das       25       0
+#> 26       TRUE       23 das_sample.das       26       0
+#> 27       TRUE       24 das_sample.das       27       0
+#> 28       TRUE       25 das_sample.das       28       0
+#> 29       TRUE       26 das_sample.das       29       0
+#> 30       TRUE       27 das_sample.das       30       0
+#> 31       TRUE       28 das_sample.das       31       0
+#> 32       TRUE       29 das_sample.das       32       0
+#> 33       TRUE       30 das_sample.das       33       0
+#> 34       TRUE       31 das_sample.das       34       0
+#> 35       TRUE       32 das_sample.das       35       0
+#> 36       TRUE       33 das_sample.das       36       0
+#> 37       TRUE       34 das_sample.das       37       0
+#> 38       TRUE       35 das_sample.das       38       0
+#> 39       TRUE       36 das_sample.das       39       0
+#> 40      FALSE     <NA> das_sample.das       40       0
+#> 41      FALSE     <NA> das_sample.das       41       0
+#> 42      FALSE     <NA> das_sample.das       42       0
+#> 43      FALSE       37 das_sample.das       43       0
+#> 44      FALSE       38 das_sample.das       44       0
+#> 45      FALSE       39 das_sample.das       45       0
+#> 46      FALSE       40 das_sample.das       46       0
+#> 47      FALSE       41 das_sample.das       47       0
+#> 48      FALSE       42 das_sample.das       48       0
+#> 49      FALSE       43 das_sample.das       49       0
+#> 50      FALSE       44 das_sample.das       50       0
+#> 51      FALSE       45 das_sample.das       51       0
+#> 52      FALSE       46 das_sample.das       52       0
+#> 53      FALSE       47 das_sample.das       53       0
+#> 54      FALSE       48 das_sample.das       54       0
+#> 55      FALSE       49 das_sample.das       55       0
+#> 56      FALSE       50 das_sample.das       56       0
+#> 57      FALSE       51 das_sample.das       57       0
+#> 58      FALSE       52 das_sample.das       58       0
+#> 59       TRUE       53 das_sample.das       59       0
+#> 60       TRUE       54 das_sample.das       60       0
+#> 61       TRUE       55 das_sample.das       61       0
+#> 62       TRUE       56 das_sample.das       62       0
+#> 63       TRUE       57 das_sample.das       63       0
+#> 64       TRUE       58 das_sample.das       64       0
+#> 65       TRUE       59 das_sample.das       65       0
+#> 66       TRUE       60 das_sample.das       66       0
+#> 67       TRUE       61 das_sample.das       67       0
+#> 68       TRUE       62 das_sample.das       68       0
+#> 69       TRUE       63 das_sample.das       69       0
+#> 70       TRUE       64 das_sample.das       70       0
+#> 71       TRUE       65 das_sample.das       71       0
+#> 72       TRUE       66 das_sample.das       72       0
+#> 73       TRUE       67 das_sample.das       73       0
+#> 74       TRUE       68 das_sample.das       74       0
+#> 75       TRUE       69 das_sample.das       75       0
+#> 76       TRUE       70 das_sample.das       76       0
+#> 77       TRUE       71 das_sample.das       77       0
+#> 78       TRUE       72 das_sample.das       78       0
+#> 79       TRUE       73 das_sample.das       79       0
+#> 80       TRUE       74 das_sample.das       80       0
+#> 81       TRUE       75 das_sample.das       81       0
+#> 82       TRUE       77 das_sample.das       83       0
+#> 83       TRUE       78 das_sample.das       84       0
+#> 84       TRUE       79 das_sample.das       85       0
+#> 85       TRUE       80 das_sample.das       86       0
+#> 86       TRUE       81 das_sample.das       87       0
+#> 87       TRUE       82 das_sample.das       88       0
+#> 88       TRUE       83 das_sample.das       89       0
+#> 89      FALSE       84 das_sample.das       90       0
+#> 90      FALSE       85 das_sample.das       91       0
+#> 91      FALSE       86 das_sample.das       92       0
+#> 92      FALSE       87 das_sample.das       93       0
+#> 93      FALSE       88 das_sample.das       94       0
+#> 94      FALSE       89 das_sample.das       95       0
+#> 95      FALSE       90 das_sample.das       96       0
+#> 96      FALSE       91 das_sample.das       97       0
+#> 97      FALSE       92 das_sample.das       98       0
+#> 98       TRUE       93 das_sample.das       99       0
+#> 99       TRUE       94 das_sample.das      100       0
+#> 100      TRUE       95 das_sample.das      101       0
+#> 101      TRUE       96 das_sample.das      102       0
+#> 102      TRUE       97 das_sample.das      103       0
+#> 103      TRUE       98 das_sample.das      104       0
+#> 104      TRUE       99 das_sample.das      105       0
+#> 105      TRUE      100 das_sample.das      106       0
+#> 106      TRUE      101 das_sample.das      107       0
+#> 107      TRUE      102 das_sample.das      108       0
+#> 108      TRUE      103 das_sample.das      109       0
+#> 109      TRUE      104 das_sample.das      110       0
+#> 110      TRUE      105 das_sample.das      111       0
+#> 111      TRUE      106 das_sample.das      112       0
+#> 112      TRUE      107 das_sample.das      113       0
+#> 113      TRUE      108 das_sample.das      114       0
+#> 114      TRUE      109 das_sample.das      115       0
+#> 115      TRUE      110 das_sample.das      116       0
+#> 116      TRUE      111 das_sample.das      117       0
+#> 117      TRUE      112 das_sample.das      118       0
+#> 118      TRUE      113 das_sample.das      119       0
+#> 119      TRUE      114 das_sample.das      120       0
+#> 120     FALSE      115 das_sample.das      121       0
+#> 121     FALSE      116 das_sample.das      122       0
+#> 122     FALSE      117 das_sample.das      123       0
+#> 123     FALSE      118 das_sample.das      124       0
+#> 124     FALSE      119 das_sample.das      125       1
+#> 125     FALSE      120 das_sample.das      126       1
+#> 126      TRUE      121 das_sample.das      127       1
+#> 127      TRUE      122 das_sample.das      128       1
+#> 128      TRUE      123 das_sample.das      129       1
+#> 129      TRUE      124 das_sample.das      130       1
+#> 130      TRUE      125 das_sample.das      131       1
+#> 131      TRUE      126 das_sample.das      132       1
+#> 132      TRUE      127 das_sample.das      133       1
+#> 133      TRUE      128 das_sample.das      134       1
+#> 134      TRUE      129 das_sample.das      135       1
+#> 135      TRUE      130 das_sample.das      136       1
+#> 136      TRUE      131 das_sample.das      137       1
+#> 137      TRUE      132 das_sample.das      138       1
+#> 138      TRUE      133 das_sample.das      139       1
+#> 139      TRUE      134 das_sample.das      140       1
+#> 140      TRUE      135 das_sample.das      141       1
+#> 141      TRUE      136 das_sample.das      142       1
+#> 142      TRUE      137 das_sample.das      143       1
+#> 143     FALSE     <NA> das_sample.das      144       1
+#> 144     FALSE     <NA> das_sample.das      145       1
+#> 145     FALSE     <NA> das_sample.das      146       1
+#> 146     FALSE      138 das_sample.das      147       1
+#> 147     FALSE      139 das_sample.das      148       1
+#> 148     FALSE      140 das_sample.das      149       1
+#> 149      TRUE      141 das_sample.das      150       1
+#> 150      TRUE      142 das_sample.das      151       1
+#> 151      TRUE      143 das_sample.das      152       1
+#> 152      TRUE      144 das_sample.das      153       1
+#> 153      TRUE      145 das_sample.das      154       1
+#> 154      TRUE      146 das_sample.das      155       1
+#> 155      TRUE      147 das_sample.das      156       1
+#> 156      TRUE      148 das_sample.das      157       1
+#> 157      TRUE      149 das_sample.das      158       1
+#> 158      TRUE      150 das_sample.das      159       1
+#> 159      TRUE      151 das_sample.das      160       1
+#> 160      TRUE      152 das_sample.das      161       1
+#> 161      TRUE      153 das_sample.das      162       1
+#> 162      TRUE      154 das_sample.das      163       1
+#> 163     FALSE      155 das_sample.das      164       1
+#> 164     FALSE      156 das_sample.das      165       1
+#> 165     FALSE      157 das_sample.das      166       1
+#> 166      TRUE      158 das_sample.das      167       1
+#> 167      TRUE      159 das_sample.das      168       1
+#> 168      TRUE      160 das_sample.das      169       1
+#> 169      TRUE      161 das_sample.das      170       1
+#> 170      TRUE      162 das_sample.das      171       1
+#> 171      TRUE      163 das_sample.das      172       1
+#> 172      TRUE      164 das_sample.das      173       1
+#> 173      TRUE      165 das_sample.das      174       1
+#> 174      TRUE      166 das_sample.das      175       1
+#> 175      TRUE      167 das_sample.das      176       1
+#> 176      TRUE      168 das_sample.das      177       1
+#> 177     FALSE     <NA> das_sample.das      178       1
+#> 178     FALSE     <NA> das_sample.das      179       1
+#> 179     FALSE     <NA> das_sample.das      180       1
+#> 180     FALSE      169 das_sample.das      181       1
+#> 181     FALSE      170 das_sample.das      182       1
+#> 182     FALSE      171 das_sample.das      183       1
+#> 183     FALSE      172 das_sample.das      184       1
+#> 184     FALSE      174 das_sample.das      186       1
+#> 185     FALSE      175 das_sample.das      187       1
+#> 186      TRUE      176 das_sample.das      188       1
+#> 187      TRUE      177 das_sample.das      189       1
+#> 188      TRUE      178 das_sample.das      190       1
+#> 189      TRUE      179 das_sample.das      191       1
+#> 190      TRUE      180 das_sample.das      192       1
+#> 191      TRUE      181 das_sample.das      193       1
+#> 192      TRUE      182 das_sample.das      194       1
+#> 193     FALSE     <NA> das_sample.das      195       1
+#> 194     FALSE     <NA> das_sample.das      196       1
+#> 195     FALSE     <NA> das_sample.das      197       1
+#> 196     FALSE     <NA> das_sample.das      198       1
+#> 197     FALSE      183 das_sample.das      199       1
+#> 198     FALSE      185 das_sample.das      201       1
+#> 199     FALSE      186 das_sample.das      202       1
+#> 200     FALSE      187 das_sample.das      203       1
+#> 201     FALSE      188 das_sample.das      204       1
+#> 202     FALSE      189 das_sample.das      205       1
+#> 203     FALSE      190 das_sample.das      206       1
+#> 204     FALSE      191 das_sample.das      207       1
+#> 205     FALSE      192 das_sample.das      208       1
+#> 206     FALSE      193 das_sample.das      209       1
+#> 207     FALSE      194 das_sample.das      210       1
+#> 208     FALSE      195 das_sample.das      211       1
+#> 209     FALSE      196 das_sample.das      212       1
+#> 210     FALSE      197 das_sample.das      213       1
+#> 211     FALSE      198 das_sample.das      214       1
+#> 212     FALSE      199 das_sample.das      215       1
+#> 213     FALSE      200 das_sample.das      216       1
+#> 214     FALSE     <NA> das_sample.das      217       1
+#> 215     FALSE      201 das_sample.das      218       1
+#> 216     FALSE      202 das_sample.das      219       1
+#> 217     FALSE      203 das_sample.das      220       1
+#> 218     FALSE      204 das_sample.das      221       1
+#> 219     FALSE      205 das_sample.das      222       1
+#> 220     FALSE      206 das_sample.das      223       1
+#> 221     FALSE      207 das_sample.das      224       1
+#> 222     FALSE      208 das_sample.das      225       1
+#> 223     FALSE      209 das_sample.das      226       1
+#> 224     FALSE      210 das_sample.das      227       1
+#> 225     FALSE      211 das_sample.das      228       1
+#> 226     FALSE      212 das_sample.das      229       1
+#> 227     FALSE      213 das_sample.das      230       1
+#> 228      TRUE        1 das_sample.das      231       1
+#> 229      TRUE        2 das_sample.das      232       1
+#> 230      TRUE        3 das_sample.das      233       1
+#> 231      TRUE        4 das_sample.das      234       1
+#> 232      TRUE        5 das_sample.das      235       1
+#> 233      TRUE        6 das_sample.das      236       1
+#> 234      TRUE        7 das_sample.das      237       1
+#> 235      TRUE        8 das_sample.das      238       1
+#> 236      TRUE        9 das_sample.das      239       1
+#> 237     FALSE       10 das_sample.das      240       1
+#> 238     FALSE       11 das_sample.das      241       1
+#> 239      TRUE       12 das_sample.das      242       1
+#> 240      TRUE       13 das_sample.das      243       1
+#> 241      TRUE       14 das_sample.das      244       1
+#> 242      TRUE       15 das_sample.das      245       1
+#> 243      TRUE       16 das_sample.das      246       1
+#> 244      TRUE       17 das_sample.das      247       1
+#> 245      TRUE       18 das_sample.das      248       1
+#> 246      TRUE       19 das_sample.das      249       1
+#> 247     FALSE     <NA> das_sample.das      250       1
+#> 248     FALSE     <NA> das_sample.das      251       1
+#> 249      TRUE       20 das_sample.das      252       1
+#> 250      TRUE       21 das_sample.das      253       1
+#> 251     FALSE     <NA> das_sample.das      254       1
+#> 252     FALSE     <NA> das_sample.das      255       1
+#> 253     FALSE     <NA> das_sample.das      256       1
+#> 254     FALSE     <NA> das_sample.das      257       1
+#> 255     FALSE     <NA> das_sample.das      258       1
+#> 256     FALSE       22 das_sample.das      259       1
 
 # Visualize effort midpoints and stratum polygon
 require(sf)
 #> Loading required package: sf
-#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
+#> Linking to GEOS 3.14.1, GDAL 3.12.2, PROJ 9.7.1; sf_use_s2() is TRUE
 y.eff.strata <- das_intersects_strata(y.eff, list(InPoly = stratum.file))
 segdata <- st_as_sf(y.eff.strata$segdata, coords = c("mlon", "mlat"), crs = 4326)
 
