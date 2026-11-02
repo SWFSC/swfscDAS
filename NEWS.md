@@ -1,4 +1,4 @@
-# swfscDAS 0.7.0.9000
+# swfscDAS 0.7.0
 
 * Fixed bug in `das_process` of incorrect OffsetGMT values, stemming from `as.Date` using 'UTC' tz by default (#16)
 
