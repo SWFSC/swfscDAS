@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+
+* Fixed the invalid url https://nmfs-ost.github.io/noaa-fit
+
 ## Release summary
 A number of feature updates, and several bug fixes described in depth in package NEWS
 
