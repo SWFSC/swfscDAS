@@ -2,6 +2,8 @@
 
 ## swfscDAS 0.7.0
 
+CRAN release: 2026-11-03
+
 - Fixed bug in `das_process` of incorrect OffsetGMT values, stemming
   from `as.Date` using ‘UTC’ tz by default
   ([\#16](https://github.com/swfsc/swfscDAS/issues/16))

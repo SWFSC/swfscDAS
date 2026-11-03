@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/swfsc/swfscDAS/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/swfsc/swfscDAS/blob/v0.7.0/DESCRIPTION)
 
 Woodman S (2026). *swfscDAS: Processing DAS Data Files*. R package
 version 0.7.0, <https://swfsc.github.io/swfscDAS/>.
